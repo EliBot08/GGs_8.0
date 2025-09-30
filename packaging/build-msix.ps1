@@ -54,9 +54,20 @@ $assetsSrc = Join-Path $repo 'packaging/msix/GGs.Desktop.Package/Assets'
 if (-not (Test-Path $assetsSrc)) { throw "Assets directory not found at: $assetsSrc" }
 Copy-Item -LiteralPath $assetsSrc -Destination (Join-Path $pubDir 'Assets') -Recurse -Force
 
-# Create mapping list file
+# Create mapping list file - MakeAppx format requires quoted paths
 $mapFile = Join-Path $artifacts 'mapping.txt'
-@("[Files]","$pubDir\AppxManifest.xml","$pubDir\Assets\Square150x150Logo.png","$pubDir\Assets\Square44x44Logo.png","$pubDir\Assets\StoreLogo.png") + (Get-ChildItem -LiteralPath $pubDir -File | ForEach-Object { $_.FullName }) | Set-Content -LiteralPath $mapFile -Encoding ASCII
+$mappingContent = [System.Collections.ArrayList]@()
+[void]$mappingContent.Add('[Files]')
+
+# Add all files from publish directory recursively
+Get-ChildItem -LiteralPath $pubDir -Recurse -File | ForEach-Object {
+    $fullPath = $_.FullName
+    $relativePath = $fullPath.Substring($pubDir.Length + 1)
+    # Format: "SourcePath" "DestinationPath"
+    [void]$mappingContent.Add("`"$fullPath`" `"$relativePath`"")
+}
+
+$mappingContent | Set-Content -LiteralPath $mapFile -Encoding UTF8
 
 # Make the .msix
 $msixPath = Join-Path $artifacts 'GGs.Desktop.msix'
