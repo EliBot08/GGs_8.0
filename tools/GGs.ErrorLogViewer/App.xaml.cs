@@ -330,6 +330,9 @@ Examples:
                     services.AddSingleton<ILogParsingService, LogParsingService>();
                     services.AddSingleton<IThemeService, ThemeService>();
                     services.AddSingleton<IExportService, ExportService>();
+                    services.AddSingleton<IPerformanceMonitoringService, PerformanceMonitoringService>();
+                    services.AddSingleton<IAlertService, AlertService>();
+                    services.AddSingleton<IAnalyticsService, AnalyticsService>();
 
                     // Register ViewModels
                     services.AddTransient<MainViewModel>();
