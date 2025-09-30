@@ -11,7 +11,6 @@ public class AuthService
 {
     private readonly HttpClient _httpClient;
     private string? _accessToken;
-    private string? _refreshToken;
 
     public AuthService(HttpClient httpClient)
     {

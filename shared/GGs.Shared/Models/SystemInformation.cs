@@ -166,6 +166,7 @@ public class StorageDevice
     public string MediaType { get; set; } = string.Empty;
     public uint RotationalSpeed { get; set; }
     public string HealthStatus { get; set; } = string.Empty;
+    public string Status { get; set; } = string.Empty;
     public double Temperature { get; set; }
     public ulong PowerOnHours { get; set; }
     public ulong PowerCycleCount { get; set; }

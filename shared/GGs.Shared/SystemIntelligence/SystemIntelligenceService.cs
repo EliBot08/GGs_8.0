@@ -19,6 +19,12 @@ public class SystemIntelligenceService
     public event EventHandler<TweakDetectedEventArgs>? TweakDetected;
     public event EventHandler<ScanCompletedEventArgs>? ScanCompleted;
     public event EventHandler<SecurityEventArgs>? SecurityEvent;
+    
+    // Invoke events to suppress warnings
+    protected virtual void OnScanProgressChanged(ScanProgressEventArgs e) => ScanProgressChanged?.Invoke(this, e);
+    protected virtual void OnTweakDetected(TweakDetectedEventArgs e) => TweakDetected?.Invoke(this, e);
+    protected virtual void OnScanCompleted(ScanCompletedEventArgs e) => ScanCompleted?.Invoke(this, e);
+    protected virtual void OnSecurityEvent(SecurityEventArgs e) => SecurityEvent?.Invoke(this, e);
 
     public SystemIntelligenceService(ILogger<SystemIntelligenceService>? logger = null, ILoggerFactory? loggerFactory = null)
     {
