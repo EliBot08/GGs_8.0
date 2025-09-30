@@ -37,11 +37,11 @@ if (-not $PublishDir) {
 $PublishDir = (Resolve-Path $PublishDir).Path
 
 # 2) Ensure WiX v4 CLI is available via local dotnet tool
-$manifestPath = Join-Path $repoRoot 'dotnet-tools.json'
+$manifestPath = Join-Path $repoRoot '.config\dotnet-tools.json'
 Push-Location $repoRoot
 try {
   if (-not (Test-Path $manifestPath)) {
-    Info 'Creating local dotnet tool manifest in repo root...'
+    Info 'Creating local dotnet tool manifest in .config...'
     dotnet new tool-manifest --force | Out-Null
   }
   Info 'Ensuring WiX tool is installed (local manifest)...'
