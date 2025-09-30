@@ -51,49 +51,50 @@ namespace GGs.ErrorLogViewer.Services
 
         public bool IsDarkMode => GetEffectiveTheme() == ElementTheme.Dark;
 
-        // Dark theme colors
+        // Enterprise Dark theme colors - Vibrant and Modern
         private static readonly Dictionary<Models.LogLevel, SolidColorBrush> DarkLogLevelBrushes = new()
         {
-            { Models.LogLevel.Trace, new SolidColorBrush(Color.FromRgb(128, 128, 128)) },      // Gray
-            { Models.LogLevel.Debug, new SolidColorBrush(Color.FromRgb(173, 216, 230)) },     // Light Blue
-            { Models.LogLevel.Information, new SolidColorBrush(Color.FromRgb(144, 238, 144)) }, // Light Green
-            { Models.LogLevel.Success, new SolidColorBrush(Color.FromRgb(50, 205, 50)) },     // Lime Green
-            { Models.LogLevel.Warning, new SolidColorBrush(Color.FromRgb(255, 215, 0)) },     // Gold
-            { Models.LogLevel.Error, new SolidColorBrush(Color.FromRgb(255, 99, 71)) },       // Tomato
-            { Models.LogLevel.Critical, new SolidColorBrush(Color.FromRgb(220, 20, 60)) }     // Crimson
+            { Models.LogLevel.Trace, new SolidColorBrush(Color.FromRgb(156, 163, 175)) },      // Cool Gray
+            { Models.LogLevel.Debug, new SolidColorBrush(Color.FromRgb(96, 165, 250)) },       // Sky Blue
+            { Models.LogLevel.Information, new SolidColorBrush(Color.FromRgb(52, 211, 153)) }, // Emerald
+            { Models.LogLevel.Success, new SolidColorBrush(Color.FromRgb(16, 185, 129)) },     // Green
+            { Models.LogLevel.Warning, new SolidColorBrush(Color.FromRgb(251, 191, 36)) },     // Amber
+            { Models.LogLevel.Error, new SolidColorBrush(Color.FromRgb(248, 113, 113)) },      // Red
+            { Models.LogLevel.Critical, new SolidColorBrush(Color.FromRgb(239, 68, 68)) }      // Crimson
         };
 
-        // Light theme colors
+        // Enterprise Light theme colors - Clear and Professional
         private static readonly Dictionary<Models.LogLevel, SolidColorBrush> LightLogLevelBrushes = new()
         {
-            { Models.LogLevel.Trace, new SolidColorBrush(Color.FromRgb(105, 105, 105)) },     // Dim Gray
-            { Models.LogLevel.Debug, new SolidColorBrush(Color.FromRgb(70, 130, 180)) },      // Steel Blue
-            { Models.LogLevel.Information, new SolidColorBrush(Color.FromRgb(34, 139, 34)) }, // Forest Green
-            { Models.LogLevel.Success, new SolidColorBrush(Color.FromRgb(0, 128, 0)) },       // Green
-            { Models.LogLevel.Warning, new SolidColorBrush(Color.FromRgb(255, 140, 0)) },     // Dark Orange
-            { Models.LogLevel.Error, new SolidColorBrush(Color.FromRgb(178, 34, 34)) },       // Fire Brick
-            { Models.LogLevel.Critical, new SolidColorBrush(Color.FromRgb(139, 0, 0)) }       // Dark Red
+            { Models.LogLevel.Trace, new SolidColorBrush(Color.FromRgb(107, 114, 128)) },      // Gray
+            { Models.LogLevel.Debug, new SolidColorBrush(Color.FromRgb(37, 99, 235)) },        // Blue
+            { Models.LogLevel.Information, new SolidColorBrush(Color.FromRgb(5, 150, 105)) },  // Teal
+            { Models.LogLevel.Success, new SolidColorBrush(Color.FromRgb(22, 163, 74)) },      // Green
+            { Models.LogLevel.Warning, new SolidColorBrush(Color.FromRgb(245, 158, 11)) },     // Amber
+            { Models.LogLevel.Error, new SolidColorBrush(Color.FromRgb(220, 38, 38)) },        // Red
+            { Models.LogLevel.Critical, new SolidColorBrush(Color.FromRgb(185, 28, 28)) }      // Dark Red
         };
 
-        // Source colors for different components
+        // Source colors for different components - Enterprise Dark
         private static readonly Dictionary<string, SolidColorBrush> DarkSourceBrushes = new()
         {
-            { "Desktop", new SolidColorBrush(Color.FromRgb(100, 149, 237)) },    // Cornflower Blue
-            { "Server", new SolidColorBrush(Color.FromRgb(255, 165, 0)) },       // Orange
-            { "Launcher", new SolidColorBrush(Color.FromRgb(147, 112, 219)) },   // Medium Slate Blue
-            { "Agent", new SolidColorBrush(Color.FromRgb(255, 20, 147)) },       // Deep Pink
-            { "LogViewer", new SolidColorBrush(Color.FromRgb(64, 224, 208)) },   // Turquoise
-            { "Unknown", new SolidColorBrush(Color.FromRgb(169, 169, 169)) }     // Dark Gray
+            { "Desktop", new SolidColorBrush(Color.FromRgb(96, 165, 250)) },      // Blue
+            { "Server", new SolidColorBrush(Color.FromRgb(251, 146, 60)) },       // Orange
+            { "Launcher", new SolidColorBrush(Color.FromRgb(167, 139, 250)) },    // Purple
+            { "Agent", new SolidColorBrush(Color.FromRgb(244, 114, 182)) },       // Pink
+            { "LogViewer", new SolidColorBrush(Color.FromRgb(45, 212, 191)) },    // Teal
+            { "Unknown", new SolidColorBrush(Color.FromRgb(156, 163, 175)) }      // Gray
         };
 
+        // Source colors for different components - Enterprise Light
         private static readonly Dictionary<string, SolidColorBrush> LightSourceBrushes = new()
         {
-            { "Desktop", new SolidColorBrush(Color.FromRgb(65, 105, 225)) },     // Royal Blue
-            { "Server", new SolidColorBrush(Color.FromRgb(255, 140, 0)) },       // Dark Orange
-            { "Launcher", new SolidColorBrush(Color.FromRgb(123, 104, 238)) },   // Medium Slate Blue
-            { "Agent", new SolidColorBrush(Color.FromRgb(199, 21, 133)) },       // Medium Violet Red
-            { "LogViewer", new SolidColorBrush(Color.FromRgb(72, 209, 204)) },   // Medium Turquoise
-            { "Unknown", new SolidColorBrush(Color.FromRgb(105, 105, 105)) }     // Dim Gray
+            { "Desktop", new SolidColorBrush(Color.FromRgb(37, 99, 235)) },       // Blue
+            { "Server", new SolidColorBrush(Color.FromRgb(234, 88, 12)) },        // Orange
+            { "Launcher", new SolidColorBrush(Color.FromRgb(124, 58, 237)) },     // Purple
+            { "Agent", new SolidColorBrush(Color.FromRgb(219, 39, 119)) },        // Pink
+            { "LogViewer", new SolidColorBrush(Color.FromRgb(20, 184, 166)) },    // Teal
+            { "Unknown", new SolidColorBrush(Color.FromRgb(107, 114, 128)) }      // Gray
         };
 
         public ThemeService(IConfiguration configuration, ILogger<ThemeService> logger)

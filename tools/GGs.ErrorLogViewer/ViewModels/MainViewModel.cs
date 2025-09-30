@@ -43,7 +43,7 @@ namespace GGs.ErrorLogViewer.ViewModels
 
         // New: Smart Filter for deduplication
         [ObservableProperty]
-        private bool _smartFilter = false;
+        private bool _smartFilter = true;
 
         // New: Font size for log text
         [ObservableProperty]
@@ -144,6 +144,9 @@ namespace GGs.ErrorLogViewer.ViewModels
 
             // Load initial configuration
             LoadConfiguration();
+
+            // Clear logs on startup
+            ClearLogs();
 
             // Note: Auto-start is now handled by AutoStartMonitoring() method called from App.xaml.cs
         }

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
 using System.Linq;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -18,7 +19,7 @@ namespace GGs.ErrorLogViewer.Services
         event EventHandler<LogEntry> LogEntryAdded;
         event EventHandler<IEnumerable<LogEntry>> LogEntriesAdded;
         event EventHandler LogsCleared;
-        
+
         Task StartMonitoringAsync(string logDirectory, CancellationToken cancellationToken = default);
         Task StopMonitoringAsync();
         IEnumerable<LogEntry> GetAllEntries();
@@ -31,18 +32,20 @@ namespace GGs.ErrorLogViewer.Services
         private readonly ILogger<LogMonitoringService> _logger;
         private readonly ILogParsingService _parsingService;
         private readonly IConfiguration _configuration;
-        
+
         private readonly ConcurrentQueue<LogEntry> _logEntries = new();
         private readonly Dictionary<string, FileWatcher> _fileWatchers = new();
         private readonly Dictionary<string, long> _filePositions = new();
-        private readonly HashSet<string> _seenLogHashes = new(); // Prevent duplicate entries
+        private readonly ConcurrentDictionary<string, DateTime> _seenLogHashes = new(); // Prevent duplicate entries
         private readonly object _lockObject = new();
-        
+
         private string _logDirectory = string.Empty;
         private Timer? _pollingTimer;
         private long _nextLogId = 1;
         private int _maxEntries;
         private int _refreshInterval;
+        private readonly int _logRetentionDays;
+        private readonly string _seenHashesFilePath;
 
         public event EventHandler<LogEntry>? LogEntryAdded;
         public event EventHandler<IEnumerable<LogEntry>>? LogEntriesAdded;
@@ -56,19 +59,28 @@ namespace GGs.ErrorLogViewer.Services
             _logger = logger;
             _parsingService = parsingService;
             _configuration = configuration;
-            
+
             _maxEntries = _configuration.GetValue<int>("ErrorLogViewer:MaxLogEntries", 50000);
             _refreshInterval = _configuration.GetValue<int>("ErrorLogViewer:RefreshIntervalMs", 250);
+            _logRetentionDays = _configuration.GetValue<int>("ErrorLogViewer:LogRetentionDays", 30);
+            _seenHashesFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "seenHashes.json");
+
+            LoadSeenHashes();
         }
 
         public async Task StartMonitoringAsync(string logDirectory, CancellationToken cancellationToken = default)
         {
             _logDirectory = logDirectory;
-            
+
             if (!Directory.Exists(_logDirectory))
             {
                 Directory.CreateDirectory(_logDirectory);
                 _logger.LogInformation("Created log directory: {LogDirectory}", _logDirectory);
+            }
+
+            if (_configuration.GetValue<bool>("ErrorLogViewer:ClearLogsOnStartup"))
+            {
+                ClearLogDirectory();
             }
 
             _logger.LogInformation("Starting log monitoring for directory: {LogDirectory}", _logDirectory);
@@ -101,7 +113,38 @@ namespace GGs.ErrorLogViewer.Services
                 _fileWatchers.Clear();
             }
 
+            SaveSeenHashes();
+
             _logger.LogInformation("Log monitoring stopped");
+        }
+
+        private void ClearLogDirectory()
+        {
+            try
+            {
+                var logFiles = GetLogFiles(_logDirectory);
+                int clearedFileCount = 0;
+                foreach (var file in logFiles)
+                {
+                    try
+                    {
+                        File.Delete(file);
+                        clearedFileCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Could not delete log file: {File}", file);
+                    }
+                }
+                if (clearedFileCount > 0)
+                {
+                    _logger.LogInformation("Cleared {Count} log files from the log directory.", clearedFileCount);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error clearing log directory.");
+            }
         }
 
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
@@ -155,11 +198,11 @@ namespace GGs.ErrorLogViewer.Services
         private async Task<IEnumerable<LogEntry>> LoadLogFileAsync(string filePath, CancellationToken cancellationToken)
         {
             var entries = new List<LogEntry>();
-            
+
             try
             {
                 using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
-                
+
                 // Handle compressed files
                 Stream readStream = stream;
                 if (filePath.EndsWith(".gz", StringComparison.OrdinalIgnoreCase))
@@ -174,7 +217,7 @@ namespace GGs.ErrorLogViewer.Services
                 while ((line = await reader.ReadLineAsync()) != null && !cancellationToken.IsCancellationRequested)
                 {
                     lineNumber++;
-                    
+
                     if (string.IsNullOrWhiteSpace(line))
                         continue;
 
@@ -214,7 +257,7 @@ namespace GGs.ErrorLogViewer.Services
                 watcher.Error += OnWatcherError;
 
                 watcher.EnableRaisingEvents = true;
-                
+
                 lock (_lockObject)
                 {
                     _fileWatchers["main"] = new FileWatcher { Watcher = watcher };
@@ -250,7 +293,7 @@ namespace GGs.ErrorLogViewer.Services
             if (IsLogFile(e.FullPath))
             {
                 _logger.LogDebug("Log file renamed: {OldPath} -> {NewPath}", e.OldFullPath, e.FullPath);
-                
+
                 lock (_lockObject)
                 {
                     if (_filePositions.ContainsKey(e.OldFullPath))
@@ -290,15 +333,15 @@ namespace GGs.ErrorLogViewer.Services
                     return;
 
                 var currentPosition = _filePositions.GetValueOrDefault(filePath, 0);
-                
+
                 if (fileInfo.Length <= currentPosition)
                     return; // No new content
 
                 var newEntries = new List<LogEntry>();
-                
+
                 using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
                 stream.Seek(currentPosition, SeekOrigin.Begin);
-                
+
                 using var reader = new StreamReader(stream);
                 string? line;
                 long lineNumber = currentPosition == 0 ? 0 : -1; // Approximate line number
@@ -306,7 +349,7 @@ namespace GGs.ErrorLogViewer.Services
                 while ((line = await reader.ReadLineAsync()) != null)
                 {
                     lineNumber++;
-                    
+
                     if (string.IsNullOrWhiteSpace(line))
                         continue;
 
@@ -315,25 +358,14 @@ namespace GGs.ErrorLogViewer.Services
                     {
                         // Create a hash to detect duplicates
                         var logHash = $"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}|{entry.Level}|{entry.Source}|{entry.Message}";
-                        
-                        lock (_lockObject)
+
+                        if (!_seenLogHashes.ContainsKey(logHash))
                         {
-                            if (!_seenLogHashes.Contains(logHash))
+                            if (_seenLogHashes.TryAdd(logHash, entry.Timestamp))
                             {
-                                _seenLogHashes.Add(logHash);
                                 entry.Id = Interlocked.Increment(ref _nextLogId);
                                 newEntries.Add(entry);
                                 _logEntries.Enqueue(entry);
-                                
-                                // Clean up old hashes to prevent memory growth
-                                if (_seenLogHashes.Count > 10000)
-                                {
-                                    var oldHashes = _seenLogHashes.Take(5000).ToList();
-                                    foreach (var oldHash in oldHashes)
-                                    {
-                                        _seenLogHashes.Remove(oldHash);
-                                    }
-                                }
                             }
                         }
                     }
@@ -362,10 +394,10 @@ namespace GGs.ErrorLogViewer.Services
         {
             // Wait a bit for the file to be fully created
             await Task.Delay(100);
-            
+
             var entries = await LoadLogFileAsync(filePath, CancellationToken.None);
             var entryList = entries.ToList();
-            
+
             if (entryList.Any())
             {
                 foreach (var entry in entryList)
@@ -425,7 +457,7 @@ namespace GGs.ErrorLogViewer.Services
         public override void Dispose()
         {
             _pollingTimer?.Dispose();
-            
+
             lock (_lockObject)
             {
                 foreach (var watcher in _fileWatchers.Values)
@@ -434,8 +466,63 @@ namespace GGs.ErrorLogViewer.Services
                 }
                 _fileWatchers.Clear();
             }
-            
+
+            SaveSeenHashes();
+
             base.Dispose();
+        }
+
+        private void LoadSeenHashes()
+        {
+            try
+            {
+                if (File.Exists(_seenHashesFilePath))
+                {
+                    var jsonData = File.ReadAllText(_seenHashesFilePath);
+                    var hashes = JsonSerializer.Deserialize<Dictionary<string, DateTime>>(jsonData);
+                    if (hashes != null)
+                    {
+                        var cutoff = DateTime.UtcNow.AddDays(-_logRetentionDays);
+                        foreach (var item in hashes)
+                        {
+                            if (item.Value > cutoff)
+                            {
+                                _seenLogHashes.TryAdd(item.Key, item.Value);
+                            }
+                        }
+                        _logger.LogInformation("Loaded {Count} recent log hashes.", _seenLogHashes.Count);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading seen hashes");
+            }
+        }
+
+        private void SaveSeenHashes()
+        {
+            try
+            {
+                var hashesToSave = new Dictionary<string, DateTime>();
+                var cutoff = DateTime.UtcNow.AddDays(-_logRetentionDays);
+
+                foreach (var item in _seenLogHashes)
+                {
+                    if (item.Value > cutoff)
+                    {
+                        hashesToSave.Add(item.Key, item.Value);
+                    }
+                }
+
+                var jsonData = JsonSerializer.Serialize(hashesToSave);
+                File.WriteAllText(_seenHashesFilePath, jsonData);
+                _logger.LogInformation("Saved {Count} log hashes.", hashesToSave.Count);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error saving seen hashes");
+            }
         }
 
         private class FileWatcher : IDisposable

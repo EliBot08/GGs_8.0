@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Threading;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,11 +21,37 @@ namespace GGs.ErrorLogViewer
         private IEarlyLoggingService? _earlyLoggingService;
         private string? _commandLineLogDirectory;
         private bool _autoStart = true;
+        private static Mutex? _mutex;
+        private static bool _mutexCreated = false;
 
         public IServiceProvider ServiceProvider => _host?.Services ?? throw new InvalidOperationException("Host not initialized");
 
         protected override void OnStartup(StartupEventArgs e)
         {
+            // Single instance check with proper mutex handling
+            try
+            {
+                _mutex = new Mutex(true, "{8F6F0AC4-B9A1-45fd-A8CF-72F04E6BDE8F-v2}", out _mutexCreated);
+                if (!_mutexCreated)
+                {
+                    MessageBox.Show(
+                        "GGs ErrorLogViewer is already running.\n\nPlease check your taskbar.",
+                        "Already Running",
+                        MessageBoxButton.OK,
+                        MessageBoxImage.Information);
+                    Shutdown();
+                    return;
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    $"Failed to create single instance mutex: {ex.Message}\n\nContinuing anyway...",
+                    "Warning",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+            
             try
             {
                 // Parse command line arguments
@@ -185,6 +212,21 @@ Examples:
             }
             finally
             {
+                // Release mutex to allow future instances
+                try
+                {
+                    if (_mutexCreated && _mutex != null)
+                    {
+                        _mutex.ReleaseMutex();
+                        _mutex.Dispose();
+                        _mutex = null;
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Failed to release mutex: {ex.Message}");
+                }
+                
                 base.OnExit(e);
             }
         }

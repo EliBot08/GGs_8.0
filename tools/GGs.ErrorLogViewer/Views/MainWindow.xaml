@@ -5,6 +5,7 @@
         xmlns:local="clr-namespace:GGs.ErrorLogViewer.Views"
         xmlns:vm="clr-namespace:GGs.ErrorLogViewer.ViewModels"
         xmlns:models="clr-namespace:GGs.ErrorLogViewer.Models"
+        xmlns:converters="clr-namespace:GGs.ErrorLogViewer.Views.Converters"
         Title="GGs Error Log Viewer" 
         Height="900" 
         Width="1600"
@@ -17,18 +18,18 @@
 
     <Window.Resources>
         <!-- Log Level to Icon Converter -->
-        <local:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
-        <local:LogLevelToColorConverter x:Key="LogLevelToColorConverter"/>
-        <local:SourceToColorConverter x:Key="SourceToColorConverter"/>
-        <local:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-        <local:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-        <local:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
-        <local:BooleanToSymbolConverter x:Key="BooleanToSymbolConverter"/>
-        <local:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
-        <local:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
-        <local:BooleanToMessageConverter x:Key="BooleanToMessageConverter"/>
+        <converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
+        <converters:LogLevelToColorConverter x:Key="LogLevelToColorConverter"/>
+        <converters:SourceToColorConverter x:Key="SourceToColorConverter"/>
+        <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+        <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+        <converters:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
+        <converters:BooleanToSymbolConverter x:Key="BooleanToSymbolConverter"/>
+        <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
+        <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+        <converters:BooleanToMessageConverter x:Key="BooleanToMessageConverter"/>
         <!-- New: Multi-value converter for message switching -->
-        <local:RawOrCompactMessageConverter x:Key="RawOrCompactMessageConverter"/>
+        <converters:RawOrCompactMessageConverter x:Key="RawOrCompactMessageConverter"/>
         
         <!-- Enhanced Button Styles with Smooth Animations -->
         <Style x:Key="ToolbarButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
@@ -269,7 +270,7 @@
         <!-- Filters -->
         <Border Grid.Row="1" Background="{DynamicResource SystemControlBackgroundAltMediumBrush}" 
                 BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" 
-                BorderThickness="0,0,0,1">
+                BorderThickness="0,0,0,1" Margin="0,5,0,0">
             <Grid Margin="8,6">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
@@ -349,7 +350,7 @@
         </Border>
 
         <!-- Main Content -->
-        <Grid Grid.Row="2">
+        <Grid Grid.Row="2" Margin="0,5,0,0">
             <Grid.RowDefinitions>
                 <RowDefinition Height="*"/>
                 <RowDefinition Height="Auto"/>
@@ -361,7 +362,7 @@
                       ItemsSource="{Binding LogEntriesView}"
                       SelectedItem="{Binding SelectedLogEntry}"
                       Style="{StaticResource LogDataGridStyle}"
-                      Margin="8">
+                      Margin="8,0,8,8">
                 
                 <DataGrid.Columns>
                     <!-- Level Icon -->
@@ -503,7 +504,7 @@
                             
                             <TextBlock Grid.Column="0" 
                                        Text="Log Entry Details" 
-                                       FontSize="16" 
+                                       FontSize="18" 
                                        FontWeight="SemiBold"/>
                             
                             <Button Grid.Column="1" 
@@ -530,31 +531,31 @@
                             </Grid.RowDefinitions>
 
                             <!-- Timestamp -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Timestamp:" FontWeight="SemiBold" Margin="0,2,8,2"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Timestamp}" Margin="0,2"/>
+                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Timestamp:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
+                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Timestamp}" Margin="0,2" FontSize="14"/>
 
                             <!-- Level -->
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Level:" FontWeight="SemiBold" Margin="0,2,8,2"/>
+                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Level:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
                             <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,2">
                                 <ui:SymbolIcon Symbol="{Binding Level, Converter={StaticResource LogLevelToIconConverter}}"
                                                Foreground="{Binding Level, Converter={StaticResource LogLevelToColorConverter}}"
                                                Margin="0,0,4,0"/>
-                                <TextBlock Text="{Binding Level}"/>
+                                <TextBlock Text="{Binding Level}" FontSize="14"/>
                             </StackPanel>
 
                             <!-- Source -->
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Source:" FontWeight="SemiBold" Margin="0,2,8,2"/>
-                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Source}" Margin="0,2"/>
+                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Source:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
+                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Source}" Margin="0,2" FontSize="14"/>
 
                             <!-- Category -->
                             <TextBlock Grid.Row="3" Grid.Column="0" Text="Category:" FontWeight="SemiBold" Margin="0,2,8,2"
-                                       Visibility="{Binding Category, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                       Visibility="{Binding Category, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
                             <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Category}" Margin="0,2"
-                                       Visibility="{Binding Category, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                       Visibility="{Binding Category, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
 
                             <!-- File Location -->
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Location:" FontWeight="SemiBold" Margin="0,2,8,2"/>
-                            <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,2">
+                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Location:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
+                            <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,2" FontSize="14">
                                 <Run Text="{Binding FileName}"/>
                                 <Run Text=":" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
                                 <Run Text="{Binding LineNumber}"/>
@@ -562,13 +563,13 @@
 
                             <!-- Exception -->
                             <TextBlock Grid.Row="5" Grid.Column="0" Text="Exception:" FontWeight="SemiBold" Margin="0,2,8,2"
-                                       Visibility="{Binding Exception, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                       Visibility="{Binding Exception, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
                             <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Exception}" Margin="0,2"
                                        Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
-                                       Visibility="{Binding Exception, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                       Visibility="{Binding Exception, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
 
                             <!-- Message -->
-                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Message:" FontWeight="SemiBold" Margin="0,8,8,2" VerticalAlignment="Top"/>
+                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Message:" FontWeight="SemiBold" Margin="0,8,8,2" VerticalAlignment="Top" FontSize="14"/>
                             <TextBox Grid.Row="6" Grid.Column="1" 
                                      Text="{Binding Message, Mode=OneWay}" 
                                      IsReadOnly="True"
@@ -578,11 +579,11 @@
                                      MaxHeight="100"
                                      Margin="0,8,0,2"
                                      Background="Transparent"
-                                     BorderThickness="0"/>
+                                     BorderThickness="0" FontSize="14"/>
 
                             <!-- Stack Trace -->
                             <TextBlock Grid.Row="7" Grid.Column="0" Text="Stack Trace:" FontWeight="SemiBold" Margin="0,8,8,2" VerticalAlignment="Top"
-                                       Visibility="{Binding StackTrace, Converter={StaticResource NullToVisibilityConverter}}"/>
+                                       Visibility="{Binding StackTrace, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
                             <TextBox Grid.Row="7" Grid.Column="1" 
                                      Text="{Binding StackTrace, Mode=OneWay}" 
                                      IsReadOnly="True"
@@ -590,7 +591,7 @@
                                      AcceptsReturn="True"
                                      VerticalScrollBarVisibility="Auto"
                                      FontFamily="Consolas"
-                                     FontSize="11"
+                                     FontSize="13"
                                      Margin="0,8,0,2"
                                      Background="Transparent"
                                      BorderThickness="0"
