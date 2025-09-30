@@ -59,10 +59,6 @@
           </uap:FileTypeAssociation>
         </uap:Extension>
 
-        <!-- Optional StartupTask (disabled by default; app can request enablement) -->
-        <uap:Extension Category="windows.startupTask">
-          <uap:StartupTask TaskId="GGsDesktopStartup" Enabled="false" DisplayName="GGs Desktop" />
-        </uap:Extension>
       </Extensions>
     </Application>
   </Applications>
