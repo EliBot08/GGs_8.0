@@ -1,0 +1,710 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Management;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using Microsoft.Win32;
+
+namespace GGs.Shared.SystemIntelligence;
+
+/// <summary>
+/// BIOS/UEFI Intelligence Scan Module
+/// Detects firmware-level performance settings
+/// </summary>
+public class BiosIntelligenceModule : BaseScanModule
+{
+    public BiosIntelligenceModule(ILogger logger) : base(logger) { }
+
+    public override string ModuleName => "BIOS Intelligence";
+    public override string Description => "Analyze BIOS/UEFI settings for performance optimization opportunities";
+    public override ScanArea SupportedAreas => ScanArea.BiosUefi;
+    public override int Priority => 150;
+    public override bool RequiresElevation => true;
+
+    public override async Task<List<DetectedTweak>> ScanAsync(
+        DeepScanRequest request, 
+        SystemScanProgress progress, 
+        CancellationToken cancellationToken = default)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        await UpdateProgress(progress, "Analyzing BIOS/UEFI settings...");
+        
+        // Scan WMI for BIOS information
+        tweaks.AddRange(await ScanBiosSettings(cancellationToken));
+        
+        await UpdateProgress(progress, "Checking power management settings...");
+        tweaks.AddRange(await ScanPowerManagementSettings(cancellationToken));
+        
+        await UpdateProgress(progress, "Analyzing CPU settings...");
+        tweaks.AddRange(await ScanCpuSettings(cancellationToken));
+
+        if (request.ScanDepth >= ScanDepth.Deep)
+        {
+            await UpdateProgress(progress, "Deep scanning hardware configurations...");
+            tweaks.AddRange(await ScanHardwareConfigurations(cancellationToken));
+        }
+
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanBiosSettings(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BIOS");
+            using var collection = searcher.Get();
+            
+            foreach (ManagementObject obj in collection)
+            {
+                var biosVersion = obj["Version"]?.ToString();
+                var biosDate = obj["ReleaseDate"]?.ToString();
+                
+                if (!string.IsNullOrEmpty(biosVersion))
+                {
+                    tweaks.Add(CreateDetectedTweak(
+                        "BIOS Version",
+                        $"Current BIOS version: {biosVersion}",
+                        TweakSource.BiosUefi,
+                        TweakCategory.Performance,
+                        biosVersion,
+                        null,
+                        PerformanceImpact.Variable,
+                        DetectionConfidence.High));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to scan BIOS settings");
+        }
+
+        await Task.Delay(100, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanPowerManagementSettings(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            // Check CPU power management
+            using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor");
+            using var collection = searcher.Get();
+            
+            foreach (ManagementObject obj in collection)
+            {
+                var maxClockSpeed = obj["MaxClockSpeed"]?.ToString();
+                var currentClockSpeed = obj["CurrentClockSpeed"]?.ToString();
+                
+                if (maxClockSpeed != null && currentClockSpeed != null)
+                {
+                    var max = int.Parse(maxClockSpeed);
+                    var current = int.Parse(currentClockSpeed);
+                    
+                    if (current < max * 0.9) // If running at less than 90% of max
+                    {
+                        tweaks.Add(CreateDetectedTweak(
+                            "CPU Power Management",
+                            "CPU may be throttled by power management settings",
+                            TweakSource.BiosUefi,
+                            TweakCategory.Cpu,
+                            $"{current} MHz",
+                            $"{max} MHz",
+                            PerformanceImpact.Major,
+                            DetectionConfidence.Medium));
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to scan power management settings");
+        }
+
+        await Task.Delay(100, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanCpuSettings(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            // Check for virtualization support
+            using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Processor");
+            using var collection = searcher.Get();
+            
+            foreach (ManagementObject obj in collection)
+            {
+                var virtualizationFirmwareEnabled = obj["VirtualizationFirmwareEnabled"];
+                if (virtualizationFirmwareEnabled != null && !(bool)virtualizationFirmwareEnabled)
+                {
+                    tweaks.Add(CreateDetectedTweak(
+                        "Hardware Virtualization",
+                        "Hardware virtualization is disabled in BIOS",
+                        TweakSource.BiosUefi,
+                        TweakCategory.Cpu,
+                        "Disabled",
+                        "Enabled",
+                        PerformanceImpact.Minor,
+                        DetectionConfidence.High));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to scan CPU settings");
+        }
+
+        await Task.Delay(100, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanHardwareConfigurations(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+        
+        // Deep hardware analysis would go here
+        await Task.Delay(200, cancellationToken);
+        return tweaks;
+    }
+}
+
+/// <summary>
+/// Third-Party Optimizer Detection Module
+/// Identifies tweaks made by other optimization software
+/// </summary>
+public class ThirdPartyOptimizerModule : BaseScanModule
+{
+    private readonly Dictionary<KnownOptimizer, OptimizerSignature> _optimizerSignatures;
+
+    public ThirdPartyOptimizerModule(ILogger logger) : base(logger)
+    {
+        _optimizerSignatures = InitializeOptimizerSignatures();
+    }
+
+    public override string ModuleName => "Third-Party Optimizer";
+    public override string Description => "Detect tweaks made by other optimization software";
+    public override ScanArea SupportedAreas => ScanArea.ThirdPartyApps;
+    public override int Priority => 160;
+
+    public override async Task<List<DetectedTweak>> ScanAsync(
+        DeepScanRequest request, 
+        SystemScanProgress progress, 
+        CancellationToken cancellationToken = default)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        await UpdateProgress(progress, "Scanning for installed optimizers...");
+        var installedOptimizers = await DetectInstalledOptimizers(cancellationToken);
+
+        foreach (var optimizer in installedOptimizers)
+        {
+            await UpdateProgress(progress, $"Analyzing {optimizer} tweaks...");
+            tweaks.AddRange(await ScanOptimizerTweaks(optimizer, request.ScanDepth, cancellationToken));
+        }
+
+        if (request.ScanDepth >= ScanDepth.Deep)
+        {
+            await UpdateProgress(progress, "Deep scanning for optimizer remnants...");
+            tweaks.AddRange(await ScanOptimizerRemnants(cancellationToken));
+        }
+
+        return tweaks;
+    }
+
+    private async Task<List<KnownOptimizer>> DetectInstalledOptimizers(CancellationToken cancellationToken)
+    {
+        var detectedOptimizers = new List<KnownOptimizer>();
+
+        try
+        {
+            // Check installed programs
+            using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Uninstall");
+            if (key != null)
+            {
+                foreach (var subKeyName in key.GetSubKeyNames())
+                {
+                    using var subKey = key.OpenSubKey(subKeyName);
+                    var displayName = subKey?.GetValue("DisplayName")?.ToString();
+                    
+                    if (!string.IsNullOrEmpty(displayName))
+                    {
+                        var optimizer = IdentifyOptimizerByName(displayName);
+                        if (optimizer != KnownOptimizer.Unknown && !detectedOptimizers.Contains(optimizer))
+                        {
+                            detectedOptimizers.Add(optimizer);
+                        }
+                    }
+                }
+            }
+
+            // Check for optimizer-specific registry keys
+            foreach (var signature in _optimizerSignatures.Values)
+            {
+                if (await CheckOptimizerSignature(signature, cancellationToken))
+                {
+                    if (!detectedOptimizers.Contains(signature.Optimizer))
+                    {
+                        detectedOptimizers.Add(signature.Optimizer);
+                    }
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to detect installed optimizers");
+        }
+
+        await Task.Delay(100, cancellationToken);
+        return detectedOptimizers;
+    }
+
+    private async Task<List<DetectedTweak>> ScanOptimizerTweaks(
+        KnownOptimizer optimizer, 
+        ScanDepth depth, 
+        CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        if (!_optimizerSignatures.TryGetValue(optimizer, out var signature))
+            return tweaks;
+
+        try
+        {
+            // Scan registry locations known to be modified by this optimizer
+            foreach (var registryPath in signature.KnownRegistryPaths)
+            {
+                var registryTweaks = await ScanRegistryPath(registryPath, optimizer, cancellationToken);
+                tweaks.AddRange(registryTweaks);
+            }
+
+            // Scan for service modifications
+            foreach (var serviceName in signature.KnownServiceModifications)
+            {
+                var serviceTweaks = await ScanServiceModifications(serviceName, optimizer, cancellationToken);
+                tweaks.AddRange(serviceTweaks);
+            }
+
+            // Scan for file modifications
+            foreach (var filePath in signature.KnownFileModifications)
+            {
+                var fileTweaks = await ScanFileModifications(filePath, optimizer, cancellationToken);
+                tweaks.AddRange(fileTweaks);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to scan tweaks for optimizer {Optimizer}", optimizer);
+        }
+
+        await Task.Delay(150, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanRegistryPath(
+        string registryPath, 
+        KnownOptimizer optimizer, 
+        CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            var parts = registryPath.Split('\\');
+            if (parts.Length < 2) return tweaks;
+
+            var hive = parts[0] switch
+            {
+                "HKEY_LOCAL_MACHINE" => Registry.LocalMachine,
+                "HKEY_CURRENT_USER" => Registry.CurrentUser,
+                "HKEY_CLASSES_ROOT" => Registry.ClassesRoot,
+                _ => null
+            };
+
+            if (hive == null) return tweaks;
+
+            var subKeyPath = string.Join("\\", parts.Skip(1));
+            using var key = hive.OpenSubKey(subKeyPath);
+            
+            if (key != null)
+            {
+                foreach (var valueName in key.GetValueNames())
+                {
+                    var value = key.GetValue(valueName);
+                    
+                    tweaks.Add(CreateDetectedTweak(
+                        $"{optimizer} Registry Tweak: {valueName}",
+                        $"Registry modification by {optimizer} at {registryPath}\\{valueName}",
+                        TweakSource.ThirdPartyOptimizer,
+                        CategorizeOptimizerTweak(optimizer, valueName),
+                        value?.ToString() ?? "null",
+                        null,
+                        EstimateOptimizerTweakImpact(optimizer, valueName),
+                        DetectionConfidence.High));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Failed to scan registry path {Path}", registryPath);
+        }
+
+        await Task.Delay(50, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanServiceModifications(
+        string serviceName, 
+        KnownOptimizer optimizer, 
+        CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            using var searcher = new ManagementObjectSearcher($"SELECT * FROM Win32_Service WHERE Name='{serviceName}'");
+            using var collection = searcher.Get();
+            
+            foreach (ManagementObject obj in collection)
+            {
+                var startMode = obj["StartMode"]?.ToString();
+                var state = obj["State"]?.ToString();
+                
+                tweaks.Add(CreateDetectedTweak(
+                    $"{optimizer} Service Modification: {serviceName}",
+                    $"Service {serviceName} modified by {optimizer}",
+                    TweakSource.ThirdPartyOptimizer,
+                    TweakCategory.Services,
+                    $"{startMode} ({state})",
+                    null,
+                    PerformanceImpact.Minor,
+                    DetectionConfidence.High));
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Failed to scan service {ServiceName}", serviceName);
+        }
+
+        await Task.Delay(30, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanFileModifications(
+        string filePath, 
+        KnownOptimizer optimizer, 
+        CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            if (File.Exists(filePath))
+            {
+                var fileInfo = new FileInfo(filePath);
+                
+                tweaks.Add(CreateDetectedTweak(
+                    $"{optimizer} File Modification: {Path.GetFileName(filePath)}",
+                    $"File {filePath} modified by {optimizer}",
+                    TweakSource.ThirdPartyOptimizer,
+                    TweakCategory.SystemFile,
+                    $"Modified: {fileInfo.LastWriteTime}",
+                    null,
+                    PerformanceImpact.Unknown,
+                    DetectionConfidence.Medium));
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Failed to scan file {FilePath}", filePath);
+        }
+
+        await Task.Delay(20, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanOptimizerRemnants(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+        
+        // Scan for remnants of uninstalled optimizers
+        await Task.Delay(200, cancellationToken);
+        return tweaks;
+    }
+
+    private KnownOptimizer IdentifyOptimizerByName(string displayName)
+    {
+        var lowerName = displayName.ToLowerInvariant();
+        
+        return lowerName switch
+        {
+            var name when name.Contains("ccleaner") => KnownOptimizer.CCleaner,
+            var name when name.Contains("advanced systemcare") => KnownOptimizer.AdvancedSystemCare,
+            var name when name.Contains("system mechanic") => KnownOptimizer.SystemMechanic,
+            var name when name.Contains("razer cortex") => KnownOptimizer.RazerCortex,
+            var name when name.Contains("msi afterburner") => KnownOptimizer.MSIAfterburner,
+            var name when name.Contains("nvidia geforce") => KnownOptimizer.NvidiaGeForceExperience,
+            _ => KnownOptimizer.Unknown
+        };
+    }
+
+    private async Task<bool> CheckOptimizerSignature(OptimizerSignature signature, CancellationToken cancellationToken)
+    {
+        // Check if optimizer signature exists in registry
+        await Task.Delay(10, cancellationToken);
+        return false; // Simplified for now
+    }
+
+    private TweakCategory CategorizeOptimizerTweak(KnownOptimizer optimizer, string tweakName)
+    {
+        var lowerName = tweakName.ToLowerInvariant();
+        
+        return lowerName switch
+        {
+            var name when name.Contains("visual") || name.Contains("effect") => TweakCategory.Visual,
+            var name when name.Contains("service") => TweakCategory.Services,
+            var name when name.Contains("startup") => TweakCategory.Startup,
+            var name when name.Contains("network") => TweakCategory.Network,
+            var name when name.Contains("memory") || name.Contains("ram") => TweakCategory.Memory,
+            var name when name.Contains("cpu") || name.Contains("processor") => TweakCategory.Cpu,
+            var name when name.Contains("gpu") || name.Contains("graphics") => TweakCategory.Gpu,
+            var name when name.Contains("game") || name.Contains("gaming") => TweakCategory.Gaming,
+            _ => TweakCategory.Performance
+        };
+    }
+
+    private PerformanceImpact EstimateOptimizerTweakImpact(KnownOptimizer optimizer, string tweakName)
+    {
+        // Estimate impact based on optimizer and tweak type
+        return optimizer switch
+        {
+            KnownOptimizer.RazerCortex => PerformanceImpact.Moderate,
+            KnownOptimizer.MSIAfterburner => PerformanceImpact.Major,
+            KnownOptimizer.CCleaner => PerformanceImpact.Minor,
+            _ => PerformanceImpact.Unknown
+        };
+    }
+
+    private Dictionary<KnownOptimizer, OptimizerSignature> InitializeOptimizerSignatures()
+    {
+        return new Dictionary<KnownOptimizer, OptimizerSignature>
+        {
+            [KnownOptimizer.CCleaner] = new OptimizerSignature
+            {
+                Optimizer = KnownOptimizer.CCleaner,
+                KnownRegistryPaths = new[]
+                {
+                    @"HKEY_CURRENT_USER\Software\Piriform\CCleaner",
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Piriform\CCleaner"
+                },
+                KnownServiceModifications = new[] { "CCleaner" },
+                KnownFileModifications = new[] { @"C:\Program Files\CCleaner\CCleaner.exe" }
+            },
+            [KnownOptimizer.RazerCortex] = new OptimizerSignature
+            {
+                Optimizer = KnownOptimizer.RazerCortex,
+                KnownRegistryPaths = new[]
+                {
+                    @"HKEY_CURRENT_USER\Software\Razer\RazerCortex",
+                    @"HKEY_LOCAL_MACHINE\SOFTWARE\Razer\RazerCortex"
+                },
+                KnownServiceModifications = new[] { "RazerCortexService" },
+                KnownFileModifications = new[] { @"C:\Program Files (x86)\Razer\Razer Cortex\RazerCortex.exe" }
+            }
+            // Add more optimizer signatures...
+        };
+    }
+}
+
+/// <summary>
+/// Signature information for known optimizers
+/// </summary>
+public class OptimizerSignature
+{
+    public KnownOptimizer Optimizer { get; set; }
+    public string[] KnownRegistryPaths { get; set; } = Array.Empty<string>();
+    public string[] KnownServiceModifications { get; set; } = Array.Empty<string>();
+    public string[] KnownFileModifications { get; set; } = Array.Empty<string>();
+}
+
+/// <summary>
+/// Group Policy Intelligence Module
+/// Analyzes Group Policy settings for performance tweaks
+/// </summary>
+public class GroupPolicyIntelligenceModule : BaseScanModule
+{
+    public GroupPolicyIntelligenceModule(ILogger logger) : base(logger) { }
+
+    public override string ModuleName => "Group Policy Intelligence";
+    public override string Description => "Analyze Group Policy settings for performance optimization";
+    public override ScanArea SupportedAreas => ScanArea.GroupPolicy;
+    public override int Priority => 170;
+    public override bool RequiresElevation => true;
+
+    public override async Task<List<DetectedTweak>> ScanAsync(
+        DeepScanRequest request, 
+        SystemScanProgress progress, 
+        CancellationToken cancellationToken = default)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        await UpdateProgress(progress, "Scanning local group policies...");
+        tweaks.AddRange(await ScanLocalGroupPolicies(cancellationToken));
+
+        await UpdateProgress(progress, "Analyzing administrative templates...");
+        tweaks.AddRange(await ScanAdministrativeTemplates(cancellationToken));
+
+        if (request.ScanDepth >= ScanDepth.Deep)
+        {
+            await UpdateProgress(progress, "Deep scanning domain policies...");
+            tweaks.AddRange(await ScanDomainPolicies(cancellationToken));
+        }
+
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanLocalGroupPolicies(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            // Scan Group Policy registry locations
+            var policyPaths = new[]
+            {
+                @"HKEY_LOCAL_MACHINE\SOFTWARE\Policies\Microsoft\Windows",
+                @"HKEY_CURRENT_USER\SOFTWARE\Policies\Microsoft\Windows"
+            };
+
+            foreach (var path in policyPaths)
+            {
+                tweaks.AddRange(await ScanPolicyRegistryPath(path, cancellationToken));
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to scan local group policies");
+        }
+
+        await Task.Delay(100, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanPolicyRegistryPath(string basePath, CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+
+        try
+        {
+            var hive = basePath.StartsWith("HKEY_LOCAL_MACHINE") ? Registry.LocalMachine : Registry.CurrentUser;
+            var subPath = basePath.Substring(basePath.IndexOf('\\') + 1);
+
+            using var key = hive.OpenSubKey(subPath);
+            if (key != null)
+            {
+                await ScanPolicyKey(key, basePath, tweaks, cancellationToken);
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Failed to scan policy registry path {Path}", basePath);
+        }
+
+        return tweaks;
+    }
+
+    private async Task ScanPolicyKey(RegistryKey key, string basePath, List<DetectedTweak> tweaks, CancellationToken cancellationToken)
+    {
+        try
+        {
+            // Scan current key values
+            foreach (var valueName in key.GetValueNames())
+            {
+                var value = key.GetValue(valueName);
+                
+                tweaks.Add(CreateDetectedTweak(
+                    $"Group Policy: {valueName}",
+                    $"Group Policy setting at {basePath}\\{valueName}",
+                    TweakSource.GroupPolicy,
+                    CategorizeGroupPolicyTweak(valueName),
+                    value?.ToString() ?? "null",
+                    null,
+                    EstimateGroupPolicyImpact(valueName),
+                    DetectionConfidence.High));
+            }
+
+            // Recursively scan subkeys
+            foreach (var subKeyName in key.GetSubKeyNames())
+            {
+                using var subKey = key.OpenSubKey(subKeyName);
+                if (subKey != null)
+                {
+                    await ScanPolicyKey(subKey, $"{basePath}\\{subKeyName}", tweaks, cancellationToken);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogDebug(ex, "Failed to scan policy key {Path}", basePath);
+        }
+
+        await Task.Delay(10, cancellationToken);
+    }
+
+    private async Task<List<DetectedTweak>> ScanAdministrativeTemplates(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+        
+        // Scan administrative template settings
+        await Task.Delay(100, cancellationToken);
+        return tweaks;
+    }
+
+    private async Task<List<DetectedTweak>> ScanDomainPolicies(CancellationToken cancellationToken)
+    {
+        var tweaks = new List<DetectedTweak>();
+        
+        // Scan domain-level policies if applicable
+        await Task.Delay(150, cancellationToken);
+        return tweaks;
+    }
+
+    private TweakCategory CategorizeGroupPolicyTweak(string policyName)
+    {
+        var lowerName = policyName.ToLowerInvariant();
+        
+        return lowerName switch
+        {
+            var name when name.Contains("telemetry") || name.Contains("diagnostic") => TweakCategory.Telemetry,
+            var name when name.Contains("update") => TweakCategory.Updates,
+            var name when name.Contains("defender") || name.Contains("security") => TweakCategory.Security,
+            var name when name.Contains("privacy") => TweakCategory.Privacy,
+            var name when name.Contains("network") => TweakCategory.Network,
+            var name when name.Contains("power") => TweakCategory.Power,
+            _ => TweakCategory.Performance
+        };
+    }
+
+    private PerformanceImpact EstimateGroupPolicyImpact(string policyName)
+    {
+        var lowerName = policyName.ToLowerInvariant();
+        
+        return lowerName switch
+        {
+            var name when name.Contains("telemetry") => PerformanceImpact.Minor,
+            var name when name.Contains("update") => PerformanceImpact.Moderate,
+            var name when name.Contains("defender") => PerformanceImpact.Major,
+            _ => PerformanceImpact.Unknown
+        };
+    }
+}
