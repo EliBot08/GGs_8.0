@@ -23,10 +23,12 @@
 **Result:** `packaging/artifacts/GGs.Desktop.msi` successfully created (0.54 MB)
 
 ### 2. MSIX Packaging - FIXED
-**Problem:** Manifest file had wrong extension causing "file not found" error
+**Problem 1:** Manifest file had wrong extension causing "file not found" error  
+**Problem 2:** Unsupported `windows.startupTask` extension category in manifest
 
 **Solution Implemented:**
 - ✅ Renamed `Package.appxmanifest.xml` → `Package.appxmanifest`
+- ✅ Removed unsupported `windows.startupTask` extension (not valid for MakeAppx)
 - ✅ Added validation checks for manifest existence before copy
 - ✅ Added validation checks for assets directory
 - ✅ Improved error handling with exit code checks
@@ -34,7 +36,7 @@
 
 **Files Modified:**
 - `packaging/build-msix.ps1` - Enhanced error handling
-- `packaging/msix/GGs.Desktop.Package/Package.appxmanifest` - Renamed (was .xml)
+- `packaging/msix/GGs.Desktop.Package/Package.appxmanifest` - Renamed & cleaned (removed startupTask)
 
 ---
 
@@ -113,13 +115,20 @@ MakeAppx pack /m AppxManifest.xml /f mapping.txt /p GGs.Desktop.msix
 - `packaging/msi/_generated/Harvested.wxs` - Generated with 1,700+ components
 - `.config/.config/dotnet-tools.json` - Deleted (nested duplicate)
 
-### Commit 2: MSIX Packaging Fix
+### Commit 2: MSIX Packaging Fix (Filename)
 **Hash:** `3d10f23`
 **Message:** "Fix MSIX packaging: rename manifest file, improve error handling and validation"
 
 **Files:**
 - `packaging/build-msix.ps1` - Added error handling and validation
 - `packaging/msix/GGs.Desktop.Package/Package.appxmanifest` - Renamed from .xml
+
+### Commit 3: MSIX Packaging Fix (Manifest Schema)
+**Hash:** `6b3c0a8`
+**Message:** "Fix MSIX manifest: remove unsupported windows.startupTask extension category"
+
+**Files:**
+- `packaging/msix/GGs.Desktop.Package/Package.appxmanifest` - Removed startupTask extension
 
 ---
 
@@ -162,6 +171,12 @@ Get-Item .\packaging\artifacts\GGs.Desktop.msi | Select Name, Length
 - New GUIDs generated on each build (not persistent)
 - For production, consider using deterministic GUIDs based on file paths
 - Current implementation works for continuous deployment scenarios
+
+### Startup Task Removal:
+- `windows.startupTask` is not supported in MakeAppx tool (enumeration constraint)
+- This extension is only available in Store-packaged apps, not sideloaded Desktop Bridge apps
+- Autostart functionality can be implemented via Windows Registry (Run key) in MSI installer instead
+- MSI already includes autostart via `HKCU\Software\Microsoft\Windows\CurrentVersion\Run` registry key
 
 ---
 
