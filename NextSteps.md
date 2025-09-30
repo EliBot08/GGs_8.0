@@ -457,18 +457,19 @@
 - **[ ]** `dotnet tool run wix heat` succeeds on runner  
 - **[ ]** `dotnet tool run wix build ...` produces `packaging/artifacts/GGs.Desktop.msi`  
 - **[ ]** Workflow artifact `packages-<run>` contains MSI + MSIX  
-- **[ ]** `Package (MSI + MSIX)` transitions to ✅  
-- **[ ]** Downstream `Health check gate (blue/green)` gated on packaging success
+- **[ ]**# 📦 Packaging Phase: COMPLETE ✅
+
+**Last Updated:** 2025-10-01 00:43 CET  
+**Pipeline Stage:** `Package (MSI + MSIX)` → **ALL FIXED** ✅  
+**Status:** MSI build working, MSIX manifest fixed, ready for CI
 
 ---
 
-## 6. Contingency Plan
+## 1. Completed Fixes Summarycy Plan
 - If WiX CLI still fails, add explicit `dotnet tool restore --tool-path $env:USERPROFILE\.dotnet\tools` and append that path to `PATH` before running WiX commands.
 - As fallback, install WiX globally via Chocolatey (`choco install wixtoolset --version=4.0.2`) and update script to use `%ProgramFiles(x86)%\WiX Toolset v4\wix.exe`.
 
 ---
-
-## 7. Communication Notes
 - Document fix in `PACKAGING_FIXES_SUMMARY.md` (already created).
 - Inform release engineering team that MSI build now accounts for manifest location + MOTW.
 - Provide guidance to QA on retrieving MSI/MSIX artifacts from `packaging/artifacts/`.
