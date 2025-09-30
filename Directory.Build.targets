@@ -1,0 +1,10 @@
+<Project>
+  <!-- Exclude Agent's appsettings.json from publish to avoid path conflicts when Desktop references Agent -->
+  <Target Name="ExcludeAgentAppsettings" BeforeTargets="ResolvePublishFiles">
+    <ItemGroup>
+      <ResolvedFileToPublish Remove="@(ResolvedFileToPublish)"
+        Condition="'%(ResolvedFileToPublish.RelativePath)' == 'appsettings.json' and '%(ResolvedFileToPublish.MSBuildProjectName)' == 'GGs.Agent'" />
+    </ItemGroup>
+  </Target>
+</Project>
+

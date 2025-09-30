@@ -1,0 +1,234 @@
+GGs – Enterprise Windows Optimization Suite
+Complete, copy-ready deep dive for first-time readers
+
+What GGs is
+•  GGs is an enterprise Windows optimization and configuration platform. It lets admins define, govern, and safely execute OS tweaks at scale, with licensing, role-based access control, remote execution, and (optionally) offline validation.
+•  It ships as four projects:
+•  GGs.Server (ASP.NET Core Web API + SignalR)
+•  GGs.Desktop (WPF client)
+•  GGs.Agent (Windows background service/worker)
+•  GGs.Shared (shared DTOs, enums, license crypto, tweak definitions)
+
+High-level architecture
+•  Desktop ↔ Server: HTTPS REST + JWT for auth; optional SignalR for real-time admin actions/events.
+•  Server ↔ Agent: SignalR for remote command dispatch + telemetry.
+•  License model: RSA keypair (server signs licenses, clients validate). Public key can be distributed to clients for offline validation; private key remains on server.
+•  Data store: EF Core with SQLite by default (one-file DB) but abstracted to support SQL Server/PostgreSQL.
+•  Security: Identity + roles (Admin, Manager, Support, User), JWT bearer auth, TLS, and signed licenses.
+
+Primary user stories
+•  End users: Activate license, run safe tweaks, undo changes, view status.
+•  Admins: Manage users/roles, issue/revoke licenses, define/version tweaks, target devices, push/rollback, audit and report.
+•  Managers: View analytics, limited license/user ops, approve change sets.
+•  Support: Troubleshoot with guardrails, assist devices and users.
+
+Project layout (relative to repo root)
+•  server/GGs.Server: Web API, Identity, EF Core, Swagger, SignalR, seed logic, configuration
+•  clients/GGs.Desktop: WPF MVVM desktop application with tiered UI and onboarding
+•  agent/GGs.Agent: Worker service for remote execution and telemetry (SignalR client)
+•  shared/GGs.Shared: Common contracts (DTOs), enums, tweak models, licensing (RSA), utilities
+
+Server specifics (GGs.Server)
+•  Core responsibilities:
+•  Authentication/Authorization: ASP.NET Core Identity + JWT (8h default lifetime)
+•  Tweak Registry: CRUD of tweak definitions with risk/safety metadata
+•  License Authority: Generates RSA keypair; issues signed licenses; validates signatures
+•  Real-time: SignalR hub for admin broadcasts, device registration updates, tweak dispatch results
+•  Configuration: appsettings.json binds to strongly-typed options (Auth, License, Seed, ConnectionStrings)
+•  Startup (Program.cs):
+•  Adds DbContext with Default connection string (SQLite file ggs.db)
+•  Seeds roles: Admin, Manager, Support, User
+•  Seeds admin: admin@ggs.local / ChangeMe!123 (overridable via Seed settings)
+•  Configures JWT based on Auth:JwtKey
+•  Registers Swagger, Controllers, SignalR, CORS
+•  Important configuration keys (server/appsettings.json):
+•  ConnectionStrings:Default → Data Source=ggs.db
+•  Auth:JwtKey → symmetric secret for JWT signing (replace for production)
+•  License:PrivateKeyPem/PublicKeyPem → RSA PEM blocks for license signing/validation
+•  Seed:AdminEmail/AdminPassword → initial admin credentials
+•  Audit:MachineToken → optional machine token guard if you enforce it
+•  Key endpoints (current implementation):
+•  POST /api/auth/login
+◦  Body: { "UserNameOrEmail": "...", "Password": "..." }
+◦  Returns: { "token": "<JWT>" }
+•  POST /api/licenses/bootstrap-keys (Admin)
+◦  Returns: { "privateKeyPem": "...(PEM)...", "publicKeyPem": "...(PEM)...", "fingerprint": "..." }
+•  POST /api/licenses/issue (Admin)
+◦  Body (LicenseIssueRequest from shared): UserId, Tier, ExpiresUtc?, IsAdminKey, DeviceBindingId?, AllowOfflineValidation, Notes?
+◦  Returns: { "license": SignedLicense }
+•  GET /api/licenses (Admin/Manager) → List existing LicenseRecord
+•  POST /api/licenses/assign/{licenseId}/{userId} (Admin)
+•  POST /api/licenses/revoke/{licenseId} (Admin)
+•  POST /api/licenses/validate (Anonymous)
+◦  Body: { "license": SignedLicense, "currentDeviceBinding": "..." }
+◦  Returns: { "isValid": bool, "message": string }
+•  Tweaks (Admin):
+◦  POST /api/tweaks → create a tweak definition with registry/service/script semantics
+◦  (Typical additional routes: GET/PUT/DELETE may exist similarly; Swagger shows the list)
+•  SignalR: /hubs/admin for real-time notifications and dispatch
+•  Notes about current code reality:
+•  Auth login uses "UserNameOrEmail" (not "Email")
+•  Keys can be bootstrapped via the Admin-only endpoint, then must be pasted into server and desktop appsettings
+•  Some endpoints mentioned in product goals (e.g., analytics, audit) are not yet implemented as REST controllers in this repo snapshot and would be part of the next iteration
+
+Desktop specifics (GGs.Desktop)
+•  Purpose: End-user and admin WPF client
+•  Capabilities:
+•  Login with JWT; attaches Authorization: Bearer headers for server calls
+•  License activation UI; offline validation supported by embedding the server’s PublicKeyPem
+•  Tiered UI: Basic, Pro, Enterprise, Admin skins/themes and feature gates
+•  Tweak browser and executor: runs safe, reversible operations with per-tweak safety/risk labels
+•  EliBot (client-side): helper assistant for explanations, bundles, and troubleshooting (desktop-only service in this snapshot)
+•  Onboarding: first-run tour, defaults, connection check, license prompt
+•  Notifications: success/failure of tweaks, license expiry, device messages
+•  Architecture:
+•  MVVM: Views (XAML) + ViewModels + Services (ApiService, EliBotService, NotificationService)
+•  Config: clients/GGs.Desktop/appsettings.json contains server URL, License.PublicKeyPem for offline signature verification, theme options
+•  Tier gates enforced in UI (feature visibility and skin/animation differences by tier)
+
+Agent specifics (GGs.Agent)
+•  Purpose: Headless background worker (Windows service) to allow remote management at scale
+•  Capabilities:
+•  Connects to server SignalR hub
+•  Enrolls device identity (device binding id), reports heartbeat and basic telemetry
+•  Executes assigned tweaks locally with elevated privileges, streams results back
+•  Offline queue: if server unreachable, can stage and reconcile when connectivity returns
+•  Security:
+•  Validates incoming commands (origin, signature, role, optional machine token)
+•  Respects allow/deny lists; can sandbox scripts; logs outcomes for audit
+
+Shared library (GGs.Shared)
+•  Canonical contract for API requests/responses and tweak/licensing types:
+•  DTOs: CreateTweakRequest, UpdateTweakRequest, TweakResponse, LicenseIssueRequest, LicenseIssueResponse, LicenseValidateRequest, LicenseValidateResponse, etc.
+•  Enums: LicenseTier (Basic/Pro/Enterprise/Admin), CommandType (Registry/Service/Script/Group), SafetyLevel, RiskLevel, ServiceAction
+•  TweakDefinition: typed fields for registry path/value, service name/action, script content, undo metadata, risk/safety
+•  Licensing:
+◦  RsaLicenseService: keypair gen, sign, verify, fingerprint
+◦  SignedLicense: Payload + Signature; payload contains LicenseId, UserId, Tier, IssuedUtc, ExpiresUtc, IsAdminKey, DeviceBindingId, AllowOfflineValidation, Notes
+
+Security model (layered)
+•  Identity: ASP.NET Core Identity tables; lockout on failed logins; email uniqueness
+•  JWT: HMAC-signed tokens; issuer/audience relaxed by default in dev; use proper issuers in prod; short skew and 8h expiry
+•  Roles and authorization: Admin full access; Manager limited management; Support limited troubleshooting; User minimal
+•  Licenses: RSA 2048 signatures; device binding optional; offline validation supported via public key only
+•  Transport: HTTPS everywhere; dev-certs for local; use real certs in prod
+•  Optional hardening: mTLS for agents, certificate pinning for clients, machine-level token for audit ingestion, rate limits, IP allowlists
+
+Data model overview (conceptual)
+•  Users and Roles (Identity tables)
+•  Tweaks table:
+•  Id (GUID), Name, Description, Category
+•  CommandType (Registry/Service/Script/Group)
+•  Registry fields (Path, ValueName, ValueType, ValueData)
+•  Service fields (ServiceName, ServiceAction)
+•  ScriptContent, UndoScriptContent
+•  Safety, Risk, RequiresAdmin, AllowUndo
+•  CreatedUtc, UpdatedUtc, CreatedBy
+•  Licenses table:
+•  LicenseId, UserId, Tier (string), IssuedUtc, ExpiresUtc, IsAdminKey
+•  DeviceBindingId, AllowOfflineValidation
+•  SignedLicenseJson (full signed object persisted)
+•  Devices table (typical): DeviceId, Hostname, Fingerprint, LastSeenUtc, Status
+•  Audit logs (planned or next iteration):
+•  Actor, ActionType, TweakId, Before/After states, Result, Reason, CorrelationId, Timestamp, IntegrityHash
+•  Analytics (planned or next iteration):
+•  Tweak success/failure metrics, adoption, device uptime, top errors, time-to-remediate
+
+Typical workflows (end-to-end)
+•  First-time setup
+  1) dotnet build GGs.sln -c Debug
+  2) dotnet dev-certs https --trust
+  3) Run server with ASPNETCORE_URLS="https://localhost:5001"
+  4) Open Swagger at https://localhost:5001/swagger to confirm the API is up
+•  Bootstrap license keys
+  1) Login as admin (POST /api/auth/login with UserNameOrEmail + Password)
+  2) POST /api/licenses/bootstrap-keys with bearer token → get PrivateKeyPem/PublicKeyPem
+  3) Paste PrivateKeyPem/PublicKeyPem into server appsettings.json under License
+  4) Paste PublicKeyPem into clients/GGs.Desktop/appsettings.json under License
+  5) Restart server
+•  Create a tweak (Admin)
+  1) POST /api/tweaks with tweak fields (e.g., registry DWORD toggle) including risk/safety
+  2) Use desktop admin panel to browse and execute; confirm apply/undo and notifications
+•  Issue and validate a license
+  1) POST /api/licenses/issue with LicenseIssueRequest (UserId, Tier, ExpiresUtc, IsAdminKey, …)
+  2) The server signs payload using PrivateKeyPem; desktop verifies signature using PublicKeyPem
+  3) Optionally bind to a device id for single-machine licenses; offline validation enabled if allowed
+•  Remote management (agent)
+  1) Agent connects to /hubs/admin as an authenticated principal (JWT or mTLS)
+  2) Admin targets devices/groups to dispatch tweaks
+  3) Agent executes and streams results; server records status; desktop/console shows notifications
+•  Auditing and analytics (future/next iteration in API)
+•  Audit logs posted server-side for each action; analytics dashboards aggregate per-tenant/role/device/time window
+
+Operations and deployment
+•  Environments:
+•  Development: SQLite, dev-certs, Swagger enabled, permissive CORS
+•  Production: SQL Server/PostgreSQL, real TLS certs, strict CORS, hardened JWT issuer/audience, rotated Auth:JwtKey
+•  Configuration management:
+•  appsettings.{Environment}.json + environment variables
+•  Secrets in production via Key Vault/Secret Manager; do not check in private keys
+•  Key rotation:
+•  Issue new RSA keypair; publish new PublicKeyPem to clients; accept both old and new during transition; reissue licenses if necessary for strict compatibility
+•  Database:
+•  EnsureCreated used in dev for quick start; prefer migrations pipeline for production (dotnet-ef migrations add/apply)
+•  Logging/telemetry:
+•  Structured logs; turn on request logging and correlation IDs
+•  Capture command outcomes with minimal PII; expose activity IDs to correlate client/server logs
+
+Tiering and UX
+•  Feature gates:
+•  Basic: Core tweaks only; minimal UI polish
+•  Pro: Full tweaks; standard skins; basic EliBot help
+•  Enterprise: Premium skins, rich animations, advanced bulk operations
+•  Admin: Admin panel tabs (Users, Licenses, Tweaks, Remote, Analytics)
+•  Onboarding:
+•  First-run wizard → license/connection setup, safe defaults, profile import
+•  Notifications:
+•  Desktop toasts and in-app bell feed → tweak results, license status, remote actions
+•  Undo/Redo:
+•  For reversible operations, store before-state snapshot and replay on undo; record both in audit trail
+
+Security and compliance guidance
+•  Principle of least privilege for roles
+•  Signed changes only: never accept raw tweak scripts from untrusted sources
+•  Protect private keys; audit access; rotate periodically
+•  Optional mTLS for agent to server; pin CA or cert to reduce MITM risk
+•  Avoid storing secrets in logs; redact tokens; enforce bounded retention
+•  GDPR/Privacy: data minimization for telemetry; configurable retention windows
+
+Extensibility roadmap
+•  New tweak primitives:
+•  Scheduled tasks, group policies, firewall rules, network stack settings
+•  Policy engine:
+•  Declarative policy packs; staged rollout, canary cohorts, approvals
+•  Analytics:
+•  SLA dashboards; device cohorts; change impact analysis; anomaly detection
+•  Marketplace:
+•  Signed tweak bundles curated by trusted authors; sandboxed execution
+•  Autopilot:
+•  Goal-oriented optimizer that selects tweak sets by device profile and business constraints
+
+Known gaps in this repo snapshot (so you plan work effectively)
+•  Server API endpoints for audit logging and analytics are not yet present; these were targeted goals and should be added as controllers with corresponding DbSets and views.
+•  License issuance route exists but may require minor fixes or validation refinements when certain enum values or nulls are supplied; confirm LicenseTier enum mapping and ensure PrivateKeyPem is loaded from configuration at runtime.
+•  EliBot is implemented client-side (desktop service) in this snapshot; no server-side EliBot controller endpoint.
+
+Copy-ready quickstart checklist
+•  Build: dotnet build C:\Users\Administrator\GGs\GGs.sln -c Debug
+•  Trust dev cert: dotnet dev-certs https --trust
+•  Run server: set ASPNETCORE_URLS=https://localhost:5001 and start GGs.Server
+•  Swagger: open https://localhost:5001/swagger to verify
+•  Login: POST /api/auth/login with UserNameOrEmail=admin@ggs.local and Password=ChangeMe!123; save returned JWT
+•  Bootstrap keys: POST /api/licenses/bootstrap-keys with Bearer JWT (Admin). Paste keys into server and desktop appsettings. Restart server.
+•  Create tweak: POST /api/tweaks with registry/service/script fields; confirm in desktop Admin panel
+•  Issue license: POST /api/licenses/issue with LicenseIssueRequest; validate with /api/licenses/validate; activate in desktop
+•  Test role security: try any Admin route without JWT to confirm 401; log in as Admin and verify Admin-only tabs in desktop
+•  Plan next: add AuditController and AnalyticsController; wire dashboards and feed; test Agent remote execution flows
+
+Mental model to keep in mind
+•  Treat Server as the root of trust (identity and license authority).
+•  Treat Desktop as a rich, policy-aware console that can work offline for verification with the public key.
+•  Treat Agent as a secure executor with least privilege that never executes unsigned or unapproved commands.
+•  Treat Shared as the single source of truth for contracts so all components remain compatible.
+
+If you copy this entire text, you have a single, end-to-end, advanced overview of how GGs is structured, how it works, how to run it, and what to do next to reach complete production readiness.

@@ -1,0 +1,115 @@
+# Build outputs
+bin/
+obj/
+publish/
+packaging/artifacts/
+build_output*.txt
+desktop_build.txt
+build_run.txt
+
+# Logs
+logs/
+*.log
+
+# Runtime data
+pids/
+*.pid
+*.seed
+*.pid.lock
+
+# Coverage directory used by tools like istanbul
+coverage/
+*.lcov
+
+# nyc test coverage
+.nyc_output
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# Optional eslint cache
+.eslintcache
+
+# Microbundle cache
+.rpt2_cache/
+.rts2_cache_cjs/
+.rts2_cache_es/
+.rts2_cache_umd/
+
+# Optional REPL history
+.node_repl_history
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS generated files
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Windows specific
+AppData/
+NTUSER.DAT*
+ntuser.dat.LOG*
+ntuser.ini
+*.lnk
+
+# User specific directories
+Documents/
+Music/
+Pictures/
+Videos/
+Favorites/
+Links/
+"Saved Games/"
+Searches/
+Contacts/
+Desktop/
+Recent/
+SendTo/
+Start Menu/
+Templates/
+PrintHood/
+NetHood/
+Cookies/
+Local Settings/
+Application Data/
+My Documents/
+
+# Development tools
+.aftman/
+.codespell/
+.codespellai/
+.continue/
+.cursor/
+.limpc/
+.ollama/
+.templateengine/
+.dotnet/
+.nuget/
+.gitconfig
+
+# Roblox specific
+Fps-roblox/
+-1.14-windows.xml
+curseforge/
