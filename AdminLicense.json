@@ -1,0 +1,21 @@
+{
+  "license": {
+    "payload": {
+      "licenseId": "f986bf82-ce07-438a-bad9-fd67b8c52ecb",
+      "userId": "admin@ggs.local",
+      "tier": 9,
+      "issuedUtc": "2025-09-02T13:47:10.4485612Z",
+      "expiresUtc": null,
+      "isAdminKey": true,
+      "deviceBindingId": "2FC8A1B8A6198890681789E58B3374B960CB9B8C7B79F96F41A477278049D6E2",
+      "allowOfflineValidation": true,
+      "notes": "Permanent Admin license (device-bound)",
+      "claims": null
+    },
+    "signature": "E6cxbKjErEXwMx8S2v7/mZSIPfEZksuJN47ckzgjouCpN8siG0ZMQ+JApw32O6C+AMtMQ0uO8kyLqKs2EZIUsZn1iitltchfKpYlWTqCS8Z7r3DzcwWTYS96HlCVYrNMYbezrshOcA6TGD3xXBqvMWD1pKNaWQbZnYjfePa1f+BLu16xLfqzN7pa/rWlPCbpdNOEXrkYiePY7BSwtvO6gqlg21Z1NPeee1rYjrUqwX/f+UBylU8FYo+khqDzvSQbLBXyoQgchklz9E20wd8WXB0WPGNAATkQ3Zy+d6zUnKQCyKwbUqdIMqsT218w3d+Dm16Z0toAFXpkTau5dWHNIQ==",
+    "keyFingerprint": "F6C3EC40F95A75A71E1E91C1B39969CC36E6FDE49BE6565E30DB3E03529270CD"
+  },
+  "publicKeyPem": "-----BEGIN PUBLIC KEY-----\nMIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAsmES+kz7bcyKPavKKzPX7X3JDSrS2/hz\nPjMTcKbxkZKJh9X6eefyKHzJ5MjpizWn9QxWjH+EeJywUEtcroNUFUJp5sFcfeoDeqd0s687m4fH\naPVkLUs18+WphEnonPMAXL7awPf9KiensKrzYffcgfGv2+DdtduVLAjfLyc/w8kDiU/0fRsl6Kuc\nvxVzG5Hw3oLLFXk2UlxlQSzGxffd1ENr43iGq6u7AZaQmrhu4YiyoZB21ajPW5aMQreMtVVN7wqA\n8g9QmfSB/ytMd+eeAArkxQBC9DgFeIn7A6YPtrji5k0o/xGASQhhkVg4fsiPMYiI+BUio8hZTOf4\nlkYVcQIDAQAB\n-----END PUBLIC KEY-----\n",
+  "fingerprint": "F6C3EC40F95A75A71E1E91C1B39969CC36E6FDE49BE6565E30DB3E03529270CD"
+}
+
