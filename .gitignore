@@ -3,9 +3,6 @@ bin/
 obj/
 publish/
 packaging/artifacts/
-build_output*.txt
-desktop_build.txt
-build_run.txt
 
 # Logs
 logs/
