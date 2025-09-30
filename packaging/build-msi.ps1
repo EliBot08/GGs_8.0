@@ -118,7 +118,7 @@ function New-AssocXml([string[]]$exts) {
   foreach ($e in $exts) {
     $ext = $e.Trim()
     if (-not $ext.StartsWith('.')) { $ext = '.' + $ext }
-    $safe = $ext.TrimStart('.')
+    $safe = $ext.TrimStart('.') -replace '[^A-Za-z0-9_]','_'
     $progId = "GGs.Desktop.$safe"
     [void]$sb.AppendLine([string]::Format('      <Component Id="Assoc_{0}" Directory="INSTALLFOLDER" Guid="*">', $safe))
     [void]$sb.AppendLine([string]::Format('        <RegistryValue Root="HKCU" Key="Software\Classes\{0}" Value="{1}" Type="string" KeyPath="yes" />', $ext, $progId))
@@ -135,7 +135,7 @@ function New-AssocXml([string[]]$exts) {
   foreach ($e in $exts) {
     $ext = $e.Trim()
     if (-not $ext.StartsWith('.')) { $ext = '.' + $ext }
-    $safe = $ext.TrimStart('.')
+    $safe = $ext.TrimStart('.') -replace '[^A-Za-z0-9_]','_'
     $progId = "GGs.Desktop.$safe"
     [void]$sb.AppendLine([string]::Format('        <RegistryValue Root="HKCU" Key="Software\GGs\Capabilities\FileAssociations" Name="{0}" Value="{1}" Type="string" />', $ext, $progId))
   }
