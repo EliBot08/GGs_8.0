@@ -59,7 +59,7 @@ public sealed class EliController : ControllerBase
 
         var convId = string.IsNullOrWhiteSpace(req.ConversationId) ? Guid.NewGuid().ToString("N") : req.ConversationId;
         var answer = await _llm.GenerateAsync($"[conv:{convId}] {req.Question}", HttpContext.RequestAborted);
-        return Ok(new AskResponse(answer, new { used = "+1", daily = permit }, ent.RoleName, ent.Flags.TryGetValue("licenseTier", out var t) ? t.ToString() : "Unknown", convId));
+        return Ok(new AskResponse(answer, new { used = "+1", daily = permit }, ent.RoleName, ent.Flags.TryGetValue("licenseTier", out var t) ? t.ToString() ?? "Unknown" : "Unknown", convId));
     }
 }
 

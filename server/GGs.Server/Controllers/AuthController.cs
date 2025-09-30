@@ -121,7 +121,7 @@ public sealed class AuthController : ControllerBase
             var limit = ent.EliBot.DailyQuestionLimit;
             claims.Add(new Claim("eli_limit", limit == int.MaxValue ? "unlimited" : limit.ToString()));
             claims.Add(new Claim("rbac_role", ent.RoleName));
-            claims.Add(new Claim("license_tier", ent.Flags.TryGetValue("licenseTier", out var t) ? t.ToString() : "Unknown"));
+            claims.Add(new Claim("license_tier", ent.Flags.TryGetValue("licenseTier", out var t) ? t.ToString() ?? "Unknown" : "Unknown"));
         }
         catch { }
         var header = new JwtHeader(creds);

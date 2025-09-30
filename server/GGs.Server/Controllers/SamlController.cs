@@ -209,14 +209,14 @@ public sealed class SamlController : ControllerBase
             var certPath = _configuration["Saml:CertificatePath"];
             if (!string.IsNullOrEmpty(certPath) && System.IO.File.Exists(certPath))
             {
-                return new X509Certificate2(certPath);
+                return X509CertificateLoader.LoadCertificateFromFile(certPath);
             }
 
             // Fallback: generate self-signed certificate
             using var rsa = RSA.Create(2048);
             var req = new CertificateRequest("CN=GGs SAML", rsa, HashAlgorithmName.SHA256, RSASignaturePadding.Pkcs1);
             var cert = req.CreateSelfSigned(DateTimeOffset.UtcNow.AddDays(-1), DateTimeOffset.UtcNow.AddYears(1));
-            return new X509Certificate2(cert.Export(X509ContentType.Pfx));
+            return X509CertificateLoader.LoadPkcs12(cert.Export(X509ContentType.Pfx), null);
         }
         catch (Exception ex)
         {

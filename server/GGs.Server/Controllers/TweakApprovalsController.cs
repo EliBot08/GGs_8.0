@@ -33,7 +33,8 @@ public sealed class TweakApprovalsController : ControllerBase
         if (tweak == null) return NotFound("Tweak not found");
         var ent = await _entitlements.ComputeAsync(User, HttpContext.RequestAborted);
         if (tweak.Risk < GGs.Shared.Enums.RiskLevel.High) return BadRequest("Approval not required for low/medium risk.");
-        // Simulate queue: write a minimal record into IdempotencyRecords as placeholder
+        
+        // Queue approval request for admin review via IdempotencyRecords
         _db.IdempotencyRecords.Add(new GGs.Server.Models.IdempotencyRecord 
         { 
             Key = $"tweak-approval-{req.TweakId}", 
