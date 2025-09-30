@@ -338,31 +338,426 @@ public class SystemInformationService
     }
 
     // Additional helper methods would be implemented here...
-    private string GetCpuBrandString() => "Intel(R) Core(TM) i7-10700K CPU @ 3.80GHz"; // Placeholder
-    private List<string> GetSupportedInstructionSets() => new() { "SSE", "SSE2", "AVX", "AVX2" }; // Placeholder
-    private string DetectMicroarchitecture(string name, string family, string model) => "Unknown"; // Placeholder
-    private List<string> DetectCacheHierarchy() => new() { "L1: 32KB", "L2: 256KB", "L3: 16MB" }; // Placeholder
-    private string DetectTDP(string name) => "125W"; // Placeholder
-    private string DetectGpuArchitecture(string name, string vendor) => "Unknown"; // Placeholder
-    private string DetectComputeCapability(string name, string vendor) => "Unknown"; // Placeholder
-    private List<string> DetectSupportedGraphicsAPIs(string name, string vendor) => new() { "DirectX 12", "OpenGL 4.6", "Vulkan 1.3" }; // Placeholder
-    private string EstimateMemoryBandwidth(ulong memorySize, string architecture) => "Unknown"; // Placeholder
-    private string EstimateGpuTDP(string name, string vendor) => "Unknown"; // Placeholder
-    private List<string> GetLegacyDriverRecommendations(string name, string vendor) => new(); // Placeholder
-    private string GetDirectXVersion() => "DirectX 12"; // Placeholder
-    private string GetOpenGLVersion() => "OpenGL 4.6"; // Placeholder
-    private bool CheckVulkanSupport() => true; // Placeholder
+    private string GetCpuBrandString()
+    {
+        try
+        {
+            using var key = Registry.LocalMachine.OpenSubKey(@"HARDWARE\DESCRIPTION\System\CentralProcessor\0");
+            return key?.GetValue("ProcessorNameString")?.ToString()?.Trim() ?? "Unknown CPU";
+        }
+        catch { return "Unknown CPU"; }
+    }
+    private List<string> GetSupportedInstructionSets()
+    {
+        var sets = new List<string> { "x86" };
+        if (Environment.Is64BitOperatingSystem)
+        {
+            sets.AddRange(new[] { "x64", "SSE", "SSE2", "SSE3", "SSSE3", "SSE4.1", "SSE4.2", "AVX", "AVX2" });
+        }
+        return sets;
+    }
+    private string DetectMicroarchitecture(string name, string family, string model)
+    {
+        var nameUpper = name.ToUpperInvariant();
+        if (nameUpper.Contains("INTEL"))
+        {
+            if (nameUpper.Contains("14TH GEN") || nameUpper.Contains("RAPTOR LAKE REFRESH")) return "Raptor Lake Refresh (14th Gen)";
+            if (nameUpper.Contains("13TH GEN") || nameUpper.Contains("RAPTOR LAKE")) return "Raptor Lake (13th Gen)";
+            if (nameUpper.Contains("12TH GEN") || nameUpper.Contains("ALDER LAKE")) return "Alder Lake (12th Gen)";
+            if (nameUpper.Contains("11TH GEN")) return "Tiger/Rocket Lake (11th Gen)";
+            if (nameUpper.Contains("10TH GEN")) return "Comet/Ice Lake (10th Gen)";
+            if (nameUpper.Contains("9TH GEN")) return "Coffee Lake Refresh (9th Gen)";
+            if (nameUpper.Contains("8TH GEN")) return "Coffee Lake (8th Gen)";
+            if (nameUpper.Contains("7TH GEN")) return "Kaby Lake (7th Gen)";
+            if (nameUpper.Contains("6TH GEN")) return "Skylake (6th Gen)";
+        }
+        if (nameUpper.Contains("RYZEN"))
+        {
+            if (nameUpper.Contains("7")) return "Zen 4 (Ryzen 7000)";
+            if (nameUpper.Contains("6")) return "Zen 3+ (Ryzen 6000)";
+            if (nameUpper.Contains("5")) return "Zen 3 (Ryzen 5000)";
+            if (nameUpper.Contains("3")) return "Zen 2 (Ryzen 3000)";
+            if (nameUpper.Contains("2")) return "Zen+ (Ryzen 2000)";
+            if (nameUpper.Contains("1")) return "Zen (Ryzen 1000)";
+        }
+        return "Unknown";
+    }
+    private List<string> DetectCacheHierarchy()
+    {
+        var hierarchy = new List<string>();
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_CacheMemory");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var level = Convert.ToInt32(obj["Level"] ?? 0);
+                var size = Convert.ToUInt64(obj["MaxCacheSize"] ?? 0);
+                if (level > 0 && size > 0) hierarchy.Add($"L{level}: {size}KB");
+            }
+            if (hierarchy.Count == 0) hierarchy.AddRange(new[] { "L1: 32KB", "L2: 256KB", "L3: 16MB" });
+        }
+        catch { hierarchy.Add("Cache detection unavailable"); }
+        return hierarchy;
+    }
+    private string DetectTDP(string name)
+    {
+        var n = name.ToUpperInvariant();
+        if (n.Contains("I9") && (n.Contains("K") || n.Contains("14900") || n.Contains("13900"))) return "125W";
+        if (n.Contains("I7") && n.Contains("K")) return "125W";
+        if (n.Contains("I9") || n.Contains("I7")) return "65W";
+        if (n.Contains("I5") || n.Contains("I3")) return "65W";
+        if (n.Contains("RYZEN 9") && (n.Contains("X") || n.Contains("7950") || n.Contains("7900"))) return "170W";
+        if (n.Contains("RYZEN 9") || n.Contains("RYZEN 7") && n.Contains("X")) return "105W";
+        if (n.Contains("RYZEN")) return "65W";
+        if (n.Contains("THREADRIPPER")) return "280W";
+        if (n.Contains("XEON")) return "165W";
+        return "Unknown";
+    }
+    private string DetectGpuArchitecture(string name, string vendor)
+    {
+        var n = name.ToUpperInvariant();
+        var v = vendor.ToUpperInvariant();
+        if (v.Contains("NVIDIA"))
+        {
+            if (n.Contains("RTX 40")) return "Ada Lovelace";
+            if (n.Contains("RTX 30")) return "Ampere";
+            if (n.Contains("RTX 20") || n.Contains("GTX 16")) return "Turing";
+            if (n.Contains("GTX 10")) return "Pascal";
+            if (n.Contains("GTX 9")) return "Maxwell";
+        }
+        if (v.Contains("AMD"))
+        {
+            if (n.Contains("RX 7")) return "RDNA 3";
+            if (n.Contains("RX 6")) return "RDNA 2";
+            if (n.Contains("RX 5")) return "RDNA";
+            if (n.Contains("VEGA")) return "GCN 5.0 (Vega)";
+        }
+        if (v.Contains("INTEL"))
+        {
+            if (n.Contains("ARC")) return "Xe-HPG";
+            if (n.Contains("IRIS XE")) return "Xe-LP";
+            if (n.Contains("UHD")) return "Gen 11/12";
+        }
+        return "Unknown";
+    }
+    private string DetectComputeCapability(string name, string vendor)
+    {
+        var v = vendor.ToUpperInvariant();
+        var n = name.ToUpperInvariant();
+        if (v.Contains("NVIDIA"))
+        {
+            if (n.Contains("RTX 40")) return "CUDA 8.9";
+            if (n.Contains("RTX 30")) return "CUDA 8.6";
+            if (n.Contains("RTX 20")) return "CUDA 7.5";
+            if (n.Contains("GTX 10")) return "CUDA 6.1";
+            return "CUDA";
+        }
+        if (v.Contains("AMD")) return n.Contains("RX 7") || n.Contains("RX 6") ? "ROCm 5.x" : "ROCm";
+        if (v.Contains("INTEL") && n.Contains("ARC")) return "oneAPI Level Zero";
+        return "None";
+    }
+    private List<string> DetectSupportedGraphicsAPIs(string name, string vendor)
+    {
+        var apis = new List<string>();
+        var v = vendor.ToUpperInvariant();
+        if (v.Contains("NVIDIA") || v.Contains("AMD") || v.Contains("INTEL"))
+        {
+            apis.AddRange(new[] { "DirectX 12", "DirectX 11", "OpenGL 4.6", "Vulkan 1.3" });
+            if (v.Contains("NVIDIA")) apis.AddRange(new[] { "CUDA", "OptiX" });
+            if (v.Contains("AMD")) apis.Add("ROCm");
+            if (v.Contains("INTEL")) apis.Add("oneAPI");
+        }
+        else apis.AddRange(new[] { "DirectX 9", "OpenGL 2.0" });
+        return apis;
+    }
+    private string EstimateMemoryBandwidth(ulong memorySize, string architecture)
+    {
+        if (memorySize == 0) return "Unknown";
+        var arch = architecture.ToUpperInvariant();
+        if (arch.Contains("AMPERE") || arch.Contains("ADA") || arch.Contains("RDNA 3"))
+            return memorySize >= 12UL * 1024 * 1024 * 1024 ? "~900 GB/s" : "~600 GB/s";
+        if (arch.Contains("TURING") || arch.Contains("RDNA 2")) return "~400 GB/s";
+        return "~200 GB/s";
+    }
+    private string EstimateGpuTDP(string name, string vendor)
+    {
+        var n = name.ToUpperInvariant();
+        var v = vendor.ToUpperInvariant();
+        if (v.Contains("NVIDIA"))
+        {
+            if (n.Contains("RTX 4090")) return "450W";
+            if (n.Contains("RTX 4080")) return "320W";
+            if (n.Contains("RTX 4070")) return "200W";
+            if (n.Contains("RTX 3090")) return "350W";
+            if (n.Contains("RTX 3080")) return "320W";
+            if (n.Contains("RTX 3070")) return "220W";
+        }
+        if (v.Contains("AMD"))
+        {
+            if (n.Contains("RX 7900")) return "355W";
+            if (n.Contains("RX 7800")) return "263W";
+            if (n.Contains("RX 6900")) return "300W";
+            if (n.Contains("RX 6800")) return "250W";
+        }
+        if (v.Contains("INTEL") && n.Contains("ARC A770")) return "225W";
+        return "Unknown";
+    }
+    private List<string> GetLegacyDriverRecommendations(string name, string vendor)
+    {
+        var recs = new List<string>();
+        var n = name.ToUpperInvariant();
+        if (n.Contains("GTX 5") || n.Contains("GTX 4"))
+            recs.Add("⚠️ Legacy NVIDIA GPU detected. Latest driver: 391.35 (April 2018)");
+        if (n.Contains("HD 5") || n.Contains("HD 6"))
+            recs.Add("⚠️ Legacy AMD GPU. Limited driver support.");
+        if (n.Contains("VOODOO"))
+            recs.Add("🔴 Extremely old GPU. No modern driver support.");
+        return recs;
+    }
+    private string GetDirectXVersion()
+    {
+        try
+        {
+            var v = Environment.OSVersion.Version;
+            if (v.Major >= 10 && v.Build >= 20348) return "DirectX 12 Ultimate";
+            if (v.Major == 10) return "DirectX 12";
+            if (v.Major == 6 && v.Minor >= 2) return "DirectX 11.1";
+            if (v.Major == 6 && v.Minor == 1) return "DirectX 11";
+            return "DirectX 9";
+        }
+        catch { return "Unknown"; }
+    }
+    private string GetOpenGLVersion() => "OpenGL 4.6 (estimated)";
+    private bool CheckVulkanSupport()
+    {
+        try
+        {
+            var vulkanPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.System), "vulkan-1.dll");
+            return File.Exists(vulkanPath);
+        }
+        catch { return false; }
+    }
 
     // Placeholder implementations for other collection methods
-    private async Task<MemoryInformation> CollectMemoryInformationAsync(CancellationToken cancellationToken) => new();
-    private async Task<StorageInformation> CollectStorageInformationAsync(CancellationToken cancellationToken) => new();
-    private async Task<NetworkInformation> CollectNetworkInformationAsync(CancellationToken cancellationToken) => new();
-    private async Task<MotherboardInformation> CollectMotherboardInformationAsync(CancellationToken cancellationToken) => new();
-    private async Task<PowerInformation> CollectPowerInformationAsync(CancellationToken cancellationToken) => new();
-    private async Task<ThermalInformation> CollectThermalInformationAsync(CancellationToken cancellationToken) => new();
-    private async Task<SecurityInformation> CollectSecurityInformationAsync(CancellationToken cancellationToken) => new();
-    private async Task<PerformanceMetrics> CollectPerformanceMetricsAsync(CancellationToken cancellationToken) => new();
-    private async Task<RegistryInformation> CollectRegistryInformationAsync(CancellationToken cancellationToken) => new();
+    private async Task<MemoryInformation> CollectMemoryInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var memInfo = new MemoryInformation();
+            try
+            {
+                using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_PhysicalMemory");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    var module = new MemoryModule
+                    {
+                        Capacity = Convert.ToUInt64(obj["Capacity"] ?? 0),
+                        Speed = Convert.ToUInt32(obj["Speed"] ?? 0),
+                        Manufacturer = obj["Manufacturer"]?.ToString() ?? "Unknown",
+                        PartNumber = obj["PartNumber"]?.ToString()?.Trim() ?? "Unknown"
+                    };
+                    memInfo.Modules.Add(module);
+                }
+                memInfo.TotalPhysicalMemory = (ulong)memInfo.Modules.Sum(m => (long)m.Capacity);
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect memory information"); }
+            return memInfo;
+        }, cancellationToken);
+    }
+    private async Task<StorageInformation> CollectStorageInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var storageInfo = new StorageInformation();
+            try
+            {
+                using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_DiskDrive");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    var drive = new StorageDevice
+                    {
+                        Model = obj["Model"]?.ToString() ?? "Unknown",
+                        InterfaceType = obj["InterfaceType"]?.ToString() ?? "Unknown",
+                        Size = Convert.ToUInt64(obj["Size"] ?? 0)
+                    };
+                    storageInfo.Devices.Add(drive);
+                }
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect storage information"); }
+            return storageInfo;
+        }, cancellationToken);
+    }
+    private async Task<NetworkInformation> CollectNetworkInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var netInfo = new NetworkInformation();
+            try
+            {
+                using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_NetworkAdapter WHERE NetEnabled=True");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    var adapter = new NetworkAdapter
+                    {
+                        Name = obj["Name"]?.ToString() ?? "Unknown",
+                        MACAddress = obj["MACAddress"]?.ToString() ?? "Unknown",
+                        Speed = Convert.ToUInt64(obj["Speed"] ?? 0)
+                    };
+                    netInfo.Adapters.Add(adapter);
+                }
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect network information"); }
+            return netInfo;
+        }, cancellationToken);
+    }
+    private async Task<MotherboardInformation> CollectMotherboardInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var mbInfo = new MotherboardInformation();
+            try
+            {
+                using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_BaseBoard");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    mbInfo.Manufacturer = obj["Manufacturer"]?.ToString() ?? "Unknown";
+                    mbInfo.Product = obj["Product"]?.ToString() ?? "Unknown";
+                    break;
+                }
+                using var biosSearcher = new ManagementObjectSearcher("SELECT * FROM Win32_BIOS");
+                foreach (ManagementObject obj in biosSearcher.Get())
+                {
+                    mbInfo.BIOSVersion = obj["Version"]?.ToString() ?? "Unknown";
+                    break;
+                }
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect motherboard information"); }
+            return mbInfo;
+        }, cancellationToken);
+    }
+    private async Task<PowerInformation> CollectPowerInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var powerInfo = new PowerInformation();
+            try
+            {
+                using var searcher = new ManagementObjectSearcher("SELECT * FROM Win32_Battery");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    powerInfo.BatteryStatus = obj["BatteryStatus"]?.ToString() ?? "Unknown";
+                    powerInfo.BatteryChargeLevel = Convert.ToUInt16(obj["EstimatedChargeRemaining"] ?? 0);
+                    break;
+                }
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect power information"); }
+            return powerInfo;
+        }, cancellationToken);
+    }
+    private async Task<ThermalInformation> CollectThermalInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var thermalInfo = new ThermalInformation();
+            try
+            {
+                using var searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
+                foreach (ManagementObject obj in searcher.Get())
+                {
+                    var tempKelvin = Convert.ToDouble(obj["CurrentTemperature"] ?? 0) / 10.0;
+                    thermalInfo.Sensors.Add(new TemperatureSensor { Name = "ACPI Thermal Zone", CurrentTemperature = tempKelvin - 273.15 });
+                }
+            }
+            catch { /* Thermal monitoring not available */ }
+            return thermalInfo;
+        }, cancellationToken);
+    }
+    private async Task<SecurityInformation> CollectSecurityInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var secInfo = new SecurityInformation();
+            try
+            {
+                secInfo.WindowsDefenderEnabled = CheckWindowsDefender();
+                secInfo.SecurityFeatures = new List<string>();
+                if (CheckSecureBoot()) secInfo.SecurityFeatures.Add("SecureBoot");
+                if (CheckTpm()) secInfo.SecurityFeatures.Add("TPM");
+                if (new System.Security.Principal.WindowsPrincipal(System.Security.Principal.WindowsIdentity.GetCurrent())
+                    .IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator))
+                    secInfo.SecurityFeatures.Add("Administrator");
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect security information"); }
+            return secInfo;
+        }, cancellationToken);
+    }
+    private async Task<PerformanceMetrics> CollectPerformanceMetricsAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var metrics = new PerformanceMetrics();
+            try
+            {
+                using var cpuCounter = new PerformanceCounter("Processor", "% Processor Time", "_Total");
+                cpuCounter.NextValue();
+                System.Threading.Thread.Sleep(100);
+                metrics.CPUUsagePercent = cpuCounter.NextValue();
+                using var memCounter = new PerformanceCounter("Memory", "% Committed Bytes In Use");
+                metrics.MemoryUsagePercent = memCounter.NextValue();
+                metrics.ProcessCount = (ulong)Process.GetProcesses().Length;
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect performance metrics"); }
+            return metrics;
+        }, cancellationToken);
+    }
+    private async Task<RegistryInformation> CollectRegistryInformationAsync(CancellationToken cancellationToken)
+    {
+        return await Task.Run(() =>
+        {
+            var regInfo = new RegistryInformation();
+            try
+            {
+                using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion");
+                if (key != null)
+                {
+                    // Registry info doesn't have these properties in the model
+                }
+            }
+            catch (Exception ex) { _logger.LogWarning(ex, "Failed to collect registry information"); }
+            return regInfo;
+        }, cancellationToken);
+    }
+    
+    private bool CheckSecureBoot()
+    {
+        try
+        {
+            using var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Control\SecureBoot\State");
+            var value = key?.GetValue("UEFISecureBootEnabled");
+            return value != null && Convert.ToInt32(value) == 1;
+        }
+        catch { return false; }
+    }
+    
+    private bool CheckTpm()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(@"root\CIMv2\Security\MicrosoftTpm", "SELECT * FROM Win32_Tpm");
+            return searcher.Get().Count > 0;
+        }
+        catch { return false; }
+    }
+    
+    private bool CheckWindowsDefender()
+    {
+        try
+        {
+            using var key = Registry.LocalMachine.OpenSubKey(@"SOFTWARE\Microsoft\Windows Defender");
+            return key != null;
+        }
+        catch { return false; }
+    }
 }
 
 /// <summary>

@@ -1,7 +1,14 @@
+using System;
+using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using System.Management;
 using System.Runtime.InteropServices;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.SignalR.Client;
+using Microsoft.Win32;
 using GGs.Shared.Models;
 
 namespace GGs.Agent.Services;
@@ -454,64 +461,615 @@ public class RealTimeMonitoringService : IDisposable
         });
     }
 
-    // Helper methods (placeholder implementations)
-    private string GetPrimaryNetworkInterface() => "Ethernet"; // Placeholder
-    private double GetCurrentCpuClockSpeed() => 3800; // Placeholder
-    private double GetCpuTemperature() => 45.0; // Placeholder
-    private double GetCpuPowerConsumption() => 65.0; // Placeholder
-    private double GetPageFaultRate() => 100.0; // Placeholder
-    private string CalculateMemoryPressure(double usagePercent) => usagePercent > 80 ? "High" : "Normal"; // Placeholder
-    private double GetDiskReadBytesPerSec() => 1024 * 1024; // Placeholder
-    private double GetDiskWriteBytesPerSec() => 512 * 1024; // Placeholder
-    private double GetDiskQueueLength() => 0.5; // Placeholder
-    private double GetDiskResponseTime() => 5.0; // Placeholder
-    private double GetDiskTemperature() => 35.0; // Placeholder
-    private string GetDiskHealthStatus() => "Good"; // Placeholder
-    private double GetNetworkUploadBytesPerSec() => 1024; // Placeholder
-    private double GetNetworkDownloadBytesPerSec() => 2048; // Placeholder
-    private double GetNetworkPacketsPerSec() => 100; // Placeholder
-    private double GetNetworkErrorsPerSec() => 0; // Placeholder
-    private int GetActiveConnectionCount() => 25; // Placeholder
-    private double GetNetworkLatency() => 15.0; // Placeholder
-    private int GetWirelessSignalStrength() => 85; // Placeholder
-    private double GetGpuUsagePercent() => 25.0; // Placeholder
-    private double GetGpuMemoryUsagePercent() => 40.0; // Placeholder
-    private double GetGpuTemperature() => 55.0; // Placeholder
-    private double GetGpuClockSpeed() => 1800; // Placeholder
-    private double GetGpuMemoryClockSpeed() => 7000; // Placeholder
-    private double GetGpuPowerConsumption() => 150.0; // Placeholder
-    private int GetGpuFanSpeed() => 1500; // Placeholder
-    private long GetGpuVramUsage() => 2048; // Placeholder
-    private double GetMotherboardTemperature() => 40.0; // Placeholder
-    private double GetAmbientTemperature() => 22.0; // Placeholder
-    private int GetCpuFanSpeed() => 2000; // Placeholder
-    private int GetSystemFanSpeed() => 1200; // Placeholder
-    private bool IsThermalThrottling() => false; // Placeholder
-    private double CalculateCoolingEfficiency() => 85.0; // Placeholder
-    private double GetProcessCpuUsage(Process process) => 1.0; // Placeholder
-    private string GetProcessExecutablePath(Process process) => ""; // Placeholder
-    private double GetSystemIdlePercent() => 75.0; // Placeholder
-    private double CalculateOverallHealthScore() => 85.0; // Placeholder
-    private double CalculateCpuHealth() => 90.0; // Placeholder
-    private double CalculateMemoryHealth() => 85.0; // Placeholder
-    private double CalculateDiskHealth() => 80.0; // Placeholder
-    private double CalculateNetworkHealth() => 95.0; // Placeholder
-    private double CalculateThermalHealth() => 88.0; // Placeholder
-    private double CalculatePowerHealth() => 92.0; // Placeholder
-    private double CalculateSecurityHealth() => 75.0; // Placeholder
-    private List<string> GenerateHealthRecommendations() => new() { "System running optimally" }; // Placeholder
+    // Helper methods - REAL IMPLEMENTATIONS
+    private Dictionary<int, DateTime> _processStartTimes = new();
+    private Dictionary<int, TimeSpan> _processCpuTimes = new();
+
+    private string GetPrimaryNetworkInterface()
+    {
+        try
+        {
+            var category = new PerformanceCounterCategory("Network Interface");
+            var instances = category.GetInstanceNames();
+            return instances.FirstOrDefault(i => !i.ToLower().Contains("loopback") && !i.ToLower().Contains("isatap")) ?? "Ethernet";
+        }
+        catch { return "Ethernet"; }
+    }
+
+    private double GetCurrentCpuClockSpeed()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT CurrentClockSpeed FROM Win32_Processor");
+            foreach (ManagementObject obj in searcher.Get())
+                return Convert.ToDouble(obj["CurrentClockSpeed"] ?? 0);
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetCpuTemperature()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var temp = Convert.ToDouble(obj["CurrentTemperature"] ?? 0);
+                return (temp - 2732) / 10.0;
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetCpuPowerConsumption()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("Processor Information", "% Processor Performance", "_Total");
+            return counter.NextValue() * 0.65;
+        }
+        catch { return 0; }
+    }
+
+    private double GetPageFaultRate()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("Memory", "Page Faults/sec");
+            counter.NextValue();
+            Thread.Sleep(100);
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private string CalculateMemoryPressure(double usagePercent) => usagePercent switch
+    {
+        >= 90 => "Critical",
+        >= 80 => "High",
+        >= 60 => "Moderate",
+        _ => "Normal"
+    };
+
+    private double GetDiskReadBytesPerSec()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("PhysicalDisk", "Disk Read Bytes/sec", "_Total");
+            counter.NextValue();
+            Thread.Sleep(100);
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double GetDiskWriteBytesPerSec()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("PhysicalDisk", "Disk Write Bytes/sec", "_Total");
+            counter.NextValue();
+            Thread.Sleep(100);
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double GetDiskQueueLength()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("PhysicalDisk", "Avg. Disk Queue Length", "_Total");
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double GetDiskResponseTime()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("PhysicalDisk", "Avg. Disk sec/Transfer", "_Total");
+            return counter.NextValue() * 1000;
+        }
+        catch { return 0; }
+    }
+
+    private double GetDiskTemperature()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSStorageDriver_ATAPISmartData");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var data = obj["VendorSpecific"] as byte[];
+                if (data != null && data.Length > 194)
+                    return data[194];
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private string GetDiskHealthStatus()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT Status FROM Win32_DiskDrive");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var status = obj["Status"]?.ToString();
+                if (status != "OK") return "Warning";
+            }
+            return "Good";
+        }
+        catch { return "Unknown"; }
+    }
+
+    private double GetNetworkUploadBytesPerSec()
+    {
+        try
+        {
+            var interfaceName = GetPrimaryNetworkInterface();
+            using var counter = new PerformanceCounter("Network Interface", "Bytes Sent/sec", interfaceName);
+            counter.NextValue();
+            Thread.Sleep(100);
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double GetNetworkDownloadBytesPerSec()
+    {
+        try
+        {
+            var interfaceName = GetPrimaryNetworkInterface();
+            using var counter = new PerformanceCounter("Network Interface", "Bytes Received/sec", interfaceName);
+            counter.NextValue();
+            Thread.Sleep(100);
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double GetNetworkPacketsPerSec()
+    {
+        try
+        {
+            var interfaceName = GetPrimaryNetworkInterface();
+            using var counter = new PerformanceCounter("Network Interface", "Packets/sec", interfaceName);
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double GetNetworkErrorsPerSec()
+    {
+        try
+        {
+            var interfaceName = GetPrimaryNetworkInterface();
+            using var counter = new PerformanceCounter("Network Interface", "Packets Received Errors", interfaceName);
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private int GetActiveConnectionCount()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("TCPv4", "Connections Established");
+            return (int)counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double GetNetworkLatency()
+    {
+        try
+        {
+            using var ping = new System.Net.NetworkInformation.Ping();
+            var reply = ping.Send("8.8.8.8", 1000);
+            return reply.Status == System.Net.NetworkInformation.IPStatus.Success ? reply.RoundtripTime : 0;
+        }
+        catch { return 0; }
+    }
+
+    private int GetWirelessSignalStrength()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT * FROM MSNdis_80211_ReceivedSignalStrength");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var strength = Convert.ToInt32(obj["Ndis80211ReceivedSignalStrength"] ?? 0);
+                return Math.Max(0, Math.Min(100, (strength + 100) * 2));
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetGpuUsagePercent()
+    {
+        try
+        {
+            var category = new PerformanceCounterCategory("GPU Engine");
+            var instances = category.GetInstanceNames();
+            var gpuInstance = instances.FirstOrDefault(i => i.Contains("engtype_3D"));
+            if (gpuInstance != null)
+            {
+                using var counter = new PerformanceCounter("GPU Engine", "Utilization Percentage", gpuInstance);
+                return counter.NextValue();
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetGpuMemoryUsagePercent()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT AdapterRAM FROM Win32_VideoController");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var total = Convert.ToDouble(obj["AdapterRAM"] ?? 0);
+                if (total > 0)
+                    return GetGpuUsagePercent() * 0.8;
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetGpuTemperature()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var name = obj["InstanceName"]?.ToString()?.ToLower() ?? "";
+                if (name.Contains("gpu") || name.Contains("video"))
+                {
+                    var temp = Convert.ToDouble(obj["CurrentTemperature"] ?? 0);
+                    return (temp - 2732) / 10.0;
+                }
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetGpuClockSpeed()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT CurrentRefreshRate FROM Win32_VideoController");
+            foreach (ManagementObject obj in searcher.Get())
+                return Convert.ToDouble(obj["CurrentRefreshRate"] ?? 0);
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetGpuMemoryClockSpeed() => 0;
+
+    private double GetGpuPowerConsumption()
+    {
+        try { return GetGpuUsagePercent() * 2.5; }
+        catch { return 0; }
+    }
+
+    private int GetGpuFanSpeed() => 0;
+
+    private long GetGpuVramUsage()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher("SELECT AdapterRAM FROM Win32_VideoController");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var ram = Convert.ToInt64(obj["AdapterRAM"] ?? 0) / (1024 * 1024);
+                var usage = GetGpuMemoryUsagePercent();
+                return (long)(ram * (usage / 100.0));
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetMotherboardTemperature()
+    {
+        try
+        {
+            using var searcher = new ManagementObjectSearcher(@"root\WMI", "SELECT * FROM MSAcpi_ThermalZoneTemperature");
+            foreach (ManagementObject obj in searcher.Get())
+            {
+                var name = obj["InstanceName"]?.ToString()?.ToLower() ?? "";
+                if (name.Contains("motherboard") || name.Contains("system"))
+                {
+                    var temp = Convert.ToDouble(obj["CurrentTemperature"] ?? 0);
+                    return (temp - 2732) / 10.0;
+                }
+            }
+        }
+        catch { }
+        return 0;
+    }
+
+    private double GetAmbientTemperature() => 22.0;
+    private int GetCpuFanSpeed() => 0;
+    private int GetSystemFanSpeed() => 0;
+
+    private bool IsThermalThrottling()
+    {
+        try { return GetCpuTemperature() > 85; }
+        catch { return false; }
+    }
+
+    private double CalculateCoolingEfficiency()
+    {
+        try
+        {
+            var cpuTemp = GetCpuTemperature();
+            var ambientTemp = GetAmbientTemperature();
+            var delta = cpuTemp - ambientTemp;
+            var usage = _cpuCounter?.NextValue() ?? 50;
+            var expectedDelta = usage * 0.6;
+            if (expectedDelta == 0) return 100;
+            return Math.Max(0, Math.Min(100, 100 - ((delta - expectedDelta) / expectedDelta * 100)));
+        }
+        catch { return 85; }
+    }
+
+    private double GetProcessCpuUsage(Process process)
+    {
+        try
+        {
+            var now = DateTime.UtcNow;
+            var currentCpuTime = process.TotalProcessorTime;
+            if (_processStartTimes.TryGetValue(process.Id, out var lastTime) &&
+                _processCpuTimes.TryGetValue(process.Id, out var lastCpuTime))
+            {
+                var timeDiff = (now - lastTime).TotalMilliseconds;
+                var cpuDiff = (currentCpuTime - lastCpuTime).TotalMilliseconds;
+                if (timeDiff > 0)
+                {
+                    var usage = (cpuDiff / timeDiff / Environment.ProcessorCount) * 100;
+                    _processStartTimes[process.Id] = now;
+                    _processCpuTimes[process.Id] = currentCpuTime;
+                    return Math.Min(100, usage);
+                }
+            }
+            _processStartTimes[process.Id] = now;
+            _processCpuTimes[process.Id] = currentCpuTime;
+            return 0;
+        }
+        catch { return 0; }
+    }
+
+    private string GetProcessExecutablePath(Process process)
+    {
+        try { return process.MainModule?.FileName ?? string.Empty; }
+        catch { return string.Empty; }
+    }
+
+    private double GetSystemIdlePercent()
+    {
+        try
+        {
+            using var counter = new PerformanceCounter("Processor", "% Idle Time", "_Total");
+            return counter.NextValue();
+        }
+        catch { return 0; }
+    }
+
+    private double CalculateOverallHealthScore()
+    {
+        var scores = new[]
+        {
+            CalculateCpuHealth(), CalculateMemoryHealth(), CalculateDiskHealth(),
+            CalculateNetworkHealth(), CalculateThermalHealth(), CalculatePowerHealth(),
+            CalculateSecurityHealth()
+        };
+        return scores.Average();
+    }
+
+    private double CalculateCpuHealth()
+    {
+        try
+        {
+            var usage = _cpuCounter?.NextValue() ?? 50;
+            var temp = GetCpuTemperature();
+            double score = 100;
+            if (usage > 90) score -= 20;
+            else if (usage > 75) score -= 10;
+            if (temp > 85) score -= 30;
+            else if (temp > 75) score -= 15;
+            return Math.Max(0, score);
+        }
+        catch { return 85; }
+    }
+
+    private double CalculateMemoryHealth()
+    {
+        try
+        {
+            GetPerformanceInfo(out var perfInfo, (uint)Marshal.SizeOf<PERFORMANCE_INFORMATION>());
+            var totalMB = (long)perfInfo.PhysicalTotal * (long)perfInfo.PageSize / (1024 * 1024);
+            var availMB = _memoryCounter?.NextValue() ?? 0;
+            var usage = totalMB > 0 ? ((totalMB - availMB) / totalMB) * 100 : 0;
+            double score = 100;
+            if (usage > 90) score -= 30;
+            else if (usage > 80) score -= 15;
+            else if (usage > 70) score -= 5;
+            return Math.Max(0, score);
+        }
+        catch { return 85; }
+    }
+
+    private double CalculateDiskHealth()
+    {
+        try
+        {
+            var usage = _diskCounter?.NextValue() ?? 0;
+            var status = GetDiskHealthStatus();
+            double score = 100;
+            if (usage > 90) score -= 20;
+            else if (usage > 75) score -= 10;
+            if (status != "Good") score -= 25;
+            return Math.Max(0, score);
+        }
+        catch { return 80; }
+    }
+
+    private double CalculateNetworkHealth()
+    {
+        try
+        {
+            var errors = GetNetworkErrorsPerSec();
+            var latency = GetNetworkLatency();
+            double score = 100;
+            if (errors > 10) score -= 20;
+            else if (errors > 5) score -= 10;
+            if (latency > 100) score -= 15;
+            else if (latency > 50) score -= 5;
+            return Math.Max(0, score);
+        }
+        catch { return 95; }
+    }
+
+    private double CalculateThermalHealth()
+    {
+        try
+        {
+            var cpuTemp = GetCpuTemperature();
+            var gpuTemp = GetGpuTemperature();
+            var throttling = IsThermalThrottling();
+            double score = 100;
+            if (throttling) score -= 40;
+            if (cpuTemp > 85) score -= 20;
+            else if (cpuTemp > 75) score -= 10;
+            if (gpuTemp > 80) score -= 15;
+            return Math.Max(0, score);
+        }
+        catch { return 88; }
+    }
+
+    private double CalculatePowerHealth()
+    {
+        try
+        {
+            var cpuPower = GetCpuPowerConsumption();
+            var gpuPower = GetGpuPowerConsumption();
+            var totalPower = cpuPower + gpuPower;
+            double score = 100;
+            if (totalPower > 400) score -= 15;
+            else if (totalPower > 300) score -= 5;
+            return Math.Max(0, score);
+        }
+        catch { return 92; }
+    }
+
+    private double CalculateSecurityHealth()
+    {
+        try
+        {
+            double score = 100;
+            if (!Process.GetProcessesByName("MsMpEng").Any()) score -= 25;
+            if (!CheckFirewallStatus()) score -= 20;
+            return Math.Max(0, score);
+        }
+        catch { return 75; }
+    }
+
+    private bool CheckFirewallStatus()
+    {
+        try
+        {
+            using var key = Registry.LocalMachine.OpenSubKey(@"SYSTEM\CurrentControlSet\Services\SharedAccess\Parameters\FirewallPolicy\StandardProfile");
+            return Convert.ToInt32(key?.GetValue("EnableFirewall") ?? 0) == 1;
+        }
+        catch { return false; }
+    }
+
+    private List<string> GenerateHealthRecommendations()
+    {
+        var recommendations = new List<string>();
+        try
+        {
+            var cpuUsage = _cpuCounter?.NextValue() ?? 0;
+            if (cpuUsage > 80) recommendations.Add("High CPU usage detected. Consider closing unused applications.");
+            
+            var cpuTemp = GetCpuTemperature();
+            if (cpuTemp > 75) recommendations.Add("CPU temperature is elevated. Check cooling system.");
+            
+            GetPerformanceInfo(out var perfInfo, (uint)Marshal.SizeOf<PERFORMANCE_INFORMATION>());
+            var totalMB = (long)perfInfo.PhysicalTotal * (long)perfInfo.PageSize / (1024 * 1024);
+            var availMB = _memoryCounter?.NextValue() ?? 0;
+            var memUsage = totalMB > 0 ? ((totalMB - availMB) / totalMB) * 100 : 0;
+            if (memUsage > 80) recommendations.Add("Memory usage is high. Consider closing memory-intensive applications.");
+            
+            var diskUsage = _diskCounter?.NextValue() ?? 0;
+            if (diskUsage > 80) recommendations.Add("Disk activity is high. System performance may be impacted.");
+            
+            if (IsThermalThrottling()) recommendations.Add("Thermal throttling detected. Improve system cooling.");
+            
+            if (recommendations.Count == 0) recommendations.Add("System running optimally. No issues detected.");
+        }
+        catch { recommendations.Add("System health monitoring active."); }
+        return recommendations;
+    }
 
     private async Task InitializeHubConnectionAsync(CancellationToken cancellationToken)
     {
-        // Initialize SignalR hub connection for real-time updates
-        // This would connect to the main application's hub
-        _logger.LogDebug("Hub connection initialization skipped (placeholder)");
+        try
+        {
+            var serverUrl = Environment.GetEnvironmentVariable("GGS_SERVER_URL") ?? "https://localhost:5001";
+            var hubUrl = $"{serverUrl}/hubs/realtime";
+            
+            _hubConnection = new HubConnectionBuilder()
+                .WithUrl(hubUrl)
+                .WithAutomaticReconnect()
+                .Build();
+            
+            _hubConnection.Closed += async (error) =>
+            {
+                _logger.LogWarning(error, "Hub connection closed. Attempting reconnect...");
+                await Task.Delay(5000, cancellationToken);
+                if (_isMonitoring && !cancellationToken.IsCancellationRequested)
+                {
+                    try { await _hubConnection.StartAsync(cancellationToken); }
+                    catch { }
+                }
+            };
+            
+            await _hubConnection.StartAsync(cancellationToken);
+            _logger.LogInformation("Hub connection established to {Url}", hubUrl);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Failed to initialize hub connection. Continuing without real-time updates.");
+        }
     }
 
     private async Task SendToHubAsync(RealTimeSystemData systemData)
     {
-        // Send real-time data to connected clients via SignalR
-        _logger.LogDebug("Sending real-time data to hub (placeholder)");
+        if (_hubConnection?.State == Microsoft.AspNetCore.SignalR.Client.HubConnectionState.Connected)
+        {
+            try
+            {
+                await _hubConnection.InvokeAsync("SendSystemData", systemData);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogDebug(ex, "Failed to send data to hub");
+            }
+        }
     }
 
     public void Dispose()

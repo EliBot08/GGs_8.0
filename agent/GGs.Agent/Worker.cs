@@ -158,12 +158,14 @@ public class Worker : BackgroundService
     /// <summary>
     /// Enterprise-grade tweak execution with comprehensive logging and error handling
     /// </summary>
-    private async Task<TweakApplicationLog> ExecuteTweakWithEnhancedLogging(TweakDefinition tweak, string correlationId)
+    private Task<TweakApplicationLog> ExecuteTweakWithEnhancedLogging(TweakDefinition tweak, string correlationId)
     {
-        var deviceId = GGs.Shared.Platform.DeviceIdHelper.GetStableDeviceId();
-        var startTime = DateTime.UtcNow;
-        
-        try
+        return Task.Run(() =>
+        {
+            var deviceId = GGs.Shared.Platform.DeviceIdHelper.GetStableDeviceId();
+            var startTime = DateTime.UtcNow;
+            
+            try
         {
             _logger.LogInformation("Starting tweak execution: {TweakName} ({TweakId}) | Device: {DeviceId} | Correlation: {CorrelationId}", 
                 tweak.Name, tweak.Id, deviceId, correlationId);
@@ -184,20 +186,21 @@ public class Worker : BackgroundService
             return log;
         }
         catch (Exception ex)
-        {
-            _logger.LogError(ex, "Critical error during tweak execution: {TweakId} | Correlation: {CorrelationId}", tweak.Id, correlationId);
-            
-            // Return error log for audit trail
-            return new TweakApplicationLog
             {
-                TweakId = tweak.Id,
-                DeviceId = deviceId,
-                AppliedUtc = startTime,
-                Success = false,
-                Error = $"Execution failed: {ex.Message}",
-                ExecutionTimeMs = (int)(DateTime.UtcNow - startTime).TotalMilliseconds
-            };
-        }
+                _logger.LogError(ex, "Critical error during tweak execution: {TweakId} | Correlation: {CorrelationId}", tweak.Id, correlationId);
+                
+                // Return error log for audit trail
+                return new TweakApplicationLog
+                {
+                    TweakId = tweak.Id,
+                    DeviceId = deviceId,
+                    AppliedUtc = startTime,
+                    Success = false,
+                    Error = $"Execution failed: {ex.Message}",
+                    ExecutionTimeMs = (int)(DateTime.UtcNow - startTime).TotalMilliseconds
+                };
+            }
+        });
     }
 
     /// <summary>
@@ -227,10 +230,11 @@ public class Worker : BackgroundService
             }
 
             // Both endpoints failed - log for manual intervention
-            _logger.LogError("All audit endpoints failed for: {TweakId} | Correlation: {CorrelationId} | Will retry via offline queue", 
+            _logger.LogError("All audit endpoints failed for: {TweakId} | Correlation: {CorrelationId} | Storing for offline retry", 
                 log.TweakId, correlationId);
             
-            // TODO: Queue for offline retry when OfflineQueueService is available
+            // Store failed audit logs for offline retry
+            await StoreFailedAuditLogAsync(log, correlationId);
             return false;
         }
         catch (Exception ex)
@@ -359,6 +363,39 @@ public class Worker : BackgroundService
         {
             _logger.LogWarning(ex, "Failed to send hub execution result: {TweakId} | Correlation: {CorrelationId}", log.TweakId, correlationId);
             return false;
+        }
+    }
+
+    /// <summary>
+    /// Stores failed audit logs to local disk for offline retry
+    /// </summary>
+    private async Task StoreFailedAuditLogAsync(TweakApplicationLog log, string correlationId)
+    {
+        try
+        {
+            var localAppData = Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var queueDir = Path.Combine(localAppData, "GGs", "OfflineQueue");
+            Directory.CreateDirectory(queueDir);
+            
+            var fileName = $"audit_{correlationId}_{DateTime.UtcNow:yyyyMMddHHmmss}.json";
+            var filePath = Path.Combine(queueDir, fileName);
+            
+            var queueItem = new
+            {
+                Log = log,
+                CorrelationId = correlationId,
+                FailedAtUtc = DateTime.UtcNow,
+                RetryCount = 0
+            };
+            
+            var json = System.Text.Json.JsonSerializer.Serialize(queueItem, new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
+            await File.WriteAllTextAsync(filePath, json);
+            
+            _logger.LogInformation("Failed audit log stored for offline retry: {FilePath}", filePath);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to store audit log for offline retry: {CorrelationId}", correlationId);
         }
     }
 
