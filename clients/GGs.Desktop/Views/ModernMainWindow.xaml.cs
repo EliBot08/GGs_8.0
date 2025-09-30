@@ -1140,8 +1140,8 @@ public ModernMainWindow()
         {
             if (BtnAskEli != null) { BtnAskEli.IsEnabled = false; BtnAskEli.Content = "Thinking…"; }
             var q = EliQuestionBox?.Text ?? string.Empty;
-            string answer = await System.Threading.Tasks.Task.Run(() => _eli.Answer(q));
-            if (EliAnswerText != null) EliAnswerText.Text = answer;
+            var response = await _eli.AskQuestionAsync(q);
+            if (EliAnswerText != null) EliAnswerText.Text = response.Answer;
         }
         catch (Exception ex)
         {

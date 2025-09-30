@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -12,8 +12,8 @@ namespace GGs.Desktop.Views.Controls;
 /// </summary>
 public partial class AnimatedProgressBar : UserControl
 {
-    private DispatcherTimer _iconRotationTimer;
-    private Storyboard _currentAnimation;
+    private DispatcherTimer? _iconRotationTimer;
+    private Storyboard? _currentAnimation;
     private double _currentProgress = 0;
     private bool _isCompleted = false;
 

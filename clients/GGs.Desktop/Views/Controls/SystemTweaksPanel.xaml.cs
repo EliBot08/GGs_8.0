@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
@@ -17,7 +17,7 @@ public partial class SystemTweaksPanel : UserControl
 {
     private readonly ILogger<SystemTweaksPanel> _logger;
     private readonly DispatcherTimer _realTimeUpdateTimer;
-    private CancellationTokenSource _cancellationTokenSource;
+    private CancellationTokenSource? _cancellationTokenSource;
     private bool _isCollecting = false;
     private bool _isUploading = false;
 
@@ -352,7 +352,7 @@ public partial class SystemTweaksPanel : UserControl
         DetailedResultsText.Text = detailedText;
     }
 
-    private void UpdateRealTimeInformation(object sender, EventArgs e)
+    private void UpdateRealTimeInformation(object? sender, EventArgs e)
     {
         try
         {

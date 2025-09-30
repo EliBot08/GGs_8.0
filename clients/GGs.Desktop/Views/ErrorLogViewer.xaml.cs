@@ -29,7 +29,7 @@ namespace GGs.Desktop.Views
 
         private string _logRoot = string.Empty;
         private readonly DispatcherTimer _timer;
-        private readonly FileSystemWatcher _watcher;
+        private readonly FileSystemWatcher? _watcher;
         private readonly Dictionary<string, long> _fileOffsets = new();
         private readonly HashSet<string> _watchedFiles = new(StringComparer.OrdinalIgnoreCase);
         private bool _paused;

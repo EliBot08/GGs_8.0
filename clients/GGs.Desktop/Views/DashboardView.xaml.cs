@@ -81,19 +81,19 @@ namespace GGs.Desktop.Views
             WelcomeText.Text = $"Welcome back, {GetUserDisplayName(entitlements)}!";
             
             // Show EliBot question limit
-            var dailyLimit = entitlements.Entitlements.EliBot.DailyQuestionLimit;
+            var dailyLimit = entitlements?.Entitlements?.EliBot.DailyQuestionLimit;
             if (dailyLimit < int.MaxValue)
             {
                 SetChatPlaceholder($"Ask EliBot anything... ({dailyLimit} questions remaining today)");
             }
 
             // Hide features not available to user tier
-            if (!entitlements.Entitlements.Monitoring.RealTimeCharts)
+            if (entitlements?.Entitlements?.Monitoring.RealTimeCharts == false)
             {
                 PerformanceChart.Visibility = Visibility.Collapsed;
             }
 
-            if (!entitlements.Entitlements.Tweaks.CustomTweakCreation)
+            if (entitlements?.Entitlements?.Tweaks.CustomTweakCreation == false)
             {
                 // Hide create tweak quick action
                 var createTweakButton = FindName("CreateTweakQuickAction") as FrameworkElement;
@@ -128,8 +128,8 @@ namespace GGs.Desktop.Views
 
         private string GeneratePersonalizedWelcomePrompt(EntitlementsResponse entitlements)
         {
-            var tier = entitlements.Entitlements.RoleName;
-            var hasAdvancedFeatures = entitlements.Entitlements.EliBot.SystemDiagnostics;
+            var tier = entitlements?.Entitlements?.RoleName;
+            var hasAdvancedFeatures = entitlements?.Entitlements?.EliBot.SystemDiagnostics;
             
             return $"Generate a personalized welcome message for a {tier} tier user. " +
                    $"Highlight 2-3 key features available to them. " +
@@ -196,7 +196,7 @@ namespace GGs.Desktop.Views
             try
             {
                 var entitlements = await GetUserEntitlementsAsync();
-                if (entitlements.Entitlements.Monitoring.RealTimeCharts)
+                if (entitlements?.Entitlements?.Monitoring.RealTimeCharts == true)
                 {
                     await PerformanceChart.InitializeWithRealtimeDataAsync();
                 }
@@ -263,7 +263,7 @@ namespace GGs.Desktop.Views
                     ChatMessages.Remove(typingMessage);
                     var limitMessage = new ChatMessageViewModel
                     {
-                        Content = $"You've reached your daily limit of {entitlements.Entitlements.EliBot.DailyQuestionLimit} questions. Upgrade your plan for unlimited access!",
+                        Content = $"You've reached your daily limit of {entitlements?.Entitlements?.EliBot.DailyQuestionLimit} questions. Upgrade your plan for unlimited access!",
                         IsFromBot = true,
                         Timestamp = DateTime.Now,
                         IsError = true
@@ -317,9 +317,9 @@ namespace GGs.Desktop.Views
             {
                 var usage = await _eliBotService.GetDailyUsageAsync();
                 var entitlements = await GetUserEntitlementsAsync();
-                var remaining = Math.Max(0, entitlements.Entitlements.EliBot.DailyQuestionLimit - usage.QuestionsUsedToday);
+                var remaining = Math.Max(0, (entitlements?.Entitlements?.EliBot.DailyQuestionLimit ?? 0) - usage.QuestionsUsedToday);
                 
-                if (remaining < entitlements.Entitlements.EliBot.DailyQuestionLimit)
+                if (remaining < entitlements?.Entitlements?.EliBot.DailyQuestionLimit)
                 {
                     SetChatPlaceholder($"Ask EliBot anything... ({remaining} questions remaining today)");
                 }
@@ -340,7 +340,7 @@ namespace GGs.Desktop.Views
         private string GetUserDisplayName(EntitlementsResponse entitlements)
         {
             // Extract user name from entitlements or use role-based display name
-            return entitlements.Entitlements.Role switch
+            return entitlements?.Entitlements?.Role switch
             {
                 RbacRole.Owner => "Owner",
                 RbacRole.Admin => "Administrator",

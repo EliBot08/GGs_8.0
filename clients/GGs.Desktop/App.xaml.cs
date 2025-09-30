@@ -1,4 +1,4 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -268,7 +268,7 @@ public partial class App : System.Windows.Application
                 try
                 {
                     var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "Logs", "critical_error.log");
-                    Directory.CreateDirectory(Path.GetDirectoryName(logPath));
+                    Directory.CreateDirectory(Path.GetDirectoryName(logPath) ?? ".");
                     File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - CRITICAL: Dispatcher exception handling failed: {ex.Message}\n");
                 }
                 catch
@@ -284,7 +284,7 @@ public partial class App : System.Windows.Application
             try
             {
                 var ex = args.ExceptionObject as Exception;
-                AppLogger.LogError("CRITICAL ERROR: Application startup failed", ex);
+                AppLogger.LogError("CRITICAL ERROR: Application startup failed", ex!);
                 try { CrashReportingService.Instance.AddBreadcrumb("Background exception", "exception", "error"); CrashReportingService.Instance.CaptureException(ex, "UnhandledException"); } catch { }
             }
             catch
@@ -464,7 +464,7 @@ public partial class App : System.Windows.Application
             try
             {
                 var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "Logs", "critical_error.log");
-                Directory.CreateDirectory(Path.GetDirectoryName(logPath));
+                Directory.CreateDirectory(Path.GetDirectoryName(logPath) ?? ".");
                 File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - CRITICAL: RecoveryWindow failed: {ex.Message}\n");
             }
             catch

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -26,7 +26,7 @@ namespace GGs.Desktop.Views
         private readonly UacPrivilegeManager _privilegeManager;
         private readonly GGs.Shared.SystemIntelligence.SecurityValidator _securityValidator;
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         #region Properties
 
@@ -372,7 +372,7 @@ namespace GGs.Desktop.Views
             }
         }
 
-        private void OnProfileDownloaded(object sender, ProfileDownloadedEventArgs e)
+        private void OnProfileDownloaded(object? sender, ProfileDownloadedEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {

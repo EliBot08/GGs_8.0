@@ -29,15 +29,14 @@ namespace GGs.Desktop.Views
         private readonly DispatcherTimer _progressTimer;
         private readonly DispatcherTimer _elapsedTimer;
         
-        private CancellationTokenSource _scanCancellationTokenSource;
+        private CancellationTokenSource? _scanCancellationTokenSource;
         private DateTime _scanStartTime;
-        private SystemIntelligenceProfile _currentProfile;
+        private SystemIntelligenceProfile? _currentProfile;
         private bool _isScanInProgress;
 
         public ObservableCollection<DetectedTweakViewModel> DetectedTweaks { get; set; }
         public ObservableCollection<ProfileSummaryViewModel> RecentProfiles { get; set; }
-
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public SystemIntelligenceView()
         {
@@ -218,7 +217,7 @@ namespace GGs.Desktop.Views
             }
         }
 
-        private void OnScanProgressChanged(object sender, GGs.Shared.SystemIntelligence.ScanProgressEventArgs e)
+        private void OnScanProgressChanged(object? sender, GGs.Shared.SystemIntelligence.ScanProgressEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
@@ -254,7 +253,7 @@ namespace GGs.Desktop.Views
             });
         }
 
-        private void OnTweakDetected(object sender, GGs.Shared.SystemIntelligence.TweakDetectedEventArgs e)
+        private void OnTweakDetected(object? sender, GGs.Shared.SystemIntelligence.TweakDetectedEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
@@ -281,7 +280,7 @@ namespace GGs.Desktop.Views
             });
         }
 
-        private void OnScanCompleted(object sender, GGs.Shared.SystemIntelligence.ScanCompletedEventArgs e)
+        private void OnScanCompleted(object? sender, GGs.Shared.SystemIntelligence.ScanCompletedEventArgs e)
         {
             Dispatcher.Invoke(() =>
             {
@@ -415,13 +414,13 @@ namespace GGs.Desktop.Views
             EstimatedTimeText.Text = "--:--:--";
         }
 
-        private void ProgressTimer_Tick(object sender, EventArgs e)
+        private void ProgressTimer_Tick(object? sender, EventArgs e)
         {
             // Update any animated progress indicators
             // This could include pulsing effects, rotating icons, etc.
         }
 
-        private void ElapsedTimer_Tick(object sender, EventArgs e)
+        private void ElapsedTimer_Tick(object? sender, EventArgs e)
         {
             if (_isScanInProgress)
             {
@@ -452,7 +451,7 @@ namespace GGs.Desktop.Views
             };
         }
 
-        private static GGs.Shared.SystemIntelligence.SafetyLevel MapSafetyTagToSystemSafetyLevel(string tag)
+        private static GGs.Shared.SystemIntelligence.SafetyLevel MapSafetyTagToSystemSafetyLevel(string? tag)
         {
             return tag switch
             {
@@ -594,7 +593,7 @@ namespace GGs.Desktop.Views
         }
 
         // Event handlers for UI buttons
-        private async void SaveProfile_Click(object sender, RoutedEventArgs e)
+        private void SaveProfile_Click(object sender, RoutedEventArgs e)
         {
             if (_currentProfile != null)
             {
@@ -604,7 +603,7 @@ namespace GGs.Desktop.Views
             }
         }
 
-        private async void ShareProfile_Click(object sender, RoutedEventArgs e)
+        private void ShareProfile_Click(object sender, RoutedEventArgs e)
         {
             if (_currentProfile != null)
             {
@@ -645,18 +644,18 @@ namespace GGs.Desktop.Views
     // Supporting view models
     public class DetectedTweakViewModel
     {
-        public string Name { get; set; }
-        public string Description { get; set; }
-        public string Source { get; set; }
-        public string Category { get; set; }
+        public string Name { get; set; } = string.Empty;
+        public string Description { get; set; } = string.Empty;
+        public string Source { get; set; } = string.Empty;
+        public string Category { get; set; } = string.Empty;
         public int ConfidenceScore { get; set; }
-        public System.Windows.Media.Brush SafetyColor { get; set; }
+        public System.Windows.Media.Brush SafetyColor { get; set; } = System.Windows.Media.Brushes.Gray;
         public bool IsSelected { get; set; }
     }
 
     public class ProfileSummaryViewModel
     {
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public DateTime CreatedDate { get; set; }
         public int TweakCount { get; set; }
     }
@@ -665,29 +664,29 @@ namespace GGs.Desktop.Views
     public class ScanProgressEventArgs : EventArgs
     {
         public double OverallProgress { get; set; }
-        public string CurrentOperation { get; set; }
+        public string CurrentOperation { get; set; } = string.Empty;
         public double Progress { get; set; }
         public double RegistryProgress { get; set; }
         public double ServiceProgress { get; set; }
         public double BiosProgress { get; set; }
         public double GroupPolicyProgress { get; set; }
-        public TimeSpan? EstimatedTimeRemaining { get; set; }
+        public TimeSpan? estimatedTimeRemaining { get; set; }
     }
 
     public class TweakDetectedEventArgs : EventArgs
     {
-        public DetectedTweak Tweak { get; set; }
+        public DetectedTweak Tweak { get; set; } = null!;
     }
 
     public class ScanCompletedEventArgs : EventArgs
     {
-        public SystemIntelligenceProfile Profile { get; set; }
+        public SystemIntelligenceProfile Profile { get; set; } = null!;
     }
 
     public class ScanErrorEventArgs : EventArgs
     {
-        public string ErrorMessage { get; set; }
-        public Exception Exception { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
+        public Exception Exception { get; set; } = null!;
     }
 
     // Configuration class

@@ -285,8 +285,8 @@ var licenseVm = new ViewModels.LicenseManagementViewModel(_api, new AuthService(
         {
             if (sender is System.Windows.Controls.Button b) { b.IsEnabled = false; b.Content = "Thinking…"; }
             var q = EliQuestion?.Text ?? string.Empty;
-            string answer = await System.Threading.Tasks.Task.Run(() => _eli.Answer(q));
-            if (EliAnswer != null) EliAnswer.Text = answer;
+            var response = await _eli.AskQuestionAsync(q);
+            if (EliAnswer != null) EliAnswer.Text = response.Answer;
         }
         catch (Exception ex)
         {

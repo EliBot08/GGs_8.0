@@ -56,7 +56,7 @@ namespace GGs.Desktop.Views
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
 
         public ProfileArchitectView()
         {
@@ -574,7 +574,7 @@ namespace GGs.Desktop.Views
         }
 
         // Helper methods
-        private async Task<SystemIntelligenceProfile> CreateNewProfileAsync(string name, string description)
+        private async Task<SystemIntelligenceProfile?> CreateNewProfileAsync(string name, string description)
         {
             try
             {
@@ -601,7 +601,7 @@ namespace GGs.Desktop.Views
             }
         }
 
-        private async Task<SystemIntelligenceProfile> ImportProfileFromFileAsync(string fileName)
+        private async Task<SystemIntelligenceProfile?> ImportProfileFromFileAsync(string fileName)
         {
             try
             {
@@ -820,7 +820,7 @@ namespace GGs.Desktop.Views
         private bool _isShared;
 
         public string Id { get; set; }
-        public string Name { get; set; }
+        public string Name { get; set; } = string.Empty;
         public string Description { get; set; }
         public DateTime CreatedDate { get; set; }
         public int TweakCount { get; set; }
@@ -919,7 +919,7 @@ namespace GGs.Desktop.Views
             return tags;
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
         protected virtual void OnPropertyChanged(string propertyName)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
@@ -946,7 +946,7 @@ namespace GGs.Desktop.Views
     // Event argument classes
     public class CloudSyncProgressEventArgs : EventArgs
     {
-        public string CurrentOperation { get; set; }
+        public string CurrentOperation { get; set; } = string.Empty;
         public double Progress { get; set; }
     }
 
