@@ -67,7 +67,7 @@ namespace GGs.Desktop.Views
                     Directory.CreateDirectory(LogRoot);
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Fallback to temp directory if LocalApplicationData fails
                 LogRoot = System.IO.Path.Combine(Path.GetTempPath(), "GGs", "logs");

@@ -558,6 +558,7 @@ namespace GGs.Desktop.Services
 
         private async Task<SystemInfo> GatherSystemInfoAsync()
         {
+            await Task.CompletedTask;
             var info = new SystemInfo();
 
             try
@@ -619,6 +620,7 @@ namespace GGs.Desktop.Services
 
         private async Task SaveProfilesAsync()
         {
+            await Task.CompletedTask;
             try
             {
                 var profilesPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData), "GGs", "Profiles");
@@ -788,6 +790,7 @@ namespace GGs.Desktop.Services
 
         public async Task<bool> ApplyProfileAsync(GGs.Shared.SystemIntelligence.SystemIntelligenceProfile profile)
         {
+            await Task.CompletedTask;
             if (profile == null) return false;
             try
             {

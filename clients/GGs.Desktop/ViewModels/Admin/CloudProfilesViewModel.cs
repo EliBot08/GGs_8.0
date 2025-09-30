@@ -91,9 +91,9 @@ namespace GGs.Desktop.ViewModels.Admin
 
         #region Commands
 
-        public ICommand DownloadProfileCommand { get; private set; }
-        public ICommand VerifySignatureCommand { get; private set; }
-        public ICommand ApproveProfileCommand { get; private set; }
+        public ICommand DownloadProfileCommand { get; private set; } = null!;
+        public ICommand VerifySignatureCommand { get; private set; } = null!;
+        public ICommand ApproveProfileCommand { get; private set; } = null!;
 
         private void InitializeCommands()
         {

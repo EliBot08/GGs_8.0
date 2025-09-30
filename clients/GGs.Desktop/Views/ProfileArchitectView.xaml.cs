@@ -475,9 +475,9 @@ namespace GGs.Desktop.Views
 
                 // Check the clicked button and set filter
                 var button = sender as ToggleButton;
-                button.IsChecked = true;
+                if (button != null) button.IsChecked = true;
 
-                _currentFilter = button.Name switch
+                _currentFilter = button?.Name switch
                 {
                     nameof(FilterLocal) => ProfileFilter.Local,
                     nameof(FilterShared) => ProfileFilter.Shared,
@@ -558,6 +558,7 @@ namespace GGs.Desktop.Views
         {
             Dispatcher.Invoke(async () =>
             {
+                await Task.CompletedTask; // Suppress CS1998
                 HideLoading();
                 
                 if (e.IsSuccessful)
@@ -643,7 +644,7 @@ namespace GGs.Desktop.Views
         {
             try
             {
-                if (_cloudProfileManager != null)
+                if (_cloudProfileManager != null && _systemIntelligenceService != null)
                 {
                     var systemProfile = await _systemIntelligenceService.LoadProfileAsync(profile.Id);
                     if (systemProfile != null)

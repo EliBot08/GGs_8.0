@@ -31,7 +31,9 @@ namespace GGs.Desktop.Views
         
         private CancellationTokenSource? _scanCancellationTokenSource;
         private DateTime _scanStartTime;
+        #pragma warning disable CS0649
         private SystemIntelligenceProfile? _currentProfile;
+        #pragma warning restore CS0649
         private bool _isScanInProgress;
 
         public ObservableCollection<DetectedTweakViewModel> DetectedTweaks { get; set; }
@@ -139,6 +141,7 @@ namespace GGs.Desktop.Views
 
         private async Task StartScanAsync(ScanConfiguration config)
         {
+            await Task.CompletedTask; // Placeholder for future async implementation
             try
             {
                 _isScanInProgress = true;
@@ -199,6 +202,7 @@ namespace GGs.Desktop.Views
 
         private async Task StopScanAsync()
         {
+            await Task.CompletedTask; // Placeholder for future async implementation
             try
             {
                 _scanCancellationTokenSource?.Cancel();

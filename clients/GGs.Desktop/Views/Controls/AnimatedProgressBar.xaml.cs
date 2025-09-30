@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -6,14 +6,15 @@ using System.Windows.Media.Animation;
 using System.Windows.Threading;
 
 namespace GGs.Desktop.Views.Controls;
-
 /// <summary>
 /// Professional animated progress bar with smooth transitions and visual effects
 /// </summary>
 public partial class AnimatedProgressBar : UserControl
 {
     private DispatcherTimer? _iconRotationTimer;
+    #pragma warning disable CS0649
     private Storyboard? _currentAnimation;
+    #pragma warning restore CS0649
     private double _currentProgress = 0;
     private bool _isCompleted = false;
 
@@ -305,7 +306,7 @@ public partial class AnimatedProgressBar : UserControl
             CompletionIcon.Opacity = 0;
 
             // Restart icon rotation if needed
-            if (!_iconRotationTimer.IsEnabled)
+            if (_iconRotationTimer != null && !_iconRotationTimer.IsEnabled)
             {
                 _iconRotationTimer.Start();
             }

@@ -38,6 +38,8 @@ namespace GGs.Desktop.Services
             return true;
         }
 
+        #pragma warning disable CS0067
         public event EventHandler<string>? AuditAdded;
+        #pragma warning restore CS0067
     }
 }

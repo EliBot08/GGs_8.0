@@ -66,7 +66,7 @@ public sealed class AccessibilityService : IAccessibilityService
         try
         {
             // Check for JAWS
-            if (FindWindow("JFWUI2", null) != IntPtr.Zero)
+            if (FindWindow("JFWUI2", null!) != IntPtr.Zero)
                 return true;
 
             // Check for NVDA

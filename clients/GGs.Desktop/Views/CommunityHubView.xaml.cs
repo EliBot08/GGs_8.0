@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
@@ -252,7 +252,7 @@ namespace GGs.Desktop.Views
             }
         }
 
-        private async void MyProfilesButton_Click(object sender, RoutedEventArgs e)
+        private void MyProfilesButton_Click(object sender, RoutedEventArgs e)
         {
             try
             {
@@ -548,7 +548,7 @@ namespace GGs.Desktop.Views
 
         #region INotifyPropertyChanged
 
-        protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
@@ -574,8 +574,8 @@ namespace GGs.Desktop.Views
     /// </summary>
     public class CommunityShareProfileDialog : Window
     {
-        public SharedSI.SystemIntelligenceProfile SelectedProfile { get; private set; }
-        public ShareOptions ShareOptions { get; private set; }
+        public SharedSI.SystemIntelligenceProfile SelectedProfile { get; private set; } = null!;
+        public ShareOptions ShareOptions { get; private set; } = null!;
     
         public CommunityShareProfileDialog(System.Collections.Generic.List<SharedSI.SystemIntelligenceProfile> profiles)
         {

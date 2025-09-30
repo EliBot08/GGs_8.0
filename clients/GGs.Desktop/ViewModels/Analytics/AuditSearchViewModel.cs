@@ -132,7 +132,7 @@ namespace GGs.Desktop.ViewModels.Analytics
                 SearchStatus = "Searching audit logs...";
                 
                 var searchCriteria = BuildSearchCriteria();
-                var results = await _apiClient.SearchAuditLogsAsync(searchCriteria.Query, searchCriteria.FromDate, searchCriteria.ToDate);
+                var results = await _apiClient.SearchAuditLogsAsync(searchCriteria.Query ?? string.Empty, searchCriteria.FromDate, searchCriteria.ToDate);
                 
                 AuditEntries.Clear();
                 foreach (var entry in results)
@@ -169,7 +169,7 @@ namespace GGs.Desktop.ViewModels.Analytics
                 var searchCriteria = BuildSearchCriteria();
                 searchCriteria.Skip = LoadedEntries;
                 
-                var results = await _apiClient.SearchAuditLogsAsync(searchCriteria.Query, searchCriteria.FromDate, searchCriteria.ToDate);
+                var results = await _apiClient.SearchAuditLogsAsync(searchCriteria.Query ?? string.Empty, searchCriteria.FromDate, searchCriteria.ToDate);
                 
                 foreach (var entry in results)
                 {
