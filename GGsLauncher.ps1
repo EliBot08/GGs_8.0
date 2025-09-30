@@ -293,16 +293,14 @@ function Start-ErrorLogViewer {
     }
     
     try {
-        $arguments = @()
+        Write-LauncherLog "Starting ErrorLogViewer..." -Level Info
         
         if ($CustomLogDir) {
-            $arguments += "--log-dir"
-            $arguments += $CustomLogDir
             Write-LauncherLog "Using custom log directory: $CustomLogDir" -Level Info
+            $process = Start-Process -FilePath $exePath -ArgumentList @("--log-dir", $CustomLogDir) -PassThru -WindowStyle Normal
+        } else {
+            $process = Start-Process -FilePath $exePath -PassThru -WindowStyle Normal
         }
-        
-        Write-LauncherLog "Starting ErrorLogViewer..." -Level Info
-        $process = Start-Process -FilePath $exePath -ArgumentList $arguments -PassThru -WindowStyle Normal
         
         # Wait briefly to check if process started successfully
         Start-Sleep -Milliseconds 500
