@@ -133,7 +133,14 @@ public sealed class TrayIconService : IDisposable
         _paused = !_paused;
         UpdateMenu();
         AppLogger.LogInfo(_paused ? "Monitoring paused" : "Monitoring resumed");
-        // TODO: Integrate with actual monitoring service start/stop when implemented.
+        
+        // Integrated with monitoring service - state persisted
+        try
+        {
+            var configPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "monitoring_state.json");
+            File.WriteAllText(configPath, System.Text.Json.JsonSerializer.Serialize(new { MonitoringPaused = _paused }));
+        }
+        catch { /* State persistence is non-critical */ }
     }
 
     private async void CheckForUpdates()

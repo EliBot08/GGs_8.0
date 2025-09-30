@@ -66,11 +66,17 @@ public sealed class EliBotService
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
 
+                if (eliBotResponse is null)
+                {
+                    _logger.LogError("Failed to deserialize EliBot response");
+                    return FallbackResponse(question);
+                }
+
                 // Add assistant message to conversation history
                 _conversationHistory.Add(new EliBotMessage
                 {
                     Role = "assistant",
-                    Content = eliBotResponse.Answer,
+                    Content = eliBotResponse.Answer ?? string.Empty,
                     Timestamp = DateTime.UtcNow
                 });
 
@@ -115,7 +121,7 @@ public sealed class EliBotService
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
 
-                return usage.CanAskQuestion;
+                return usage?.CanAskQuestion ?? false;
             }
 
             return false;
@@ -140,10 +146,11 @@ public sealed class EliBotService
             if (response.IsSuccessStatusCode)
             {
                 var json = await response.Content.ReadAsStringAsync();
-                return JsonSerializer.Deserialize<EliBotUsage>(json, new JsonSerializerOptions
+                var usage = JsonSerializer.Deserialize<EliBotUsage>(json, new JsonSerializerOptions
                 {
                     PropertyNamingPolicy = JsonNamingPolicy.CamelCase
                 });
+                return usage ?? new EliBotUsage { CanAskQuestion = false };
             }
 
             return new EliBotUsage { CanAskQuestion = false };

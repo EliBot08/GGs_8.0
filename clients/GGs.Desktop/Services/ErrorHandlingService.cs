@@ -39,7 +39,7 @@ public sealed class ErrorHandlingService : IErrorHandlingService
     public async Task<T> ExecuteWithRetryAsync<T>(Func<Task<T>> operation, int maxRetries = 3, TimeSpan? delay = null)
     {
         var retryDelay = delay ?? TimeSpan.FromSeconds(1);
-        Exception lastException = null;
+        Exception? lastException = null;
 
         for (int attempt = 0; attempt <= maxRetries; attempt++)
         {

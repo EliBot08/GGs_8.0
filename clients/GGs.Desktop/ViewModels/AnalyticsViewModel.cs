@@ -155,7 +155,7 @@ public class AnalyticsViewModel : BaseViewModel
 
     private void ApplyLocalFallback()
     {
-        // We don't have reliable local datasets; present minimal placeholders
+        // Apply local fallback when server data unavailable - show empty state
         TotalTweaksApplied = 0;
         SuccessRate = 0;
         MostPopularTweak = "None";

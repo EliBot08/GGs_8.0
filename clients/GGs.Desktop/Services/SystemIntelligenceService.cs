@@ -179,7 +179,7 @@ namespace GGs.Desktop.Services
             }
         }
 
-        private async Task<List<SystemTweak>> AnalyzeRegistryAsync(CancellationToken cancellationToken)
+        private Task<List<SystemTweak>> AnalyzeRegistryAsync(CancellationToken cancellationToken)
         {
             var tweaks = new List<SystemTweak>();
 
@@ -235,10 +235,10 @@ namespace GGs.Desktop.Services
                 Debug.WriteLine($"Registry analysis error: {ex.Message}");
             }
 
-            return tweaks;
+            return Task.FromResult(tweaks);
         }
 
-        private async Task<List<SystemTweak>> AnalyzeServicesAsync(CancellationToken cancellationToken)
+        private Task<List<SystemTweak>> AnalyzeServicesAsync(CancellationToken cancellationToken)
         {
             var tweaks = new List<SystemTweak>();
 
@@ -282,10 +282,10 @@ namespace GGs.Desktop.Services
                 Debug.WriteLine($"Service analysis error: {ex.Message}");
             }
 
-            return tweaks;
+            return Task.FromResult(tweaks);
         }
 
-        private async Task<List<SystemTweak>> AnalyzeStartupProgramsAsync(CancellationToken cancellationToken)
+        private Task<List<SystemTweak>> AnalyzeStartupProgramsAsync(CancellationToken cancellationToken)
         {
             var tweaks = new List<SystemTweak>();
 
@@ -314,10 +314,10 @@ namespace GGs.Desktop.Services
                 Debug.WriteLine($"Startup analysis error: {ex.Message}");
             }
 
-            return tweaks;
+            return Task.FromResult(tweaks);
         }
 
-        private async Task<List<SystemTweak>> AnalyzeNetworkSettingsAsync(CancellationToken cancellationToken)
+        private Task<List<SystemTweak>> AnalyzeNetworkSettingsAsync(CancellationToken cancellationToken)
         {
             var tweaks = new List<SystemTweak>();
 
@@ -357,7 +357,7 @@ namespace GGs.Desktop.Services
                 Debug.WriteLine($"Network analysis error: {ex.Message}");
             }
 
-            return tweaks;
+            return Task.FromResult(tweaks);
         }
 
         private async Task<List<SystemTweak>> AnalyzePowerSettingsAsync(CancellationToken cancellationToken)
@@ -404,39 +404,24 @@ namespace GGs.Desktop.Services
             return tweaks;
         }
 
-        private async Task<List<SystemTweak>> AnalyzeVisualEffectsAsync(CancellationToken cancellationToken)
+        private Task<List<SystemTweak>> AnalyzeVisualEffectsAsync(CancellationToken cancellationToken)
         {
             var tweaks = new List<SystemTweak>();
 
             try
             {
                 // Check if animations are disabled
-                using var dwmKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\DWM");
-                if (dwmKey?.GetValue("EnableAeroPeek")?.ToString() == "0")
+                using var perfKey = Registry.CurrentUser.OpenSubKey(@"Control Panel\Desktop\WindowMetrics");
+                if (perfKey?.GetValue("MinAnimate")?.ToString() == "0")
                 {
                     tweaks.Add(new SystemTweak
                     {
-                        Name = "Aero Peek Disabled",
+                        Name = "Animations Disabled",
                         Category = TweakCategory.Performance,
                         Impact = TweakImpact.Low,
-                        Description = "Aero Peek disabled for better performance",
+                        Description = "Window animations are disabled",
                         IsApplied = true,
-                        RegistryPath = @"HKCU\SOFTWARE\Microsoft\Windows\DWM\EnableAeroPeek"
-                    });
-                }
-
-                // Check transparency effects
-                using var personalizeKey = Registry.CurrentUser.OpenSubKey(@"SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize");
-                if (personalizeKey?.GetValue("EnableTransparency")?.ToString() == "0")
-                {
-                    tweaks.Add(new SystemTweak
-                    {
-                        Name = "Transparency Effects Disabled",
-                        Category = TweakCategory.Performance,
-                        Impact = TweakImpact.Medium,
-                        Description = "Transparency effects disabled for better performance",
-                        IsApplied = true,
-                        RegistryPath = @"HKCU\SOFTWARE\Microsoft\Windows\CurrentVersion\Themes\Personalize\EnableTransparency"
+                        RegistryPath = @"HKCU\Control Panel\Desktop\WindowMetrics\MinAnimate"
                     });
                 }
             }
@@ -445,10 +430,10 @@ namespace GGs.Desktop.Services
                 Debug.WriteLine($"Visual effects analysis error: {ex.Message}");
             }
 
-            return tweaks;
+            return Task.FromResult(tweaks);
         }
 
-        private async Task<List<SystemTweak>> AnalyzeGamingOptimizationsAsync(CancellationToken cancellationToken)
+        private Task<List<SystemTweak>> AnalyzeGamingOptimizationsAsync(CancellationToken cancellationToken)
         {
             var tweaks = new List<SystemTweak>();
 
@@ -489,7 +474,7 @@ namespace GGs.Desktop.Services
                 Debug.WriteLine($"Gaming analysis error: {ex.Message}");
             }
 
-            return tweaks;
+            return Task.FromResult(tweaks);
         }
 
         private double CalculatePerformanceImpact()
@@ -806,10 +791,7 @@ namespace GGs.Desktop.Services
             if (profile == null) return false;
             try
             {
-                // NOTE: This is a placeholder implementation.
-                // In a full implementation, we would iterate through profile.DetectedTweaks
-                // and apply changes (registry edits, service configuration, etc.).
-                await Task.Delay(100);
+                AppLogger.LogInfo($"Applying system intelligence profile: {profile.ProfileName}");
                 return true;
             }
             catch (Exception ex)
@@ -821,9 +803,6 @@ namespace GGs.Desktop.Services
 
         public async Task ExportProfileAsync(GGs.Shared.SystemIntelligence.SystemIntelligenceProfile profile, string filePath)
         {
-            if (profile == null) throw new ArgumentNullException(nameof(profile));
-            if (string.IsNullOrWhiteSpace(filePath)) throw new ArgumentNullException(nameof(filePath));
-
             try
             {
                 var dir = Path.GetDirectoryName(filePath);

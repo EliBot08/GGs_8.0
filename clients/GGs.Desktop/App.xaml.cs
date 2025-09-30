@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -20,6 +20,7 @@ public partial class App : System.Windows.Application
 {
     public static bool IsExiting { get; set; }
     private static System.Threading.Mutex? _singleInstanceMutex;
+    private static bool _mutexCreated = false;
     public static IServiceProvider? ServiceProvider { get; private set; }
 
     protected override void OnStartup(StartupEventArgs e)
@@ -54,14 +55,26 @@ public partial class App : System.Windows.Application
         var logger = loggerFactory.CreateLogger("GGs.Desktop");
         AppLogger.Initialize(logger);
 
-        // Single-instance guard
-        bool createdNew = false;
-        _singleInstanceMutex = new System.Threading.Mutex(true, "GGs.Desktop.Singleton", out createdNew);
-        if (!createdNew)
+        // Single-instance guard with proper cleanup
+        try
         {
-try { System.Windows.MessageBox.Show("GGs is already running in the background.", "GGs", MessageBoxButton.OK, MessageBoxImage.Information); } catch { }
-System.Windows.Application.Current?.Shutdown();
-            return;
+            _singleInstanceMutex = new System.Threading.Mutex(true, "GGs.Desktop.Singleton.v4.0", out _mutexCreated);
+            if (!_mutexCreated)
+            {
+                AppLogger.LogWarn("Another instance of GGs Desktop is already running");
+                System.Windows.MessageBox.Show(
+                    "GGs Desktop is already running.\n\nPlease check your taskbar or system tray.",
+                    "GGs - Already Running",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                System.Windows.Application.Current?.Shutdown();
+                return;
+            }
+            AppLogger.LogInfo("Single instance mutex acquired successfully");
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to create single instance mutex", ex);
         }
 
         // Initialize friendly file logger and global exception handlers
@@ -126,64 +139,7 @@ System.Windows.Application.Current?.Shutdown();
             AppLogger.LogWarn($"Could not force LaunchMinimized setting: {ex.Message}");
         }
 
-        // Always show the main window - never start minimized to tray
-        // Open the ErrorLogViewer early so it captures everything live (singleton)
-        try
-        {
-            // Check if ErrorLogViewer is already running to prevent duplication
-            var existingProcesses = System.Diagnostics.Process.GetProcessesByName("GGs.ErrorLogViewer");
-            if (existingProcesses.Length == 0)
-            {
-                var logViewer = new Views.ErrorLogViewer();
-                logViewer.Show();
-                AppLogger.LogInfo("ErrorLogViewer opened successfully");
-            }
-            else
-            {
-                AppLogger.LogInfo($"ErrorLogViewer already running ({existingProcesses.Length} instances), skipping launch");
-            }
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogWarn($"Could not open ErrorLogViewer window automatically: {ex.Message}");
-        }
-
-        // Try to create a simple test window first
-        System.Windows.Window? testWindow = null;
-        try
-        {
-            AppLogger.LogInfo("Creating simple test window...");
-            testWindow = new System.Windows.Window
-            {
-                Title = "GGs Test Window",
-                Width = 400,
-                Height = 300,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Background = System.Windows.Media.Brushes.DarkBlue
-            };
-            
-            var textBlock = new System.Windows.Controls.TextBlock
-            {
-                Text = "GGs Desktop Application\n\nIf you can see this window, the basic WPF functionality is working.\n\nThis is a test window to verify display capabilities.",
-                Foreground = System.Windows.Media.Brushes.White,
-                FontSize = 16,
-                TextAlignment = TextAlignment.Center,
-                VerticalAlignment = VerticalAlignment.Center,
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-            
-            testWindow.Content = textBlock;
-            testWindow.Show();
-            testWindow.Activate();
-            testWindow.Focus();
-            AppLogger.LogSuccess("Test window created and shown successfully");
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Failed to create test window", ex);
-        }
-
-        // Always show the main window - simplified approach
+        // CRITICAL: Always show the main window - ensure it's visible and NOT running in background
         Views.ModernMainWindow? created = null;
         try
         {
@@ -191,16 +147,22 @@ System.Windows.Application.Current?.Shutdown();
             created = new Views.ModernMainWindow();
             AppLogger.LogInfo("ModernMainWindow created successfully");
             
-            // Simple, direct window showing
-            created.Show();
+            // Force window to be visible - multiple approaches for reliability
             created.WindowState = WindowState.Normal;
             created.Visibility = Visibility.Visible;
             created.ShowInTaskbar = true;
+            created.Topmost = true; // Temporarily topmost to ensure visibility
+            created.Show();
             created.Activate();
             created.Focus();
+            created.Topmost = false; // Remove topmost after showing
+            
+            // Set as main window to prevent background-only running
+            this.MainWindow = created;
+            this.ShutdownMode = ShutdownMode.OnMainWindowClose;
             
             if (!string.IsNullOrWhiteSpace(navArg)) created.NavigateTo(navArg);
-            AppLogger.LogSuccess("Main window shown and activated 🎉");
+            AppLogger.LogSuccess("Main window shown and activated - NOT running in background 🎉");
         }
         catch (Exception ex)
         {
@@ -254,6 +216,8 @@ System.Windows.Application.Current?.Shutdown();
 
     protected override void OnExit(ExitEventArgs e)
     {
+        IsExiting = true;
+        
         try { new StartupHealthService().MarkCleanExit(); } catch { }
         try
         {
@@ -262,6 +226,23 @@ System.Windows.Application.Current?.Shutdown();
             AppLogger.LogInfo("Application exiting... 👋");
         }
         finally { AppLogger.LogAppClosing(); }
+        
+        // Release mutex to allow future instances
+        try
+        {
+            if (_mutexCreated && _singleInstanceMutex != null)
+            {
+                _singleInstanceMutex.ReleaseMutex();
+                _singleInstanceMutex.Dispose();
+                _singleInstanceMutex = null;
+                AppLogger.LogInfo("Single instance mutex released");
+            }
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogWarn($"Failed to release mutex: {ex.Message}");
+        }
+        
         try { OpenTelemetryConfig.Shutdown(); } catch { }
         base.OnExit(e);
     }
@@ -493,4 +474,3 @@ System.Windows.Application.Current?.Shutdown();
         }
     }
 }
-

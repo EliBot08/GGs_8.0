@@ -19,192 +19,90 @@ public partial class ModernMainWindow : Window
     private readonly System.Collections.Generic.Queue<double> _cpuHistory = new System.Collections.Generic.Queue<double>();
     private const int CpuHistoryCapacity = 120;
     
-    public ModernMainWindow()
+public ModernMainWindow()
     {
-        try
-        {
-            // AppLogger should already be initialized in App.xaml.cs
-            try
-            {
-                AppLogger.LogInfo("Initializing ModernMainWindow");
-            }
-            catch (Exception logEx)
-            {
-                Debug.WriteLine($"Logger failed: {logEx.Message}");
-            }
-            
-            // Initialize component first - this is critical
-            InitializeComponent();
-            
-            // Set basic window properties
+        InitializeComponent();
+
+        // AppLogger should already be initialized in App.xaml.cs
+        AppLogger.LogInfo("Initializing ModernMainWindow");
+
+        // Set basic window properties
+        this.Visibility = Visibility.Visible;
+        this.WindowState = WindowState.Normal;
+        this.ShowInTaskbar = true;
+
+        // Apply window icon if available
+        IconService.ApplyWindowIcon(this);
+
+        // Ensure window is visible after XAML initialization
+        this.Loaded += (s, e) => {
             this.Visibility = Visibility.Visible;
             this.WindowState = WindowState.Normal;
-            this.ShowInTaskbar = true;
-            
-            // Apply window icon if available
-            try { IconService.ApplyWindowIcon(this); } catch { }
-            
-            // Ensure window is visible after XAML initialization
-            this.Loaded += (s, e) => {
-                try {
-                    this.Visibility = Visibility.Visible;
-                    this.WindowState = WindowState.Normal;
-                    this.Show();
-                    this.Activate();
-                    this.Focus();
-                    AppLogger.LogInfo("Window loaded and made visible");
-                } catch (Exception ex) {
-                    AppLogger.LogError("Failed to make window visible in Loaded event", ex);
-                }
-            };
+            this.Show();
+            this.Activate();
+            this.Focus();
+            AppLogger.LogInfo("Window loaded and made visible");
+        };
 
-            // Initialize EliBotService with required dependencies
-            try
-            {
-                var cfg = new Microsoft.Extensions.Configuration.ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true).AddEnvironmentVariables().Build();
-                var baseUrl = cfg["Server:BaseUrl"] ?? "https://localhost:5001";
-                var sec = new GGs.Shared.Http.HttpClientSecurityOptions();
-                var http = GGs.Shared.Http.SecureHttpClientFactory.GetOrCreate(baseUrl, sec, userAgent: "GGs.Desktop");
-                var auth = new GGs.Shared.Api.AuthService(http);
-                var loggerFactory = Microsoft.Extensions.Logging.LoggerFactory.Create(builder => { });
-                var logger = loggerFactory.CreateLogger("EliBotService");
-                _eli = new Services.EliBotService(http, auth, Microsoft.Extensions.Logging.Abstractions.NullLogger<Services.EliBotService>.Instance);
-            }
-            catch
-            {
-                // Fallback to defaults if DI setup fails
-                _eli = new Services.EliBotService(new System.Net.Http.HttpClient(), new GGs.Shared.Api.AuthService(new System.Net.Http.HttpClient()), Microsoft.Extensions.Logging.Abstractions.NullLogger<Services.EliBotService>.Instance);
-            }
-            
-            // Initialize theme manager with comprehensive error handling
-            try
-            {
-                _themeManager = ThemeManagerService.Instance;
-                if (_themeManager != null)
-                {
-                    try
-                    {
-                        _themeManager.LoadThemePreference();
-                    }
-                    catch (Exception loadEx)
-                    {
-                        Debug.WriteLine($"Theme preference loading failed: {loadEx.Message}");
-                    }
-                    
-                    try
-                    {
-                        _themeManager.ApplyTheme();
-                    }
-                    catch (Exception applyEx)
-                    {
-                        Debug.WriteLine($"Theme application failed: {applyEx.Message}");
-                    }
-                    
-                    UpdateThemeIcon();
-                }
-            }
-            catch (Exception themeEx)
-            {
-                Debug.WriteLine($"Theme initialization failed: {themeEx.Message}");
-                AppLogger.LogWarn($"Theme initialization failed: {themeEx.Message}");
-                // Continue without theming
-            }
-            
-            // Initialize system monitor service
-            try
-            {
-                _monitorService = new SystemMonitorService();
-                _monitorService.StatsUpdated += OnStatsUpdated;
-            }
-            catch (Exception monitorEx)
-            {
-                Debug.WriteLine($"Monitor service initialization failed: {monitorEx.Message}");
-                AppLogger.LogWarn($"Monitor service failed: {monitorEx.Message}");
-                // Continue without real monitoring - will use fallback
-            }
-            
-            // Start system monitoring
-            StartSystemMonitoring();
-            
-            // Initialize default UI states
-            InitializeUIStates();
+        // Initialize EliBotService with required dependencies
+        var cfg = new Microsoft.Extensions.Configuration.ConfigurationBuilder().AddJsonFile("appsettings.json", optional: true).AddEnvironmentVariables().Build();
+        var baseUrl = cfg["Server:BaseUrl"] ?? "https://localhost:5001";
+        var sec = new GGs.Shared.Http.HttpClientSecurityOptions();
+        var http = GGs.Shared.Http.SecureHttpClientFactory.GetOrCreate(baseUrl, sec, userAgent: "GGs.Desktop");
+        var auth = new GGs.Shared.Api.AuthService(http);
+        _eli = new Services.EliBotService(http, auth, Microsoft.Extensions.Logging.Abstractions.NullLogger<Services.EliBotService>.Instance);
 
-            // Setup notifications view model
-            try { if (NotificationsView != null) NotificationsView.DataContext = new GGs.Desktop.ViewModels.NotificationsViewModel(); } catch { }
+        // Initialize theme manager
+        _themeManager = ThemeManagerService.Instance;
+        _themeManager.LoadThemePreference();
+        _themeManager.ApplyTheme();
+        UpdateThemeIcon();
 
-            try
-            {
-                Services.EntitlementsService.Changed += (_, __) => Dispatcher.BeginInvoke(new Action(ApplyEntitlementsGating));
-                Services.EntitlementsService.ServerEntitlementsChanged += (_, ent) =>
-                {
-                    try { if (ent != null) Dispatcher.BeginInvoke(new Action(() => ApplyServerEntitlementsAppearance(ent))); } catch { }
-                };
-            }
-            catch { }
-            ApplyEntitlementsGating();
+        // Initialize system monitor service
+        _monitorService = new SystemMonitorService();
+        _monitorService.StatsUpdated += OnStatsUpdated;
 
-            // Populate user/license info if available
-            try
-            {
-                var licSvc = new GGs.Desktop.Services.LicenseService();
-                var payload = licSvc.CurrentPayload;
-                if (payload != null)
-                {
-                    if (LicenseTypeText != null) LicenseTypeText.Text = payload.Tier.ToString();
-                    if (UserNameText != null) UserNameText.Text = payload.IsAdminKey ? "Admin" : payload.Tier.ToString();
-                    if (UserEmailText != null) UserEmailText.Text = string.IsNullOrWhiteSpace(payload.UserId) ? "—" : payload.UserId;
-                }
-            }
-            catch { }
-            
-            // Notifications badge wiring
-            try
-            {
-                Services.NotificationCenter.UnreadCountChanged += (_, count) =>
-                {
-                    try
-                    {
-                        Dispatcher.BeginInvoke(new Action(() =>
-                        {
-                            if (NotificationsBadge != null)
-                                NotificationsBadge.Visibility = count > 0 ? Visibility.Visible : Visibility.Collapsed;
-                            if (NotificationsBadgeText != null)
-                                NotificationsBadgeText.Text = Math.Min(count, 99).ToString();
-                        }));
-                    }
-                    catch { }
-                };
-                // Initialize current state
-                var initial = Services.NotificationCenter.UnreadCount;
-                if (NotificationsBadge != null) NotificationsBadge.Visibility = initial > 0 ? Visibility.Visible : Visibility.Collapsed;
-                if (NotificationsBadgeText != null) NotificationsBadgeText.Text = Math.Min(initial, 99).ToString();
-            }
-            catch { }
-            
-            // Fade in animation
-            this.Opacity = 0;
-            this.Loaded += Window_Loaded;
+        // Start system monitoring
+        StartSystemMonitoring();
 
-            // Redraw chart on size changes
-            try { if (PerformanceGraph != null) PerformanceGraph.SizeChanged += (_, __) => RedrawCpuChart(); } catch { }
-        }
-        catch (Exception ex)
+        // Initialize default UI states
+        InitializeUIStates();
+
+        // Setup notifications view model
+        NotificationsView.DataContext = new GGs.Desktop.ViewModels.NotificationsViewModel();
+
+        Services.EntitlementsService.Changed += (_, __) => Dispatcher.BeginInvoke(new Action(ApplyEntitlementsGating));
+        Services.EntitlementsService.ServerEntitlementsChanged += (_, ent) =>
         {
-            try
-            {
-                AppLogger.LogError("Critical error during ModernMainWindow initialization", ex);
-            }
-            catch { }
-            
-            MessageBox.Show($"Critical initialization error: {ex.Message}\n\nThe application will close.", 
-                "Fatal Error", MessageBoxButton.OK, MessageBoxImage.Error);
-            
-            try
-            {
-                Application.Current?.Shutdown();
-            }
-            catch { }
+            if (ent != null) Dispatcher.BeginInvoke(new Action(() => ApplyServerEntitlementsAppearance(ent)));
+        };
+        ApplyEntitlementsGating();
+
+        // Populate user/license info if available
+        var licSvc = new GGs.Desktop.Services.LicenseService();
+        var payload = licSvc.CurrentPayload;
+        if (payload != null)
+        {
+            LicenseTypeText.Text = payload.Tier.ToString();
+            UserNameText.Text = payload.IsAdminKey ? "Admin" : payload.Tier.ToString();
+            UserEmailText.Text = string.IsNullOrWhiteSpace(payload.UserId) ? "—" : payload.UserId;
         }
+
+        // Notifications badge wiring
+        Services.NotificationCenter.UnreadCountChanged += (_, count) =>
+        {
+            Dispatcher.BeginInvoke(new Action(() =>
+            {
+                NotificationsBadge.Visibility = count > 0 ? Visibility.Visible : Visibility.Collapsed;
+                NotificationsBadgeText.Text = Math.Min(count, 99).ToString();
+            }));
+        };
+        var initial = Services.NotificationCenter.UnreadCount;
+        NotificationsBadge.Visibility = initial > 0 ? Visibility.Visible : Visibility.Collapsed;
+        NotificationsBadgeText.Text = Math.Min(initial, 99).ToString();
+
+        // Redraw chart on size changes
+        PerformanceGraph.SizeChanged += (_, __) => RedrawCpuChart();
     }
 
     public void NavigateTo(string tab)
@@ -257,283 +155,7 @@ public partial class ModernMainWindow : Window
         catch { }
     }
 
-    private void Window_Loaded(object sender, RoutedEventArgs e)
-    {
-        try
-        {
-            var fadeIn = new DoubleAnimation(0, 1, TimeSpan.FromMilliseconds(500));
-            this.BeginAnimation(OpacityProperty, fadeIn);
-            
-            // Initialize settings checkboxes
-            try
-            {
-                if (ChkStartWithWindows != null)
-                {
-                    ChkStartWithWindows.IsChecked = SettingsService.StartWithWindows;
-                    ChkStartWithWindows.Checked += SettingsCheckbox_Changed;
-                    ChkStartWithWindows.Unchecked += SettingsCheckbox_Changed;
-                }
-                if (ChkLaunchMinimized != null)
-                {
-                    ChkLaunchMinimized.IsChecked = SettingsService.LaunchMinimized;
-                    ChkLaunchMinimized.Checked += SettingsCheckbox_Changed;
-                    ChkLaunchMinimized.Unchecked += SettingsCheckbox_Changed;
-                }
-            }
-            catch (Exception settingsEx)
-            {
-                Debug.WriteLine($"Settings init error: {settingsEx.Message}");
-            }
 
-            // Initialize Deep Optimization UI
-            try
-            {
-                if (ChkDeepOptimization != null)
-                {
-                    ChkDeepOptimization.IsChecked = SettingsService.DeepOptimizationEnabled;
-                    ChkDeepOptimization.Checked += SettingsCheckbox_Changed;
-                    ChkDeepOptimization.Unchecked += SettingsCheckbox_Changed;
-                }
-                if (BtnInstallAgent != null) BtnInstallAgent.Click += (_, __) => { InstallAgentServiceInteractive(); RefreshAgentStatusUI(); };
-                if (BtnUninstallAgent != null) BtnUninstallAgent.Click += (_, __) => { UninstallAgentServiceInteractive(); RefreshAgentStatusUI(); };
-                if (BtnStartAgent != null) BtnStartAgent.Click += (_, __) => { TryStartAgentService(); RefreshAgentStatusUI(); };
-                if (BtnStopAgent != null) BtnStopAgent.Click += (_, __) => { TryStopAgentService(); RefreshAgentStatusUI(); };
-                RefreshAgentStatusUI();
-            }
-            catch { }
-
-            // Initialize typed settings
-            try
-            {
-                var sm = new SettingsManager();
-                var us = sm.Load();
-
-                // Appearance bindings
-                try
-                {
-                    // Theme
-                    if (CmbTheme != null)
-                    {
-                        foreach (var item in CmbTheme.Items)
-                        {
-                            if (item is ComboBoxItem cbi && string.Equals(cbi.Content?.ToString(), us.Theme, StringComparison.OrdinalIgnoreCase))
-                            {
-                                CmbTheme.SelectedItem = cbi; break;
-                            }
-                        }
-                        CmbTheme.SelectionChanged += (s2, e2) =>
-                        {
-                            try
-                            {
-                                var edited = sm.Load();
-                                if (CmbTheme.SelectedItem is ComboBoxItem cbi)
-                                    edited.Theme = cbi.Content?.ToString() ?? edited.Theme;
-                                sm.Save(edited);
-                            }
-                            catch { }
-                        };
-                    }
-
-                    // Font size
-                    if (SldFontSize != null)
-                    {
-                        SldFontSize.Value = us.FontSizePoints;
-                        if (TxtFontSizeValue != null) TxtFontSizeValue.Text = $"{us.FontSizePoints:F0} pt";
-                        SldFontSize.ValueChanged += (s3, e3) =>
-                        {
-                            try
-                            {
-                                var edited = sm.Load();
-                                edited.FontSizePoints = e3.NewValue;
-                                sm.Save(edited);
-                                if (TxtFontSizeValue != null) TxtFontSizeValue.Text = $"{e3.NewValue:F0} pt";
-                            }
-                            catch { }
-                        };
-                    }
-
-                    // Accent colors
-                    if (TxtAccentPrimary != null)
-                    {
-                        TxtAccentPrimary.Text = us.AccentPrimaryHex;
-                        RectAccentPrimary.Background = TryBrush(us.AccentPrimaryHex);
-                        TxtAccentPrimary.TextChanged += (s4, e4) =>
-                        {
-                            try
-                            {
-                                RectAccentPrimary.Background = TryBrush(TxtAccentPrimary.Text);
-                                var edited = sm.Load();
-                                edited.AccentPrimaryHex = TxtAccentPrimary.Text;
-                                sm.Save(edited);
-                            }
-                            catch { }
-                        };
-                    }
-                    if (TxtAccentSecondary != null)
-                    {
-                        TxtAccentSecondary.Text = us.AccentSecondaryHex;
-                        RectAccentSecondary.Background = TryBrush(us.AccentSecondaryHex);
-                        TxtAccentSecondary.TextChanged += (s5, e5) =>
-                        {
-                            try
-                            {
-                                RectAccentSecondary.Background = TryBrush(TxtAccentSecondary.Text);
-                                var edited = sm.Load();
-                                edited.AccentSecondaryHex = TxtAccentSecondary.Text;
-                                sm.Save(edited);
-                            }
-                            catch { }
-                        };
-                    }
-                }
-                catch { }
-
-                // Server
-                if (TxtServerBaseUrl != null)
-                {
-                    TxtServerBaseUrl.Text = us.ServerBaseUrl;
-                }
-                if (BtnSaveServer != null)
-                {
-                    BtnSaveServer.Click += (_, __) =>
-                    {
-                        try
-                        {
-                            var edited = sm.Load();
-                            edited.ServerBaseUrl = TxtServerBaseUrl?.Text ?? edited.ServerBaseUrl;
-                            edited.ValidateAndThrow();
-                            sm.Save(edited);
-                            if (TxtServerValidation != null) TxtServerValidation.Text = "Saved.";
-                        }
-                        catch (Exception vex)
-                        {
-                            if (TxtServerValidation != null) TxtServerValidation.Text = vex.Message;
-                        }
-                    };
-                }
-
-                // Updates section
-                if (CmbUpdateChannel != null)
-                {
-                    var channel = us.UpdateChannel;
-                    foreach (var item in CmbUpdateChannel.Items)
-                    {
-                        if (item is ComboBoxItem cbi && string.Equals(cbi.Content?.ToString(), channel, StringComparison.OrdinalIgnoreCase))
-                        {
-                            CmbUpdateChannel.SelectedItem = cbi;
-                            break;
-                        }
-                    }
-                    CmbUpdateChannel.SelectionChanged += (s, e2) =>
-                    {
-                        try
-                        {
-                            var edited = sm.Load();
-                            if (CmbUpdateChannel.SelectedItem is ComboBoxItem cbi)
-                                edited.UpdateChannel = cbi.Content?.ToString() ?? edited.UpdateChannel;
-                            sm.Save(edited);
-                        }
-                        catch (Exception ex2) { Debug.WriteLine($"Channel save error: {ex2.Message}"); }
-                    };
-                }
-                if (BtnCheckUpdates != null)
-                {
-                    BtnCheckUpdates.Click += BtnCheckUpdates_Click;
-                }
-                if (TxtCurrentVersion != null)
-                {
-                    try
-                    {
-                        var v = System.Reflection.Assembly.GetEntryAssembly()?.GetName()?.Version?.ToString() ?? "?";
-                        TxtCurrentVersion.Text = v;
-                    }
-                    catch { TxtCurrentVersion.Text = "?"; }
-                }
-                if (TxtLastUpdateCheck != null)
-                {
-                    try
-                    {
-                        var last = SettingsService.LastUpdateCheckUtc;
-                        TxtLastUpdateCheck.Text = last.HasValue ? last.Value.ToLocalTime().ToString("g") : "Never";
-                    }
-                    catch { TxtLastUpdateCheck.Text = "Never"; }
-                }
-
-                // Crash reporting
-                if (ChkCrashReporting != null)
-                {
-                    ChkCrashReporting.IsChecked = us.CrashReportingEnabled;
-                    ChkCrashReporting.Checked += (_, __) => { var e2 = sm.Load(); e2.CrashReportingEnabled = true; sm.Save(e2); };
-                    ChkCrashReporting.Unchecked += (_, __) => { var e2 = sm.Load(); e2.CrashReportingEnabled = false; sm.Save(e2); };
-                }
-                if (BtnOpenCrashFolder != null)
-                {
-                    BtnOpenCrashFolder.Click += (_, __) =>
-                    {
-                        try { CrashReportingService.Instance.OpenReportsFolder(); } catch { }
-                    };
-                }
-
-                // Secrets & Export/Import
-                if (BtnSaveSecret != null)
-                {
-                    BtnSaveSecret.Click += (_, __) =>
-                    {
-                        try
-                        {
-                            var token = PwdCloudProfiles?.Password ?? string.Empty;
-                            new SettingsManager().SetCloudProfilesApiToken(string.IsNullOrWhiteSpace(token) ? null : token);
-                            if (TxtSettingsStatus != null) TxtSettingsStatus.Text = "Secret saved.";
-                        }
-                        catch (Exception ex3) { if (TxtSettingsStatus != null) TxtSettingsStatus.Text = ex3.Message; }
-                    };
-                }
-                if (BtnExportSettings != null)
-                {
-                    BtnExportSettings.Click += (_, __) =>
-                    {
-                        try
-                        {
-                            var dialog = new Microsoft.Win32.SaveFileDialog { Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*", FileName = "ggs_settings.json" };
-                            if (dialog.ShowDialog(this) == true)
-                            {
-                                var (ok, err) = sm.TryExport(dialog.FileName);
-                                if (TxtSettingsStatus != null) TxtSettingsStatus.Text = ok ? "Exported." : (err ?? "Export failed");
-                            }
-                        }
-                        catch (Exception ex4) { if (TxtSettingsStatus != null) TxtSettingsStatus.Text = ex4.Message; }
-                    };
-                }
-                if (BtnImportSettings != null)
-                {
-                    BtnImportSettings.Click += (_, __) =>
-                    {
-                        try
-                        {
-                            var dialog = new Microsoft.Win32.OpenFileDialog { Filter = "JSON files (*.json)|*.json|All files (*.*)|*.*" };
-                            if (dialog.ShowDialog(this) == true)
-                            {
-                                var (ok, err) = sm.TryImport(dialog.FileName);
-                                if (TxtSettingsStatus != null) TxtSettingsStatus.Text = ok ? "Imported." : (err ?? "Import failed");
-                                if (ok && TxtServerBaseUrl != null) TxtServerBaseUrl.Text = sm.Load().ServerBaseUrl;
-                            }
-                        }
-                        catch (Exception ex5) { if (TxtSettingsStatus != null) TxtSettingsStatus.Text = ex5.Message; }
-                    };
-                }
-            }
-            catch (Exception updEx)
-            {
-                Debug.WriteLine($"Settings init error: {updEx.Message}");
-            }
-            
-            AppLogger.LogInfo("ModernMainWindow loaded successfully");
-        }
-        catch (Exception ex)
-        {
-            Debug.WriteLine($"Window_Loaded error: {ex.Message}");
-        }
-    }
 
     private void SettingsCheckbox_Changed(object sender, RoutedEventArgs e)
     {

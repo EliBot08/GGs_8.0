@@ -31,36 +31,64 @@ namespace GGs.Desktop.Services
         public event PropertyChangedEventHandler? PropertyChanged;
         public event EventHandler<AppTheme>? ThemeChanged;
 
-        // Theme Colors for Dark Mode
+        // Enterprise Theme Colors for Dark Mode - Midnight Blue
         public static class DarkTheme
         {
-            public static System.Windows.Media.Color BackgroundPrimary = System.Windows.Media.Color.FromRgb(26, 22, 37);
-            public static System.Windows.Media.Color BackgroundSecondary = System.Windows.Media.Color.FromRgb(42, 36, 56);
-            public static System.Windows.Media.Color BackgroundTertiary = System.Windows.Media.Color.FromRgb(61, 54, 80);
-            public static System.Windows.Media.Color AccentPrimary = System.Windows.Media.Color.FromRgb(139, 92, 246);
-            public static System.Windows.Media.Color AccentSecondary = System.Windows.Media.Color.FromRgb(167, 139, 250);
+            public static System.Windows.Media.Color BackgroundPrimary = System.Windows.Media.Color.FromRgb(10, 14, 39);      // Deep Navy
+            public static System.Windows.Media.Color BackgroundSecondary = System.Windows.Media.Color.FromRgb(20, 27, 61);   // Navy Blue
+            public static System.Windows.Media.Color BackgroundTertiary = System.Windows.Media.Color.FromRgb(28, 38, 71);    // Dark Blue
+            public static System.Windows.Media.Color BackgroundQuaternary = System.Windows.Media.Color.FromRgb(37, 49, 84);  // Slate Blue
+            public static System.Windows.Media.Color SurfaceColor = System.Windows.Media.Color.FromRgb(20, 27, 61);
+            public static System.Windows.Media.Color SurfaceHover = System.Windows.Media.Color.FromRgb(28, 38, 71);
+            
+            public static System.Windows.Media.Color AccentPrimary = System.Windows.Media.Color.FromRgb(0, 229, 255);        // Cyan
+            public static System.Windows.Media.Color AccentSecondary = System.Windows.Media.Color.FromRgb(0, 184, 212);      // Dark Cyan
+            public static System.Windows.Media.Color AccentTertiary = System.Windows.Media.Color.FromRgb(0, 145, 234);       // Blue
+            public static System.Windows.Media.Color AccentGlow = System.Windows.Media.Color.FromArgb(136, 0, 229, 255);     // Glowing Cyan
+            
             public static System.Windows.Media.Color TextPrimary = System.Windows.Media.Color.FromRgb(255, 255, 255);
-            public static System.Windows.Media.Color TextSecondary = System.Windows.Media.Color.FromRgb(156, 163, 175);
-            public static System.Windows.Media.Color BorderColor = System.Windows.Media.Color.FromRgb(61, 54, 80);
-            public static System.Windows.Media.Color Success = System.Windows.Media.Color.FromRgb(34, 197, 94);
-            public static System.Windows.Media.Color Warning = System.Windows.Media.Color.FromRgb(251, 146, 60);
-            public static System.Windows.Media.Color Error = System.Windows.Media.Color.FromRgb(239, 68, 68);
+            public static System.Windows.Media.Color TextSecondary = System.Windows.Media.Color.FromRgb(184, 197, 224);
+            public static System.Windows.Media.Color TextTertiary = System.Windows.Media.Color.FromRgb(138, 154, 184);
+            public static System.Windows.Media.Color TextDisabled = System.Windows.Media.Color.FromRgb(74, 91, 127);
+            
+            public static System.Windows.Media.Color BorderColor = System.Windows.Media.Color.FromRgb(45, 58, 92);
+            public static System.Windows.Media.Color BorderHover = System.Windows.Media.Color.FromRgb(61, 74, 108);
+            public static System.Windows.Media.Color BorderActive = System.Windows.Media.Color.FromRgb(0, 229, 255);
+            
+            public static System.Windows.Media.Color Success = System.Windows.Media.Color.FromRgb(0, 230, 118);
+            public static System.Windows.Media.Color Warning = System.Windows.Media.Color.FromRgb(255, 171, 0);
+            public static System.Windows.Media.Color Error = System.Windows.Media.Color.FromRgb(255, 23, 68);
+            public static System.Windows.Media.Color Info = System.Windows.Media.Color.FromRgb(0, 176, 255);
         }
 
-        // Theme Colors for Light Mode
+        // Enterprise Theme Colors for Light Mode - Clean Professional
         public static class LightTheme
         {
             public static System.Windows.Media.Color BackgroundPrimary = System.Windows.Media.Color.FromRgb(255, 255, 255);
-            public static System.Windows.Media.Color BackgroundSecondary = System.Windows.Media.Color.FromRgb(249, 250, 251);
-            public static System.Windows.Media.Color BackgroundTertiary = System.Windows.Media.Color.FromRgb(243, 244, 246);
-            public static System.Windows.Media.Color AccentPrimary = System.Windows.Media.Color.FromRgb(109, 40, 217);
-            public static System.Windows.Media.Color AccentSecondary = System.Windows.Media.Color.FromRgb(139, 92, 246);
-            public static System.Windows.Media.Color TextPrimary = System.Windows.Media.Color.FromRgb(17, 24, 39);
-            public static System.Windows.Media.Color TextSecondary = System.Windows.Media.Color.FromRgb(107, 114, 128);
-            public static System.Windows.Media.Color BorderColor = System.Windows.Media.Color.FromRgb(229, 231, 235);
+            public static System.Windows.Media.Color BackgroundSecondary = System.Windows.Media.Color.FromRgb(247, 249, 252);
+            public static System.Windows.Media.Color BackgroundTertiary = System.Windows.Media.Color.FromRgb(236, 240, 245);
+            public static System.Windows.Media.Color BackgroundQuaternary = System.Windows.Media.Color.FromRgb(225, 232, 237);
+            public static System.Windows.Media.Color SurfaceColor = System.Windows.Media.Color.FromRgb(255, 255, 255);
+            public static System.Windows.Media.Color SurfaceHover = System.Windows.Media.Color.FromRgb(247, 249, 252);
+            
+            public static System.Windows.Media.Color AccentPrimary = System.Windows.Media.Color.FromRgb(37, 99, 235);
+            public static System.Windows.Media.Color AccentSecondary = System.Windows.Media.Color.FromRgb(29, 78, 216);
+            public static System.Windows.Media.Color AccentTertiary = System.Windows.Media.Color.FromRgb(30, 64, 175);
+            public static System.Windows.Media.Color AccentGlow = System.Windows.Media.Color.FromArgb(68, 37, 99, 235);
+            
+            public static System.Windows.Media.Color TextPrimary = System.Windows.Media.Color.FromRgb(26, 32, 44);
+            public static System.Windows.Media.Color TextSecondary = System.Windows.Media.Color.FromRgb(74, 85, 104);
+            public static System.Windows.Media.Color TextTertiary = System.Windows.Media.Color.FromRgb(113, 128, 150);
+            public static System.Windows.Media.Color TextDisabled = System.Windows.Media.Color.FromRgb(160, 174, 192);
+            
+            public static System.Windows.Media.Color BorderColor = System.Windows.Media.Color.FromRgb(209, 213, 219);
+            public static System.Windows.Media.Color BorderHover = System.Windows.Media.Color.FromRgb(156, 163, 175);
+            public static System.Windows.Media.Color BorderActive = System.Windows.Media.Color.FromRgb(37, 99, 235);
+            
             public static System.Windows.Media.Color Success = System.Windows.Media.Color.FromRgb(16, 185, 129);
             public static System.Windows.Media.Color Warning = System.Windows.Media.Color.FromRgb(245, 158, 11);
             public static System.Windows.Media.Color Error = System.Windows.Media.Color.FromRgb(239, 68, 68);
+            public static System.Windows.Media.Color Info = System.Windows.Media.Color.FromRgb(59, 130, 246);
         }
 
         public AppTheme CurrentTheme

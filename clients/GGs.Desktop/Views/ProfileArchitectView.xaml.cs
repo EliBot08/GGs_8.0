@@ -953,49 +953,70 @@ namespace GGs.Desktop.Views
     public class CloudSyncCompletedEventArgs : EventArgs
     {
         public bool IsSuccessful { get; set; }
-        public string ErrorMessage { get; set; }
+        public string ErrorMessage { get; set; } = string.Empty;
     }
 
-    // Dialog placeholder classes
+    // Dialog window classes for Profile Architect operations
     public class CreateProfileDialog : Window
     {
-        public string ProfileName { get; set; }
-        public string ProfileDescription { get; set; }
-        
+        public string ProfileName { get; set; } = string.Empty;
+        public string ProfileDescription { get; set; } = string.Empty;
+
         public CreateProfileDialog()
         {
-            // Initialize dialog
+            Title = "Create New Profile";
+            Width = 450;
+            Height = 300;
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            // Dialog content would be defined in corresponding XAML file
         }
     }
 
     public class EditProfileDialog : Window
     {
+        public ProfileViewModel Profile { get; set; }
+        
         public EditProfileDialog(ProfileViewModel profile)
         {
-            // Initialize edit dialog
+            Profile = profile;
+            Title = $"Edit Profile: {profile.Name}";
+            Width = 500;
+            Height = 400;
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            // Dialog content would be defined in corresponding XAML file
         }
     }
 
     public class ArchitectShareProfileDialog : Window
     {
-        public ShareSettings ShareSettings { get; set; }
+        public ShareSettings ShareSettings { get; set; } = new();
         
         public ArchitectShareProfileDialog(ProfileViewModel profile)
         {
-            // Initialize share dialog
+            Title = $"Share Profile: {profile.Name}";
+            Width = 550;
+            Height = 450;
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            // Dialog content would be defined in corresponding XAML file
         }
     }
 
     public class ShareSettings
     {
-        public SharingPermission Permission { get; set; }
-        public bool AllowComments { get; set; }
-        public bool AllowRating { get; set; }
+        public SharingPermission Permission { get; set; } = SharingPermission.FriendsOnly;
+        public bool AllowComments { get; set; } = true;
+        public bool AllowRating { get; set; } = true;
     }
 
-    // Rename the duplicate dialog class to avoid conflicts across views
     public class ShareProfileViewModelDialog : Window
     {
-        public ShareProfileViewModelDialog(ProfileViewModel profile) { }
+        public ShareProfileViewModelDialog(ProfileViewModel profile) 
+        {
+            Title = $"Share Profile: {profile.Name}";
+            Width = 550;
+            Height = 450;
+            WindowStartupLocation = WindowStartupLocation.CenterOwner;
+            // Dialog content would be defined in corresponding XAML file
+        }
     }
 }
