@@ -1,0 +1,451 @@
+using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
+using System.IO;
+using System.IO.Compression;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
+using GGs.ErrorLogViewer.Models;
+
+namespace GGs.ErrorLogViewer.Services
+{
+    public interface ILogMonitoringService
+    {
+        event EventHandler<LogEntry> LogEntryAdded;
+        event EventHandler<IEnumerable<LogEntry>> LogEntriesAdded;
+        event EventHandler LogsCleared;
+        
+        Task StartMonitoringAsync(string logDirectory, CancellationToken cancellationToken = default);
+        Task StopMonitoringAsync();
+        IEnumerable<LogEntry> GetAllEntries();
+        void ClearLogs();
+        Task<IEnumerable<LogEntry>> LoadHistoricalLogsAsync(string directory, DateTime? since = null);
+    }
+
+    public class LogMonitoringService : BackgroundService, ILogMonitoringService
+    {
+        private readonly ILogger<LogMonitoringService> _logger;
+        private readonly ILogParsingService _parsingService;
+        private readonly IConfiguration _configuration;
+        
+        private readonly ConcurrentQueue<LogEntry> _logEntries = new();
+        private readonly Dictionary<string, FileWatcher> _fileWatchers = new();
+        private readonly Dictionary<string, long> _filePositions = new();
+        private readonly HashSet<string> _seenLogHashes = new(); // Prevent duplicate entries
+        private readonly object _lockObject = new();
+        
+        private string _logDirectory = string.Empty;
+        private Timer? _pollingTimer;
+        private long _nextLogId = 1;
+        private int _maxEntries;
+        private int _refreshInterval;
+
+        public event EventHandler<LogEntry>? LogEntryAdded;
+        public event EventHandler<IEnumerable<LogEntry>>? LogEntriesAdded;
+        public event EventHandler? LogsCleared;
+
+        public LogMonitoringService(
+            ILogger<LogMonitoringService> logger,
+            ILogParsingService parsingService,
+            IConfiguration configuration)
+        {
+            _logger = logger;
+            _parsingService = parsingService;
+            _configuration = configuration;
+            
+            _maxEntries = _configuration.GetValue<int>("ErrorLogViewer:MaxLogEntries", 50000);
+            _refreshInterval = _configuration.GetValue<int>("ErrorLogViewer:RefreshIntervalMs", 250);
+        }
+
+        public async Task StartMonitoringAsync(string logDirectory, CancellationToken cancellationToken = default)
+        {
+            _logDirectory = logDirectory;
+            
+            if (!Directory.Exists(_logDirectory))
+            {
+                Directory.CreateDirectory(_logDirectory);
+                _logger.LogInformation("Created log directory: {LogDirectory}", _logDirectory);
+            }
+
+            _logger.LogInformation("Starting log monitoring for directory: {LogDirectory}", _logDirectory);
+
+            // Load existing logs first
+            await LoadExistingLogsAsync(cancellationToken);
+
+            // Set up file system watchers
+            SetupFileWatchers();
+
+            // Start polling timer for active files
+            _pollingTimer = new Timer(PollActiveFiles, null, TimeSpan.Zero, TimeSpan.FromMilliseconds(_refreshInterval));
+
+            _logger.LogInformation("Log monitoring started successfully");
+        }
+
+        public async Task StopMonitoringAsync()
+        {
+            _logger.LogInformation("Stopping log monitoring...");
+
+            _pollingTimer?.Dispose();
+            _pollingTimer = null;
+
+            lock (_lockObject)
+            {
+                foreach (var watcher in _fileWatchers.Values)
+                {
+                    watcher.Dispose();
+                }
+                _fileWatchers.Clear();
+            }
+
+            _logger.LogInformation("Log monitoring stopped");
+        }
+
+        protected override async Task ExecuteAsync(CancellationToken stoppingToken)
+        {
+            // This service is manually started via StartMonitoringAsync
+            while (!stoppingToken.IsCancellationRequested)
+            {
+                await Task.Delay(1000, stoppingToken);
+            }
+        }
+
+        private async Task LoadExistingLogsAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                var logFiles = GetLogFiles(_logDirectory);
+                var allEntries = new List<LogEntry>();
+
+                foreach (var file in logFiles.OrderBy(f => File.GetCreationTime(f)))
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                        break;
+
+                    var entries = await LoadLogFileAsync(file, cancellationToken);
+                    allEntries.AddRange(entries);
+                }
+
+                // Sort by timestamp and take most recent entries
+                var sortedEntries = allEntries
+                    .OrderBy(e => e.Timestamp)
+                    .TakeLast(_maxEntries)
+                    .ToList();
+
+                foreach (var entry in sortedEntries)
+                {
+                    _logEntries.Enqueue(entry);
+                }
+
+                if (sortedEntries.Any())
+                {
+                    LogEntriesAdded?.Invoke(this, sortedEntries);
+                    _logger.LogInformation("Loaded {Count} existing log entries", sortedEntries.Count);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error loading existing logs");
+            }
+        }
+
+        private async Task<IEnumerable<LogEntry>> LoadLogFileAsync(string filePath, CancellationToken cancellationToken)
+        {
+            var entries = new List<LogEntry>();
+            
+            try
+            {
+                using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                
+                // Handle compressed files
+                Stream readStream = stream;
+                if (filePath.EndsWith(".gz", StringComparison.OrdinalIgnoreCase))
+                {
+                    readStream = new GZipStream(stream, CompressionMode.Decompress);
+                }
+
+                using var reader = new StreamReader(readStream);
+                string? line;
+                long lineNumber = 0;
+
+                while ((line = await reader.ReadLineAsync()) != null && !cancellationToken.IsCancellationRequested)
+                {
+                    lineNumber++;
+                    
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
+                    var entry = _parsingService.ParseLogLine(line, filePath, lineNumber);
+                    if (entry != null)
+                    {
+                        entry.Id = Interlocked.Increment(ref _nextLogId);
+                        entries.Add(entry);
+                    }
+                }
+
+                // Update file position for future monitoring
+                _filePositions[filePath] = stream.Length;
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error reading log file: {FilePath}", filePath);
+            }
+
+            return entries;
+        }
+
+        private void SetupFileWatchers()
+        {
+            try
+            {
+                var watcher = new FileSystemWatcher(_logDirectory)
+                {
+                    Filter = "*.*",
+                    IncludeSubdirectories = true,
+                    NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite | NotifyFilters.Size
+                };
+
+                watcher.Created += OnFileCreated;
+                watcher.Changed += OnFileChanged;
+                watcher.Renamed += OnFileRenamed;
+                watcher.Error += OnWatcherError;
+
+                watcher.EnableRaisingEvents = true;
+                
+                lock (_lockObject)
+                {
+                    _fileWatchers["main"] = new FileWatcher { Watcher = watcher };
+                }
+
+                _logger.LogDebug("File system watcher setup for: {Directory}", _logDirectory);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error setting up file system watcher");
+            }
+        }
+
+        private void OnFileCreated(object sender, FileSystemEventArgs e)
+        {
+            if (IsLogFile(e.FullPath))
+            {
+                _logger.LogDebug("New log file detected: {FilePath}", e.FullPath);
+                _ = Task.Run(async () => await ProcessNewFileAsync(e.FullPath));
+            }
+        }
+
+        private void OnFileChanged(object sender, FileSystemEventArgs e)
+        {
+            if (IsLogFile(e.FullPath))
+            {
+                // File changes are handled by polling timer for better performance
+            }
+        }
+
+        private void OnFileRenamed(object sender, RenamedEventArgs e)
+        {
+            if (IsLogFile(e.FullPath))
+            {
+                _logger.LogDebug("Log file renamed: {OldPath} -> {NewPath}", e.OldFullPath, e.FullPath);
+                
+                lock (_lockObject)
+                {
+                    if (_filePositions.ContainsKey(e.OldFullPath))
+                    {
+                        _filePositions[e.FullPath] = _filePositions[e.OldFullPath];
+                        _filePositions.Remove(e.OldFullPath);
+                    }
+                }
+            }
+        }
+
+        private void OnWatcherError(object sender, ErrorEventArgs e)
+        {
+            _logger.LogError(e.GetException(), "File system watcher error");
+        }
+
+        private async void PollActiveFiles(object? state)
+        {
+            try
+            {
+                var logFiles = GetLogFiles(_logDirectory);
+                var tasks = logFiles.Select(ProcessFileChangesAsync).ToArray();
+                await Task.WhenAll(tasks);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error during file polling");
+            }
+        }
+
+        private async Task ProcessFileChangesAsync(string filePath)
+        {
+            try
+            {
+                var fileInfo = new FileInfo(filePath);
+                if (!fileInfo.Exists)
+                    return;
+
+                var currentPosition = _filePositions.GetValueOrDefault(filePath, 0);
+                
+                if (fileInfo.Length <= currentPosition)
+                    return; // No new content
+
+                var newEntries = new List<LogEntry>();
+                
+                using var stream = new FileStream(filePath, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+                stream.Seek(currentPosition, SeekOrigin.Begin);
+                
+                using var reader = new StreamReader(stream);
+                string? line;
+                long lineNumber = currentPosition == 0 ? 0 : -1; // Approximate line number
+
+                while ((line = await reader.ReadLineAsync()) != null)
+                {
+                    lineNumber++;
+                    
+                    if (string.IsNullOrWhiteSpace(line))
+                        continue;
+
+                    var entry = _parsingService.ParseLogLine(line, filePath, lineNumber);
+                    if (entry != null)
+                    {
+                        // Create a hash to detect duplicates
+                        var logHash = $"{entry.Timestamp:yyyy-MM-dd HH:mm:ss.fff}|{entry.Level}|{entry.Source}|{entry.Message}";
+                        
+                        lock (_lockObject)
+                        {
+                            if (!_seenLogHashes.Contains(logHash))
+                            {
+                                _seenLogHashes.Add(logHash);
+                                entry.Id = Interlocked.Increment(ref _nextLogId);
+                                newEntries.Add(entry);
+                                _logEntries.Enqueue(entry);
+                                
+                                // Clean up old hashes to prevent memory growth
+                                if (_seenLogHashes.Count > 10000)
+                                {
+                                    var oldHashes = _seenLogHashes.Take(5000).ToList();
+                                    foreach (var oldHash in oldHashes)
+                                    {
+                                        _seenLogHashes.Remove(oldHash);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+
+                _filePositions[filePath] = stream.Position;
+
+                if (newEntries.Any())
+                {
+                    // Maintain max entries limit
+                    while (_logEntries.Count > _maxEntries)
+                    {
+                        _logEntries.TryDequeue(out _);
+                    }
+
+                    LogEntriesAdded?.Invoke(this, newEntries);
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Error processing file changes: {FilePath}", filePath);
+            }
+        }
+
+        private async Task ProcessNewFileAsync(string filePath)
+        {
+            // Wait a bit for the file to be fully created
+            await Task.Delay(100);
+            
+            var entries = await LoadLogFileAsync(filePath, CancellationToken.None);
+            var entryList = entries.ToList();
+            
+            if (entryList.Any())
+            {
+                foreach (var entry in entryList)
+                {
+                    _logEntries.Enqueue(entry);
+                }
+
+                LogEntriesAdded?.Invoke(this, entryList);
+            }
+        }
+
+        private static bool IsLogFile(string filePath)
+        {
+            var extension = Path.GetExtension(filePath).ToLowerInvariant();
+            return extension is ".log" or ".jsonl" or ".txt" or ".gz";
+        }
+
+        private static IEnumerable<string> GetLogFiles(string directory)
+        {
+            if (!Directory.Exists(directory))
+                return Enumerable.Empty<string>();
+
+            return Directory.EnumerateFiles(directory, "*.*", SearchOption.AllDirectories)
+                .Where(IsLogFile);
+        }
+
+        public IEnumerable<LogEntry> GetAllEntries()
+        {
+            return _logEntries.ToArray();
+        }
+
+        public void ClearLogs()
+        {
+            while (_logEntries.TryDequeue(out _)) { }
+            LogsCleared?.Invoke(this, EventArgs.Empty);
+            _logger.LogInformation("Log entries cleared");
+        }
+
+        public async Task<IEnumerable<LogEntry>> LoadHistoricalLogsAsync(string directory, DateTime? since = null)
+        {
+            var entries = new List<LogEntry>();
+            var logFiles = GetLogFiles(directory);
+
+            foreach (var file in logFiles)
+            {
+                var fileEntries = await LoadLogFileAsync(file, CancellationToken.None);
+                if (since.HasValue)
+                {
+                    fileEntries = fileEntries.Where(e => e.Timestamp >= since.Value);
+                }
+                entries.AddRange(fileEntries);
+            }
+
+            return entries.OrderBy(e => e.Timestamp);
+        }
+
+        public override void Dispose()
+        {
+            _pollingTimer?.Dispose();
+            
+            lock (_lockObject)
+            {
+                foreach (var watcher in _fileWatchers.Values)
+                {
+                    watcher.Dispose();
+                }
+                _fileWatchers.Clear();
+            }
+            
+            base.Dispose();
+        }
+
+        private class FileWatcher : IDisposable
+        {
+            public FileSystemWatcher? Watcher { get; set; }
+
+            public void Dispose()
+            {
+                Watcher?.Dispose();
+            }
+        }
+    }
+}
