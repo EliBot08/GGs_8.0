@@ -1,0 +1,145 @@
+name: ci
+
+on:
+  push:
+    branches: [ main, master, develop ]
+  pull_request:
+    branches: [ "**" ]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "Target environment (staging|production)"
+        required: false
+        default: "staging"
+      api_base_url:
+        description: "Deployed API base URL for health checks (e.g., https://ggs.example.com)"
+        required: false
+        default: "https://localhost:5001"
+
+jobs:
+  build-and-test:
+    name: Build, Test, Coverage
+    runs-on: windows-latest
+    env:
+      DOTNET_NOLOGO: 1
+      DOTNET_CLI_TELEMETRY_OPTOUT: 1
+      COVERAGE_MIN: 0 # Set to a higher % (e.g., 50) to enforce a gate
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Restore
+        run: dotnet restore ${{ github.workspace }}\GGs.sln
+
+      - name: Build (Release, warnings as errors)
+        run: dotnet build ${{ github.workspace }}\GGs.sln -c Release -warnaserror
+
+      - name: Test with coverage
+        run: |
+          dotnet test ${{ github.workspace }}\GGs.sln -c Release --no-build --collect:"XPlat Code Coverage" --logger "trx;LogFileName=test_results.trx" --results-directory ${{ runner.temp }}\test_results
+
+      - name: Install reportgenerator
+        run: dotnet tool install -g dotnet-reportgenerator-globaltool
+
+      - name: Generate coverage report
+        shell: pwsh
+        run: |
+          $cov = Get-ChildItem -Path $env:RUNNER_TEMP\test_results -Recurse -Filter 'coverage.cobertura.xml' | Select-Object -First 1
+          if (-not $cov) { Write-Host 'No coverage file found'; exit 0 }
+          $out = "${{ runner.temp }}\coverage"
+          reportgenerator -reports:$($cov.FullName) -targetdir:$out -reporttypes:'Html;Cobertura;TextSummary'
+          Get-Content -Raw "$out\Summary.txt" | Write-Host
+          $summary = Get-Content -Raw "$out\Summary.txt"
+          if ($summary -match 'Line coverage\s*:\s*([0-9\.]+)\%') {
+            $line = [double]$Matches[1]
+            $min = [double]$env:COVERAGE_MIN
+            Write-Host "Line coverage: $line% (min: $min%)"
+            if ($line -lt $min) { Write-Error "Coverage $line% is below threshold $min%"; exit 1 }
+          }
+
+      - name: Upload Test Results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: |
+            ${{ runner.temp }}\test_results\**\*.trx
+            ${{ runner.temp }}\coverage\
+
+  package:
+    name: Package (MSI + MSIX)
+    runs-on: windows-latest
+    needs: build-and-test
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Build MSI (WiX v4)
+        shell: pwsh
+        run: |
+          .\packaging\build-msi.ps1 -Configuration Release -SelfContained -Channel stable -FileAssociations .ggs,.ggprofile
+
+      - name: Build MSIX (WAP or MakeAppx)
+        shell: pwsh
+        run: |
+          .\packaging\build-msix.ps1 -Configuration Release
+
+      - name: Optional sign MSI
+        if: env.CODE_SIGN_PFX_BASE64 != ''
+        shell: pwsh
+        env:
+          CODE_SIGN_PFX_BASE64: ${{ secrets.CODE_SIGN_PFX_BASE64 }}
+          CODE_SIGN_PASSWORD: ${{ secrets.CODE_SIGN_PASSWORD }}
+        run: |
+          $pfx = "$env:RUNNER_TEMP\codesign.pfx"
+          [IO.File]::WriteAllBytes($pfx, [Convert]::FromBase64String($env:CODE_SIGN_PFX_BASE64))
+          $msi = Get-ChildItem .\packaging\artifacts -Recurse -Filter '*.msi' | Select-Object -First 1
+          if ($msi) { & signtool sign /fd SHA256 /f $pfx /p $env:CODE_SIGN_PASSWORD $msi.FullName }
+
+      - name: Upload packages
+        uses: actions/upload-artifact@v4
+        with:
+          name: packages-${{ github.ref_type == 'tag' && github.ref_name || github.run_number }}
+          path: |
+            packaging/artifacts/**/*.msi
+            packaging/artifacts/**/*.msix
+
+  health-check:
+    name: Health check gate (blue/green)
+    runs-on: windows-latest
+    needs: package
+    steps:
+      - name: Wait for /ready to be healthy
+        shell: pwsh
+        env:
+          API_BASE_URL: ${{ github.event.inputs.api_base_url }}
+        run: |
+          $base = if ([string]::IsNullOrWhiteSpace($env:API_BASE_URL)) { 'https://localhost:5001' } else { $env:API_BASE_URL }
+          $ready = "$base/ready"
+          Write-Host "Polling $ready for readiness..."
+          $max = 30
+          for ($i=0; $i -lt $max; $i++) {
+            try {
+              $resp = Invoke-WebRequest -UseBasicParsing -Uri $ready -Method GET -TimeoutSec 5
+              if ($resp.StatusCode -eq 200) { Write-Host 'Service ready'; exit 0 }
+            } catch { }
+            Start-Sleep -Seconds 2
+          }
+          Write-Error "Service did not become ready within time limit"
+          exit 1
+
+      - name: Rollback (simulated)
+        if: failure()
+        run: |
+          echo "Rolling back deployment (simulation)."
+

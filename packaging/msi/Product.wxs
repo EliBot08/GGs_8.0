@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <!-- MSI for per-user install under %LOCALAPPDATA%\Programs\GGs.Desktop
+       Mirrors previous uninstall entries and supports optional autostart/shortcut.
+       File associations are added under HKCU and are removed on uninstall. -->
+  <Package Name="GGs Desktop"
+           Manufacturer="GGs"
+           Version="1.0.0.0"
+           UpgradeCode="6f42ef5a-4b7e-4a84-9b0d-4ea6c3e2a7b1"
+           Scope="perUser"
+           InstallerVersion="500">
+
+    <MediaTemplate CompressionLevel="mszip" />
+
+    <!-- Install root: %LOCALAPPDATA%\Programs\GGs.Desktop -->
+    <StandardDirectory Id="LocalAppDataFolder">
+      <Directory Id="GGsProgramsFolder" Name="Programs">
+        <Directory Id="INSTALLFOLDER" Name="GGs.Desktop" />
+      </Directory>
+    </StandardDirectory>
+
+    <!-- Start Menu folder (per-user) -->
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Directory Id="GGsProgramMenuFolder" Name="GGs" />
+    </StandardDirectory>
+
+    <!-- Public properties for IT-managed installs -->
+    <Property Id="ARPNOREPAIR" Value="1" />
+    <Property Id="ARPNOMODIFY" Value="1" />
+    <Property Id="CHANNEL" Value="stable" /> <!-- seeded to HKCU for app to pick up on first run -->
+    <Property Id="AUTOSTART" Value="0" />   <!-- set to 1 to enable autostart -->
+    <Property Id="NOSHORTCUT" Value="0" />  <!-- set to 1 to suppress Start Menu shortcut -->
+
+    <!-- Main feature includes harvested app files, optional shortcut/autostart, uninstall info, and file associations. -->
+    <Feature Id="MainFeature" Title="GGs Desktop" Level="1" Absent="disallow">
+      <ComponentGroupRef Id="AppFiles" />
+      <ComponentRef Id="App_Shortcut" />
+      <ComponentRef Id="Reg_Autostart" />
+      <ComponentRef Id="Reg_Uninstall" />
+      <ComponentGroupRef Id="FileAssociations" />
+    </Feature>
+
+    <!-- Optional Start Menu shortcut -->
+    <Component Id="App_Shortcut" Directory="GGsProgramMenuFolder" Guid="*" Condition="NOT NOSHORTCUT">
+      <Shortcut Id="StartMenuShortcut"
+                Name="GGs Desktop"
+                Target="[INSTALLFOLDER]GGs.Desktop.exe"
+                WorkingDirectory="INSTALLFOLDER"
+                Icon="AppIcon" />
+      <RemoveFolder Id="RemoveGGsMenuFolder" On="uninstall" />
+      <!-- KeyPath registry keeps component referenced -->
+      <RegistryValue Root="HKCU" Key="Software\GGs\Desktop\Installed" Name="StartMenuShortcut" Value="1" Type="integer" KeyPath="yes" />
+    </Component>
+
+    <!-- Autostart (optional) -->
+    <Component Id="Reg_Autostart" Directory="INSTALLFOLDER" Guid="*" Condition="AUTOSTART">
+      <RegistryValue Root="HKCU"
+                     Key="Software\Microsoft\Windows\CurrentVersion\Run"
+                     Name="GGsDesktop"
+                     Value="&quot;[INSTALLFOLDER]GGs.Desktop.exe&quot;"
+                     Type="string"
+                     KeyPath="yes" />
+    </Component>
+
+    <!-- Uninstall info (mirrors prior per-user script keys) + Channel seed -->
+    <Component Id="Reg_Uninstall" Directory="INSTALLFOLDER" Guid="*">
+      <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\GGs.Desktop" Name="DisplayName" Value="GGs Desktop" Type="string" />
+      <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\GGs.Desktop" Name="Publisher" Value="GGs" Type="string" />
+      <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\GGs.Desktop" Name="DisplayVersion" Value="[ProductVersion]" Type="string" />
+      <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\GGs.Desktop" Name="InstallLocation" Value="[INSTALLFOLDER]" Type="string" />
+      <RegistryValue Root="HKCU" Key="Software\Microsoft\Windows\CurrentVersion\Uninstall\GGs.Desktop" Name="UninstallString" Value="msiexec.exe /x [ProductCode]" Type="string" KeyPath="yes" />
+
+      <!-- Channel seed for app SettingsManager to pick up on first run -->
+      <RegistryValue Root="HKCU" Key="Software\GGs\Desktop" Name="UpdateChannel" Value="[CHANNEL]" Type="string" />
+    </Component>
+
+    <!-- App icon for shortcut and associations -->
+    <Icon Id="AppIcon" SourceFile="..\..\clients\GGs.Desktop\assets\app-icon.ico" />
+
+    <!-- File association authoring will be generated as a ComponentGroup with Id=FileAssociations
+         and consumed via the ComponentGroupRef above. -->
+
+  </Package>
+</Wix>
+

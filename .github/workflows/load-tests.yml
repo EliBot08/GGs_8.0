@@ -1,0 +1,164 @@
+name: Load Tests
+
+on:
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'server/**'
+      - 'tests/GGs.LoadTests/**'
+      - '.github/workflows/load-tests.yml'
+  workflow_dispatch:
+    inputs:
+      test_duration_minutes:
+        description: 'Test duration in minutes'
+        required: false
+        default: '5'
+        type: string
+      concurrent_users:
+        description: 'Number of concurrent users'
+        required: false
+        default: '100'
+        type: string
+
+env:
+  DOTNET_VERSION: '8.0.x'
+  
+jobs:
+  load-test:
+    runs-on: ubuntu-latest
+    
+    services:
+      redis:
+        image: redis:7-alpine
+        ports:
+          - 6379:6379
+        options: >-
+          --health-cmd "redis-cli ping"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+          
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: ggs_loadtest
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }}
+        
+    - name: Cache dependencies
+      uses: actions/cache@v4
+      with:
+        path: |
+          ~/.nuget/packages
+          ~/.dotnet/tools
+        key: ${{ runner.os }}-nuget-${{ hashFiles('**/*.csproj') }}
+        restore-keys: |
+          ${{ runner.os }}-nuget-
+          
+    - name: Restore dependencies
+      run: |
+        cd GGs2.0/GGs
+        dotnet restore
+        
+    - name: Build solution
+      run: |
+        cd GGs2.0/GGs
+        dotnet build --no-restore --configuration Release
+        
+    - name: Setup test database
+      run: |
+        cd GGs2.0/GGs/server/GGs.Server
+        export ConnectionStrings__Default="Host=localhost;Port=5432;Database=ggs_loadtest;Username=postgres;Password=postgres"
+        export ConnectionStrings__Redis="localhost:6379"
+        dotnet ef database update --configuration Release
+        
+    - name: Start GGs Server
+      run: |
+        cd GGs2.0/GGs/server/GGs.Server
+        export ASPNETCORE_ENVIRONMENT=LoadTest
+        export ConnectionStrings__Default="Host=localhost;Port=5432;Database=ggs_loadtest;Username=postgres;Password=postgres"
+        export ConnectionStrings__Redis="localhost:6379"
+        export Auth__JwtKey="LoadTestJwtKey12345678901234567890123456789012345678901234567890"
+        export License__PublicKeyPem="LS0tLS1CRUdJTiBQVUJMSUMgS0VZLS0tLS0KTUlJQklqQU5CZ2txaGtpRzl3MEJBUUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUF0OWNiUys4SWQ2RmRBUGJNS3luaApzYTdXR3hFeHo2eFlVTWQ0WUljU3VFWGRXSkN6VTB4dGdDSENPNzR5NjhYWUVVUzZuZ2JlS0pEZE5tUTdGUEJaClRuRmdJcUFtSnFObUJGWkVEb3pvRWhhVlc2b0JSQUZLTnJCQzg3WlhvMGo3aXJGaklkRVhYVXd1dkpzc1p6UU4KUkp5OVc0QUpLQTJ5QnU0bDF3YWUxU1NxZjRlVnhQVGNNRXBjOXM3eUYxRGtLZmdYSjdSYUtJaXJrVStLWGY5aAp1M0N3dFFSZ1pMVzZtUGVGd1hBcFhxMERWMkU1TEY4UUJpdU15OC9WVTNvTVJHQ2NqZml2MFJnMi9kdEEvZXdyCjQzUG02b09UQzlhTy9kc0IyU3h3ZjNGd0NxSmZCdEZ6WVU3UWhZWWtmMFpDZlVSRWFBTDBQVWtQdzVoUUlWNE4KWkVZYVNqSVpUNjZUSG4zSGE0eUxoZXUzN3J0ZG5JUmNuVkd0MDl0MkNtVEMrOTB0UHFEN0ZJdURCUFJVRXpxRApBL1lIOE5XQUQyYm1CRVBqcEs5aWlXa3Azc3EyeHhqWW5JZk05ak1WS3JVcys3dXlGZmgrS0l6TXpYYUQzSkNkCjhSNFdROE9CQUJMVVZaZFNYbldXK3dJREFRQUIKLS0tLS1FTkQgUFVCTElDIEtFWS0tLS0t"
+        export Server__AllowedOrigins="http://localhost:*,https://localhost:*"
+        dotnet run --configuration Release --no-build &
+        echo $! > server.pid
+        sleep 30 # Wait for server to start
+        
+    - name: Wait for server readiness
+      run: |
+        timeout 60s bash -c 'until curl -f http://localhost:5000/health/ready; do sleep 2; done'
+        
+    - name: Run load tests
+      run: |
+        cd GGs2.0/GGs/tests/GGs.LoadTests
+        export TestDurationMinutes=${{ github.event.inputs.test_duration_minutes || '5' }}
+        export ConcurrentUsers=${{ github.event.inputs.concurrent_users || '100' }}
+        
+        # Run all load test scenarios
+        dotnet run --configuration Release --no-build
+        
+    - name: Upload load test results
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: load-test-results
+        path: |
+          GGs2.0/GGs/tests/GGs.LoadTests/load-test-results/
+          
+    - name: Stop server
+      if: always()
+      run: |
+        if [ -f server.pid ]; then
+          kill $(cat server.pid) || true
+          rm server.pid
+        fi
+        
+    - name: Comment PR with results
+      if: github.event_name == 'pull_request'
+      uses: actions/github-script@v7
+      with:
+        script: |
+          const fs = require('fs');
+          const path = './GGs2.0/GGs/tests/GGs.LoadTests/load-test-results';
+          
+          if (fs.existsSync(path)) {
+            // Find the latest HTML report
+            const files = fs.readdirSync(path);
+            const htmlReport = files.find(f => f.endsWith('.html'));
+            
+            if (htmlReport) {
+              const comment = `
+              ## 🚀 Load Test Results
+              
+              Load tests completed successfully! 
+              
+              **Test Configuration:**
+              - Duration: ${{ github.event.inputs.test_duration_minutes || '5' }} minutes
+              - Concurrent Users: ${{ github.event.inputs.concurrent_users || '100' }}
+              
+              Detailed results are available in the artifacts section.
+              `;
+              
+              github.rest.issues.createComment({
+                issue_number: context.issue.number,
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                body: comment
+              });
+            }
+          }
