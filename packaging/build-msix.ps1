@@ -21,7 +21,8 @@ $msbuildCmd = Get-Command msbuild.exe -ErrorAction SilentlyContinue
 $msbuild = if ($msbuildCmd) { $msbuildCmd.Source } else { $null }
 if ($UseMsBuild -or $msbuild) {
   Info "Building MSIX via MSBuild..."
-  & $msbuild $wapproj /t:Restore,Build /p:Configuration=$Configuration /p:Platform=$Platform /p:UapAppxPackageBuildMode=SideloadOnly /p:AppxBundle=Never /p:AppxPackageDir=$artifacts\ | Out-Null
+  & $msbuild $wapproj /t:Restore,Build /p:Configuration=$Configuration /p:Platform=$Platform /p:UapAppxPackageBuildMode=SideloadOnly /p:AppxBundle=Never /p:AppxPackageDir=$artifacts\
+  if ($LASTEXITCODE -ne 0) { throw "MSBuild failed with exit code $LASTEXITCODE" }
   $pkg = Get-ChildItem -LiteralPath $artifacts -Filter '*.msix' -Recurse | Sort-Object LastWriteTime -Descending | Select-Object -First 1
   if (-not $pkg) { throw 'MSIX build produced no .msix. Ensure certificate/signing settings are valid or set AppxPackageSigningEnabled=false.' }
   Write-Output $pkg.FullName
@@ -42,12 +43,16 @@ $pubDir = Join-Path $artifacts 'publish.win-x64'
 $pubArgs = @('publish', $appProj, '-c', $Configuration, '-r', 'win-x64', '-o', $pubDir)
 if ($SelfContained.IsPresent) { $pubArgs += '-p:SelfContained=true' } else { $pubArgs += '-p:SelfContained=false' }
 Info "Publishing desktop app to $pubDir ..."
-dotnet @pubArgs | Out-Null
+dotnet @pubArgs
+if ($LASTEXITCODE -ne 0) { throw "Publish failed with exit code $LASTEXITCODE" }
 
 # Copy manifest and assets next to published exe
 $manifestSrc = Join-Path $repo 'packaging/msix/GGs.Desktop.Package/Package.appxmanifest'
+if (-not (Test-Path $manifestSrc)) { throw "Package manifest not found at: $manifestSrc" }
 Copy-Item -LiteralPath $manifestSrc -Destination (Join-Path $pubDir 'AppxManifest.xml') -Force
-Copy-Item -LiteralPath (Join-Path $repo 'packaging/msix/GGs.Desktop.Package/Assets') -Destination (Join-Path $pubDir 'Assets') -Recurse -Force
+$assetsSrc = Join-Path $repo 'packaging/msix/GGs.Desktop.Package/Assets'
+if (-not (Test-Path $assetsSrc)) { throw "Assets directory not found at: $assetsSrc" }
+Copy-Item -LiteralPath $assetsSrc -Destination (Join-Path $pubDir 'Assets') -Recurse -Force
 
 # Create mapping list file
 $mapFile = Join-Path $artifacts 'mapping.txt'
@@ -56,6 +61,8 @@ $mapFile = Join-Path $artifacts 'mapping.txt'
 # Make the .msix
 $msixPath = Join-Path $artifacts 'GGs.Desktop.msix'
 Info "Packing MSIX -> $msixPath ..."
-& $makeAppx pack /o /m (Join-Path $pubDir 'AppxManifest.xml') /f $mapFile /p $msixPath | Out-Null
+& $makeAppx pack /o /m (Join-Path $pubDir 'AppxManifest.xml') /f $mapFile /p $msixPath
+if ($LASTEXITCODE -ne 0) { throw "MakeAppx failed with exit code $LASTEXITCODE" }
+if (-not (Test-Path $msixPath)) { throw "MSIX package not created at: $msixPath" }
 Write-Output $msixPath
 
