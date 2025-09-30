@@ -1,0 +1,1675 @@
+﻿<?xml version='1.0' encoding='UTF-8'?>
+<Wix xmlns='http://wixtoolset.org/schemas/v4/wxs'>
+  <Fragment>
+    <ComponentGroup Id='AppFiles' Directory='INSTALLFOLDER'>
+      <Component Id='cmp_Accessibility_dll_0' Guid='D597E58C-1B34-4360-946D-EB46AD72EF38'>
+        <File Id='fil_Accessibility_dll_0' Source='$(var.PublishDir)\Accessibility.dll' />
+      </Component>
+      <Component Id='cmp_appsettings_Development_json_1' Guid='A1EA6909-8B3A-4E34-AACD-81FB50FBA285'>
+        <File Id='fil_appsettings_Development_json_1' Source='$(var.PublishDir)\appsettings.Development.json' />
+      </Component>
+      <Component Id='cmp_appsettings_json_2' Guid='D334B97B-17CE-47AB-8332-B31D6BE76E65'>
+        <File Id='fil_appsettings_json_2' Source='$(var.PublishDir)\appsettings.json' />
+      </Component>
+      <Component Id='cmp_clretwrc_dll_3' Guid='B7C86F18-7F66-4BD9-BEF6-7BE3EABF2E66'>
+        <File Id='fil_clretwrc_dll_3' Source='$(var.PublishDir)\clretwrc.dll' />
+      </Component>
+      <Component Id='cmp_clrgc_dll_4' Guid='E420E42D-F7D0-48E0-99F2-94974923C9BD'>
+        <File Id='fil_clrgc_dll_4' Source='$(var.PublishDir)\clrgc.dll' />
+      </Component>
+      <Component Id='cmp_clrgcexp_dll_5' Guid='EA376EB4-F2E3-422A-9A51-D959553919A1'>
+        <File Id='fil_clrgcexp_dll_5' Source='$(var.PublishDir)\clrgcexp.dll' />
+      </Component>
+      <Component Id='cmp_clrjit_dll_6' Guid='C73E7108-42D5-4669-9396-5E23AE846CC4'>
+        <File Id='fil_clrjit_dll_6' Source='$(var.PublishDir)\clrjit.dll' />
+      </Component>
+      <Component Id='cmp_CommunityToolkit_Mvvm_dll_7' Guid='B2C0EA31-B269-47EA-9394-4EF7D7A3C456'>
+        <File Id='fil_CommunityToolkit_Mvvm_dll_7' Source='$(var.PublishDir)\CommunityToolkit.Mvvm.dll' />
+      </Component>
+      <Component Id='cmp_CommunityToolkit_WinUI_Notifications_dll_8' Guid='5DCE64B9-A2DF-45B2-ACB3-FF5AD02D0DF6'>
+        <File Id='fil_CommunityToolkit_WinUI_Notifications_dll_8' Source='$(var.PublishDir)\CommunityToolkit.WinUI.Notifications.dll' />
+      </Component>
+      <Component Id='cmp_coreclr_dll_9' Guid='7507C835-886F-4D7B-B110-4E0C590CCC4C'>
+        <File Id='fil_coreclr_dll_9' Source='$(var.PublishDir)\coreclr.dll' />
+      </Component>
+      <Component Id='cmp_createdump_exe_10' Guid='2134558B-1E40-4657-941A-CC50D91C1280'>
+        <File Id='fil_createdump_exe_10' Source='$(var.PublishDir)\createdump.exe' />
+      </Component>
+      <Component Id='cmp_D3DCompiler_47_cor3_dll_11' Guid='E42E80E3-5A92-47B8-BD20-7F67EE683453'>
+        <File Id='fil_D3DCompiler_47_cor3_dll_11' Source='$(var.PublishDir)\D3DCompiler_47_cor3.dll' />
+      </Component>
+      <Component Id='cmp_DirectWriteForwarder_dll_12' Guid='1FEA18BF-ABA2-4428-A8D2-F74361A99ABE'>
+        <File Id='fil_DirectWriteForwarder_dll_12' Source='$(var.PublishDir)\DirectWriteForwarder.dll' />
+      </Component>
+      <Component Id='cmp_e_sqlite3_dll_13' Guid='66A956AD-36CA-43B2-AE39-B6002F6151CA'>
+        <File Id='fil_e_sqlite3_dll_13' Source='$(var.PublishDir)\e_sqlite3.dll' />
+      </Component>
+      <Component Id='cmp_FastTreeNative_dll_14' Guid='AF9D4D2A-E32C-4255-B023-4C8C3275F2DA'>
+        <File Id='fil_FastTreeNative_dll_14' Source='$(var.PublishDir)\FastTreeNative.dll' />
+      </Component>
+      <Component Id='cmp_GGs_Agent_deps_json_15' Guid='B079E462-54EC-4AD1-AC95-3E57D70DD150'>
+        <File Id='fil_GGs_Agent_deps_json_15' Source='$(var.PublishDir)\GGs.Agent.deps.json' />
+      </Component>
+      <Component Id='cmp_GGs_Agent_dll_16' Guid='5C214571-7673-4632-AE64-FE1253312818'>
+        <File Id='fil_GGs_Agent_dll_16' Source='$(var.PublishDir)\GGs.Agent.dll' />
+      </Component>
+      <Component Id='cmp_GGs_Agent_exe_17' Guid='BA050A7E-1A2B-48ED-B0C6-CA7174EE237B'>
+        <File Id='fil_GGs_Agent_exe_17' Source='$(var.PublishDir)\GGs.Agent.exe' />
+      </Component>
+      <Component Id='cmp_GGs_Agent_pdb_18' Guid='34A75BCF-D2C7-4B5E-AA74-07EA216854BF'>
+        <File Id='fil_GGs_Agent_pdb_18' Source='$(var.PublishDir)\GGs.Agent.pdb' />
+      </Component>
+      <Component Id='cmp_GGs_Agent_runtimeconfig_json_19' Guid='CBC07605-3533-4EB6-871C-5B3268B555A2'>
+        <File Id='fil_GGs_Agent_runtimeconfig_json_19' Source='$(var.PublishDir)\GGs.Agent.runtimeconfig.json' />
+      </Component>
+      <Component Id='cmp_GGs_Desktop_deps_json_20' Guid='9D31F543-1B9D-4AEE-B710-10F0487D8EA4'>
+        <File Id='fil_GGs_Desktop_deps_json_20' Source='$(var.PublishDir)\GGs.Desktop.deps.json' />
+      </Component>
+      <Component Id='cmp_GGs_Desktop_dll_21' Guid='242CCB38-507D-412A-972B-2AB66DA217C2'>
+        <File Id='fil_GGs_Desktop_dll_21' Source='$(var.PublishDir)\GGs.Desktop.dll' />
+      </Component>
+      <Component Id='cmp_GGs_Desktop_exe_22' Guid='8F31592B-3489-41CC-B61F-4A70A958A39D'>
+        <File Id='fil_GGs_Desktop_exe_22' Source='$(var.PublishDir)\GGs.Desktop.exe' />
+      </Component>
+      <Component Id='cmp_GGs_Desktop_pdb_23' Guid='CD2B4112-0683-4DAB-8DD4-F915C41B1758'>
+        <File Id='fil_GGs_Desktop_pdb_23' Source='$(var.PublishDir)\GGs.Desktop.pdb' />
+      </Component>
+      <Component Id='cmp_GGs_Desktop_runtimeconfig_json_24' Guid='03556008-CF81-4512-83A9-907E36A43F68'>
+        <File Id='fil_GGs_Desktop_runtimeconfig_json_24' Source='$(var.PublishDir)\GGs.Desktop.runtimeconfig.json' />
+      </Component>
+      <Component Id='cmp_GGs_Shared_dll_25' Guid='B9EAF18C-F0D1-407E-98DD-3F2BAFCA76F2'>
+        <File Id='fil_GGs_Shared_dll_25' Source='$(var.PublishDir)\GGs.Shared.dll' />
+      </Component>
+      <Component Id='cmp_GGs_Shared_pdb_26' Guid='75EC5379-A597-4B71-AA13-8C555358A3C8'>
+        <File Id='fil_GGs_Shared_pdb_26' Source='$(var.PublishDir)\GGs.Shared.pdb' />
+      </Component>
+      <Component Id='cmp_Google_Protobuf_dll_27' Guid='05A0D836-5979-4EB6-91F2-5097C8EE14F6'>
+        <File Id='fil_Google_Protobuf_dll_27' Source='$(var.PublishDir)\Google.Protobuf.dll' />
+      </Component>
+      <Component Id='cmp_Grpc_Core_Api_dll_28' Guid='54F8CC72-C566-4FDE-8DF8-49E16011B02E'>
+        <File Id='fil_Grpc_Core_Api_dll_28' Source='$(var.PublishDir)\Grpc.Core.Api.dll' />
+      </Component>
+      <Component Id='cmp_Grpc_Net_Client_dll_29' Guid='F4E2B3A4-2488-41BE-A7E0-EBC2E8343C78'>
+        <File Id='fil_Grpc_Net_Client_dll_29' Source='$(var.PublishDir)\Grpc.Net.Client.dll' />
+      </Component>
+      <Component Id='cmp_Grpc_Net_Common_dll_30' Guid='1EFAEE33-4370-4E53-AFB7-934EE0BE0ED6'>
+        <File Id='fil_Grpc_Net_Common_dll_30' Source='$(var.PublishDir)\Grpc.Net.Common.dll' />
+      </Component>
+      <Component Id='cmp_hostfxr_dll_31' Guid='CE4C86A9-DB81-48B5-8FCA-189D79285B3B'>
+        <File Id='fil_hostfxr_dll_31' Source='$(var.PublishDir)\hostfxr.dll' />
+      </Component>
+      <Component Id='cmp_hostpolicy_dll_32' Guid='CE8B1B74-6A38-4E1F-8792-EB5DC4CF2E2F'>
+        <File Id='fil_hostpolicy_dll_32' Source='$(var.PublishDir)\hostpolicy.dll' />
+      </Component>
+      <Component Id='cmp_LdaNative_dll_33' Guid='C816DD79-1971-4CEB-AB3A-BE53F6902A68'>
+        <File Id='fil_LdaNative_dll_33' Source='$(var.PublishDir)\LdaNative.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_AspNetCore_Connections_Abstractions_dll_34' Guid='5F872061-C740-43DA-B622-6710CC1879BE'>
+        <File Id='fil_Microsoft_AspNetCore_Connections_Abstractions_dll_34' Source='$(var.PublishDir)\Microsoft.AspNetCore.Connections.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_AspNetCore_Http_Connections_Client_dll_35' Guid='0E757D0D-7860-4A56-9FEF-5D63BC947D15'>
+        <File Id='fil_Microsoft_AspNetCore_Http_Connections_Client_dll_35' Source='$(var.PublishDir)\Microsoft.AspNetCore.Http.Connections.Client.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_AspNetCore_Http_Connections_Common_dll_36' Guid='EB498B6E-98F6-4436-A208-3153D4490BE2'>
+        <File Id='fil_Microsoft_AspNetCore_Http_Connections_Common_dll_36' Source='$(var.PublishDir)\Microsoft.AspNetCore.Http.Connections.Common.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_AspNetCore_SignalR_Client_Core_dll_37' Guid='0B8C5EF1-D7AB-434A-AC55-590B2E9188BF'>
+        <File Id='fil_Microsoft_AspNetCore_SignalR_Client_Core_dll_37' Source='$(var.PublishDir)\Microsoft.AspNetCore.SignalR.Client.Core.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_AspNetCore_SignalR_Client_dll_38' Guid='CF544996-505E-440D-8CD4-843D1D3F6A8E'>
+        <File Id='fil_Microsoft_AspNetCore_SignalR_Client_dll_38' Source='$(var.PublishDir)\Microsoft.AspNetCore.SignalR.Client.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_AspNetCore_SignalR_Common_dll_39' Guid='6E4F1A54-04C9-482F-AD75-6F5ECE71B64E'>
+        <File Id='fil_Microsoft_AspNetCore_SignalR_Common_dll_39' Source='$(var.PublishDir)\Microsoft.AspNetCore.SignalR.Common.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_AspNetCore_SignalR_Protocols_Json_dll_40' Guid='1AEE3671-E51F-4040-9B8F-AFE2A7C3C5E3'>
+        <File Id='fil_Microsoft_AspNetCore_SignalR_Protocols_Json_dll_40' Source='$(var.PublishDir)\Microsoft.AspNetCore.SignalR.Protocols.Json.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_CSharp_dll_41' Guid='B8F0E5CF-D705-4B3B-9646-BD1F0E6B0FDC'>
+        <File Id='fil_Microsoft_CSharp_dll_41' Source='$(var.PublishDir)\Microsoft.CSharp.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Data_Sqlite_dll_42' Guid='6AA27021-F6EF-4652-A2AA-97D1E2E1D507'>
+        <File Id='fil_Microsoft_Data_Sqlite_dll_42' Source='$(var.PublishDir)\Microsoft.Data.Sqlite.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_DiaSymReader_Native_amd64_dll_43' Guid='477755C8-B729-4993-85CE-9DE56E55C0D0'>
+        <File Id='fil_Microsoft_DiaSymReader_Native_amd64_dll_43' Source='$(var.PublishDir)\Microsoft.DiaSymReader.Native.amd64.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_Abstractions_dll_44' Guid='89717FC8-F30B-4FE4-BCDC-49E8AB973EF2'>
+        <File Id='fil_Microsoft_Extensions_Configuration_Abstractions_dll_44' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_Binder_dll_45' Guid='F29C44B0-C50B-4912-ABE2-3326B4C2808F'>
+        <File Id='fil_Microsoft_Extensions_Configuration_Binder_dll_45' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.Binder.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_CommandLine_dll_46' Guid='2FA30688-255A-4704-86CA-2C620C0D21F0'>
+        <File Id='fil_Microsoft_Extensions_Configuration_CommandLine_dll_46' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.CommandLine.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_dll_47' Guid='3BA0B4F0-5161-4E89-959A-24ACCBD0F4E1'>
+        <File Id='fil_Microsoft_Extensions_Configuration_dll_47' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_EnvironmentVariables_dll_48' Guid='A18C779A-C8CE-4C56-AD88-3D3BB011B46B'>
+        <File Id='fil_Microsoft_Extensions_Configuration_EnvironmentVariables_dll_48' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.EnvironmentVariables.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_FileExtensions_dll_49' Guid='420EEC6E-8615-4D86-ACFD-768D491AE866'>
+        <File Id='fil_Microsoft_Extensions_Configuration_FileExtensions_dll_49' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.FileExtensions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_Json_dll_50' Guid='9042007B-4C4A-40C3-ACC7-860DEFEF38CA'>
+        <File Id='fil_Microsoft_Extensions_Configuration_Json_dll_50' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.Json.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Configuration_UserSecrets_dll_51' Guid='2B68C0FD-FB3E-4BC2-A701-4CE1867A7619'>
+        <File Id='fil_Microsoft_Extensions_Configuration_UserSecrets_dll_51' Source='$(var.PublishDir)\Microsoft.Extensions.Configuration.UserSecrets.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_DependencyInjection_Abstractions_dll_52' Guid='98EA742E-35E4-4E22-A61B-D9C1AB34D458'>
+        <File Id='fil_Microsoft_Extensions_DependencyInjection_Abstractions_dll_52' Source='$(var.PublishDir)\Microsoft.Extensions.DependencyInjection.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_DependencyInjection_dll_53' Guid='D521FDC3-FD4B-4982-AAB1-49FBE6965DC0'>
+        <File Id='fil_Microsoft_Extensions_DependencyInjection_dll_53' Source='$(var.PublishDir)\Microsoft.Extensions.DependencyInjection.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Diagnostics_Abstractions_dll_54' Guid='8056982C-60CF-4EB8-9536-C99F95B4AD8D'>
+        <File Id='fil_Microsoft_Extensions_Diagnostics_Abstractions_dll_54' Source='$(var.PublishDir)\Microsoft.Extensions.Diagnostics.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Diagnostics_dll_55' Guid='699B9BD2-D2CD-404F-850F-D89CF658E884'>
+        <File Id='fil_Microsoft_Extensions_Diagnostics_dll_55' Source='$(var.PublishDir)\Microsoft.Extensions.Diagnostics.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Features_dll_56' Guid='24EDB920-5328-4CA7-AA59-CFBD5EE2F434'>
+        <File Id='fil_Microsoft_Extensions_Features_dll_56' Source='$(var.PublishDir)\Microsoft.Extensions.Features.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_FileProviders_Abstractions_dll_57' Guid='EAD64EF2-E69F-4BFE-9EAF-E58E23088469'>
+        <File Id='fil_Microsoft_Extensions_FileProviders_Abstractions_dll_57' Source='$(var.PublishDir)\Microsoft.Extensions.FileProviders.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_FileProviders_Physical_dll_58' Guid='9B0CE66D-F978-4E96-A4DF-00BEEEE4DDC4'>
+        <File Id='fil_Microsoft_Extensions_FileProviders_Physical_dll_58' Source='$(var.PublishDir)\Microsoft.Extensions.FileProviders.Physical.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_FileSystemGlobbing_dll_59' Guid='D670A818-FF7F-46EA-83A5-75873D4F8DA1'>
+        <File Id='fil_Microsoft_Extensions_FileSystemGlobbing_dll_59' Source='$(var.PublishDir)\Microsoft.Extensions.FileSystemGlobbing.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Hosting_Abstractions_dll_60' Guid='5EB55A92-9B24-420A-B1F2-0B1FB1CE3F85'>
+        <File Id='fil_Microsoft_Extensions_Hosting_Abstractions_dll_60' Source='$(var.PublishDir)\Microsoft.Extensions.Hosting.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Hosting_dll_61' Guid='957F261F-B47F-45D0-A86D-7D436201ECDE'>
+        <File Id='fil_Microsoft_Extensions_Hosting_dll_61' Source='$(var.PublishDir)\Microsoft.Extensions.Hosting.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Hosting_WindowsServices_dll_62' Guid='DA324190-7FE7-413E-B020-341963C8E205'>
+        <File Id='fil_Microsoft_Extensions_Hosting_WindowsServices_dll_62' Source='$(var.PublishDir)\Microsoft.Extensions.Hosting.WindowsServices.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Http_dll_63' Guid='87D86D16-93B9-430A-B213-EEB18D6B9843'>
+        <File Id='fil_Microsoft_Extensions_Http_dll_63' Source='$(var.PublishDir)\Microsoft.Extensions.Http.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Logging_Abstractions_dll_64' Guid='0EA80746-3478-463F-81F5-2E80F4777AC7'>
+        <File Id='fil_Microsoft_Extensions_Logging_Abstractions_dll_64' Source='$(var.PublishDir)\Microsoft.Extensions.Logging.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Logging_Configuration_dll_65' Guid='95D2FEF5-063A-4728-B31F-77C82F7ADC36'>
+        <File Id='fil_Microsoft_Extensions_Logging_Configuration_dll_65' Source='$(var.PublishDir)\Microsoft.Extensions.Logging.Configuration.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Logging_Console_dll_66' Guid='1A4EE980-BDC0-4954-8D59-05BA072BCF2E'>
+        <File Id='fil_Microsoft_Extensions_Logging_Console_dll_66' Source='$(var.PublishDir)\Microsoft.Extensions.Logging.Console.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Logging_Debug_dll_67' Guid='7DEC1DA4-1BD3-4EAB-B8D8-D31353D6F23B'>
+        <File Id='fil_Microsoft_Extensions_Logging_Debug_dll_67' Source='$(var.PublishDir)\Microsoft.Extensions.Logging.Debug.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Logging_dll_68' Guid='0553EB02-D27C-4C47-9F61-0F97A06415A1'>
+        <File Id='fil_Microsoft_Extensions_Logging_dll_68' Source='$(var.PublishDir)\Microsoft.Extensions.Logging.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Logging_EventLog_dll_69' Guid='B178116F-08F4-4B6B-B9D0-74310AB4F7F9'>
+        <File Id='fil_Microsoft_Extensions_Logging_EventLog_dll_69' Source='$(var.PublishDir)\Microsoft.Extensions.Logging.EventLog.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Logging_EventSource_dll_70' Guid='F85D75FF-AF77-4743-AF27-D5EE9E65B3D4'>
+        <File Id='fil_Microsoft_Extensions_Logging_EventSource_dll_70' Source='$(var.PublishDir)\Microsoft.Extensions.Logging.EventSource.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Options_ConfigurationExtensions_dll_71' Guid='3D4FCD14-1084-4308-A75D-0ADDA243372E'>
+        <File Id='fil_Microsoft_Extensions_Options_ConfigurationExtensions_dll_71' Source='$(var.PublishDir)\Microsoft.Extensions.Options.ConfigurationExtensions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Options_dll_72' Guid='15FC7D71-1D36-4CE4-8E10-3BB52B5A5493'>
+        <File Id='fil_Microsoft_Extensions_Options_dll_72' Source='$(var.PublishDir)\Microsoft.Extensions.Options.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Extensions_Primitives_dll_73' Guid='0CF35411-411C-46E7-9812-E8F1AF0844A0'>
+        <File Id='fil_Microsoft_Extensions_Primitives_dll_73' Source='$(var.PublishDir)\Microsoft.Extensions.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_IdentityModel_Abstractions_dll_74' Guid='EE21C0C0-B880-4390-AE3C-9437B4D97451'>
+        <File Id='fil_Microsoft_IdentityModel_Abstractions_dll_74' Source='$(var.PublishDir)\Microsoft.IdentityModel.Abstractions.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_IdentityModel_JsonWebTokens_dll_75' Guid='3F3994B0-30D7-49B4-8B4A-97D532F0C112'>
+        <File Id='fil_Microsoft_IdentityModel_JsonWebTokens_dll_75' Source='$(var.PublishDir)\Microsoft.IdentityModel.JsonWebTokens.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_IdentityModel_Logging_dll_76' Guid='92B3FFDB-BD97-48D4-9A74-238186293B04'>
+        <File Id='fil_Microsoft_IdentityModel_Logging_dll_76' Source='$(var.PublishDir)\Microsoft.IdentityModel.Logging.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_IdentityModel_Tokens_dll_77' Guid='D02F15A1-7944-4C69-BE1D-568554B93136'>
+        <File Id='fil_Microsoft_IdentityModel_Tokens_dll_77' Source='$(var.PublishDir)\Microsoft.IdentityModel.Tokens.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_Core_dll_78' Guid='22123CFD-9505-4FC5-8521-073298E20AB3'>
+        <File Id='fil_Microsoft_ML_Core_dll_78' Source='$(var.PublishDir)\Microsoft.ML.Core.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_CpuMath_dll_79' Guid='BCB0B2F8-EDF6-4469-8193-FB6EFB29655B'>
+        <File Id='fil_Microsoft_ML_CpuMath_dll_79' Source='$(var.PublishDir)\Microsoft.ML.CpuMath.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_Data_dll_80' Guid='F385558F-CEB1-4171-846A-D08B4CD1B3E8'>
+        <File Id='fil_Microsoft_ML_Data_dll_80' Source='$(var.PublishDir)\Microsoft.ML.Data.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_DataView_dll_81' Guid='17D9D1B8-394E-42F8-A5F0-9DD2BAB954AE'>
+        <File Id='fil_Microsoft_ML_DataView_dll_81' Source='$(var.PublishDir)\Microsoft.ML.DataView.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_dll_82' Guid='C0FC0648-EB4F-46C0-8F8C-6BC7C02DD6EF'>
+        <File Id='fil_Microsoft_ML_dll_82' Source='$(var.PublishDir)\Microsoft.ML.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_FastTree_dll_83' Guid='4B532E79-3046-4D7E-9F99-E7046ECBDE9B'>
+        <File Id='fil_Microsoft_ML_FastTree_dll_83' Source='$(var.PublishDir)\Microsoft.ML.FastTree.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_KMeansClustering_dll_84' Guid='BFDC8F27-B8F6-401A-8EE4-CE3CBFD3B28E'>
+        <File Id='fil_Microsoft_ML_KMeansClustering_dll_84' Source='$(var.PublishDir)\Microsoft.ML.KMeansClustering.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_PCA_dll_85' Guid='C3A560FE-7F86-4FA7-9167-D83B034F1FDE'>
+        <File Id='fil_Microsoft_ML_PCA_dll_85' Source='$(var.PublishDir)\Microsoft.ML.PCA.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_StandardTrainers_dll_86' Guid='14DC668A-F1F8-44E4-A448-04FACD91E680'>
+        <File Id='fil_Microsoft_ML_StandardTrainers_dll_86' Source='$(var.PublishDir)\Microsoft.ML.StandardTrainers.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_ML_Transforms_dll_87' Guid='F15E767D-000E-4711-8AB3-084C986F4966'>
+        <File Id='fil_Microsoft_ML_Transforms_dll_87' Source='$(var.PublishDir)\Microsoft.ML.Transforms.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_VisualBasic_Core_dll_88' Guid='D486F8B7-E7F7-45D4-AE13-8C3E2B79D02E'>
+        <File Id='fil_Microsoft_VisualBasic_Core_dll_88' Source='$(var.PublishDir)\Microsoft.VisualBasic.Core.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_VisualBasic_dll_89' Guid='118573A3-7478-4A8F-A6A7-51D28ACDA898'>
+        <File Id='fil_Microsoft_VisualBasic_dll_89' Source='$(var.PublishDir)\Microsoft.VisualBasic.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_VisualBasic_Forms_dll_90' Guid='EA767424-6E92-408A-B46D-6F12A85A8EFD'>
+        <File Id='fil_Microsoft_VisualBasic_Forms_dll_90' Source='$(var.PublishDir)\Microsoft.VisualBasic.Forms.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Win32_Primitives_dll_91' Guid='49952275-6508-41EA-9073-AF3572068FA4'>
+        <File Id='fil_Microsoft_Win32_Primitives_dll_91' Source='$(var.PublishDir)\Microsoft.Win32.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Win32_Registry_AccessControl_dll_92' Guid='6AEAEBFC-6F27-4495-B8F8-05D75EC37B98'>
+        <File Id='fil_Microsoft_Win32_Registry_AccessControl_dll_92' Source='$(var.PublishDir)\Microsoft.Win32.Registry.AccessControl.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Win32_Registry_dll_93' Guid='C2266335-F632-46EF-A278-5C921EEE209A'>
+        <File Id='fil_Microsoft_Win32_Registry_dll_93' Source='$(var.PublishDir)\Microsoft.Win32.Registry.dll' />
+      </Component>
+      <Component Id='cmp_Microsoft_Win32_SystemEvents_dll_94' Guid='2FD2904E-C85A-4C06-8B6A-97C4C2B835FD'>
+        <File Id='fil_Microsoft_Win32_SystemEvents_dll_94' Source='$(var.PublishDir)\Microsoft.Win32.SystemEvents.dll' />
+      </Component>
+      <Component Id='cmp_mscordaccore_dll_95' Guid='7CA34F25-5D4E-4F8B-AE7F-61BCE7B1EDE6'>
+        <File Id='fil_mscordaccore_dll_95' Source='$(var.PublishDir)\mscordaccore.dll' />
+      </Component>
+      <Component Id='cmp_mscordaccore_amd64_amd64_9_0_925_41916_dll_96' Guid='A99CA2F1-4BC6-401C-861E-8E8780A23E0A'>
+        <File Id='fil_mscordaccore_amd64_amd64_9_0_925_41916_dll_96' Source='$(var.PublishDir)\mscordaccore_amd64_amd64_9.0.925.41916.dll' />
+      </Component>
+      <Component Id='cmp_mscordbi_dll_97' Guid='9C108AA5-3948-43A2-A7BD-E6F1D2269EDA'>
+        <File Id='fil_mscordbi_dll_97' Source='$(var.PublishDir)\mscordbi.dll' />
+      </Component>
+      <Component Id='cmp_mscorlib_dll_98' Guid='6FA07FD8-7200-4573-8C70-B4631E6EA8C7'>
+        <File Id='fil_mscorlib_dll_98' Source='$(var.PublishDir)\mscorlib.dll' />
+      </Component>
+      <Component Id='cmp_mscorrc_dll_99' Guid='9A54B3C0-27FA-4AC0-80EF-49D7AC92294A'>
+        <File Id='fil_mscorrc_dll_99' Source='$(var.PublishDir)\mscorrc.dll' />
+      </Component>
+      <Component Id='cmp_msquic_dll_100' Guid='1798E642-66D7-40AC-8CA4-091382AAE50F'>
+        <File Id='fil_msquic_dll_100' Source='$(var.PublishDir)\msquic.dll' />
+      </Component>
+      <Component Id='cmp_netstandard_dll_101' Guid='B4B773B9-1B3D-4FAA-9990-C81570EDED92'>
+        <File Id='fil_netstandard_dll_101' Source='$(var.PublishDir)\netstandard.dll' />
+      </Component>
+      <Component Id='cmp_Newtonsoft_Json_dll_102' Guid='6BE6D7D6-E4A2-43D2-9C88-960180281E97'>
+        <File Id='fil_Newtonsoft_Json_dll_102' Source='$(var.PublishDir)\Newtonsoft.Json.dll' />
+      </Component>
+      <Component Id='cmp_OpenTelemetry_Api_dll_103' Guid='F5B22024-D1B9-4547-A6D3-FC57B19A2D27'>
+        <File Id='fil_OpenTelemetry_Api_dll_103' Source='$(var.PublishDir)\OpenTelemetry.Api.dll' />
+      </Component>
+      <Component Id='cmp_OpenTelemetry_Api_ProviderBuilderExtensions_dll_104' Guid='9DBC38A5-A1C1-41DC-A80A-988D6783AC85'>
+        <File Id='fil_OpenTelemetry_Api_ProviderBuilderExtensions_dll_104' Source='$(var.PublishDir)\OpenTelemetry.Api.ProviderBuilderExtensions.dll' />
+      </Component>
+      <Component Id='cmp_OpenTelemetry_dll_105' Guid='4BD12A80-8214-43FF-B203-CB5E7B7C1C8A'>
+        <File Id='fil_OpenTelemetry_dll_105' Source='$(var.PublishDir)\OpenTelemetry.dll' />
+      </Component>
+      <Component Id='cmp_OpenTelemetry_Exporter_OpenTelemetryProtocol_dll_106' Guid='CF964B4F-968C-4A10-8AC2-88FB2821E321'>
+        <File Id='fil_OpenTelemetry_Exporter_OpenTelemetryProtocol_dll_106' Source='$(var.PublishDir)\OpenTelemetry.Exporter.OpenTelemetryProtocol.dll' />
+      </Component>
+      <Component Id='cmp_OpenTelemetry_Instrumentation_Http_dll_107' Guid='CCE83F2D-C802-48AD-B916-0CA89F5DC1B6'>
+        <File Id='fil_OpenTelemetry_Instrumentation_Http_dll_107' Source='$(var.PublishDir)\OpenTelemetry.Instrumentation.Http.dll' />
+      </Component>
+      <Component Id='cmp_OpenTelemetry_Instrumentation_Process_dll_108' Guid='52387BA1-63A5-444C-8D67-22162558AB0C'>
+        <File Id='fil_OpenTelemetry_Instrumentation_Process_dll_108' Source='$(var.PublishDir)\OpenTelemetry.Instrumentation.Process.dll' />
+      </Component>
+      <Component Id='cmp_OpenTelemetry_Instrumentation_Runtime_dll_109' Guid='D82FA222-7BCC-4C04-AFDB-F308B500EC1F'>
+        <File Id='fil_OpenTelemetry_Instrumentation_Runtime_dll_109' Source='$(var.PublishDir)\OpenTelemetry.Instrumentation.Runtime.dll' />
+      </Component>
+      <Component Id='cmp_PenImc_cor3_dll_110' Guid='521C7BDF-3ADE-42C9-B4FF-C21B9591B521'>
+        <File Id='fil_PenImc_cor3_dll_110' Source='$(var.PublishDir)\PenImc_cor3.dll' />
+      </Component>
+      <Component Id='cmp_PresentationCore_dll_111' Guid='C9B7557F-505B-49A8-AB1A-87DAC94A793C'>
+        <File Id='fil_PresentationCore_dll_111' Source='$(var.PublishDir)\PresentationCore.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_SystemCore_dll_112' Guid='8FCFEA66-C5EF-4656-A12D-2A9B4C23A6E9'>
+        <File Id='fil_PresentationFramework_SystemCore_dll_112' Source='$(var.PublishDir)\PresentationFramework-SystemCore.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_SystemData_dll_113' Guid='33A0EFD4-F968-4A8C-B095-657BBDAB8066'>
+        <File Id='fil_PresentationFramework_SystemData_dll_113' Source='$(var.PublishDir)\PresentationFramework-SystemData.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_SystemDrawing_dll_114' Guid='F57E61CF-A3A1-4DF9-8496-32EA92DB5520'>
+        <File Id='fil_PresentationFramework_SystemDrawing_dll_114' Source='$(var.PublishDir)\PresentationFramework-SystemDrawing.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_SystemXml_dll_115' Guid='6AC90133-5995-4C9A-B9A6-51A80957303D'>
+        <File Id='fil_PresentationFramework_SystemXml_dll_115' Source='$(var.PublishDir)\PresentationFramework-SystemXml.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_SystemXmlLinq_dll_116' Guid='D48107E8-3BEC-4432-B81D-CAE6ABD25C3F'>
+        <File Id='fil_PresentationFramework_SystemXmlLinq_dll_116' Source='$(var.PublishDir)\PresentationFramework-SystemXmlLinq.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_Aero_dll_117' Guid='202937FE-B1EA-4330-B484-315BC39B0F86'>
+        <File Id='fil_PresentationFramework_Aero_dll_117' Source='$(var.PublishDir)\PresentationFramework.Aero.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_Aero2_dll_118' Guid='E790F46A-7ABD-495A-A7A6-802154632B31'>
+        <File Id='fil_PresentationFramework_Aero2_dll_118' Source='$(var.PublishDir)\PresentationFramework.Aero2.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_AeroLite_dll_119' Guid='749D0831-8582-456C-99C6-04CE6A390EF7'>
+        <File Id='fil_PresentationFramework_AeroLite_dll_119' Source='$(var.PublishDir)\PresentationFramework.AeroLite.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_Classic_dll_120' Guid='870A5E01-79F6-4894-A03C-A7C177F3B4FB'>
+        <File Id='fil_PresentationFramework_Classic_dll_120' Source='$(var.PublishDir)\PresentationFramework.Classic.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_dll_121' Guid='8277691F-F8AE-4187-A3E9-C40FCCB36D10'>
+        <File Id='fil_PresentationFramework_dll_121' Source='$(var.PublishDir)\PresentationFramework.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_Fluent_dll_122' Guid='1208FCCC-7B66-4E80-BB91-C5366DBEA94A'>
+        <File Id='fil_PresentationFramework_Fluent_dll_122' Source='$(var.PublishDir)\PresentationFramework.Fluent.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_Luna_dll_123' Guid='A920EE07-4F07-464F-8760-2D85B1E83456'>
+        <File Id='fil_PresentationFramework_Luna_dll_123' Source='$(var.PublishDir)\PresentationFramework.Luna.dll' />
+      </Component>
+      <Component Id='cmp_PresentationFramework_Royale_dll_124' Guid='FBF07E69-1D39-4372-9960-F84E9C0651F7'>
+        <File Id='fil_PresentationFramework_Royale_dll_124' Source='$(var.PublishDir)\PresentationFramework.Royale.dll' />
+      </Component>
+      <Component Id='cmp_PresentationNative_cor3_dll_125' Guid='C73D5004-67AC-416A-990D-F4D476619F2C'>
+        <File Id='fil_PresentationNative_cor3_dll_125' Source='$(var.PublishDir)\PresentationNative_cor3.dll' />
+      </Component>
+      <Component Id='cmp_PresentationUI_dll_126' Guid='0E52700D-F7CC-433E-804A-956F06A637CB'>
+        <File Id='fil_PresentationUI_dll_126' Source='$(var.PublishDir)\PresentationUI.dll' />
+      </Component>
+      <Component Id='cmp_ReachFramework_dll_127' Guid='C203DCB6-9EC7-41D0-9987-7B67467E4C1A'>
+        <File Id='fil_ReachFramework_dll_127' Source='$(var.PublishDir)\ReachFramework.dll' />
+      </Component>
+      <Component Id='cmp_SQLitePCLRaw_batteries_v2_dll_128' Guid='A55731AE-B74E-44E6-83D5-B5687F1BAA39'>
+        <File Id='fil_SQLitePCLRaw_batteries_v2_dll_128' Source='$(var.PublishDir)\SQLitePCLRaw.batteries_v2.dll' />
+      </Component>
+      <Component Id='cmp_SQLitePCLRaw_core_dll_129' Guid='64E03500-CE9D-43AD-B22D-2079C4754469'>
+        <File Id='fil_SQLitePCLRaw_core_dll_129' Source='$(var.PublishDir)\SQLitePCLRaw.core.dll' />
+      </Component>
+      <Component Id='cmp_SQLitePCLRaw_provider_e_sqlite3_dll_130' Guid='1D26D55A-3B6F-425E-81BA-99B57C4459FF'>
+        <File Id='fil_SQLitePCLRaw_provider_e_sqlite3_dll_130' Source='$(var.PublishDir)\SQLitePCLRaw.provider.e_sqlite3.dll' />
+      </Component>
+      <Component Id='cmp_System_AppContext_dll_131' Guid='DD9304A2-EB27-46E1-B132-47EE9CE79D39'>
+        <File Id='fil_System_AppContext_dll_131' Source='$(var.PublishDir)\System.AppContext.dll' />
+      </Component>
+      <Component Id='cmp_System_Buffers_dll_132' Guid='D490C1ED-1132-474B-8473-1B686869FC8C'>
+        <File Id='fil_System_Buffers_dll_132' Source='$(var.PublishDir)\System.Buffers.dll' />
+      </Component>
+      <Component Id='cmp_System_CodeDom_dll_133' Guid='329A244E-6F23-497B-8384-60B9EED3914A'>
+        <File Id='fil_System_CodeDom_dll_133' Source='$(var.PublishDir)\System.CodeDom.dll' />
+      </Component>
+      <Component Id='cmp_System_Collections_Concurrent_dll_134' Guid='9187D388-BD27-41F1-80BB-3F2422E09711'>
+        <File Id='fil_System_Collections_Concurrent_dll_134' Source='$(var.PublishDir)\System.Collections.Concurrent.dll' />
+      </Component>
+      <Component Id='cmp_System_Collections_dll_135' Guid='3C1CBE93-CDF6-4907-8DCA-03325E595EE7'>
+        <File Id='fil_System_Collections_dll_135' Source='$(var.PublishDir)\System.Collections.dll' />
+      </Component>
+      <Component Id='cmp_System_Collections_Immutable_dll_136' Guid='79A446EE-C475-4CBA-95D5-2234CB2DA325'>
+        <File Id='fil_System_Collections_Immutable_dll_136' Source='$(var.PublishDir)\System.Collections.Immutable.dll' />
+      </Component>
+      <Component Id='cmp_System_Collections_NonGeneric_dll_137' Guid='7E9943A4-BED5-48E8-878E-87003E7C9864'>
+        <File Id='fil_System_Collections_NonGeneric_dll_137' Source='$(var.PublishDir)\System.Collections.NonGeneric.dll' />
+      </Component>
+      <Component Id='cmp_System_Collections_Specialized_dll_138' Guid='A95DCF33-0616-46AA-A1BB-10E73D7F8FCB'>
+        <File Id='fil_System_Collections_Specialized_dll_138' Source='$(var.PublishDir)\System.Collections.Specialized.dll' />
+      </Component>
+      <Component Id='cmp_System_ComponentModel_Annotations_dll_139' Guid='17EAC296-4CAD-444E-BE91-D7C4532077FB'>
+        <File Id='fil_System_ComponentModel_Annotations_dll_139' Source='$(var.PublishDir)\System.ComponentModel.Annotations.dll' />
+      </Component>
+      <Component Id='cmp_System_ComponentModel_DataAnnotations_dll_140' Guid='6317D93C-0035-47E6-A06B-E16913B1A68A'>
+        <File Id='fil_System_ComponentModel_DataAnnotations_dll_140' Source='$(var.PublishDir)\System.ComponentModel.DataAnnotations.dll' />
+      </Component>
+      <Component Id='cmp_System_ComponentModel_dll_141' Guid='E60203C9-4C51-446E-AB99-B4406DF4DB53'>
+        <File Id='fil_System_ComponentModel_dll_141' Source='$(var.PublishDir)\System.ComponentModel.dll' />
+      </Component>
+      <Component Id='cmp_System_ComponentModel_EventBasedAsync_dll_142' Guid='FC2BF5B0-0477-4795-9666-EE40F2156C2E'>
+        <File Id='fil_System_ComponentModel_EventBasedAsync_dll_142' Source='$(var.PublishDir)\System.ComponentModel.EventBasedAsync.dll' />
+      </Component>
+      <Component Id='cmp_System_ComponentModel_Primitives_dll_143' Guid='C5303C03-0D6F-4A08-B5AC-2477734527B9'>
+        <File Id='fil_System_ComponentModel_Primitives_dll_143' Source='$(var.PublishDir)\System.ComponentModel.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_ComponentModel_TypeConverter_dll_144' Guid='7F9A7E15-0CDF-4F91-B2BB-CEC00C209395'>
+        <File Id='fil_System_ComponentModel_TypeConverter_dll_144' Source='$(var.PublishDir)\System.ComponentModel.TypeConverter.dll' />
+      </Component>
+      <Component Id='cmp_System_Configuration_ConfigurationManager_dll_145' Guid='449306F3-ED1E-4F4C-97F8-90CEA2398C9E'>
+        <File Id='fil_System_Configuration_ConfigurationManager_dll_145' Source='$(var.PublishDir)\System.Configuration.ConfigurationManager.dll' />
+      </Component>
+      <Component Id='cmp_System_Configuration_dll_146' Guid='4B394BB2-8A76-4607-A538-6C259CF3D750'>
+        <File Id='fil_System_Configuration_dll_146' Source='$(var.PublishDir)\System.Configuration.dll' />
+      </Component>
+      <Component Id='cmp_System_Console_dll_147' Guid='AC31B3B6-B021-4BC3-A78E-637274A21C69'>
+        <File Id='fil_System_Console_dll_147' Source='$(var.PublishDir)\System.Console.dll' />
+      </Component>
+      <Component Id='cmp_System_Core_dll_148' Guid='A44AB41C-1DE4-4CD0-9D1D-3246D9DA7A2E'>
+        <File Id='fil_System_Core_dll_148' Source='$(var.PublishDir)\System.Core.dll' />
+      </Component>
+      <Component Id='cmp_System_Data_Common_dll_149' Guid='1CC3BDAE-9847-40ED-8F76-6F6E999AB5CE'>
+        <File Id='fil_System_Data_Common_dll_149' Source='$(var.PublishDir)\System.Data.Common.dll' />
+      </Component>
+      <Component Id='cmp_System_Data_DataSetExtensions_dll_150' Guid='CE4C7A27-8FB5-405B-946F-D7DA7D7F0ADD'>
+        <File Id='fil_System_Data_DataSetExtensions_dll_150' Source='$(var.PublishDir)\System.Data.DataSetExtensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Data_dll_151' Guid='ADCC1C33-9908-4DDF-9F7F-81F9898E825C'>
+        <File Id='fil_System_Data_dll_151' Source='$(var.PublishDir)\System.Data.dll' />
+      </Component>
+      <Component Id='cmp_System_Design_dll_152' Guid='C199188F-0914-47C3-965D-6F3F09ADEE9E'>
+        <File Id='fil_System_Design_dll_152' Source='$(var.PublishDir)\System.Design.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_Contracts_dll_153' Guid='F8A9C150-8095-4C55-AA00-5EFFEB30FC75'>
+        <File Id='fil_System_Diagnostics_Contracts_dll_153' Source='$(var.PublishDir)\System.Diagnostics.Contracts.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_Debug_dll_154' Guid='F7566B01-4E95-49F0-B1CB-013A7D30C88B'>
+        <File Id='fil_System_Diagnostics_Debug_dll_154' Source='$(var.PublishDir)\System.Diagnostics.Debug.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_DiagnosticSource_dll_155' Guid='AF5F6BE1-5B43-45A8-89C2-3492924E96C1'>
+        <File Id='fil_System_Diagnostics_DiagnosticSource_dll_155' Source='$(var.PublishDir)\System.Diagnostics.DiagnosticSource.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_EventLog_dll_156' Guid='5C678FB0-146E-473B-9735-22291E09517E'>
+        <File Id='fil_System_Diagnostics_EventLog_dll_156' Source='$(var.PublishDir)\System.Diagnostics.EventLog.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_EventLog_Messages_dll_157' Guid='990851AF-0AD3-4958-B3B9-01825C37201A'>
+        <File Id='fil_System_Diagnostics_EventLog_Messages_dll_157' Source='$(var.PublishDir)\System.Diagnostics.EventLog.Messages.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_FileVersionInfo_dll_158' Guid='52B5A92D-093B-45BF-83B7-F13BD50275E2'>
+        <File Id='fil_System_Diagnostics_FileVersionInfo_dll_158' Source='$(var.PublishDir)\System.Diagnostics.FileVersionInfo.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_PerformanceCounter_dll_159' Guid='D49E3E96-B588-49D0-AFCE-0B367AA3937B'>
+        <File Id='fil_System_Diagnostics_PerformanceCounter_dll_159' Source='$(var.PublishDir)\System.Diagnostics.PerformanceCounter.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_Process_dll_160' Guid='D481A803-9BE7-48B8-B81A-8111B3012B52'>
+        <File Id='fil_System_Diagnostics_Process_dll_160' Source='$(var.PublishDir)\System.Diagnostics.Process.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_StackTrace_dll_161' Guid='CBB12675-1723-4C6F-99C2-691DF378A918'>
+        <File Id='fil_System_Diagnostics_StackTrace_dll_161' Source='$(var.PublishDir)\System.Diagnostics.StackTrace.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_TextWriterTraceListener_dll_162' Guid='DD1BBEFD-09FF-4775-B577-E85085105F68'>
+        <File Id='fil_System_Diagnostics_TextWriterTraceListener_dll_162' Source='$(var.PublishDir)\System.Diagnostics.TextWriterTraceListener.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_Tools_dll_163' Guid='EC66A19C-8BDD-49E7-8070-83C8580B4B73'>
+        <File Id='fil_System_Diagnostics_Tools_dll_163' Source='$(var.PublishDir)\System.Diagnostics.Tools.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_TraceSource_dll_164' Guid='AFA5675C-431B-43C1-8F01-1B07DAB8EF51'>
+        <File Id='fil_System_Diagnostics_TraceSource_dll_164' Source='$(var.PublishDir)\System.Diagnostics.TraceSource.dll' />
+      </Component>
+      <Component Id='cmp_System_Diagnostics_Tracing_dll_165' Guid='669D50AA-6B43-41DA-8AC6-B3E6FD03B739'>
+        <File Id='fil_System_Diagnostics_Tracing_dll_165' Source='$(var.PublishDir)\System.Diagnostics.Tracing.dll' />
+      </Component>
+      <Component Id='cmp_System_DirectoryServices_dll_166' Guid='5D03FCEA-128F-4F19-823A-40D2B1EBB466'>
+        <File Id='fil_System_DirectoryServices_dll_166' Source='$(var.PublishDir)\System.DirectoryServices.dll' />
+      </Component>
+      <Component Id='cmp_System_dll_167' Guid='759E4250-D954-4C86-A1B2-111A0D96FAAE'>
+        <File Id='fil_System_dll_167' Source='$(var.PublishDir)\System.dll' />
+      </Component>
+      <Component Id='cmp_System_Drawing_Common_dll_168' Guid='E26C9BB9-CEDD-4C42-87EB-D475CA37B873'>
+        <File Id='fil_System_Drawing_Common_dll_168' Source='$(var.PublishDir)\System.Drawing.Common.dll' />
+      </Component>
+      <Component Id='cmp_System_Drawing_Design_dll_169' Guid='1112DCFA-3861-4CCC-8806-5AD3EEEB032F'>
+        <File Id='fil_System_Drawing_Design_dll_169' Source='$(var.PublishDir)\System.Drawing.Design.dll' />
+      </Component>
+      <Component Id='cmp_System_Drawing_dll_170' Guid='93F980CC-AB55-4792-90B9-3C099F899604'>
+        <File Id='fil_System_Drawing_dll_170' Source='$(var.PublishDir)\System.Drawing.dll' />
+      </Component>
+      <Component Id='cmp_System_Drawing_Primitives_dll_171' Guid='A6394120-307B-4F64-97E2-C938E50E90CC'>
+        <File Id='fil_System_Drawing_Primitives_dll_171' Source='$(var.PublishDir)\System.Drawing.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_Dynamic_Runtime_dll_172' Guid='17438894-A657-4D57-8D39-0440D186FF5A'>
+        <File Id='fil_System_Dynamic_Runtime_dll_172' Source='$(var.PublishDir)\System.Dynamic.Runtime.dll' />
+      </Component>
+      <Component Id='cmp_System_Formats_Asn1_dll_173' Guid='9D0A8176-4EDD-4F6B-A601-C276288AB279'>
+        <File Id='fil_System_Formats_Asn1_dll_173' Source='$(var.PublishDir)\System.Formats.Asn1.dll' />
+      </Component>
+      <Component Id='cmp_System_Formats_Nrbf_dll_174' Guid='C8020824-E98F-482D-A7FE-5D57BADDF619'>
+        <File Id='fil_System_Formats_Nrbf_dll_174' Source='$(var.PublishDir)\System.Formats.Nrbf.dll' />
+      </Component>
+      <Component Id='cmp_System_Formats_Tar_dll_175' Guid='02E8658D-C8B8-4EAC-BBB0-348D7210AF91'>
+        <File Id='fil_System_Formats_Tar_dll_175' Source='$(var.PublishDir)\System.Formats.Tar.dll' />
+      </Component>
+      <Component Id='cmp_System_Globalization_Calendars_dll_176' Guid='21A2D151-AC1F-411C-9EA0-245B96311DE0'>
+        <File Id='fil_System_Globalization_Calendars_dll_176' Source='$(var.PublishDir)\System.Globalization.Calendars.dll' />
+      </Component>
+      <Component Id='cmp_System_Globalization_dll_177' Guid='13C649F2-52AA-44C0-B8C8-219248E09825'>
+        <File Id='fil_System_Globalization_dll_177' Source='$(var.PublishDir)\System.Globalization.dll' />
+      </Component>
+      <Component Id='cmp_System_Globalization_Extensions_dll_178' Guid='F0B14764-A466-48B5-9319-E11E0108959D'>
+        <File Id='fil_System_Globalization_Extensions_dll_178' Source='$(var.PublishDir)\System.Globalization.Extensions.dll' />
+      </Component>
+      <Component Id='cmp_System_IdentityModel_Tokens_Jwt_dll_179' Guid='E7856B72-E355-41DF-AC4A-2096074C1E03'>
+        <File Id='fil_System_IdentityModel_Tokens_Jwt_dll_179' Source='$(var.PublishDir)\System.IdentityModel.Tokens.Jwt.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Compression_Brotli_dll_180' Guid='D8856233-2B73-447C-BBBC-4FD084B5F201'>
+        <File Id='fil_System_IO_Compression_Brotli_dll_180' Source='$(var.PublishDir)\System.IO.Compression.Brotli.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Compression_dll_181' Guid='ACAF184D-4457-4027-92C7-4F640E567008'>
+        <File Id='fil_System_IO_Compression_dll_181' Source='$(var.PublishDir)\System.IO.Compression.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Compression_FileSystem_dll_182' Guid='38967660-17D9-4C28-A8F2-E7624CDBB98F'>
+        <File Id='fil_System_IO_Compression_FileSystem_dll_182' Source='$(var.PublishDir)\System.IO.Compression.FileSystem.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Compression_Native_dll_183' Guid='3E05ECA9-E4CA-4041-A166-0D8A4A8EDFED'>
+        <File Id='fil_System_IO_Compression_Native_dll_183' Source='$(var.PublishDir)\System.IO.Compression.Native.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Compression_ZipFile_dll_184' Guid='FFC7D564-0703-42CD-8214-2FFD2F930447'>
+        <File Id='fil_System_IO_Compression_ZipFile_dll_184' Source='$(var.PublishDir)\System.IO.Compression.ZipFile.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_dll_185' Guid='73FD0AB3-D6BB-4A7D-A627-EF8F7DF88CEB'>
+        <File Id='fil_System_IO_dll_185' Source='$(var.PublishDir)\System.IO.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_FileSystem_AccessControl_dll_186' Guid='833F3A2F-DC23-480E-9FAE-CD5E5E972E6C'>
+        <File Id='fil_System_IO_FileSystem_AccessControl_dll_186' Source='$(var.PublishDir)\System.IO.FileSystem.AccessControl.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_FileSystem_dll_187' Guid='7F880C9E-924F-4AC2-A60D-FCB48E75A6B0'>
+        <File Id='fil_System_IO_FileSystem_dll_187' Source='$(var.PublishDir)\System.IO.FileSystem.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_FileSystem_DriveInfo_dll_188' Guid='75ACD74A-A820-4624-9DBE-D5DC109B474C'>
+        <File Id='fil_System_IO_FileSystem_DriveInfo_dll_188' Source='$(var.PublishDir)\System.IO.FileSystem.DriveInfo.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_FileSystem_Primitives_dll_189' Guid='14BEFF46-0FDB-4BCE-9D8D-D55AA675D376'>
+        <File Id='fil_System_IO_FileSystem_Primitives_dll_189' Source='$(var.PublishDir)\System.IO.FileSystem.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_FileSystem_Watcher_dll_190' Guid='843F6CE7-A2D2-4794-B0AB-717EF4BA58C2'>
+        <File Id='fil_System_IO_FileSystem_Watcher_dll_190' Source='$(var.PublishDir)\System.IO.FileSystem.Watcher.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_IsolatedStorage_dll_191' Guid='0F3A0EE6-7DBC-4AB0-8B3E-6E80FE1D48A6'>
+        <File Id='fil_System_IO_IsolatedStorage_dll_191' Source='$(var.PublishDir)\System.IO.IsolatedStorage.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_MemoryMappedFiles_dll_192' Guid='58981553-96A9-4002-B741-207EA7FA7A9C'>
+        <File Id='fil_System_IO_MemoryMappedFiles_dll_192' Source='$(var.PublishDir)\System.IO.MemoryMappedFiles.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Packaging_dll_193' Guid='C838A9BC-8E02-4B40-B4F0-BE62209DE482'>
+        <File Id='fil_System_IO_Packaging_dll_193' Source='$(var.PublishDir)\System.IO.Packaging.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Pipelines_dll_194' Guid='8399376C-700B-41CF-AA07-5B57242A8D9F'>
+        <File Id='fil_System_IO_Pipelines_dll_194' Source='$(var.PublishDir)\System.IO.Pipelines.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Pipes_AccessControl_dll_195' Guid='5945C5A2-F0BA-48BC-8731-CF3474A623FC'>
+        <File Id='fil_System_IO_Pipes_AccessControl_dll_195' Source='$(var.PublishDir)\System.IO.Pipes.AccessControl.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_Pipes_dll_196' Guid='3D9B5C01-7DE8-4FF3-93C2-52F7BDB3460C'>
+        <File Id='fil_System_IO_Pipes_dll_196' Source='$(var.PublishDir)\System.IO.Pipes.dll' />
+      </Component>
+      <Component Id='cmp_System_IO_UnmanagedMemoryStream_dll_197' Guid='4A3FE422-D4AE-421C-84DF-02BA481C0FC3'>
+        <File Id='fil_System_IO_UnmanagedMemoryStream_dll_197' Source='$(var.PublishDir)\System.IO.UnmanagedMemoryStream.dll' />
+      </Component>
+      <Component Id='cmp_System_Linq_dll_198' Guid='AAB56EFD-6DC2-43FF-AA34-90AC42524A7A'>
+        <File Id='fil_System_Linq_dll_198' Source='$(var.PublishDir)\System.Linq.dll' />
+      </Component>
+      <Component Id='cmp_System_Linq_Expressions_dll_199' Guid='104966FC-2E14-487C-AD04-60830E813FC1'>
+        <File Id='fil_System_Linq_Expressions_dll_199' Source='$(var.PublishDir)\System.Linq.Expressions.dll' />
+      </Component>
+      <Component Id='cmp_System_Linq_Parallel_dll_200' Guid='CDFF4259-D27E-4913-87FE-0A71AD411F94'>
+        <File Id='fil_System_Linq_Parallel_dll_200' Source='$(var.PublishDir)\System.Linq.Parallel.dll' />
+      </Component>
+      <Component Id='cmp_System_Linq_Queryable_dll_201' Guid='96679E42-ABE7-463D-8148-D51D7B4A4CA5'>
+        <File Id='fil_System_Linq_Queryable_dll_201' Source='$(var.PublishDir)\System.Linq.Queryable.dll' />
+      </Component>
+      <Component Id='cmp_System_Management_dll_202' Guid='8DCF78C0-4198-4776-A1B4-8E14A6FA2351'>
+        <File Id='fil_System_Management_dll_202' Source='$(var.PublishDir)\System.Management.dll' />
+      </Component>
+      <Component Id='cmp_System_Memory_dll_203' Guid='339A0B99-73A9-48DF-9FC6-B50B72362CF3'>
+        <File Id='fil_System_Memory_dll_203' Source='$(var.PublishDir)\System.Memory.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_dll_204' Guid='D350ADB2-5FD7-45DB-8FFD-42FAA6C299B2'>
+        <File Id='fil_System_Net_dll_204' Source='$(var.PublishDir)\System.Net.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Http_dll_205' Guid='D723D9AE-BAE5-403E-8C55-F9397B3192DE'>
+        <File Id='fil_System_Net_Http_dll_205' Source='$(var.PublishDir)\System.Net.Http.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Http_Json_dll_206' Guid='E99941CB-A9B4-402B-9889-4CB7BD6463A2'>
+        <File Id='fil_System_Net_Http_Json_dll_206' Source='$(var.PublishDir)\System.Net.Http.Json.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_HttpListener_dll_207' Guid='766D56D7-613E-422E-8500-7079977A9877'>
+        <File Id='fil_System_Net_HttpListener_dll_207' Source='$(var.PublishDir)\System.Net.HttpListener.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Mail_dll_208' Guid='0AC53930-4C5C-4E8A-A257-7AB7D8AF82A4'>
+        <File Id='fil_System_Net_Mail_dll_208' Source='$(var.PublishDir)\System.Net.Mail.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_NameResolution_dll_209' Guid='FABE01B2-AAC3-4311-9776-BF3413F192F4'>
+        <File Id='fil_System_Net_NameResolution_dll_209' Source='$(var.PublishDir)\System.Net.NameResolution.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_NetworkInformation_dll_210' Guid='EF8B3FD9-A234-475B-90ED-9D5CC0CC4031'>
+        <File Id='fil_System_Net_NetworkInformation_dll_210' Source='$(var.PublishDir)\System.Net.NetworkInformation.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Ping_dll_211' Guid='442ECA25-1F6E-47D7-91B5-96BC488D961C'>
+        <File Id='fil_System_Net_Ping_dll_211' Source='$(var.PublishDir)\System.Net.Ping.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Primitives_dll_212' Guid='EDDA2139-E0E9-4EBB-9C60-147CD665F354'>
+        <File Id='fil_System_Net_Primitives_dll_212' Source='$(var.PublishDir)\System.Net.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Quic_dll_213' Guid='12C04368-1473-407A-9287-E95636A6FD85'>
+        <File Id='fil_System_Net_Quic_dll_213' Source='$(var.PublishDir)\System.Net.Quic.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Requests_dll_214' Guid='BF06B2D0-2308-4F3A-A18B-A8C9C35E8515'>
+        <File Id='fil_System_Net_Requests_dll_214' Source='$(var.PublishDir)\System.Net.Requests.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Security_dll_215' Guid='BE22E11F-B9AE-4741-AB4E-BC800B2D3A13'>
+        <File Id='fil_System_Net_Security_dll_215' Source='$(var.PublishDir)\System.Net.Security.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_ServicePoint_dll_216' Guid='6B89AB52-BA76-4EEC-9766-85B6087D9E08'>
+        <File Id='fil_System_Net_ServicePoint_dll_216' Source='$(var.PublishDir)\System.Net.ServicePoint.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_Sockets_dll_217' Guid='0448C526-A1E2-4D58-97C5-8EA9AF7D2812'>
+        <File Id='fil_System_Net_Sockets_dll_217' Source='$(var.PublishDir)\System.Net.Sockets.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_WebClient_dll_218' Guid='3FBDEFE8-CBD0-46CE-B4AE-D1DEC019F524'>
+        <File Id='fil_System_Net_WebClient_dll_218' Source='$(var.PublishDir)\System.Net.WebClient.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_WebHeaderCollection_dll_219' Guid='C653D661-F7F8-43FA-8C6F-86CC1F9F94C0'>
+        <File Id='fil_System_Net_WebHeaderCollection_dll_219' Source='$(var.PublishDir)\System.Net.WebHeaderCollection.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_WebProxy_dll_220' Guid='D33A269C-0B8B-4AFE-AA5A-A48C3E0FE11F'>
+        <File Id='fil_System_Net_WebProxy_dll_220' Source='$(var.PublishDir)\System.Net.WebProxy.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_WebSockets_Client_dll_221' Guid='86E5CB89-3232-4D05-B5BB-DA872EAB27B5'>
+        <File Id='fil_System_Net_WebSockets_Client_dll_221' Source='$(var.PublishDir)\System.Net.WebSockets.Client.dll' />
+      </Component>
+      <Component Id='cmp_System_Net_WebSockets_dll_222' Guid='4A66FBD9-390E-41B0-91CC-60668FD6C9F9'>
+        <File Id='fil_System_Net_WebSockets_dll_222' Source='$(var.PublishDir)\System.Net.WebSockets.dll' />
+      </Component>
+      <Component Id='cmp_System_Numerics_dll_223' Guid='F887F706-A1D0-4044-A853-4319445076C7'>
+        <File Id='fil_System_Numerics_dll_223' Source='$(var.PublishDir)\System.Numerics.dll' />
+      </Component>
+      <Component Id='cmp_System_Numerics_Tensors_dll_224' Guid='7444C659-EB93-4112-8ADD-E25CD876B9C8'>
+        <File Id='fil_System_Numerics_Tensors_dll_224' Source='$(var.PublishDir)\System.Numerics.Tensors.dll' />
+      </Component>
+      <Component Id='cmp_System_Numerics_Vectors_dll_225' Guid='B96D9495-594D-4450-B0E7-1A94E89F9120'>
+        <File Id='fil_System_Numerics_Vectors_dll_225' Source='$(var.PublishDir)\System.Numerics.Vectors.dll' />
+      </Component>
+      <Component Id='cmp_System_ObjectModel_dll_226' Guid='FB37F6B0-3553-45E6-A6F0-D90DD51B08D0'>
+        <File Id='fil_System_ObjectModel_dll_226' Source='$(var.PublishDir)\System.ObjectModel.dll' />
+      </Component>
+      <Component Id='cmp_System_Printing_dll_227' Guid='809D66C9-275F-40B6-8933-006394DCB315'>
+        <File Id='fil_System_Printing_dll_227' Source='$(var.PublishDir)\System.Printing.dll' />
+      </Component>
+      <Component Id='cmp_System_Private_CoreLib_dll_228' Guid='28D61D13-C714-4200-A92F-F83C14ED63C6'>
+        <File Id='fil_System_Private_CoreLib_dll_228' Source='$(var.PublishDir)\System.Private.CoreLib.dll' />
+      </Component>
+      <Component Id='cmp_System_Private_DataContractSerialization_dll_229' Guid='B277DC9D-95DB-43DA-81AE-180770846A6D'>
+        <File Id='fil_System_Private_DataContractSerialization_dll_229' Source='$(var.PublishDir)\System.Private.DataContractSerialization.dll' />
+      </Component>
+      <Component Id='cmp_System_Private_Uri_dll_230' Guid='9D16BD6E-BA76-4673-B0AA-B9938ACFAD1D'>
+        <File Id='fil_System_Private_Uri_dll_230' Source='$(var.PublishDir)\System.Private.Uri.dll' />
+      </Component>
+      <Component Id='cmp_System_Private_Windows_Core_dll_231' Guid='7540FBD1-91D4-4EC9-B7FC-95322DAD6E22'>
+        <File Id='fil_System_Private_Windows_Core_dll_231' Source='$(var.PublishDir)\System.Private.Windows.Core.dll' />
+      </Component>
+      <Component Id='cmp_System_Private_Xml_dll_232' Guid='2700D3B6-BAB4-4663-B2C0-6B475DB93CEB'>
+        <File Id='fil_System_Private_Xml_dll_232' Source='$(var.PublishDir)\System.Private.Xml.dll' />
+      </Component>
+      <Component Id='cmp_System_Private_Xml_Linq_dll_233' Guid='9EE5C603-20AA-4A1C-8C79-81DBC3AFB089'>
+        <File Id='fil_System_Private_Xml_Linq_dll_233' Source='$(var.PublishDir)\System.Private.Xml.Linq.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_DispatchProxy_dll_234' Guid='6C14409C-2E65-4119-BABA-3DECB4D67F1F'>
+        <File Id='fil_System_Reflection_DispatchProxy_dll_234' Source='$(var.PublishDir)\System.Reflection.DispatchProxy.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_dll_235' Guid='DE565C54-8777-4341-BE47-E9B8B24C52CE'>
+        <File Id='fil_System_Reflection_dll_235' Source='$(var.PublishDir)\System.Reflection.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_Emit_dll_236' Guid='3F3C4A32-B9FB-432E-9CBE-70DC29540A3A'>
+        <File Id='fil_System_Reflection_Emit_dll_236' Source='$(var.PublishDir)\System.Reflection.Emit.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_Emit_ILGeneration_dll_237' Guid='E5CF7F41-373E-4904-AD6C-76C324681D8B'>
+        <File Id='fil_System_Reflection_Emit_ILGeneration_dll_237' Source='$(var.PublishDir)\System.Reflection.Emit.ILGeneration.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_Emit_Lightweight_dll_238' Guid='E0373449-9A3A-434C-8B07-AC3FC002F115'>
+        <File Id='fil_System_Reflection_Emit_Lightweight_dll_238' Source='$(var.PublishDir)\System.Reflection.Emit.Lightweight.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_Extensions_dll_239' Guid='0D6CEC20-F277-4623-9BAA-487462728E75'>
+        <File Id='fil_System_Reflection_Extensions_dll_239' Source='$(var.PublishDir)\System.Reflection.Extensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_Metadata_dll_240' Guid='9A3485AB-1A31-4340-9D9E-CBF2C16F49FD'>
+        <File Id='fil_System_Reflection_Metadata_dll_240' Source='$(var.PublishDir)\System.Reflection.Metadata.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_Primitives_dll_241' Guid='A53B2D88-828A-42F4-B249-4BAA23DE8227'>
+        <File Id='fil_System_Reflection_Primitives_dll_241' Source='$(var.PublishDir)\System.Reflection.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_Reflection_TypeExtensions_dll_242' Guid='64B6D7D5-2F3E-47D2-9008-A345454DFED6'>
+        <File Id='fil_System_Reflection_TypeExtensions_dll_242' Source='$(var.PublishDir)\System.Reflection.TypeExtensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Resources_Extensions_dll_243' Guid='AD596DCB-10CC-4607-8392-E83331BE3B5C'>
+        <File Id='fil_System_Resources_Extensions_dll_243' Source='$(var.PublishDir)\System.Resources.Extensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Resources_Reader_dll_244' Guid='4D9E7814-21E4-4964-BC06-C3716C00ED4D'>
+        <File Id='fil_System_Resources_Reader_dll_244' Source='$(var.PublishDir)\System.Resources.Reader.dll' />
+      </Component>
+      <Component Id='cmp_System_Resources_ResourceManager_dll_245' Guid='31B62EC6-764B-4931-881D-C5797B29F42E'>
+        <File Id='fil_System_Resources_ResourceManager_dll_245' Source='$(var.PublishDir)\System.Resources.ResourceManager.dll' />
+      </Component>
+      <Component Id='cmp_System_Resources_Writer_dll_246' Guid='ADCF7300-95A7-417D-A4BB-F317E60DD752'>
+        <File Id='fil_System_Resources_Writer_dll_246' Source='$(var.PublishDir)\System.Resources.Writer.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_CompilerServices_Unsafe_dll_247' Guid='1DFAAD72-5620-4C80-8432-1ED3222EA04D'>
+        <File Id='fil_System_Runtime_CompilerServices_Unsafe_dll_247' Source='$(var.PublishDir)\System.Runtime.CompilerServices.Unsafe.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_CompilerServices_VisualC_dll_248' Guid='7E195084-9551-4382-A151-24890167ECD5'>
+        <File Id='fil_System_Runtime_CompilerServices_VisualC_dll_248' Source='$(var.PublishDir)\System.Runtime.CompilerServices.VisualC.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_dll_249' Guid='6653833E-57FE-40C4-BCDD-C43988DBB1BD'>
+        <File Id='fil_System_Runtime_dll_249' Source='$(var.PublishDir)\System.Runtime.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Extensions_dll_250' Guid='E23279A6-BFBF-47C5-A25E-2B83F5BDDB62'>
+        <File Id='fil_System_Runtime_Extensions_dll_250' Source='$(var.PublishDir)\System.Runtime.Extensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Handles_dll_251' Guid='04ADB40E-7E3C-4E07-B486-FD105DBB6DCC'>
+        <File Id='fil_System_Runtime_Handles_dll_251' Source='$(var.PublishDir)\System.Runtime.Handles.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_InteropServices_dll_252' Guid='4020A504-F0CD-48D9-B4BA-51EDD9615E8D'>
+        <File Id='fil_System_Runtime_InteropServices_dll_252' Source='$(var.PublishDir)\System.Runtime.InteropServices.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_InteropServices_JavaScript_dll_253' Guid='37F51205-06C2-4361-9AE8-DB78E8B8574C'>
+        <File Id='fil_System_Runtime_InteropServices_JavaScript_dll_253' Source='$(var.PublishDir)\System.Runtime.InteropServices.JavaScript.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_InteropServices_RuntimeInformation_dll_254' Guid='29B9FAC9-BE6C-466F-A5D5-45320CE04E1B'>
+        <File Id='fil_System_Runtime_InteropServices_RuntimeInformation_dll_254' Source='$(var.PublishDir)\System.Runtime.InteropServices.RuntimeInformation.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Intrinsics_dll_255' Guid='071E07D4-A6E0-4B1D-8D1F-8217002451BC'>
+        <File Id='fil_System_Runtime_Intrinsics_dll_255' Source='$(var.PublishDir)\System.Runtime.Intrinsics.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Loader_dll_256' Guid='D72E3EC0-CE4F-4D78-A897-73A72C1AF691'>
+        <File Id='fil_System_Runtime_Loader_dll_256' Source='$(var.PublishDir)\System.Runtime.Loader.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Numerics_dll_257' Guid='A3DF0D16-9F5C-4709-9BCC-DE7DC0C97C21'>
+        <File Id='fil_System_Runtime_Numerics_dll_257' Source='$(var.PublishDir)\System.Runtime.Numerics.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Serialization_dll_258' Guid='C3B199C8-ADA3-4DE6-B398-6C3C064191FC'>
+        <File Id='fil_System_Runtime_Serialization_dll_258' Source='$(var.PublishDir)\System.Runtime.Serialization.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Serialization_Formatters_dll_259' Guid='2CA7FFC0-3C5E-48FE-8033-7D1AA824C8E4'>
+        <File Id='fil_System_Runtime_Serialization_Formatters_dll_259' Source='$(var.PublishDir)\System.Runtime.Serialization.Formatters.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Serialization_Json_dll_260' Guid='633D2E90-3A8A-4152-8C21-8CCC403383F2'>
+        <File Id='fil_System_Runtime_Serialization_Json_dll_260' Source='$(var.PublishDir)\System.Runtime.Serialization.Json.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Serialization_Primitives_dll_261' Guid='FB9FB340-AF16-4DC0-AB9C-E1EC881763ED'>
+        <File Id='fil_System_Runtime_Serialization_Primitives_dll_261' Source='$(var.PublishDir)\System.Runtime.Serialization.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_Runtime_Serialization_Xml_dll_262' Guid='BFA99C03-2C63-4151-B5B9-B835BCD7907B'>
+        <File Id='fil_System_Runtime_Serialization_Xml_dll_262' Source='$(var.PublishDir)\System.Runtime.Serialization.Xml.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_AccessControl_dll_263' Guid='59A6EA4F-C220-4FD3-A3DE-CC8B7B8788F1'>
+        <File Id='fil_System_Security_AccessControl_dll_263' Source='$(var.PublishDir)\System.Security.AccessControl.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Claims_dll_264' Guid='0DF23F10-4889-4058-A9D0-047EF65D226D'>
+        <File Id='fil_System_Security_Claims_dll_264' Source='$(var.PublishDir)\System.Security.Claims.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_Algorithms_dll_265' Guid='F944A4B3-9AB2-415E-AC78-70B662FC9EA8'>
+        <File Id='fil_System_Security_Cryptography_Algorithms_dll_265' Source='$(var.PublishDir)\System.Security.Cryptography.Algorithms.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_Cng_dll_266' Guid='CA5AF401-4F9C-41A4-A1B0-BEA7FA9105B1'>
+        <File Id='fil_System_Security_Cryptography_Cng_dll_266' Source='$(var.PublishDir)\System.Security.Cryptography.Cng.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_Csp_dll_267' Guid='D9FBC102-E966-4F6A-81E7-31E09B5D81A2'>
+        <File Id='fil_System_Security_Cryptography_Csp_dll_267' Source='$(var.PublishDir)\System.Security.Cryptography.Csp.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_dll_268' Guid='70145151-1E88-4652-B081-776466F63434'>
+        <File Id='fil_System_Security_Cryptography_dll_268' Source='$(var.PublishDir)\System.Security.Cryptography.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_Encoding_dll_269' Guid='0F2BFEA8-4EF2-4172-AF3D-736115460054'>
+        <File Id='fil_System_Security_Cryptography_Encoding_dll_269' Source='$(var.PublishDir)\System.Security.Cryptography.Encoding.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_OpenSsl_dll_270' Guid='68D22093-B6C6-4919-B6E0-BE0EE23985A8'>
+        <File Id='fil_System_Security_Cryptography_OpenSsl_dll_270' Source='$(var.PublishDir)\System.Security.Cryptography.OpenSsl.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_Pkcs_dll_271' Guid='11414E0B-9308-42E3-B6C7-1A5FB3FB6FF1'>
+        <File Id='fil_System_Security_Cryptography_Pkcs_dll_271' Source='$(var.PublishDir)\System.Security.Cryptography.Pkcs.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_Primitives_dll_272' Guid='797993FC-6A23-4A60-A04A-73A150BA29CA'>
+        <File Id='fil_System_Security_Cryptography_Primitives_dll_272' Source='$(var.PublishDir)\System.Security.Cryptography.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_ProtectedData_dll_273' Guid='0F70BAC6-D1A8-47ED-BDFD-F45C08AEDE70'>
+        <File Id='fil_System_Security_Cryptography_ProtectedData_dll_273' Source='$(var.PublishDir)\System.Security.Cryptography.ProtectedData.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_X509Certificates_dll_274' Guid='C7830C2A-D2A5-48A1-9D46-34115A9AE22F'>
+        <File Id='fil_System_Security_Cryptography_X509Certificates_dll_274' Source='$(var.PublishDir)\System.Security.Cryptography.X509Certificates.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Cryptography_Xml_dll_275' Guid='023EEFC7-6C5B-4FF5-A4DC-269F1223EE01'>
+        <File Id='fil_System_Security_Cryptography_Xml_dll_275' Source='$(var.PublishDir)\System.Security.Cryptography.Xml.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_dll_276' Guid='1E19A992-A3A6-458A-BC0B-8D0A069DB7C3'>
+        <File Id='fil_System_Security_dll_276' Source='$(var.PublishDir)\System.Security.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Permissions_dll_277' Guid='46EA4F59-C615-443B-B664-7AC5F0FFD051'>
+        <File Id='fil_System_Security_Permissions_dll_277' Source='$(var.PublishDir)\System.Security.Permissions.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Principal_dll_278' Guid='06F100F3-A626-416C-9DCE-D06AE65D853D'>
+        <File Id='fil_System_Security_Principal_dll_278' Source='$(var.PublishDir)\System.Security.Principal.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_Principal_Windows_dll_279' Guid='F3298A5B-01F1-41E1-AE1E-9477144C2816'>
+        <File Id='fil_System_Security_Principal_Windows_dll_279' Source='$(var.PublishDir)\System.Security.Principal.Windows.dll' />
+      </Component>
+      <Component Id='cmp_System_Security_SecureString_dll_280' Guid='DEA61D49-9749-4C3F-A96F-24572BE72895'>
+        <File Id='fil_System_Security_SecureString_dll_280' Source='$(var.PublishDir)\System.Security.SecureString.dll' />
+      </Component>
+      <Component Id='cmp_System_ServiceModel_Web_dll_281' Guid='A22C123C-73F0-4EC9-94F4-525DE993F544'>
+        <File Id='fil_System_ServiceModel_Web_dll_281' Source='$(var.PublishDir)\System.ServiceModel.Web.dll' />
+      </Component>
+      <Component Id='cmp_System_ServiceProcess_dll_282' Guid='3D9DAD1E-A0BD-4ED3-BBD2-A904B95717F7'>
+        <File Id='fil_System_ServiceProcess_dll_282' Source='$(var.PublishDir)\System.ServiceProcess.dll' />
+      </Component>
+      <Component Id='cmp_System_ServiceProcess_ServiceController_dll_283' Guid='E79B3D17-BF96-4656-A163-809C9F542B8C'>
+        <File Id='fil_System_ServiceProcess_ServiceController_dll_283' Source='$(var.PublishDir)\System.ServiceProcess.ServiceController.dll' />
+      </Component>
+      <Component Id='cmp_System_Speech_dll_284' Guid='F6F5ED7F-FA64-4696-8DF1-A3B736BD0E12'>
+        <File Id='fil_System_Speech_dll_284' Source='$(var.PublishDir)\System.Speech.dll' />
+      </Component>
+      <Component Id='cmp_System_Text_Encoding_CodePages_dll_285' Guid='C19C1A1B-EB6D-433A-9F26-A8F90C70FC22'>
+        <File Id='fil_System_Text_Encoding_CodePages_dll_285' Source='$(var.PublishDir)\System.Text.Encoding.CodePages.dll' />
+      </Component>
+      <Component Id='cmp_System_Text_Encoding_dll_286' Guid='C9361D70-827D-48BF-8805-F3E03000FEBC'>
+        <File Id='fil_System_Text_Encoding_dll_286' Source='$(var.PublishDir)\System.Text.Encoding.dll' />
+      </Component>
+      <Component Id='cmp_System_Text_Encoding_Extensions_dll_287' Guid='B72306EA-3FE8-4083-AAAF-5DE45C4B5CA5'>
+        <File Id='fil_System_Text_Encoding_Extensions_dll_287' Source='$(var.PublishDir)\System.Text.Encoding.Extensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Text_Encodings_Web_dll_288' Guid='84390348-D849-4128-BDA1-E67C1593C82E'>
+        <File Id='fil_System_Text_Encodings_Web_dll_288' Source='$(var.PublishDir)\System.Text.Encodings.Web.dll' />
+      </Component>
+      <Component Id='cmp_System_Text_Json_dll_289' Guid='B0907E2F-E9AC-4E53-BE74-18D9D4BA2F89'>
+        <File Id='fil_System_Text_Json_dll_289' Source='$(var.PublishDir)\System.Text.Json.dll' />
+      </Component>
+      <Component Id='cmp_System_Text_RegularExpressions_dll_290' Guid='AAC0EBE0-DED4-4F82-9055-360350FE00E1'>
+        <File Id='fil_System_Text_RegularExpressions_dll_290' Source='$(var.PublishDir)\System.Text.RegularExpressions.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_AccessControl_dll_291' Guid='89AA55F0-E881-4AB6-9F1D-4AD9F0C53C82'>
+        <File Id='fil_System_Threading_AccessControl_dll_291' Source='$(var.PublishDir)\System.Threading.AccessControl.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Channels_dll_292' Guid='35588C56-7229-4AB5-9837-3A81D54BE3CF'>
+        <File Id='fil_System_Threading_Channels_dll_292' Source='$(var.PublishDir)\System.Threading.Channels.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_dll_293' Guid='678750B7-1E40-4EE1-8A3D-B6F959E5343E'>
+        <File Id='fil_System_Threading_dll_293' Source='$(var.PublishDir)\System.Threading.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Overlapped_dll_294' Guid='7DED5E72-0B62-4263-853A-70F2DBD32481'>
+        <File Id='fil_System_Threading_Overlapped_dll_294' Source='$(var.PublishDir)\System.Threading.Overlapped.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Tasks_Dataflow_dll_295' Guid='EB97EE83-F744-412E-AB78-DA2AAD56D204'>
+        <File Id='fil_System_Threading_Tasks_Dataflow_dll_295' Source='$(var.PublishDir)\System.Threading.Tasks.Dataflow.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Tasks_dll_296' Guid='93BF007F-E7A5-4873-9F1E-B9C6559FE177'>
+        <File Id='fil_System_Threading_Tasks_dll_296' Source='$(var.PublishDir)\System.Threading.Tasks.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Tasks_Extensions_dll_297' Guid='1109C369-520C-4C47-AF8B-8532EDA4D3E9'>
+        <File Id='fil_System_Threading_Tasks_Extensions_dll_297' Source='$(var.PublishDir)\System.Threading.Tasks.Extensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Tasks_Parallel_dll_298' Guid='1DE6592C-EF6C-4073-93CC-CCBB9D3094FF'>
+        <File Id='fil_System_Threading_Tasks_Parallel_dll_298' Source='$(var.PublishDir)\System.Threading.Tasks.Parallel.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Thread_dll_299' Guid='D7724909-FCA6-45E8-928A-2441489DC2F5'>
+        <File Id='fil_System_Threading_Thread_dll_299' Source='$(var.PublishDir)\System.Threading.Thread.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_ThreadPool_dll_300' Guid='BE628DBC-9161-4CF1-AE30-E25FCFDC23B8'>
+        <File Id='fil_System_Threading_ThreadPool_dll_300' Source='$(var.PublishDir)\System.Threading.ThreadPool.dll' />
+      </Component>
+      <Component Id='cmp_System_Threading_Timer_dll_301' Guid='DDE1FDD5-A8E1-4C19-93FA-0A9E69382648'>
+        <File Id='fil_System_Threading_Timer_dll_301' Source='$(var.PublishDir)\System.Threading.Timer.dll' />
+      </Component>
+      <Component Id='cmp_System_Transactions_dll_302' Guid='5D55CEA6-DF0D-4A6C-B1FA-E73580D89953'>
+        <File Id='fil_System_Transactions_dll_302' Source='$(var.PublishDir)\System.Transactions.dll' />
+      </Component>
+      <Component Id='cmp_System_Transactions_Local_dll_303' Guid='D6536208-311A-4EDD-98A5-B9A933151CE9'>
+        <File Id='fil_System_Transactions_Local_dll_303' Source='$(var.PublishDir)\System.Transactions.Local.dll' />
+      </Component>
+      <Component Id='cmp_System_ValueTuple_dll_304' Guid='E0DD78F5-F652-410E-8EEA-EB7D656A6032'>
+        <File Id='fil_System_ValueTuple_dll_304' Source='$(var.PublishDir)\System.ValueTuple.dll' />
+      </Component>
+      <Component Id='cmp_System_Web_dll_305' Guid='824C91EB-6A4B-4D16-90E9-6CBE8624667E'>
+        <File Id='fil_System_Web_dll_305' Source='$(var.PublishDir)\System.Web.dll' />
+      </Component>
+      <Component Id='cmp_System_Web_HttpUtility_dll_306' Guid='AB0EFF8A-1E04-45A2-9FE0-4E582493EBC8'>
+        <File Id='fil_System_Web_HttpUtility_dll_306' Source='$(var.PublishDir)\System.Web.HttpUtility.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Controls_Ribbon_dll_307' Guid='520ABFC5-4DA1-4AE9-8C74-14F6193ECF8B'>
+        <File Id='fil_System_Windows_Controls_Ribbon_dll_307' Source='$(var.PublishDir)\System.Windows.Controls.Ribbon.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_dll_308' Guid='3AE7A9B3-3AB9-4156-8523-4572F5BE282C'>
+        <File Id='fil_System_Windows_dll_308' Source='$(var.PublishDir)\System.Windows.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Extensions_dll_309' Guid='2DC1CECB-3A1D-4DB9-846E-991D10124F62'>
+        <File Id='fil_System_Windows_Extensions_dll_309' Source='$(var.PublishDir)\System.Windows.Extensions.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Forms_Design_dll_310' Guid='A96BB17B-9FDE-4BB0-AAE1-9C2356DD239D'>
+        <File Id='fil_System_Windows_Forms_Design_dll_310' Source='$(var.PublishDir)\System.Windows.Forms.Design.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Forms_Design_Editors_dll_311' Guid='AAB51B27-0819-4DDA-9114-CBF820B15811'>
+        <File Id='fil_System_Windows_Forms_Design_Editors_dll_311' Source='$(var.PublishDir)\System.Windows.Forms.Design.Editors.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Forms_dll_312' Guid='A8AD87A6-2BCF-48EA-9A07-7AC6B12DB9BE'>
+        <File Id='fil_System_Windows_Forms_dll_312' Source='$(var.PublishDir)\System.Windows.Forms.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Forms_Primitives_dll_313' Guid='9EE0489B-DFD4-44B3-B2E2-1BCCF469CF16'>
+        <File Id='fil_System_Windows_Forms_Primitives_dll_313' Source='$(var.PublishDir)\System.Windows.Forms.Primitives.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Input_Manipulations_dll_314' Guid='DC1C6896-2CDA-44B1-8767-92B24191A126'>
+        <File Id='fil_System_Windows_Input_Manipulations_dll_314' Source='$(var.PublishDir)\System.Windows.Input.Manipulations.dll' />
+      </Component>
+      <Component Id='cmp_System_Windows_Presentation_dll_315' Guid='EBABF0C4-B65A-47A4-8010-C66FC9D43FB0'>
+        <File Id='fil_System_Windows_Presentation_dll_315' Source='$(var.PublishDir)\System.Windows.Presentation.dll' />
+      </Component>
+      <Component Id='cmp_System_Xaml_dll_316' Guid='BE44E4B9-B5A2-4058-8499-F896FE2AEB98'>
+        <File Id='fil_System_Xaml_dll_316' Source='$(var.PublishDir)\System.Xaml.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_dll_317' Guid='3A5E5D25-3D69-49FD-BAB6-1D1BBDDCC18F'>
+        <File Id='fil_System_Xml_dll_317' Source='$(var.PublishDir)\System.Xml.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_Linq_dll_318' Guid='A65F6798-552B-4F9B-8782-B476442F2EE8'>
+        <File Id='fil_System_Xml_Linq_dll_318' Source='$(var.PublishDir)\System.Xml.Linq.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_ReaderWriter_dll_319' Guid='7E91CDA5-34EB-4F04-B6F6-5E1A907FDC6E'>
+        <File Id='fil_System_Xml_ReaderWriter_dll_319' Source='$(var.PublishDir)\System.Xml.ReaderWriter.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_Serialization_dll_320' Guid='5506FB55-3D11-4890-A75A-94D691A4CDFC'>
+        <File Id='fil_System_Xml_Serialization_dll_320' Source='$(var.PublishDir)\System.Xml.Serialization.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_XDocument_dll_321' Guid='53980CC2-D840-4E37-B20C-F6E2D1B0E385'>
+        <File Id='fil_System_Xml_XDocument_dll_321' Source='$(var.PublishDir)\System.Xml.XDocument.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_XmlDocument_dll_322' Guid='32E01AAA-9B75-4ADF-B9C8-14C9BC118652'>
+        <File Id='fil_System_Xml_XmlDocument_dll_322' Source='$(var.PublishDir)\System.Xml.XmlDocument.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_XmlSerializer_dll_323' Guid='EE0F3880-3246-441D-9C6D-22FEEA792A88'>
+        <File Id='fil_System_Xml_XmlSerializer_dll_323' Source='$(var.PublishDir)\System.Xml.XmlSerializer.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_XPath_dll_324' Guid='C23DFA84-A7CE-49D8-AD5D-B2E585F3D2DC'>
+        <File Id='fil_System_Xml_XPath_dll_324' Source='$(var.PublishDir)\System.Xml.XPath.dll' />
+      </Component>
+      <Component Id='cmp_System_Xml_XPath_XDocument_dll_325' Guid='70ECD9AD-9763-4B42-8A47-B1EE789BF5A2'>
+        <File Id='fil_System_Xml_XPath_XDocument_dll_325' Source='$(var.PublishDir)\System.Xml.XPath.XDocument.dll' />
+      </Component>
+      <Component Id='cmp_UIAutomationClient_dll_326' Guid='6FB729CE-5056-4AED-9541-4265FC905837'>
+        <File Id='fil_UIAutomationClient_dll_326' Source='$(var.PublishDir)\UIAutomationClient.dll' />
+      </Component>
+      <Component Id='cmp_UIAutomationClientSideProviders_dll_327' Guid='65C4DC60-E980-491D-B10E-F2AADE1662D0'>
+        <File Id='fil_UIAutomationClientSideProviders_dll_327' Source='$(var.PublishDir)\UIAutomationClientSideProviders.dll' />
+      </Component>
+      <Component Id='cmp_UIAutomationProvider_dll_328' Guid='E0AC16D1-F644-461D-9163-FFF6C2C9A736'>
+        <File Id='fil_UIAutomationProvider_dll_328' Source='$(var.PublishDir)\UIAutomationProvider.dll' />
+      </Component>
+      <Component Id='cmp_UIAutomationTypes_dll_329' Guid='520E5319-BFF4-4DB7-8CC2-86D0A006632F'>
+        <File Id='fil_UIAutomationTypes_dll_329' Source='$(var.PublishDir)\UIAutomationTypes.dll' />
+      </Component>
+      <Component Id='cmp_vcruntime140_cor3_dll_330' Guid='68F40371-70F7-4C86-91EA-0EA20F41A34B'>
+        <File Id='fil_vcruntime140_cor3_dll_330' Source='$(var.PublishDir)\vcruntime140_cor3.dll' />
+      </Component>
+      <Component Id='cmp_WindowsBase_dll_331' Guid='32CF21E4-6332-4463-9F48-A1EA4B47EA45'>
+        <File Id='fil_WindowsBase_dll_331' Source='$(var.PublishDir)\WindowsBase.dll' />
+      </Component>
+      <Component Id='cmp_WindowsFormsIntegration_dll_332' Guid='642ECCA0-6F05-40D0-AB40-CB6F46410C18'>
+        <File Id='fil_WindowsFormsIntegration_dll_332' Source='$(var.PublishDir)\WindowsFormsIntegration.dll' />
+      </Component>
+      <Component Id='cmp_wpfgfx_cor3_dll_333' Guid='E3C3DD2D-6ED6-4C7D-9CEA-32C33FBA7D90'>
+        <File Id='fil_wpfgfx_cor3_dll_333' Source='$(var.PublishDir)\wpfgfx_cor3.dll' />
+      </Component>
+      <Component Id='cmp_assets_app_icon_ico_334' Guid='196F502F-6DD2-44BA-BAD4-B2932BFB4954'>
+        <File Id='fil_assets_app_icon_ico_334' Source='$(var.PublishDir)\assets\app-icon.ico' />
+      </Component>
+      <Component Id='cmp_cs_Microsoft_VisualBasic_Forms_resources_dll_335' Guid='5D69AF4D-1671-48E0-A878-1DD8760C5431'>
+        <File Id='fil_cs_Microsoft_VisualBasic_Forms_resources_dll_335' Source='$(var.PublishDir)\cs\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_PresentationCore_resources_dll_336' Guid='B320CD00-4E7D-458B-BCC5-8AB8EAEB6BC6'>
+        <File Id='fil_cs_PresentationCore_resources_dll_336' Source='$(var.PublishDir)\cs\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_PresentationFramework_resources_dll_337' Guid='0AF476F6-771D-4C9F-BC27-B0F12630B9F8'>
+        <File Id='fil_cs_PresentationFramework_resources_dll_337' Source='$(var.PublishDir)\cs\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_PresentationUI_resources_dll_338' Guid='B37A0E9C-FE8F-474D-9373-6FB446C21FD0'>
+        <File Id='fil_cs_PresentationUI_resources_dll_338' Source='$(var.PublishDir)\cs\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_ReachFramework_resources_dll_339' Guid='B802BB5F-766C-46D0-8BAA-5826704D8728'>
+        <File Id='fil_cs_ReachFramework_resources_dll_339' Source='$(var.PublishDir)\cs\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_System_Windows_Controls_Ribbon_resources_dll_340' Guid='DA89F1AA-BA0E-4D5B-896B-9E091FB335FC'>
+        <File Id='fil_cs_System_Windows_Controls_Ribbon_resources_dll_340' Source='$(var.PublishDir)\cs\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_System_Windows_Forms_Design_resources_dll_341' Guid='1DD8776A-8F04-48A7-829B-5EC0B52D8B50'>
+        <File Id='fil_cs_System_Windows_Forms_Design_resources_dll_341' Source='$(var.PublishDir)\cs\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_System_Windows_Forms_Primitives_resources_dll_342' Guid='A143F757-3A07-4A23-A6EF-3F766625603A'>
+        <File Id='fil_cs_System_Windows_Forms_Primitives_resources_dll_342' Source='$(var.PublishDir)\cs\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_System_Windows_Forms_resources_dll_343' Guid='91B0A394-4DFA-44D5-9ED9-9657D8D80B4E'>
+        <File Id='fil_cs_System_Windows_Forms_resources_dll_343' Source='$(var.PublishDir)\cs\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_System_Windows_Input_Manipulations_resources_dll_344' Guid='024D75CB-7F1A-46B4-8A57-9DB1F7F3FEF9'>
+        <File Id='fil_cs_System_Windows_Input_Manipulations_resources_dll_344' Source='$(var.PublishDir)\cs\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_System_Xaml_resources_dll_345' Guid='A0819C1D-BB1A-4AC2-B0CC-B450F98D04D8'>
+        <File Id='fil_cs_System_Xaml_resources_dll_345' Source='$(var.PublishDir)\cs\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_UIAutomationClient_resources_dll_346' Guid='F65D3570-0154-4861-99AC-4B246A54FE38'>
+        <File Id='fil_cs_UIAutomationClient_resources_dll_346' Source='$(var.PublishDir)\cs\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_UIAutomationClientSideProviders_resources_dll_347' Guid='4B87C3D0-80D4-43C5-BC17-2E506A38F410'>
+        <File Id='fil_cs_UIAutomationClientSideProviders_resources_dll_347' Source='$(var.PublishDir)\cs\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_UIAutomationProvider_resources_dll_348' Guid='1C5B957D-EDE5-4419-A4C3-E12653A4FF03'>
+        <File Id='fil_cs_UIAutomationProvider_resources_dll_348' Source='$(var.PublishDir)\cs\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_UIAutomationTypes_resources_dll_349' Guid='1170E3AF-8E95-4D2E-A050-7E0F684C941E'>
+        <File Id='fil_cs_UIAutomationTypes_resources_dll_349' Source='$(var.PublishDir)\cs\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_WindowsBase_resources_dll_350' Guid='39D62088-3F62-4062-AA96-4A797DE49EA7'>
+        <File Id='fil_cs_WindowsBase_resources_dll_350' Source='$(var.PublishDir)\cs\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_cs_WindowsFormsIntegration_resources_dll_351' Guid='58402835-CC1D-499F-945C-894FDA045426'>
+        <File Id='fil_cs_WindowsFormsIntegration_resources_dll_351' Source='$(var.PublishDir)\cs\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_Microsoft_VisualBasic_Forms_resources_dll_352' Guid='2A57382C-F520-40A2-AE9A-E2BA6BEB75DC'>
+        <File Id='fil_de_Microsoft_VisualBasic_Forms_resources_dll_352' Source='$(var.PublishDir)\de\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_PresentationCore_resources_dll_353' Guid='A61D2A26-3BCA-4AA2-8C2F-308B6772DB92'>
+        <File Id='fil_de_PresentationCore_resources_dll_353' Source='$(var.PublishDir)\de\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_PresentationFramework_resources_dll_354' Guid='D793E63C-6EC2-45B3-8EC7-C8313F59DBC9'>
+        <File Id='fil_de_PresentationFramework_resources_dll_354' Source='$(var.PublishDir)\de\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_PresentationUI_resources_dll_355' Guid='0CDCB3FF-C060-4257-AE1C-F1A674B9533D'>
+        <File Id='fil_de_PresentationUI_resources_dll_355' Source='$(var.PublishDir)\de\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_ReachFramework_resources_dll_356' Guid='45C045E3-3ADF-4B78-82CE-78DECC65B19A'>
+        <File Id='fil_de_ReachFramework_resources_dll_356' Source='$(var.PublishDir)\de\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_System_Windows_Controls_Ribbon_resources_dll_357' Guid='ED9E5729-3F07-42ED-9BF3-6044829B6108'>
+        <File Id='fil_de_System_Windows_Controls_Ribbon_resources_dll_357' Source='$(var.PublishDir)\de\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_System_Windows_Forms_Design_resources_dll_358' Guid='8D14ABEF-9CA2-48B1-8A4C-1014C75672D1'>
+        <File Id='fil_de_System_Windows_Forms_Design_resources_dll_358' Source='$(var.PublishDir)\de\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_System_Windows_Forms_Primitives_resources_dll_359' Guid='380F5DAF-9490-4B96-8708-6C17E423489B'>
+        <File Id='fil_de_System_Windows_Forms_Primitives_resources_dll_359' Source='$(var.PublishDir)\de\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_System_Windows_Forms_resources_dll_360' Guid='1F7D739E-6045-4CE3-B847-61F600C58A94'>
+        <File Id='fil_de_System_Windows_Forms_resources_dll_360' Source='$(var.PublishDir)\de\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_System_Windows_Input_Manipulations_resources_dll_361' Guid='8E069F01-3AA3-4DC7-8E40-AD5CFE7B7C3C'>
+        <File Id='fil_de_System_Windows_Input_Manipulations_resources_dll_361' Source='$(var.PublishDir)\de\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_System_Xaml_resources_dll_362' Guid='3D5E2B46-03C5-43E1-AD89-31D3FEF68964'>
+        <File Id='fil_de_System_Xaml_resources_dll_362' Source='$(var.PublishDir)\de\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_UIAutomationClient_resources_dll_363' Guid='48CD7714-B2BB-4529-BEAC-F81C242C5262'>
+        <File Id='fil_de_UIAutomationClient_resources_dll_363' Source='$(var.PublishDir)\de\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_UIAutomationClientSideProviders_resources_dll_364' Guid='29A9D9BF-A0A3-4A28-8AD8-C5024029573B'>
+        <File Id='fil_de_UIAutomationClientSideProviders_resources_dll_364' Source='$(var.PublishDir)\de\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_UIAutomationProvider_resources_dll_365' Guid='A468D564-C129-4EBA-8E4C-7211A3B8FD9F'>
+        <File Id='fil_de_UIAutomationProvider_resources_dll_365' Source='$(var.PublishDir)\de\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_UIAutomationTypes_resources_dll_366' Guid='5C9D0FC6-795B-469E-96F3-254B2CE53C14'>
+        <File Id='fil_de_UIAutomationTypes_resources_dll_366' Source='$(var.PublishDir)\de\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_WindowsBase_resources_dll_367' Guid='981B3853-4521-4708-BB09-2B79E7D1A7BF'>
+        <File Id='fil_de_WindowsBase_resources_dll_367' Source='$(var.PublishDir)\de\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_de_WindowsFormsIntegration_resources_dll_368' Guid='F365FCDA-6EAF-4526-A2FA-F5BA6FD07442'>
+        <File Id='fil_de_WindowsFormsIntegration_resources_dll_368' Source='$(var.PublishDir)\de\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_Microsoft_VisualBasic_Forms_resources_dll_369' Guid='7DC8E051-4427-49AC-8020-3C53B76087C6'>
+        <File Id='fil_es_Microsoft_VisualBasic_Forms_resources_dll_369' Source='$(var.PublishDir)\es\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_PresentationCore_resources_dll_370' Guid='A2C4EFA6-6AEF-49A7-A6A0-5B246C03BC4B'>
+        <File Id='fil_es_PresentationCore_resources_dll_370' Source='$(var.PublishDir)\es\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_PresentationFramework_resources_dll_371' Guid='480BBB8A-2F81-4EC2-B24F-DD31CA067280'>
+        <File Id='fil_es_PresentationFramework_resources_dll_371' Source='$(var.PublishDir)\es\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_PresentationUI_resources_dll_372' Guid='545B52A3-BBC5-4E11-BE87-B0C52A18A993'>
+        <File Id='fil_es_PresentationUI_resources_dll_372' Source='$(var.PublishDir)\es\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_ReachFramework_resources_dll_373' Guid='1A4E23FA-9406-4403-9D5C-45E96C7D6720'>
+        <File Id='fil_es_ReachFramework_resources_dll_373' Source='$(var.PublishDir)\es\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_System_Windows_Controls_Ribbon_resources_dll_374' Guid='33890C7C-DAD2-4E55-9E9E-0AAC4D0167CA'>
+        <File Id='fil_es_System_Windows_Controls_Ribbon_resources_dll_374' Source='$(var.PublishDir)\es\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_System_Windows_Forms_Design_resources_dll_375' Guid='B0A69CE8-B743-4B77-B126-4695FE2D71EA'>
+        <File Id='fil_es_System_Windows_Forms_Design_resources_dll_375' Source='$(var.PublishDir)\es\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_System_Windows_Forms_Primitives_resources_dll_376' Guid='18A78739-1F96-4E20-8B20-6B59C81045C3'>
+        <File Id='fil_es_System_Windows_Forms_Primitives_resources_dll_376' Source='$(var.PublishDir)\es\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_System_Windows_Forms_resources_dll_377' Guid='AA912423-2C55-4BEB-B9A0-27EBC0344223'>
+        <File Id='fil_es_System_Windows_Forms_resources_dll_377' Source='$(var.PublishDir)\es\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_System_Windows_Input_Manipulations_resources_dll_378' Guid='5BE0749F-F55B-4A3B-ABF0-22810DD18A56'>
+        <File Id='fil_es_System_Windows_Input_Manipulations_resources_dll_378' Source='$(var.PublishDir)\es\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_System_Xaml_resources_dll_379' Guid='66D47CA2-F8D8-467F-86BD-71B982FE7BB1'>
+        <File Id='fil_es_System_Xaml_resources_dll_379' Source='$(var.PublishDir)\es\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_UIAutomationClient_resources_dll_380' Guid='FFD96E12-EC25-4650-9C29-7EECAAECFBD6'>
+        <File Id='fil_es_UIAutomationClient_resources_dll_380' Source='$(var.PublishDir)\es\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_UIAutomationClientSideProviders_resources_dll_381' Guid='EDCDBC68-1A1B-48D2-9227-CE023E73A004'>
+        <File Id='fil_es_UIAutomationClientSideProviders_resources_dll_381' Source='$(var.PublishDir)\es\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_UIAutomationProvider_resources_dll_382' Guid='B4609944-8950-48B4-866D-7D10B89D0B82'>
+        <File Id='fil_es_UIAutomationProvider_resources_dll_382' Source='$(var.PublishDir)\es\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_UIAutomationTypes_resources_dll_383' Guid='2A273916-070B-4A6E-ABCA-99882C1FA67E'>
+        <File Id='fil_es_UIAutomationTypes_resources_dll_383' Source='$(var.PublishDir)\es\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_WindowsBase_resources_dll_384' Guid='32509254-CFF5-4B2D-B372-6C49387208DF'>
+        <File Id='fil_es_WindowsBase_resources_dll_384' Source='$(var.PublishDir)\es\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_es_WindowsFormsIntegration_resources_dll_385' Guid='A257500A-2C4F-43BD-88CA-6526B01BB40C'>
+        <File Id='fil_es_WindowsFormsIntegration_resources_dll_385' Source='$(var.PublishDir)\es\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_Microsoft_VisualBasic_Forms_resources_dll_386' Guid='3E77E4F7-A1C4-4F88-B040-35874160B16F'>
+        <File Id='fil_fr_Microsoft_VisualBasic_Forms_resources_dll_386' Source='$(var.PublishDir)\fr\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_PresentationCore_resources_dll_387' Guid='F03F9434-FF90-4813-8528-6270B2257531'>
+        <File Id='fil_fr_PresentationCore_resources_dll_387' Source='$(var.PublishDir)\fr\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_PresentationFramework_resources_dll_388' Guid='169F5DD0-2D86-4CA0-ABEF-8DFFD99EE103'>
+        <File Id='fil_fr_PresentationFramework_resources_dll_388' Source='$(var.PublishDir)\fr\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_PresentationUI_resources_dll_389' Guid='FDF9754E-0537-4ECC-86A7-6522D5A101CB'>
+        <File Id='fil_fr_PresentationUI_resources_dll_389' Source='$(var.PublishDir)\fr\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_ReachFramework_resources_dll_390' Guid='62D0D22F-AE34-4C5D-B3BD-837E7ACCE50A'>
+        <File Id='fil_fr_ReachFramework_resources_dll_390' Source='$(var.PublishDir)\fr\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_System_Windows_Controls_Ribbon_resources_dll_391' Guid='93C07634-3A98-4DDD-89DA-B2D6A6D78760'>
+        <File Id='fil_fr_System_Windows_Controls_Ribbon_resources_dll_391' Source='$(var.PublishDir)\fr\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_System_Windows_Forms_Design_resources_dll_392' Guid='A94FEF44-C628-44D2-8F0B-97D91D01914C'>
+        <File Id='fil_fr_System_Windows_Forms_Design_resources_dll_392' Source='$(var.PublishDir)\fr\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_System_Windows_Forms_Primitives_resources_dll_393' Guid='F4EFBA78-D9B2-4A47-AFA7-964FB1822FB5'>
+        <File Id='fil_fr_System_Windows_Forms_Primitives_resources_dll_393' Source='$(var.PublishDir)\fr\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_System_Windows_Forms_resources_dll_394' Guid='23B2498B-83DA-417A-B7B2-B396CAB6B449'>
+        <File Id='fil_fr_System_Windows_Forms_resources_dll_394' Source='$(var.PublishDir)\fr\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_System_Windows_Input_Manipulations_resources_dll_395' Guid='F8E12E09-6205-4D3F-8C18-9A8D4C2E0F5D'>
+        <File Id='fil_fr_System_Windows_Input_Manipulations_resources_dll_395' Source='$(var.PublishDir)\fr\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_System_Xaml_resources_dll_396' Guid='E7AB3B67-9FBC-4EA6-86B3-AC150B638EFD'>
+        <File Id='fil_fr_System_Xaml_resources_dll_396' Source='$(var.PublishDir)\fr\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_UIAutomationClient_resources_dll_397' Guid='AA0F8A28-AA3A-4D33-B962-799734CFC376'>
+        <File Id='fil_fr_UIAutomationClient_resources_dll_397' Source='$(var.PublishDir)\fr\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_UIAutomationClientSideProviders_resources_dll_398' Guid='4FA288C4-66AD-4DFA-BD01-87F778D7DA41'>
+        <File Id='fil_fr_UIAutomationClientSideProviders_resources_dll_398' Source='$(var.PublishDir)\fr\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_UIAutomationProvider_resources_dll_399' Guid='25BDE975-A625-4C4E-9DCA-8BB4E8824474'>
+        <File Id='fil_fr_UIAutomationProvider_resources_dll_399' Source='$(var.PublishDir)\fr\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_UIAutomationTypes_resources_dll_400' Guid='243EB46D-8E99-4682-8632-710CF89B8A22'>
+        <File Id='fil_fr_UIAutomationTypes_resources_dll_400' Source='$(var.PublishDir)\fr\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_WindowsBase_resources_dll_401' Guid='BFEC492F-31D6-4619-9AB8-48AC4399D2C0'>
+        <File Id='fil_fr_WindowsBase_resources_dll_401' Source='$(var.PublishDir)\fr\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_fr_WindowsFormsIntegration_resources_dll_402' Guid='72A93239-DA47-4E45-96C5-1C05368C9BB1'>
+        <File Id='fil_fr_WindowsFormsIntegration_resources_dll_402' Source='$(var.PublishDir)\fr\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_Microsoft_VisualBasic_Forms_resources_dll_403' Guid='4C7D3961-B3F1-4FE4-864F-5DAFE4550E07'>
+        <File Id='fil_it_Microsoft_VisualBasic_Forms_resources_dll_403' Source='$(var.PublishDir)\it\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_PresentationCore_resources_dll_404' Guid='A8738FAF-E0C8-4D2A-850F-ECB82DB47BB7'>
+        <File Id='fil_it_PresentationCore_resources_dll_404' Source='$(var.PublishDir)\it\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_PresentationFramework_resources_dll_405' Guid='EF3579D3-11A9-46A7-BF23-65098CB39427'>
+        <File Id='fil_it_PresentationFramework_resources_dll_405' Source='$(var.PublishDir)\it\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_PresentationUI_resources_dll_406' Guid='ECE89724-3130-46C2-8ED7-E3D02E572E1A'>
+        <File Id='fil_it_PresentationUI_resources_dll_406' Source='$(var.PublishDir)\it\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_ReachFramework_resources_dll_407' Guid='B4B0C57F-DF16-4AB2-A876-8DFCA0926D67'>
+        <File Id='fil_it_ReachFramework_resources_dll_407' Source='$(var.PublishDir)\it\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_System_Windows_Controls_Ribbon_resources_dll_408' Guid='18640F65-A38C-4988-902E-8A90A7F09309'>
+        <File Id='fil_it_System_Windows_Controls_Ribbon_resources_dll_408' Source='$(var.PublishDir)\it\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_System_Windows_Forms_Design_resources_dll_409' Guid='44083D62-2BF1-461E-8AD2-E220299A43D5'>
+        <File Id='fil_it_System_Windows_Forms_Design_resources_dll_409' Source='$(var.PublishDir)\it\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_System_Windows_Forms_Primitives_resources_dll_410' Guid='2E5AD58B-E627-4826-A16B-9BECA09BD63D'>
+        <File Id='fil_it_System_Windows_Forms_Primitives_resources_dll_410' Source='$(var.PublishDir)\it\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_System_Windows_Forms_resources_dll_411' Guid='101CCAC3-9E50-4EB7-9FD0-F625089AA164'>
+        <File Id='fil_it_System_Windows_Forms_resources_dll_411' Source='$(var.PublishDir)\it\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_System_Windows_Input_Manipulations_resources_dll_412' Guid='0BF84297-9132-44FF-B49F-B43FD6E46990'>
+        <File Id='fil_it_System_Windows_Input_Manipulations_resources_dll_412' Source='$(var.PublishDir)\it\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_System_Xaml_resources_dll_413' Guid='9C06DF2A-864F-4AC0-808D-41DEFFD54851'>
+        <File Id='fil_it_System_Xaml_resources_dll_413' Source='$(var.PublishDir)\it\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_UIAutomationClient_resources_dll_414' Guid='A31200BB-2014-4F86-9A55-290AD2BCD6F5'>
+        <File Id='fil_it_UIAutomationClient_resources_dll_414' Source='$(var.PublishDir)\it\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_UIAutomationClientSideProviders_resources_dll_415' Guid='59836D17-0396-46EE-9898-F913F2960681'>
+        <File Id='fil_it_UIAutomationClientSideProviders_resources_dll_415' Source='$(var.PublishDir)\it\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_UIAutomationProvider_resources_dll_416' Guid='1446096F-8CA3-40F3-AE80-03868EA8F2FD'>
+        <File Id='fil_it_UIAutomationProvider_resources_dll_416' Source='$(var.PublishDir)\it\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_UIAutomationTypes_resources_dll_417' Guid='5369DAA3-E350-412A-B9B4-7F75E7D9297D'>
+        <File Id='fil_it_UIAutomationTypes_resources_dll_417' Source='$(var.PublishDir)\it\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_WindowsBase_resources_dll_418' Guid='8ACFB09B-D601-453F-B992-3F7FEEFF6448'>
+        <File Id='fil_it_WindowsBase_resources_dll_418' Source='$(var.PublishDir)\it\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_it_WindowsFormsIntegration_resources_dll_419' Guid='42BEC4D5-0FA7-4896-BA6B-F225B72314BD'>
+        <File Id='fil_it_WindowsFormsIntegration_resources_dll_419' Source='$(var.PublishDir)\it\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_Microsoft_VisualBasic_Forms_resources_dll_420' Guid='C824CE3B-404E-4969-81DE-7ABD31CE26F4'>
+        <File Id='fil_ja_Microsoft_VisualBasic_Forms_resources_dll_420' Source='$(var.PublishDir)\ja\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_PresentationCore_resources_dll_421' Guid='D41ABC11-A096-43A3-AAC3-7E04DF8FCC5E'>
+        <File Id='fil_ja_PresentationCore_resources_dll_421' Source='$(var.PublishDir)\ja\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_PresentationFramework_resources_dll_422' Guid='A5040C2B-E9CC-4D5B-A3C4-AD67A09B83DE'>
+        <File Id='fil_ja_PresentationFramework_resources_dll_422' Source='$(var.PublishDir)\ja\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_PresentationUI_resources_dll_423' Guid='4A1AD720-34A1-4F98-9C63-DFFF216B460F'>
+        <File Id='fil_ja_PresentationUI_resources_dll_423' Source='$(var.PublishDir)\ja\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_ReachFramework_resources_dll_424' Guid='EB0AF193-79DE-4D29-96BA-90CED708E224'>
+        <File Id='fil_ja_ReachFramework_resources_dll_424' Source='$(var.PublishDir)\ja\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_System_Windows_Controls_Ribbon_resources_dll_425' Guid='4C1515E5-3D5F-466B-926A-1A3BC1612CFA'>
+        <File Id='fil_ja_System_Windows_Controls_Ribbon_resources_dll_425' Source='$(var.PublishDir)\ja\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_System_Windows_Forms_Design_resources_dll_426' Guid='05D2AF15-FCA6-4BFD-BF93-F5B7A70F7875'>
+        <File Id='fil_ja_System_Windows_Forms_Design_resources_dll_426' Source='$(var.PublishDir)\ja\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_System_Windows_Forms_Primitives_resources_dll_427' Guid='0AB7241C-73E6-4858-8CF5-54569C443261'>
+        <File Id='fil_ja_System_Windows_Forms_Primitives_resources_dll_427' Source='$(var.PublishDir)\ja\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_System_Windows_Forms_resources_dll_428' Guid='9C79BD2E-7485-4C70-B9E4-8CA8954A9CFE'>
+        <File Id='fil_ja_System_Windows_Forms_resources_dll_428' Source='$(var.PublishDir)\ja\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_System_Windows_Input_Manipulations_resources_dll_429' Guid='DD937807-6470-4C04-8054-BB541E8EDDEE'>
+        <File Id='fil_ja_System_Windows_Input_Manipulations_resources_dll_429' Source='$(var.PublishDir)\ja\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_System_Xaml_resources_dll_430' Guid='740DB569-0B82-4202-AEA0-4D80DC85036F'>
+        <File Id='fil_ja_System_Xaml_resources_dll_430' Source='$(var.PublishDir)\ja\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_UIAutomationClient_resources_dll_431' Guid='4770238C-2057-458C-BFA5-49BF113A7075'>
+        <File Id='fil_ja_UIAutomationClient_resources_dll_431' Source='$(var.PublishDir)\ja\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_UIAutomationClientSideProviders_resources_dll_432' Guid='1F0FE159-F3E2-404E-B7B3-FF72B230761C'>
+        <File Id='fil_ja_UIAutomationClientSideProviders_resources_dll_432' Source='$(var.PublishDir)\ja\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_UIAutomationProvider_resources_dll_433' Guid='3B0A59F7-0B01-4C6A-B7CD-D4407F65E1E6'>
+        <File Id='fil_ja_UIAutomationProvider_resources_dll_433' Source='$(var.PublishDir)\ja\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_UIAutomationTypes_resources_dll_434' Guid='406B7937-FCE2-4510-98BD-B90746D571C1'>
+        <File Id='fil_ja_UIAutomationTypes_resources_dll_434' Source='$(var.PublishDir)\ja\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_WindowsBase_resources_dll_435' Guid='54FC6715-DB59-4A92-991C-BC4C6613470C'>
+        <File Id='fil_ja_WindowsBase_resources_dll_435' Source='$(var.PublishDir)\ja\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_ja_WindowsFormsIntegration_resources_dll_436' Guid='2A986750-CFF1-4F13-B4EE-6AFF7E110179'>
+        <File Id='fil_ja_WindowsFormsIntegration_resources_dll_436' Source='$(var.PublishDir)\ja\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_Microsoft_VisualBasic_Forms_resources_dll_437' Guid='2DF5AC2D-39C0-4968-80F3-00FC0CF770F4'>
+        <File Id='fil_ko_Microsoft_VisualBasic_Forms_resources_dll_437' Source='$(var.PublishDir)\ko\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_PresentationCore_resources_dll_438' Guid='54ED8A8E-8081-47AA-9F4F-6331BC545FE2'>
+        <File Id='fil_ko_PresentationCore_resources_dll_438' Source='$(var.PublishDir)\ko\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_PresentationFramework_resources_dll_439' Guid='FFCA82BC-A62B-44BF-A394-897ADC1BE22F'>
+        <File Id='fil_ko_PresentationFramework_resources_dll_439' Source='$(var.PublishDir)\ko\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_PresentationUI_resources_dll_440' Guid='47EA5AE4-981F-4B42-9CA6-529DC6BC2234'>
+        <File Id='fil_ko_PresentationUI_resources_dll_440' Source='$(var.PublishDir)\ko\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_ReachFramework_resources_dll_441' Guid='817B9B8D-03A8-407F-B954-85BEFFC6DF17'>
+        <File Id='fil_ko_ReachFramework_resources_dll_441' Source='$(var.PublishDir)\ko\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_System_Windows_Controls_Ribbon_resources_dll_442' Guid='39892C5A-7EB7-4A51-BE90-88F836183ED6'>
+        <File Id='fil_ko_System_Windows_Controls_Ribbon_resources_dll_442' Source='$(var.PublishDir)\ko\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_System_Windows_Forms_Design_resources_dll_443' Guid='6BCF35A9-0F64-4F8F-B0B6-094C700B5AC3'>
+        <File Id='fil_ko_System_Windows_Forms_Design_resources_dll_443' Source='$(var.PublishDir)\ko\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_System_Windows_Forms_Primitives_resources_dll_444' Guid='73EE5735-DEE3-4EFB-A888-BA565AF3A3D1'>
+        <File Id='fil_ko_System_Windows_Forms_Primitives_resources_dll_444' Source='$(var.PublishDir)\ko\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_System_Windows_Forms_resources_dll_445' Guid='9D5D3287-2882-41D6-A8B6-18D9C2CE2D71'>
+        <File Id='fil_ko_System_Windows_Forms_resources_dll_445' Source='$(var.PublishDir)\ko\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_System_Windows_Input_Manipulations_resources_dll_446' Guid='343848EC-4EED-4691-9B6E-0E85B4AB6841'>
+        <File Id='fil_ko_System_Windows_Input_Manipulations_resources_dll_446' Source='$(var.PublishDir)\ko\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_System_Xaml_resources_dll_447' Guid='999024FB-F72E-4557-BACE-F7D3AA5508B0'>
+        <File Id='fil_ko_System_Xaml_resources_dll_447' Source='$(var.PublishDir)\ko\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_UIAutomationClient_resources_dll_448' Guid='FA8B0206-F343-46E2-8F96-2648A573CE55'>
+        <File Id='fil_ko_UIAutomationClient_resources_dll_448' Source='$(var.PublishDir)\ko\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_UIAutomationClientSideProviders_resources_dll_449' Guid='D714186C-EC2C-42D7-AC2B-233F0DBBC015'>
+        <File Id='fil_ko_UIAutomationClientSideProviders_resources_dll_449' Source='$(var.PublishDir)\ko\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_UIAutomationProvider_resources_dll_450' Guid='E250C089-CB43-4A7C-B1C8-7109B14C2485'>
+        <File Id='fil_ko_UIAutomationProvider_resources_dll_450' Source='$(var.PublishDir)\ko\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_UIAutomationTypes_resources_dll_451' Guid='7A9030E1-DC60-4446-825A-86723A13EBD8'>
+        <File Id='fil_ko_UIAutomationTypes_resources_dll_451' Source='$(var.PublishDir)\ko\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_WindowsBase_resources_dll_452' Guid='9A0A2772-D509-481A-9468-A547E586DE97'>
+        <File Id='fil_ko_WindowsBase_resources_dll_452' Source='$(var.PublishDir)\ko\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_ko_WindowsFormsIntegration_resources_dll_453' Guid='9C04790C-B2A2-4A10-B550-E0B6DB971AFE'>
+        <File Id='fil_ko_WindowsFormsIntegration_resources_dll_453' Source='$(var.PublishDir)\ko\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_Microsoft_VisualBasic_Forms_resources_dll_454' Guid='4A115CD1-1A75-43F3-AD37-DDD70914C96F'>
+        <File Id='fil_pl_Microsoft_VisualBasic_Forms_resources_dll_454' Source='$(var.PublishDir)\pl\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_PresentationCore_resources_dll_455' Guid='48C3C68A-5250-40AC-9755-50B0080D70BC'>
+        <File Id='fil_pl_PresentationCore_resources_dll_455' Source='$(var.PublishDir)\pl\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_PresentationFramework_resources_dll_456' Guid='F8DA83B0-9C1D-424B-81DA-B7723B83C5CC'>
+        <File Id='fil_pl_PresentationFramework_resources_dll_456' Source='$(var.PublishDir)\pl\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_PresentationUI_resources_dll_457' Guid='1551886B-3770-446D-9F83-C9B0C2504F77'>
+        <File Id='fil_pl_PresentationUI_resources_dll_457' Source='$(var.PublishDir)\pl\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_ReachFramework_resources_dll_458' Guid='5A3AA866-29E8-4A8D-8D17-66C82FBA3382'>
+        <File Id='fil_pl_ReachFramework_resources_dll_458' Source='$(var.PublishDir)\pl\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_System_Windows_Controls_Ribbon_resources_dll_459' Guid='3902B5AF-78E4-4C6E-8BE7-CC98668BFB25'>
+        <File Id='fil_pl_System_Windows_Controls_Ribbon_resources_dll_459' Source='$(var.PublishDir)\pl\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_System_Windows_Forms_Design_resources_dll_460' Guid='523CB6F6-85FD-4251-957C-3DEE02A6CF2D'>
+        <File Id='fil_pl_System_Windows_Forms_Design_resources_dll_460' Source='$(var.PublishDir)\pl\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_System_Windows_Forms_Primitives_resources_dll_461' Guid='D716AD62-F940-4CE6-A9B4-F993136E2F1E'>
+        <File Id='fil_pl_System_Windows_Forms_Primitives_resources_dll_461' Source='$(var.PublishDir)\pl\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_System_Windows_Forms_resources_dll_462' Guid='00B05294-66FD-4800-BB2E-169A077247BE'>
+        <File Id='fil_pl_System_Windows_Forms_resources_dll_462' Source='$(var.PublishDir)\pl\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_System_Windows_Input_Manipulations_resources_dll_463' Guid='37FABE4A-5151-45B0-B4C6-0D1218DE5992'>
+        <File Id='fil_pl_System_Windows_Input_Manipulations_resources_dll_463' Source='$(var.PublishDir)\pl\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_System_Xaml_resources_dll_464' Guid='65B832D0-73BE-4041-B539-26F39D76522C'>
+        <File Id='fil_pl_System_Xaml_resources_dll_464' Source='$(var.PublishDir)\pl\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_UIAutomationClient_resources_dll_465' Guid='F55264B1-E064-4D0A-A42B-D363AAC6DBFB'>
+        <File Id='fil_pl_UIAutomationClient_resources_dll_465' Source='$(var.PublishDir)\pl\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_UIAutomationClientSideProviders_resources_dll_466' Guid='D2096ED5-B35E-4BED-9F85-712BCC1E257D'>
+        <File Id='fil_pl_UIAutomationClientSideProviders_resources_dll_466' Source='$(var.PublishDir)\pl\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_UIAutomationProvider_resources_dll_467' Guid='7D3D2F2D-97DF-4300-85BC-3E666978F5C3'>
+        <File Id='fil_pl_UIAutomationProvider_resources_dll_467' Source='$(var.PublishDir)\pl\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_UIAutomationTypes_resources_dll_468' Guid='812D7F69-6D03-4885-B70E-E10BFBEC94F8'>
+        <File Id='fil_pl_UIAutomationTypes_resources_dll_468' Source='$(var.PublishDir)\pl\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_WindowsBase_resources_dll_469' Guid='BAE8B645-26F8-4D5B-A30E-F08D368A8F1B'>
+        <File Id='fil_pl_WindowsBase_resources_dll_469' Source='$(var.PublishDir)\pl\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_pl_WindowsFormsIntegration_resources_dll_470' Guid='47071771-FA6F-4CAB-97EA-1F40B52066C1'>
+        <File Id='fil_pl_WindowsFormsIntegration_resources_dll_470' Source='$(var.PublishDir)\pl\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_Microsoft_VisualBasic_Forms_resources_dll_471' Guid='5E457284-4B8A-4EC2-888F-C15C8310A9A5'>
+        <File Id='fil_pt_BR_Microsoft_VisualBasic_Forms_resources_dll_471' Source='$(var.PublishDir)\pt-BR\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_PresentationCore_resources_dll_472' Guid='1091B0F2-80AF-4423-B1A4-1EA8DAB739CC'>
+        <File Id='fil_pt_BR_PresentationCore_resources_dll_472' Source='$(var.PublishDir)\pt-BR\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_PresentationFramework_resources_dll_473' Guid='8E0768D7-84AE-458A-97BA-F5174FA5704E'>
+        <File Id='fil_pt_BR_PresentationFramework_resources_dll_473' Source='$(var.PublishDir)\pt-BR\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_PresentationUI_resources_dll_474' Guid='5964EC57-A080-455F-BFED-110FAEE653FF'>
+        <File Id='fil_pt_BR_PresentationUI_resources_dll_474' Source='$(var.PublishDir)\pt-BR\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_ReachFramework_resources_dll_475' Guid='108DABF8-B810-4033-9724-48D66B166F19'>
+        <File Id='fil_pt_BR_ReachFramework_resources_dll_475' Source='$(var.PublishDir)\pt-BR\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_System_Windows_Controls_Ribbon_resources_dll_476' Guid='380D7FE2-E544-49AE-A44A-28EEBF08BB98'>
+        <File Id='fil_pt_BR_System_Windows_Controls_Ribbon_resources_dll_476' Source='$(var.PublishDir)\pt-BR\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_System_Windows_Forms_Design_resources_dll_477' Guid='3602C39B-D74A-4ADF-9F50-1A2EA174ECD0'>
+        <File Id='fil_pt_BR_System_Windows_Forms_Design_resources_dll_477' Source='$(var.PublishDir)\pt-BR\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_System_Windows_Forms_Primitives_resources_dll_478' Guid='1E3E4681-C685-4421-9E90-3B069CB3EDF4'>
+        <File Id='fil_pt_BR_System_Windows_Forms_Primitives_resources_dll_478' Source='$(var.PublishDir)\pt-BR\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_System_Windows_Forms_resources_dll_479' Guid='B0853DF1-48E6-4BEB-8BAD-0C6ACD9FA7C2'>
+        <File Id='fil_pt_BR_System_Windows_Forms_resources_dll_479' Source='$(var.PublishDir)\pt-BR\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_System_Windows_Input_Manipulations_resources_dll_480' Guid='B71021CA-8ABE-48A7-859C-C7490C4D10E8'>
+        <File Id='fil_pt_BR_System_Windows_Input_Manipulations_resources_dll_480' Source='$(var.PublishDir)\pt-BR\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_System_Xaml_resources_dll_481' Guid='16A4A39D-B707-4304-9101-1528CA25A39B'>
+        <File Id='fil_pt_BR_System_Xaml_resources_dll_481' Source='$(var.PublishDir)\pt-BR\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_UIAutomationClient_resources_dll_482' Guid='225CF65F-3137-47C4-BB70-1FC9A0B90E6E'>
+        <File Id='fil_pt_BR_UIAutomationClient_resources_dll_482' Source='$(var.PublishDir)\pt-BR\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_UIAutomationClientSideProviders_resources_dll_483' Guid='F6706001-A562-4DCC-B58A-4CBEE6040485'>
+        <File Id='fil_pt_BR_UIAutomationClientSideProviders_resources_dll_483' Source='$(var.PublishDir)\pt-BR\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_UIAutomationProvider_resources_dll_484' Guid='1F325013-F9B3-43EA-9BE9-B406A5E686BD'>
+        <File Id='fil_pt_BR_UIAutomationProvider_resources_dll_484' Source='$(var.PublishDir)\pt-BR\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_UIAutomationTypes_resources_dll_485' Guid='12CB226D-426A-4299-8459-2D24EB1CB91B'>
+        <File Id='fil_pt_BR_UIAutomationTypes_resources_dll_485' Source='$(var.PublishDir)\pt-BR\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_WindowsBase_resources_dll_486' Guid='DE8CDAD6-8C78-48FD-BBCB-12A1512FCFD8'>
+        <File Id='fil_pt_BR_WindowsBase_resources_dll_486' Source='$(var.PublishDir)\pt-BR\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_pt_BR_WindowsFormsIntegration_resources_dll_487' Guid='2F0399A1-9CA1-43C7-A0AA-2CE7DBE7C26A'>
+        <File Id='fil_pt_BR_WindowsFormsIntegration_resources_dll_487' Source='$(var.PublishDir)\pt-BR\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_Microsoft_VisualBasic_Forms_resources_dll_488' Guid='AA8826E8-8AFA-4F99-876C-003BB9931F58'>
+        <File Id='fil_ru_Microsoft_VisualBasic_Forms_resources_dll_488' Source='$(var.PublishDir)\ru\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_PresentationCore_resources_dll_489' Guid='1C8D8B1C-D635-4ABA-8051-1F1083D77149'>
+        <File Id='fil_ru_PresentationCore_resources_dll_489' Source='$(var.PublishDir)\ru\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_PresentationFramework_resources_dll_490' Guid='B3E4C255-405F-4A1D-BDCC-7D69853979A3'>
+        <File Id='fil_ru_PresentationFramework_resources_dll_490' Source='$(var.PublishDir)\ru\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_PresentationUI_resources_dll_491' Guid='A7C8E025-BDD3-45C8-933C-350C48588159'>
+        <File Id='fil_ru_PresentationUI_resources_dll_491' Source='$(var.PublishDir)\ru\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_ReachFramework_resources_dll_492' Guid='18707749-CC9E-4DDC-9A47-9DEB917E85BB'>
+        <File Id='fil_ru_ReachFramework_resources_dll_492' Source='$(var.PublishDir)\ru\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_System_Windows_Controls_Ribbon_resources_dll_493' Guid='FA8A0B13-4AC6-477F-9723-627F37452707'>
+        <File Id='fil_ru_System_Windows_Controls_Ribbon_resources_dll_493' Source='$(var.PublishDir)\ru\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_System_Windows_Forms_Design_resources_dll_494' Guid='DB4B5158-7B01-40C1-BE24-0E9D757CF18B'>
+        <File Id='fil_ru_System_Windows_Forms_Design_resources_dll_494' Source='$(var.PublishDir)\ru\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_System_Windows_Forms_Primitives_resources_dll_495' Guid='8F053418-9A80-40DE-B6D3-1F5DC0871109'>
+        <File Id='fil_ru_System_Windows_Forms_Primitives_resources_dll_495' Source='$(var.PublishDir)\ru\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_System_Windows_Forms_resources_dll_496' Guid='936E9483-1A10-4FC4-A0F7-B43E5C0C8E52'>
+        <File Id='fil_ru_System_Windows_Forms_resources_dll_496' Source='$(var.PublishDir)\ru\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_System_Windows_Input_Manipulations_resources_dll_497' Guid='4176E8BC-0BC9-4F41-BB2A-FA290FD101A5'>
+        <File Id='fil_ru_System_Windows_Input_Manipulations_resources_dll_497' Source='$(var.PublishDir)\ru\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_System_Xaml_resources_dll_498' Guid='5CE462F3-722F-4EEC-AA60-DD5478563CD2'>
+        <File Id='fil_ru_System_Xaml_resources_dll_498' Source='$(var.PublishDir)\ru\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_UIAutomationClient_resources_dll_499' Guid='CA05D23D-89D8-44AE-9692-7E5D8D69FAF7'>
+        <File Id='fil_ru_UIAutomationClient_resources_dll_499' Source='$(var.PublishDir)\ru\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_UIAutomationClientSideProviders_resources_dll_500' Guid='213885F8-4940-4E3D-A3D1-4DB4EF7F267E'>
+        <File Id='fil_ru_UIAutomationClientSideProviders_resources_dll_500' Source='$(var.PublishDir)\ru\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_UIAutomationProvider_resources_dll_501' Guid='3317F194-DCC3-4F53-AC9B-E5EDE663F73E'>
+        <File Id='fil_ru_UIAutomationProvider_resources_dll_501' Source='$(var.PublishDir)\ru\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_UIAutomationTypes_resources_dll_502' Guid='1E4BAC29-F397-470A-BE42-AA59428AE240'>
+        <File Id='fil_ru_UIAutomationTypes_resources_dll_502' Source='$(var.PublishDir)\ru\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_WindowsBase_resources_dll_503' Guid='610728C2-515E-4064-B9E4-3154933AD375'>
+        <File Id='fil_ru_WindowsBase_resources_dll_503' Source='$(var.PublishDir)\ru\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_ru_WindowsFormsIntegration_resources_dll_504' Guid='CEBD827E-C86D-4B4C-B63A-EBBD9BAEB3E5'>
+        <File Id='fil_ru_WindowsFormsIntegration_resources_dll_504' Source='$(var.PublishDir)\ru\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_Microsoft_VisualBasic_Forms_resources_dll_505' Guid='DA0D9F70-0D3A-4B5B-84E1-FE095CDE501A'>
+        <File Id='fil_tr_Microsoft_VisualBasic_Forms_resources_dll_505' Source='$(var.PublishDir)\tr\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_PresentationCore_resources_dll_506' Guid='8655BDAD-D8E9-41ED-BA4A-3563D1655658'>
+        <File Id='fil_tr_PresentationCore_resources_dll_506' Source='$(var.PublishDir)\tr\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_PresentationFramework_resources_dll_507' Guid='551FCE0D-C97D-4F09-B2AC-D252A559A174'>
+        <File Id='fil_tr_PresentationFramework_resources_dll_507' Source='$(var.PublishDir)\tr\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_PresentationUI_resources_dll_508' Guid='E0FF5D6C-E676-499D-90EC-A55D4D8EA7AD'>
+        <File Id='fil_tr_PresentationUI_resources_dll_508' Source='$(var.PublishDir)\tr\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_ReachFramework_resources_dll_509' Guid='43946744-C187-45B5-AB00-2E8726CAC943'>
+        <File Id='fil_tr_ReachFramework_resources_dll_509' Source='$(var.PublishDir)\tr\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_System_Windows_Controls_Ribbon_resources_dll_510' Guid='6C725ECB-2F85-4AD6-9988-02ADC2A98885'>
+        <File Id='fil_tr_System_Windows_Controls_Ribbon_resources_dll_510' Source='$(var.PublishDir)\tr\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_System_Windows_Forms_Design_resources_dll_511' Guid='68B7020D-803D-4B73-9061-7467FEABEB3F'>
+        <File Id='fil_tr_System_Windows_Forms_Design_resources_dll_511' Source='$(var.PublishDir)\tr\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_System_Windows_Forms_Primitives_resources_dll_512' Guid='1E21BEDD-085A-4391-B334-E767A3885A8F'>
+        <File Id='fil_tr_System_Windows_Forms_Primitives_resources_dll_512' Source='$(var.PublishDir)\tr\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_System_Windows_Forms_resources_dll_513' Guid='724ED852-824B-4BB7-BF4A-DB71FB6804E7'>
+        <File Id='fil_tr_System_Windows_Forms_resources_dll_513' Source='$(var.PublishDir)\tr\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_System_Windows_Input_Manipulations_resources_dll_514' Guid='8FF0CC9C-7545-467A-8C4E-74A7ECBDB6B2'>
+        <File Id='fil_tr_System_Windows_Input_Manipulations_resources_dll_514' Source='$(var.PublishDir)\tr\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_System_Xaml_resources_dll_515' Guid='A780515A-F030-4C99-8923-B7104898806A'>
+        <File Id='fil_tr_System_Xaml_resources_dll_515' Source='$(var.PublishDir)\tr\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_UIAutomationClient_resources_dll_516' Guid='85105477-ED50-49FC-8F77-D954A148B605'>
+        <File Id='fil_tr_UIAutomationClient_resources_dll_516' Source='$(var.PublishDir)\tr\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_UIAutomationClientSideProviders_resources_dll_517' Guid='49541D60-19D5-414A-AE79-6B5D08F793B8'>
+        <File Id='fil_tr_UIAutomationClientSideProviders_resources_dll_517' Source='$(var.PublishDir)\tr\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_UIAutomationProvider_resources_dll_518' Guid='D0993E4E-A9F0-4DB9-81BF-7CCB4C5E5994'>
+        <File Id='fil_tr_UIAutomationProvider_resources_dll_518' Source='$(var.PublishDir)\tr\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_UIAutomationTypes_resources_dll_519' Guid='87E29741-08DF-4BB0-AF0C-CBA822F9DB07'>
+        <File Id='fil_tr_UIAutomationTypes_resources_dll_519' Source='$(var.PublishDir)\tr\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_WindowsBase_resources_dll_520' Guid='F9567EBE-CE0B-404B-A5D4-B7D29A1DF194'>
+        <File Id='fil_tr_WindowsBase_resources_dll_520' Source='$(var.PublishDir)\tr\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_tr_WindowsFormsIntegration_resources_dll_521' Guid='44E998C6-AD78-4F08-BD55-F9A460B104C4'>
+        <File Id='fil_tr_WindowsFormsIntegration_resources_dll_521' Source='$(var.PublishDir)\tr\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_Microsoft_VisualBasic_Forms_resources_dll_522' Guid='A749BCE9-B4F0-4D9C-A337-6DC718FB734C'>
+        <File Id='fil_zh_Hans_Microsoft_VisualBasic_Forms_resources_dll_522' Source='$(var.PublishDir)\zh-Hans\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_PresentationCore_resources_dll_523' Guid='ABD58C4E-E974-4A76-8007-DFA5875EC3C0'>
+        <File Id='fil_zh_Hans_PresentationCore_resources_dll_523' Source='$(var.PublishDir)\zh-Hans\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_PresentationFramework_resources_dll_524' Guid='10D64A4C-9EA9-4BC3-B1B4-C1528FC4172C'>
+        <File Id='fil_zh_Hans_PresentationFramework_resources_dll_524' Source='$(var.PublishDir)\zh-Hans\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_PresentationUI_resources_dll_525' Guid='B3953146-151B-40AB-BB58-CCBF89DF9116'>
+        <File Id='fil_zh_Hans_PresentationUI_resources_dll_525' Source='$(var.PublishDir)\zh-Hans\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_ReachFramework_resources_dll_526' Guid='66CE0817-A90D-4DA8-B60C-2BFD30CE5531'>
+        <File Id='fil_zh_Hans_ReachFramework_resources_dll_526' Source='$(var.PublishDir)\zh-Hans\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_System_Windows_Controls_Ribbon_resources_dll_527' Guid='ECB6E453-2A63-4450-A6AD-AD94A304DE54'>
+        <File Id='fil_zh_Hans_System_Windows_Controls_Ribbon_resources_dll_527' Source='$(var.PublishDir)\zh-Hans\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_System_Windows_Forms_Design_resources_dll_528' Guid='B00B8EDE-841D-49D4-9235-869F2B391C79'>
+        <File Id='fil_zh_Hans_System_Windows_Forms_Design_resources_dll_528' Source='$(var.PublishDir)\zh-Hans\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_System_Windows_Forms_Primitives_resources_dll_529' Guid='8F06D6DE-0950-4A5A-911D-A9ED72514904'>
+        <File Id='fil_zh_Hans_System_Windows_Forms_Primitives_resources_dll_529' Source='$(var.PublishDir)\zh-Hans\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_System_Windows_Forms_resources_dll_530' Guid='7D89AAC7-A217-4E27-9F4C-B16BA57736F6'>
+        <File Id='fil_zh_Hans_System_Windows_Forms_resources_dll_530' Source='$(var.PublishDir)\zh-Hans\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_System_Windows_Input_Manipulations_resources_dll_531' Guid='D27AF7EB-D5A9-42BB-84A7-DC4F8C6F1A8C'>
+        <File Id='fil_zh_Hans_System_Windows_Input_Manipulations_resources_dll_531' Source='$(var.PublishDir)\zh-Hans\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_System_Xaml_resources_dll_532' Guid='19020DB2-F29C-4D6C-B550-0B6649D72C46'>
+        <File Id='fil_zh_Hans_System_Xaml_resources_dll_532' Source='$(var.PublishDir)\zh-Hans\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_UIAutomationClient_resources_dll_533' Guid='3AA3376A-388A-41DF-890A-143A227C5A61'>
+        <File Id='fil_zh_Hans_UIAutomationClient_resources_dll_533' Source='$(var.PublishDir)\zh-Hans\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_UIAutomationClientSideProviders_resources_dll_534' Guid='DF6E233E-756E-491E-8224-DD1F2E1207A0'>
+        <File Id='fil_zh_Hans_UIAutomationClientSideProviders_resources_dll_534' Source='$(var.PublishDir)\zh-Hans\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_UIAutomationProvider_resources_dll_535' Guid='B175D7EE-23E9-4692-BB5E-72AD73B3723C'>
+        <File Id='fil_zh_Hans_UIAutomationProvider_resources_dll_535' Source='$(var.PublishDir)\zh-Hans\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_UIAutomationTypes_resources_dll_536' Guid='04530744-93E8-41FE-8A00-C16F0718EDBD'>
+        <File Id='fil_zh_Hans_UIAutomationTypes_resources_dll_536' Source='$(var.PublishDir)\zh-Hans\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_WindowsBase_resources_dll_537' Guid='8DDE3AE3-517E-4B78-B973-C14B86818945'>
+        <File Id='fil_zh_Hans_WindowsBase_resources_dll_537' Source='$(var.PublishDir)\zh-Hans\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hans_WindowsFormsIntegration_resources_dll_538' Guid='9EF4F8B6-FC40-4FC7-AE31-2C39F9CB16E5'>
+        <File Id='fil_zh_Hans_WindowsFormsIntegration_resources_dll_538' Source='$(var.PublishDir)\zh-Hans\WindowsFormsIntegration.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_Microsoft_VisualBasic_Forms_resources_dll_539' Guid='3DB95BB9-3C2B-4568-ABFC-7E6A652E0755'>
+        <File Id='fil_zh_Hant_Microsoft_VisualBasic_Forms_resources_dll_539' Source='$(var.PublishDir)\zh-Hant\Microsoft.VisualBasic.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_PresentationCore_resources_dll_540' Guid='8E26C3F0-19D0-4CEE-BC3D-4B8D914D6F61'>
+        <File Id='fil_zh_Hant_PresentationCore_resources_dll_540' Source='$(var.PublishDir)\zh-Hant\PresentationCore.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_PresentationFramework_resources_dll_541' Guid='EF654DDD-14FC-4147-B6A1-68B9B3CBAF1A'>
+        <File Id='fil_zh_Hant_PresentationFramework_resources_dll_541' Source='$(var.PublishDir)\zh-Hant\PresentationFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_PresentationUI_resources_dll_542' Guid='32E824D0-62F1-41F9-8992-6952B2F4BCC3'>
+        <File Id='fil_zh_Hant_PresentationUI_resources_dll_542' Source='$(var.PublishDir)\zh-Hant\PresentationUI.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_ReachFramework_resources_dll_543' Guid='DAB2F582-A8D9-4CD1-B057-CE5A5E59BA44'>
+        <File Id='fil_zh_Hant_ReachFramework_resources_dll_543' Source='$(var.PublishDir)\zh-Hant\ReachFramework.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_System_Windows_Controls_Ribbon_resources_dll_544' Guid='70716AF2-154D-40FC-A08F-F27C2E9652F6'>
+        <File Id='fil_zh_Hant_System_Windows_Controls_Ribbon_resources_dll_544' Source='$(var.PublishDir)\zh-Hant\System.Windows.Controls.Ribbon.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_System_Windows_Forms_Design_resources_dll_545' Guid='C2F475F1-E198-4B43-861E-D837E5B42811'>
+        <File Id='fil_zh_Hant_System_Windows_Forms_Design_resources_dll_545' Source='$(var.PublishDir)\zh-Hant\System.Windows.Forms.Design.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_System_Windows_Forms_Primitives_resources_dll_546' Guid='5C36A72A-5257-4534-A681-E702599871C1'>
+        <File Id='fil_zh_Hant_System_Windows_Forms_Primitives_resources_dll_546' Source='$(var.PublishDir)\zh-Hant\System.Windows.Forms.Primitives.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_System_Windows_Forms_resources_dll_547' Guid='01CE1AFB-E109-4D78-8422-CFB2A7E0BA87'>
+        <File Id='fil_zh_Hant_System_Windows_Forms_resources_dll_547' Source='$(var.PublishDir)\zh-Hant\System.Windows.Forms.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_System_Windows_Input_Manipulations_resources_dll_548' Guid='36FA9E2F-C86E-4A6C-8A5B-CE6241E3AEF7'>
+        <File Id='fil_zh_Hant_System_Windows_Input_Manipulations_resources_dll_548' Source='$(var.PublishDir)\zh-Hant\System.Windows.Input.Manipulations.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_System_Xaml_resources_dll_549' Guid='430A9AF8-8A86-4BE2-AA24-5BDE95D8CDE2'>
+        <File Id='fil_zh_Hant_System_Xaml_resources_dll_549' Source='$(var.PublishDir)\zh-Hant\System.Xaml.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_UIAutomationClient_resources_dll_550' Guid='0160AEF3-55FC-4C0D-AC4D-AC010B2AF7E7'>
+        <File Id='fil_zh_Hant_UIAutomationClient_resources_dll_550' Source='$(var.PublishDir)\zh-Hant\UIAutomationClient.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_UIAutomationClientSideProviders_resources_dll_551' Guid='42842C45-65D4-498A-9AFE-656BFF5BC6A0'>
+        <File Id='fil_zh_Hant_UIAutomationClientSideProviders_resources_dll_551' Source='$(var.PublishDir)\zh-Hant\UIAutomationClientSideProviders.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_UIAutomationProvider_resources_dll_552' Guid='C1FC134C-4AC9-457C-AB2D-6215160BF6CE'>
+        <File Id='fil_zh_Hant_UIAutomationProvider_resources_dll_552' Source='$(var.PublishDir)\zh-Hant\UIAutomationProvider.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_UIAutomationTypes_resources_dll_553' Guid='A584AB3C-B5AA-45D4-AEBF-83F00488A499'>
+        <File Id='fil_zh_Hant_UIAutomationTypes_resources_dll_553' Source='$(var.PublishDir)\zh-Hant\UIAutomationTypes.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_WindowsBase_resources_dll_554' Guid='7A9D5C47-28CE-4CD3-9462-83E8D0CB7C76'>
+        <File Id='fil_zh_Hant_WindowsBase_resources_dll_554' Source='$(var.PublishDir)\zh-Hant\WindowsBase.resources.dll' />
+      </Component>
+      <Component Id='cmp_zh_Hant_WindowsFormsIntegration_resources_dll_555' Guid='2AF2EAA7-9550-43A9-AA2E-168A0EB49F71'>
+        <File Id='fil_zh_Hant_WindowsFormsIntegration_resources_dll_555' Source='$(var.PublishDir)\zh-Hant\WindowsFormsIntegration.resources.dll' />
+      </Component>
+    </ComponentGroup>
+  </Fragment>
+</Wix>

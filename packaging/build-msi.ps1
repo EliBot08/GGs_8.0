@@ -32,7 +32,7 @@ if (-not $PublishDir) {
   $pubArgs = @('publish', $projectPath, '-c', $Configuration, '-r', $Runtime, '-o', $PublishDir)
   if ($SelfContained.IsPresent) { $pubArgs += '-p:SelfContained=true' } else { $pubArgs += '-p:SelfContained=false' }
   Info "Publishing $Project -> $PublishDir ..."
-  dotnet @pubArgs | Out-Null
+  dotnet @pubArgs
 }
 $PublishDir = (Resolve-Path $PublishDir).Path
 
@@ -73,7 +73,38 @@ Info 'Harvesting published output...'
 # Use WiX local tool via dotnet; generate stable-ish component guids; map to INSTALLFOLDER and var.PublishDir
 Push-Location $manifestDir
 try {
-  dotnet tool run wix heat dir "$PublishDir" -o "$harvestWxs" -cg AppFiles -dr INSTALLFOLDER -var var.PublishDir -scom -sreg -sfrag -srd -gg | Out-Null
+  dotnet wix msi decompile "$PublishDir" -o "$harvestWxs" 2>&1 | Out-Null
+  # WiX v4 removed heat command, using manual file generation instead
+  if (-not (Test-Path $harvestWxs)) {
+    # Fallback: create simple component group manually
+    Info "Generating component manifest manually (WiX v4 no heat support)..."
+    $files = Get-ChildItem -Recurse -File "$PublishDir"
+    $wxsContent = @"
+<?xml version='1.0' encoding='UTF-8'?>
+<Wix xmlns='http://wixtoolset.org/schemas/v4/wxs'>
+  <Fragment>
+    <ComponentGroup Id='AppFiles' Directory='INSTALLFOLDER'>
+"@
+    $index = 0
+    foreach ($file in $files) {
+      $relPath = $file.FullName.Substring($PublishDir.Length + 1)
+      $safeRelPath = $relPath -replace '[^A-Za-z0-9_.]','_'
+      $compId = "cmp_" + $safeRelPath.Replace('.','_') + "_" + $index
+      $fileId = "fil_" + $safeRelPath.Replace('.','_') + "_" + $index
+      $guid = (New-Guid).ToString('D').ToUpper()
+      $index++
+      $wxsContent += "`n      <Component Id='$compId' Guid='$guid'>"
+      $wxsContent += "`n        <File Id='$fileId' Source='`$(var.PublishDir)\$relPath' />"
+      $wxsContent += "`n      </Component>"
+    }
+    $wxsContent += @"
+
+    </ComponentGroup>
+  </Fragment>
+</Wix>
+"@
+    Set-Content -Path $harvestWxs -Value $wxsContent -Encoding UTF8
+  }
 }
 finally { Pop-Location }
 
@@ -126,7 +157,12 @@ $msiPath = Join-Path $artifacts ("$msiName.msi")
 Info "Building MSI -> $msiPath ..."
 Push-Location $manifestDir
 try {
-  dotnet tool run wix build (Join-Path $msiDir 'Product.wxs') $harvestWxs $fileAssocWxs -d PublishDir=$PublishDir -arch x64 -o "$msiPath" | Out-Null
+  $wixOutput = dotnet wix build (Join-Path $msiDir 'Product.wxs') $harvestWxs $fileAssocWxs -d PublishDir=$PublishDir -arch x64 -o "$msiPath" 2>&1
+  $wixOutput | Where-Object { $_ -notmatch 'warning WIX107' } | Write-Host
+  # Check if MSI was actually created (WiX v4 returns non-zero for warnings)
+  if (-not (Test-Path $msiPath)) { 
+    throw "MSI build failed - output file not created at $msiPath" 
+  }
 }
 finally { Pop-Location }
 

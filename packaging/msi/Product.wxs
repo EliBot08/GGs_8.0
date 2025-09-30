@@ -32,7 +32,7 @@
     <Property Id="NOSHORTCUT" Value="0" />  <!-- set to 1 to suppress Start Menu shortcut -->
 
     <!-- Main feature includes harvested app files, optional shortcut/autostart, uninstall info, and file associations. -->
-    <Feature Id="MainFeature" Title="GGs Desktop" Level="1" Absent="disallow">
+    <Feature Id="MainFeature" Title="GGs Desktop" Level="1">
       <ComponentGroupRef Id="AppFiles" />
       <ComponentRef Id="App_Shortcut" />
       <ComponentRef Id="Reg_Autostart" />
@@ -75,7 +75,7 @@
     </Component>
 
     <!-- App icon for shortcut and associations -->
-    <Icon Id="AppIcon" SourceFile="..\..\clients\GGs.Desktop\assets\app-icon.ico" />
+    <Icon Id="AppIcon" SourceFile="$(var.PublishDir)\assets\app-icon.ico" />
 
     <!-- File association authoring will be generated as a ComponentGroup with Id=FileAssociations
          and consumed via the ComponentGroupRef above. -->
