@@ -37,25 +37,41 @@ if (-not $PublishDir) {
 $PublishDir = (Resolve-Path $PublishDir).Path
 
 # 2) Ensure WiX v4 CLI is available via local dotnet tool
-$manifestPath = Join-Path $repoRoot '.config\dotnet-tools.json'
-Push-Location $repoRoot
+$rootManifest = Join-Path $repoRoot 'dotnet-tools.json'
+$configManifest = Join-Path $repoRoot '.config\dotnet-tools.json'
+
+$manifestDir = $null
+if (Test-Path $rootManifest) {
+  $manifestDir = $repoRoot
+} elseif (Test-Path $configManifest) {
+  $manifestDir = Join-Path $repoRoot '.config'
+} else {
+  $manifestDir = $repoRoot
+}
+
+$manifestPath = Join-Path $manifestDir 'dotnet-tools.json'
+if (Test-Path $manifestPath) {
+  try { Unblock-File -LiteralPath $manifestPath -ErrorAction SilentlyContinue } catch { }
+}
+
+Push-Location $manifestDir
 try {
   if (-not (Test-Path $manifestPath)) {
-    Info 'Creating local dotnet tool manifest in .config...'
+    Info "Creating local dotnet tool manifest in $manifestDir..."
     dotnet new tool-manifest --force | Out-Null
   }
   Info 'Ensuring WiX tool is installed (local manifest)...'
   # Pin a stable WiX 4 version
   $wixVersion = '4.0.2'
-  try { dotnet tool update wix --version $wixVersion | Out-Null } catch { dotnet tool install wix --version $wixVersion | Out-Null }
-  dotnet tool restore | Out-Null
+  try { dotnet tool update wix --version $wixVersion --tool-manifest $manifestPath | Out-Null } catch { dotnet tool install wix --version $wixVersion --tool-manifest $manifestPath | Out-Null }
+  dotnet tool restore --tool-manifest $manifestPath | Out-Null
 }
 finally { Pop-Location }
 # 3) Harvest published files into WiX authoring
 $harvestWxs = Join-Path $genDir 'Harvested.wxs'
 Info 'Harvesting published output...'
 # Use WiX local tool via dotnet; generate stable-ish component guids; map to INSTALLFOLDER and var.PublishDir
-Push-Location $repoRoot
+Push-Location $manifestDir
 try {
   dotnet tool run wix heat dir "$PublishDir" -o "$harvestWxs" -cg AppFiles -dr INSTALLFOLDER -var var.PublishDir -scom -sreg -sfrag -srd -gg | Out-Null
 }
@@ -108,7 +124,7 @@ if ($Version) { $msiName += "-$Version" }
 $msiPath = Join-Path $artifacts ("$msiName.msi")
 
 Info "Building MSI -> $msiPath ..."
-Push-Location $repoRoot
+Push-Location $manifestDir
 try {
   dotnet tool run wix build (Join-Path $msiDir 'Product.wxs') $harvestWxs $fileAssocWxs -d PublishDir=$PublishDir -arch x64 -o "$msiPath" | Out-Null
 }

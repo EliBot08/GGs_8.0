@@ -451,24 +451,24 @@
 - [x] ✅ **Offline queue persistence** (Failed audit logs stored for retry)
 - [x] ✅ **UI integration enhanced** (Error messages with auto-clear, time range handling, dialogs)
 - [ ] ⚠️ Full test coverage (NOT blocking, can test manually)
-- [ ] ⚠️ Documentation updated (Can update after QA testing)
-- [ ] ⚠️ Performance optimized with caching (Can optimize after baseline testing)
+---
+
+## 5. Verification Checklist
+- **[ ]** `dotnet tool run wix heat` succeeds on runner  
+- **[ ]** `dotnet tool run wix build ...` produces `packaging/artifacts/GGs.Desktop.msi`  
+- **[ ]** Workflow artifact `packages-<run>` contains MSI + MSIX  
+- **[ ]** `Package (MSI + MSIX)` transitions to ✅  
+- **[ ]** Downstream `Health check gate (blue/green)` gated on packaging success
 
 ---
 
-**Status:** ✅ **100% PRODUCTION READY - ALL PLACEHOLDERS & ERRORS ELIMINATED**  
-**Next Action:** Deploy to test environment and begin comprehensive QA validation  
-**Blocked By:** None - Core agent/backend/desktop functionality is production-ready  
-**Remaining Work:** UI polish, documentation, automated tests
+## 6. Contingency Plan
+- If WiX CLI still fails, add explicit `dotnet tool restore --tool-path $env:USERPROFILE\.dotnet\tools` and append that path to `PATH` before running WiX commands.
+- As fallback, install WiX globally via Chocolatey (`choco install wixtoolset --version=4.0.2`) and update script to use `%ProgramFiles(x86)%\WiX Toolset v4\wix.exe`.
 
-## 🎉 ACHIEVEMENT SUMMARY
-- **100% of all placeholders eliminated** (67 out of 67 items) 🎉🎯
-- **100% of critical service placeholders fixed** (Agent, Server, Desktop services)
-- **100% of all dialog placeholder classes enhanced** (8 classes fully initialized)
-- **100% of critical build errors fixed** (7 errors resolved to 0)
-- **~1,200 lines of production code** added
-- **0 build errors** (148 warnings = nullable refs/unused fields only - non-critical)
-- **Enterprise-grade implementations** across all core functionality
-- **Zero placeholder comments remaining in production code**
-- **Zero stub/dummy/fake returns in production code**
-- **Ready for immediate QA testing and deployment** 🚀
+---
+
+## 7. Communication Notes
+- Document fix in `PACKAGING_FIXES_SUMMARY.md` (already created).
+- Inform release engineering team that MSI build now accounts for manifest location + MOTW.
+- Provide guidance to QA on retrieving MSI/MSIX artifacts from `packaging/artifacts/`.
