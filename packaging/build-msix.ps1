@@ -55,12 +55,13 @@ if (-not (Test-Path $assetsSrc)) { throw "Assets directory not found at: $assets
 Copy-Item -LiteralPath $assetsSrc -Destination (Join-Path $pubDir 'Assets') -Recurse -Force
 
 # Create mapping list file - MakeAppx format requires quoted paths
+# NOTE: When using /m parameter, AppxManifest.xml is auto-included and MUST be excluded from mapping
 $mapFile = Join-Path $artifacts 'mapping.txt'
 $mappingContent = [System.Collections.ArrayList]@()
 [void]$mappingContent.Add('[Files]')
 
-# Add all files from publish directory recursively
-Get-ChildItem -LiteralPath $pubDir -Recurse -File | ForEach-Object {
+# Add all files from publish directory recursively, EXCEPT AppxManifest.xml
+Get-ChildItem -LiteralPath $pubDir -Recurse -File | Where-Object { $_.Name -ne 'AppxManifest.xml' } | ForEach-Object {
     $fullPath = $_.FullName
     $relativePath = $fullPath.Substring($pubDir.Length + 1)
     # Format: "SourcePath" "DestinationPath"
