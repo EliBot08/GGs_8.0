@@ -67,19 +67,22 @@ function Start-ErrorLogViewer {
             return $null
         }
         
-        # Build ErrorLogViewer with enhanced error handling
-        Write-LogEntry "Building ErrorLogViewer..." -Level INFO
-        $buildResult = Build-Application -Path $errorLogViewerPath -ProjectName "GGs.ErrorLogViewer"
-        if (!$buildResult) {
-            Write-LogEntry "ErrorLogViewer build failed, but continuing without it" -Level WARNING
-            Write-LogEntry "This is not critical - the main GGs application will still work" -Level INFO
-            return $null
-        }
-        
-        # Find the executable
+        # Check if already built
         $exePath = "$errorLogViewerPath\bin\Release\net8.0-windows\GGs.ErrorLogViewer.exe"
         if (!(Test-Path $exePath)) {
-            Write-LogEntry "ErrorLogViewer executable not found after build" -Level WARNING
+            # Build ErrorLogViewer with enhanced error handling
+            Write-LogEntry "Building ErrorLogViewer..." -Level INFO
+            $buildResult = Build-Application -Path $errorLogViewerPath -ProjectName "GGs.ErrorLogViewer"
+            if (!$buildResult) {
+                Write-LogEntry "ErrorLogViewer build failed, but continuing without it" -Level WARNING
+                Write-LogEntry "This is not critical - the main GGs application will still work" -Level INFO
+                return $null
+            }
+        }
+        
+        # Verify executable exists
+        if (!(Test-Path $exePath)) {
+            Write-LogEntry "ErrorLogViewer executable not found" -Level WARNING
             return $null
         }
         
@@ -195,7 +198,7 @@ function Stop-ExistingProcesses {
 
 # Build application with retry logic
 function Build-Application {
-    param([string]$Path, [string]$ProjectName)
+    param([string]$Path, [string]$ProjectName, [bool]$SkipClean = $false)
     
     Write-LogEntry "Building $ProjectName..." -Level INFO
     
@@ -204,16 +207,19 @@ function Build-Application {
         try {
             Push-Location $Path
             
-            # Clean previous builds
-            if (Test-Path "bin") {
-                Remove-Item -Path "bin" -Recurse -Force -ErrorAction SilentlyContinue
-            }
-            if (Test-Path "obj") {
-                Remove-Item -Path "obj" -Recurse -Force -ErrorAction SilentlyContinue
+            # Only clean if explicitly requested (speeds up subsequent builds)
+            if (!$SkipClean) {
+                Write-LogEntry "Cleaning previous builds..." -Level DEBUG
+                if (Test-Path "bin\Release") {
+                    Remove-Item -Path "bin\Release" -Recurse -Force -ErrorAction SilentlyContinue
+                }
+                if (Test-Path "obj\Release") {
+                    Remove-Item -Path "obj\Release" -Recurse -Force -ErrorAction SilentlyContinue
+                }
             }
             
             # Build the project
-            $buildResult = dotnet build -c Release 2>&1
+            $buildResult = dotnet build -c Release --no-incremental 2>&1
             $buildExitCode = $LASTEXITCODE
             
             if ($buildExitCode -eq 0) {
