@@ -1,0 +1,8 @@
+﻿Continue on the prompts in ANALYSYS.PROMPTS.md from where we last left off, follow the instructions in the prompt and if you think a prompt is missing something critical then add it. when youre done with a prompt
+or prompts then make sure to test it and make sure its production ready with enterprise level of functioning then in the end mark the prompts as done. if anything is unclear make proper assesments and continue. keep building and coding the prompts in order until you reach youre token limit
+
+
+read my entire file and understand it then make launch the app fully and test it if it works with all the backend frontend literally everything i dont want a stupid simple launch i want a enterprisee level launch of my app, make it easy for someone like me to launch it who has 0 knowledge in coding
+
+
+ولله غندي مشكلة في العبة كرشت تحت الارض و انا في سيناريو و نييتي ادخل بسرعة لكن ولله اخذت مني 15 دقيقة ادخل العبة دخلت و لقيت نفسي مسجون الف شهر

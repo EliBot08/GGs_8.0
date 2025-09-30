@@ -1,0 +1,37 @@
+Administrator elevation (user consent via UAC prompt)
+
+Your app manifest requests requireAdministrator.
+
+The user explicitly approves when launching.
+
+This gives your app rights to all files, registry hives, and processes accessible to Administrators.
+
+Windows Service running as LocalSystem
+
+Installed by your app (with the user’s permission).
+
+Runs with SYSTEM privileges — the most powerful built-in account in Windows.
+
+This can do more than Administrator accounts (e.g., manage services, access protected registry keys, work before logon).
+
+Kernel-mode driver (signed, installed with user consent)
+
+For true “every inch” access, you need a driver.
+
+A driver runs in ring 0 (kernel mode), which means it can directly interact with hardware, memory, filesystem, networking stack, etc.
+
+To be legitimate:
+
+Write it with the Windows Driver Kit (WDK).
+
+Sign it with an EV code-signing certificate.
+
+Package it in your installer so the user approves its installation.
+
+Win32 + WMI + Registry APIs (via C# with P/Invoke)
+
+Access low-level configuration safely.
+
+Control processes, threads, scheduling, network, power, storage.
+
+Use official APIs instead of hacks (safer and future-proof).
