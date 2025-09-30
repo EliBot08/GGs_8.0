@@ -1,0 +1,139 @@
+<UserControl x:Class="GGs.Desktop.Views.Controls.AnimatedProgressBar"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+    
+    <UserControl.Resources>
+        <!-- Gradient Brushes for Professional Look -->
+        <LinearGradientBrush x:Key="ProgressGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FF00D4FF" Offset="0"/>
+            <GradientStop Color="#FF0099FF" Offset="0.5"/>
+            <GradientStop Color="#FF0066FF" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="ProgressGradientSuccess" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FF00FF88" Offset="0"/>
+            <GradientStop Color="#FF00CC66" Offset="0.5"/>
+            <GradientStop Color="#FF009944" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="ProgressGradientWarning" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FFFF9900" Offset="0"/>
+            <GradientStop Color="#FFFF7700" Offset="0.5"/>
+            <GradientStop Color="#FFFF5500" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="ProgressGradientError" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FFFF4444" Offset="0"/>
+            <GradientStop Color="#FFFF2222" Offset="0.5"/>
+            <GradientStop Color="#FFFF0000" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <!-- Animation Storyboards -->
+        <Storyboard x:Key="PulseAnimation" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="PulseEllipse" 
+                           Storyboard.TargetProperty="Opacity"
+                           From="0.3" To="0.8" Duration="0:0:1.5" 
+                           AutoReverse="True"/>
+        </Storyboard>
+        
+        <Storyboard x:Key="ShimmerAnimation" RepeatBehavior="Forever">
+            <DoubleAnimation Storyboard.TargetName="ShimmerTransform" 
+                           Storyboard.TargetProperty="X"
+                           From="-100" To="400" Duration="0:0:2"/>
+        </Storyboard>
+        
+        <Storyboard x:Key="CompletionAnimation">
+            <DoubleAnimation Storyboard.TargetName="CompletionIcon" 
+                           Storyboard.TargetProperty="Opacity"
+                           From="0" To="1" Duration="0:0:0.5"/>
+            <DoubleAnimation Storyboard.TargetName="CompletionIconScaleTransform" 
+                           Storyboard.TargetProperty="ScaleX"
+                           From="0.5" To="1" Duration="0:0:0.5"/>
+            <DoubleAnimation Storyboard.TargetName="CompletionIconScaleTransform" 
+                           Storyboard.TargetProperty="ScaleY"
+                           From="0.5" To="1" Duration="0:0:0.5"/>
+        </Storyboard>
+    </UserControl.Resources>
+    
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Progress Description -->
+        <Grid Grid.Row="0" Margin="0,0,0,8">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Animation Icon -->
+            <TextBlock x:Name="AnimationIcon" Grid.Column="0" 
+                      Text="🔍" FontSize="16" VerticalAlignment="Center" 
+                      Margin="0,0,8,0" Foreground="{DynamicResource ThemeAccentPrimary}">
+                <TextBlock.RenderTransform>
+                    <RotateTransform x:Name="IconRotateTransform" CenterX="8" CenterY="8"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+            
+            <!-- Description Text -->
+            <TextBlock x:Name="DescriptionText" Grid.Column="1" 
+                      Text="Processing..." FontSize="14" FontWeight="Medium"
+                      VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextPrimary}"/>
+            
+            <!-- Percentage -->
+            <TextBlock x:Name="PercentageText" Grid.Column="2" 
+                      Text="0%" FontSize="14" FontWeight="SemiBold"
+                      VerticalAlignment="Center" Foreground="{DynamicResource ThemeAccentPrimary}"/>
+        </Grid>
+        
+        <!-- Progress Bar Container -->
+        <Border Grid.Row="1" Height="8" Background="{DynamicResource ThemeBackgroundTertiary}" 
+                CornerRadius="4" ClipToBounds="True">
+            <Grid>
+                <!-- Background Pulse Effect -->
+                <Ellipse x:Name="PulseEllipse" Fill="{DynamicResource ThemeAccentPrimary}" 
+                        Opacity="0.1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                
+                <!-- Progress Fill -->
+                <Rectangle x:Name="ProgressFill" HorizontalAlignment="Left" 
+                          Fill="{StaticResource ProgressGradient}" Height="8">
+                <Rectangle.RenderTransform>
+                    <ScaleTransform x:Name="ProgressScaleTransform" ScaleX="0"/>
+                </Rectangle.RenderTransform>
+                
+                <!-- Shimmer Effect -->
+                <Rectangle.OpacityMask>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <LinearGradientBrush.Transform>
+                            <TranslateTransform x:Name="ShimmerTransform" X="-100"/>
+                        </LinearGradientBrush.Transform>
+                        <GradientStop Color="Transparent" Offset="0"/>
+                        <GradientStop Color="White" Offset="0.4"/>
+                        <GradientStop Color="White" Offset="0.6"/>
+                        <GradientStop Color="Transparent" Offset="1"/>
+                    </LinearGradientBrush>
+                </Rectangle.OpacityMask>
+                </Rectangle>
+            </Grid>
+        </Border>
+        
+        <!-- Step Indicator -->
+        <StackPanel Grid.Row="2" Orientation="Horizontal" Margin="0,8,0,0" 
+                   HorizontalAlignment="Center">
+            <TextBlock x:Name="StepText" Text="Step 1 of 10" FontSize="12" 
+                      Foreground="{DynamicResource ThemeTextSecondary}"/>
+            
+            <!-- Completion Icon -->
+            <TextBlock x:Name="CompletionIcon" Text="✅" FontSize="16" 
+                      Margin="8,0,0,0" Opacity="0" Visibility="Collapsed">
+                <TextBlock.RenderTransform>
+                    <ScaleTransform x:Name="CompletionIconScaleTransform" ScaleX="0.5" ScaleY="0.5"/>
+                </TextBlock.RenderTransform>
+            </TextBlock>
+        </StackPanel>
+    </Grid>
+</UserControl>

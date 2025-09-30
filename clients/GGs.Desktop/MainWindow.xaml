@@ -1,0 +1,63 @@
+﻿<Window x:Class="GGs.Desktop.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:GGs.Desktop.Views"
+        xmlns:viewsAdmin="clr-namespace:GGs.Desktop.Views.Admin"
+        Title="GGs - Admin Panel" Height="700" Width="1100" WindowStartupLocation="CenterScreen">
+    <DockPanel>
+        <StackPanel DockPanel.Dock="Top" Orientation="Vertical" Margin="10">
+            <StackPanel Orientation="Horizontal">
+                <TextBlock Name="TierText" FontSize="16" FontWeight="Bold" Text="Tier: " />
+                <TextBlock Name="UserText" FontSize="16" Margin="10,0,0,0"/>
+            </StackPanel>
+            <Border Name="NotificationBar" Background="#FFFBE6" BorderBrush="#F0C36D" BorderThickness="1" Padding="8" Margin="0,6,0,0" Visibility="Collapsed">
+                <TextBlock Name="NotificationText" Foreground="#8A6D3B"/>
+            </Border>
+        </StackPanel>
+        <!-- Connectivity banner -->
+        <Border x:Name="ConnectivityBar" Background="#FDECEA" BorderBrush="#F5C2C7" BorderThickness="1" Padding="8" Margin="10,0,10,6" Visibility="Collapsed">
+            <TextBlock x:Name="ConnectivityText" Foreground="#8A1C1C" Text="Offline mode: Some features are disabled. Changes will sync when back online."/>
+        </Border>
+        <TabControl>
+            <TabItem x:Name="DashboardTab" Header="Dashboard">
+                <StackPanel Margin="10">
+                    <views:OnboardingChecklist x:Name="Onboarding" Margin="0,0,0,10"/>
+                    <TextBlock Text="Welcome to GGs" FontSize="20" FontWeight="Bold"/>
+                    <TextBlock Text="EliBot recommendations:" Margin="0,10,0,0"/>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox Name="EliQuestion" Width="400"/>
+                        <Button x:Name="BtnAskEliBot" Content="Ask EliBot" Margin="10,0,0,0" Click="AskEliBot_Click"/>
+                    </StackPanel>
+                    <TextBlock Name="EliAnswer" Margin="0,10,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem x:Name="TweaksTab" Header="Tweaks">
+                <viewsAdmin:TweakManagementView x:Name="TweakView"/>
+            </TabItem>
+            <TabItem x:Name="LicensesTab" Header="Licenses">
+                <viewsAdmin:LicenseManagementView x:Name="LicenseView"/>
+            </TabItem>
+            <TabItem x:Name="UsersTab" Header="Users">
+                <viewsAdmin:UserManagementView x:Name="UserView"/>
+            </TabItem>
+            <TabItem x:Name="AnalyticsTab" Header="Analytics">
+                <views:AnalyticsView x:Name="AnalyticsView"/>
+            </TabItem>
+            <TabItem x:Name="NotificationsTab" Header="Notifications">
+                <views:NotificationsView x:Name="NotificationsView"/>
+            </TabItem>
+            <TabItem x:Name="RemoteTab" Header="Remote">
+                <viewsAdmin:RemoteManagementView x:Name="RemoteView"/>
+            </TabItem>
+            <TabItem x:Name="SettingsTab" Header="Settings">
+                <StackPanel Margin="10">
+                    <TextBlock Text="Configure server URL and themes in appsettings.json."/>
+                    <StackPanel Orientation="Horizontal" Margin="0,10,0,0">
+                        <TextBlock Text="Text size" VerticalAlignment="Center" Width="100"/>
+                        <Slider Minimum="11" Maximum="22" Width="200" ValueChanged="FontSlider_ValueChanged"/>
+                    </StackPanel>
+                </StackPanel>
+            </TabItem>
+        </TabControl>
+    </DockPanel>
+</Window>

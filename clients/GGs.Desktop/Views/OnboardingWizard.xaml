@@ -1,0 +1,195 @@
+<Window x:Class="GGs.Desktop.Views.OnboardingWizard"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:controls="clr-namespace:GGs.Desktop.Views.Controls"
+        Title="Welcome to GGs Enterprise"
+        Height="700" Width="900"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="None"
+        AllowsTransparency="True"
+        Background="Transparent"
+        ResizeMode="NoResize">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/ModernEnterpriseTheme.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
+
+    <Border Background="{DynamicResource BackgroundBrush}" 
+            CornerRadius="16" 
+            BorderBrush="{DynamicResource BorderBrush}" 
+            BorderThickness="1">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <Border Grid.Row="0" Background="{DynamicResource SurfaceBrush}" 
+                    CornerRadius="16,16,0,0" Padding="32,24">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Logo and Title -->
+                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                        <Path Width="32" Height="32" Fill="{DynamicResource PrimaryBrush}" 
+                              Data="M12 2L2 7v10c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7l-10-5z"/>
+                        <StackPanel Margin="16,0,0,0">
+                            <TextBlock Text="GGs Enterprise" FontSize="24" FontWeight="Bold" 
+                                       Foreground="{DynamicResource TextPrimaryBrush}"/>
+                            <TextBlock x:Name="WelcomeSubtitle" Text="Gaming Optimization Suite" 
+                                       FontSize="14" Foreground="{DynamicResource TextSecondaryBrush}"/>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <!-- Progress Indicator -->
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" 
+                                HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <controls:ProgressDot x:Name="Step1Dot" IsActive="True" IsCompleted="False"/>
+                        <Rectangle Width="32" Height="2" Fill="{DynamicResource BorderBrush}" Margin="4,0"/>
+                        <controls:ProgressDot x:Name="Step2Dot" IsActive="False" IsCompleted="False"/>
+                        <Rectangle Width="32" Height="2" Fill="{DynamicResource BorderBrush}" Margin="4,0"/>
+                        <controls:ProgressDot x:Name="Step3Dot" IsActive="False" IsCompleted="False"/>
+                        <Rectangle Width="32" Height="2" Fill="{DynamicResource BorderBrush}" Margin="4,0"/>
+                        <controls:ProgressDot x:Name="Step4Dot" IsActive="False" IsCompleted="False"/>
+                    </StackPanel>
+
+                    <!-- Close Button -->
+                    <Button Grid.Column="2" x:Name="CloseButton" 
+                            Style="{DynamicResource PrimaryButton}"
+                            Background="Transparent" 
+                            Foreground="{DynamicResource TextSecondaryBrush}"
+                            Width="32" Height="32" 
+                            Click="Close_Click">
+                        <Path Width="16" Height="16" Fill="CurrentColor" 
+                              Data="M6 6l12 12M6 18L18 6"/>
+                    </Button>
+                </Grid>
+            </Border>
+
+            <!-- Content Area -->
+            <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="32">
+                <ContentControl x:Name="ContentPresenter">
+                    
+                    <!-- Step 1: Welcome -->
+                    <Grid x:Name="Step1Content">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="300"/>
+                        </Grid.ColumnDefinitions>
+
+                        <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                            <TextBlock Text="Welcome to GGs Enterprise!" 
+                                       FontSize="36" FontWeight="Bold" 
+                                       Foreground="{DynamicResource TextPrimaryBrush}"
+                                       Margin="0,0,0,16"/>
+                            
+                            <TextBlock Text="Your journey to optimized gaming performance starts here. GGs Enterprise provides advanced system optimization, AI-powered recommendations, and enterprise-grade management tools."
+                                       FontSize="16" 
+                                       Foreground="{DynamicResource TextSecondaryBrush}"
+                                       TextWrapping="Wrap"
+                                       LineHeight="24"
+                                       Margin="0,0,0,24"/>
+
+                            <StackPanel>
+                                <controls:FeatureHighlight 
+                                    Icon="M13 10V3L4 14h7v7l9-11h-7z"
+                                    Title="Advanced Performance Optimization"
+                                    Description="AI-powered tweaks that adapt to your system and gaming preferences"/>
+                                
+                                <controls:FeatureHighlight 
+                                    Icon="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"
+                                    Title="EliBot AI Assistant"
+                                    Description="24/7 AI support for optimization guidance and troubleshooting"/>
+                                
+                                <controls:FeatureHighlight 
+                                    Icon="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"
+                                    Title="Enterprise Management"
+                                    Description="User management, remote deployment, and advanced analytics"/>
+                            </StackPanel>
+                        </StackPanel>
+
+                        <Border Grid.Column="1" Style="{DynamicResource ModernCard}" 
+                                Background="{DynamicResource PrimaryBrush}" Margin="32,0,0,0">
+                            <StackPanel>
+                                <TextBlock Text="🎮" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                                <TextBlock Text="Ready to optimize your gaming experience?"
+                                           FontSize="18" FontWeight="SemiBold" 
+                                           Foreground="White" TextAlignment="Center"
+                                           TextWrapping="Wrap" Margin="0,0,0,16"/>
+                                <TextBlock Text="This wizard will help you:"
+                                           FontSize="14" Foreground="#E0E7FF" 
+                                           Margin="0,0,0,12"/>
+                                <StackPanel>
+                                    <TextBlock Text="• Configure your system profile" 
+                                               FontSize="14" Foreground="#E0E7FF" Margin="0,0,0,4"/>
+                                    <TextBlock Text="• Set up optimization preferences" 
+                                               FontSize="14" Foreground="#E0E7FF" Margin="0,0,0,4"/>
+                                    <TextBlock Text="• Connect to enterprise features" 
+                                               FontSize="14" Foreground="#E0E7FF" Margin="0,0,0,4"/>
+                                    <TextBlock Text="• Test EliBot AI assistant" 
+                                               FontSize="14" Foreground="#E0E7FF" Margin="0,0,0,4"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+
+                </ContentControl>
+            </ScrollViewer>
+
+            <!-- Footer with Navigation -->
+            <Border Grid.Row="2" Background="{DynamicResource SurfaceBrush}" 
+                    CornerRadius="0,0,16,16" Padding="32,20"
+                    BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0">
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <!-- Step Info -->
+                    <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock x:Name="StepTitle" Text="Welcome" 
+                                   FontSize="16" FontWeight="SemiBold" 
+                                   Foreground="{DynamicResource TextPrimaryBrush}"/>
+                        <TextBlock x:Name="StepDescription" Text="Step 1 of 4" 
+                                   FontSize="14" 
+                                   Foreground="{DynamicResource TextSecondaryBrush}"/>
+                    </StackPanel>
+
+                    <!-- Navigation Buttons -->
+                    <StackPanel Grid.Column="2" Orientation="Horizontal">
+                        <Button x:Name="BackButton" Content="Back" 
+                                Style="{DynamicResource PrimaryButton}"
+                                Background="Transparent" 
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Margin="0,0,12,0" 
+                                IsEnabled="False"
+                                Click="Back_Click"/>
+                        
+                        <Button x:Name="NextButton" Content="Get Started" 
+                                Style="{DynamicResource PrimaryButton}"
+                                Click="Next_Click"/>
+                        
+                        <Button x:Name="SkipButton" Content="Skip Tour" 
+                                Style="{DynamicResource PrimaryButton}"
+                                Background="Transparent" 
+                                Foreground="{DynamicResource TextSecondaryBrush}"
+                                Margin="12,0,0,0" 
+                                Click="Skip_Click"/>
+                    </StackPanel>
+                </Grid>
+            </Border>
+        </Grid>
+    </Border>
+</Window>

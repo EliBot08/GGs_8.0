@@ -1,0 +1,539 @@
+<UserControl x:Class="GGs.Desktop.Views.SystemIntelligenceView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="1200">
+    
+    <UserControl.Resources>
+        <!-- Premium Gradient Brushes -->
+        <LinearGradientBrush x:Key="PremiumGradient" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#FF6B46C1" Offset="0"/>
+            <GradientStop Color="#FF9333EA" Offset="0.5"/>
+            <GradientStop Color="#FFC084FC" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="SuccessGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FF10B981" Offset="0"/>
+            <GradientStop Color="#FF34D399" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="WarningGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FFF59E0B" Offset="0"/>
+            <GradientStop Color="#FFFBBF24" Offset="1"/>
+        </LinearGradientBrush>
+        
+        <LinearGradientBrush x:Key="DangerGradient" StartPoint="0,0" EndPoint="1,0">
+            <GradientStop Color="#FFEF4444" Offset="0"/>
+            <GradientStop Color="#FFF87171" Offset="1"/>
+        </LinearGradientBrush>
+
+        <!-- Premium Card Style -->
+        <Style x:Key="PremiumCard" TargetType="Border">
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundSecondary}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="24"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="4" BlurRadius="12"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Premium Button Style -->
+        <Style x:Key="PremiumButton" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource PremiumGradient}"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Padding" Value="24,12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" 
+                                CornerRadius="8" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.9"/>
+                                <Setter TargetName="border" Property="RenderTransform">
+                                    <Setter.Value>
+                                        <ScaleTransform ScaleX="1.02" ScaleY="1.02"/>
+                                    </Setter.Value>
+                                </Setter>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="border" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Progress Ring Style -->
+        <Style x:Key="PremiumProgressRing" TargetType="ProgressBar">
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ProgressBar">
+                        <Grid>
+                            <Ellipse Stroke="{DynamicResource ThemeBorder}" StrokeThickness="8" 
+                                   Width="120" Height="120"/>
+                            <Ellipse x:Name="ProgressEllipse" Stroke="{StaticResource PremiumGradient}" 
+                                   StrokeThickness="8" Width="120" Height="120"
+                                   StrokeDashArray="377" StrokeDashOffset="377"
+                                   RenderTransformOrigin="0.5,0.5">
+                                <Ellipse.RenderTransform>
+                                    <RotateTransform Angle="-90"/>
+                                </Ellipse.RenderTransform>
+                            </Ellipse>
+                            <TextBlock Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=Value, StringFormat={}{0:F0}%}"
+                                     HorizontalAlignment="Center" VerticalAlignment="Center"
+                                     FontSize="18" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <DataTrigger Binding="{Binding RelativeSource={RelativeSource Self}, Path=Value}" Value="0">
+                                <Setter TargetName="ProgressEllipse" Property="StrokeDashOffset" Value="377"/>
+                            </DataTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="{DynamicResource ThemeBackgroundPrimary}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header Section -->
+        <Border Grid.Row="0" Style="{StaticResource PremiumCard}" Margin="16,16,16,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0">
+                    <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                        <TextBlock Text="🧠" FontSize="32" VerticalAlignment="Center" Margin="0,0,12,0"/>
+                        <StackPanel>
+                            <TextBlock Text="System Intelligence Harvester" FontSize="28" FontWeight="Bold" 
+                                     Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            <TextBlock Text="Enterprise-grade deep system analysis and tweak discovery" 
+                                     FontSize="14" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                        </StackPanel>
+                    </StackPanel>
+                    
+                    <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                        <Border Background="{StaticResource PremiumGradient}" CornerRadius="12" Padding="8,4">
+                            <TextBlock Text="PRO EXCLUSIVE" FontSize="10" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                        <Border Background="{StaticResource SuccessGradient}" CornerRadius="12" Padding="8,4" Margin="8,0,0,0">
+                            <TextBlock x:Name="LicenseStatusText" Text="ENTERPRISE TIER" FontSize="10" FontWeight="Bold" Foreground="White"/>
+                        </Border>
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button x:Name="BtnStartHarvest" Content="🚀 Start Deep Harvest" Style="{StaticResource PremiumButton}" 
+                            Margin="0,0,12,0" Click="StartHarvest_Click"/>
+                    <Button x:Name="BtnSettings" Content="⚙️ Settings" Style="{StaticResource PremiumButton}" 
+                            Background="{DynamicResource ThemeBackgroundTertiary}" 
+                            Foreground="{DynamicResource ThemeTextPrimary}" Click="Settings_Click"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Main Content -->
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Margin="16,0,16,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Left Panel - Scan Progress and Results -->
+                <StackPanel Grid.Column="0" Margin="0,0,8,0">
+                    
+                    <!-- Scan Progress Card -->
+                    <Border x:Name="ScanProgressCard" Style="{StaticResource PremiumCard}" Visibility="Collapsed">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- Progress Ring -->
+                            <ProgressBar x:Name="ScanProgressRing" Grid.Column="0" Style="{StaticResource PremiumProgressRing}" 
+                                       Value="0" Maximum="100" Margin="0,0,24,0"/>
+
+                            <!-- Progress Details -->
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="Deep System Harvest in Progress" FontSize="20" FontWeight="Bold" 
+                                         Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,8"/>
+                                
+                                <TextBlock x:Name="CurrentOperationText" Text="Initializing scan modules..." 
+                                         FontSize="14" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,16"/>
+
+                                <!-- Progress Bars for Different Scan Areas -->
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Registry Analysis" FontSize="12" VerticalAlignment="Center"/>
+                                    <ProgressBar x:Name="RegistryProgress" Grid.Column="1" Height="6" Margin="8,0" 
+                                               Background="{DynamicResource ThemeBorder}" 
+                                               Foreground="{StaticResource PremiumGradient}"/>
+                                    <TextBlock x:Name="RegistryProgressText" Grid.Column="2" Text="0%" FontSize="12" 
+                                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Service Discovery" FontSize="12" VerticalAlignment="Center"/>
+                                    <ProgressBar x:Name="ServiceProgress" Grid.Column="1" Height="6" Margin="8,0" 
+                                               Background="{DynamicResource ThemeBorder}" 
+                                               Foreground="{StaticResource SuccessGradient}"/>
+                                    <TextBlock x:Name="ServiceProgressText" Grid.Column="2" Text="0%" FontSize="12" 
+                                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="BIOS/UEFI Scan" FontSize="12" VerticalAlignment="Center"/>
+                                    <ProgressBar x:Name="BiosProgress" Grid.Column="1" Height="6" Margin="8,0" 
+                                               Background="{DynamicResource ThemeBorder}" 
+                                               Foreground="{StaticResource WarningGradient}"/>
+                                    <TextBlock x:Name="BiosProgressText" Grid.Column="2" Text="0%" FontSize="12" 
+                                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <Grid Margin="0,0,0,16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="120"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="60"/>
+                                    </Grid.ColumnDefinitions>
+                                    <TextBlock Grid.Column="0" Text="Group Policy" FontSize="12" VerticalAlignment="Center"/>
+                                    <ProgressBar x:Name="GroupPolicyProgress" Grid.Column="1" Height="6" Margin="8,0" 
+                                               Background="{DynamicResource ThemeBorder}" 
+                                               Foreground="{StaticResource DangerGradient}"/>
+                                    <TextBlock x:Name="GroupPolicyProgressText" Grid.Column="2" Text="0%" FontSize="12" 
+                                             HorizontalAlignment="Right" VerticalAlignment="Center"/>
+                                </Grid>
+
+                                <!-- Time and Stats -->
+                                <Grid>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="*"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel Grid.Column="0">
+                                        <TextBlock Text="Elapsed Time" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                        <TextBlock x:Name="ElapsedTimeText" Text="00:00:00" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1">
+                                        <TextBlock Text="Tweaks Found" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                        <TextBlock x:Name="TweaksFoundText" Text="0" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="2">
+                                        <TextBlock Text="Estimated Time" FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                        <TextBlock x:Name="EstimatedTimeText" Text="--:--:--" FontSize="14" FontWeight="Bold"/>
+                                    </StackPanel>
+                                </Grid>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+
+                    <!-- Scan Results Card -->
+                    <Border x:Name="ScanResultsCard" Style="{StaticResource PremiumCard}" Visibility="Collapsed">
+                        <StackPanel>
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="🎯 Harvest Complete!" FontSize="24" FontWeight="Bold" 
+                                             Foreground="{StaticResource SuccessGradient}" Margin="0,0,0,4"/>
+                                    <TextBlock x:Name="ScanSummaryText" Text="Deep system analysis completed successfully" 
+                                             FontSize="14" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                    <Button x:Name="BtnSaveProfile" Content="💾 Save Profile" Style="{StaticResource PremiumButton}" 
+                                            Margin="0,0,8,0" Click="SaveProfile_Click"/>
+                                    <Button x:Name="BtnShareProfile" Content="🌐 Share Profile" Style="{StaticResource PremiumButton}" 
+                                            Background="{StaticResource SuccessGradient}" Click="ShareProfile_Click"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <!-- Results Summary -->
+                            <Grid Margin="0,0,0,16">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+
+                                <Border Grid.Column="0" Background="{StaticResource PremiumGradient}" CornerRadius="8" Padding="16" Margin="0,0,4,0">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock x:Name="TotalTweaksText" Text="0" FontSize="24" FontWeight="Bold" 
+                                                 Foreground="White" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Total Tweaks" FontSize="12" Foreground="White" 
+                                                 HorizontalAlignment="Center" Opacity="0.9"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="1" Background="{StaticResource SuccessGradient}" CornerRadius="8" Padding="16" Margin="4,0">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock x:Name="SafeTweaksText" Text="0" FontSize="24" FontWeight="Bold" 
+                                                 Foreground="White" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Safe Tweaks" FontSize="12" Foreground="White" 
+                                                 HorizontalAlignment="Center" Opacity="0.9"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="2" Background="{StaticResource WarningGradient}" CornerRadius="8" Padding="16" Margin="4,0">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock x:Name="CautionTweaksText" Text="0" FontSize="24" FontWeight="Bold" 
+                                                 Foreground="White" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Caution Tweaks" FontSize="12" Foreground="White" 
+                                                 HorizontalAlignment="Center" Opacity="0.9"/>
+                                    </StackPanel>
+                                </Border>
+
+                                <Border Grid.Column="3" Background="{StaticResource DangerGradient}" CornerRadius="8" Padding="16" Margin="4,0,0,0">
+                                    <StackPanel HorizontalAlignment="Center">
+                                        <TextBlock x:Name="RiskyTweaksText" Text="0" FontSize="24" FontWeight="Bold" 
+                                                 Foreground="White" HorizontalAlignment="Center"/>
+                                        <TextBlock Text="Risky Tweaks" FontSize="12" Foreground="White" 
+                                                 HorizontalAlignment="Center" Opacity="0.9"/>
+                                    </StackPanel>
+                                </Border>
+                            </Grid>
+
+                            <!-- Detected Tweaks List -->
+                            <TextBlock Text="🔍 Detected Tweaks" FontSize="18" FontWeight="Bold" 
+                                     Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,12"/>
+                            
+                            <ListView x:Name="DetectedTweaksList" Height="300" Background="Transparent" 
+                                    BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{DynamicResource ThemeBackgroundTertiary}" 
+                                              CornerRadius="8" Padding="16" Margin="0,0,0,8">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <Border Grid.Column="0" Background="{Binding SafetyColor}" 
+                                                      Width="4" CornerRadius="2" Margin="0,0,12,0"/>
+
+                                                <StackPanel Grid.Column="1">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="14" 
+                                                             Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                                    <TextBlock Text="{Binding Description}" FontSize="12" 
+                                                             Foreground="{DynamicResource ThemeTextSecondary}" 
+                                                             TextWrapping="Wrap" Margin="0,2,0,0"/>
+                                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                                        <TextBlock Text="{Binding Source}" FontSize="10" 
+                                                                 Background="{DynamicResource ThemeBorder}" 
+                                                                 Padding="4,2" Margin="0,0,4,0"/>
+                                                        <TextBlock Text="{Binding Category}" FontSize="10" 
+                                                                 Background="{DynamicResource ThemeBorder}" 
+                                                                 Padding="4,2"/>
+                                                    </StackPanel>
+                                                </StackPanel>
+
+                                                <TextBlock Grid.Column="2" Text="{Binding ConfidenceScore, StringFormat={}Confidence: {0}%}" 
+                                                         FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" 
+                                                         VerticalAlignment="Center" Margin="12,0"/>
+
+                                                <CheckBox Grid.Column="3" IsChecked="{Binding IsSelected}" 
+                                                        VerticalAlignment="Center"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Welcome Card (shown when no scan is active) -->
+                    <Border x:Name="WelcomeCard" Style="{StaticResource PremiumCard}">
+                        <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Margin="0,40">
+                            <TextBlock Text="🧠" FontSize="64" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                            <TextBlock Text="Ready to Harvest System Intelligence" FontSize="24" FontWeight="Bold" 
+                                     HorizontalAlignment="Center" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,8"/>
+                            <TextBlock Text="Click 'Start Deep Harvest' to begin the most comprehensive system analysis available" 
+                                     FontSize="14" HorizontalAlignment="Center" Foreground="{DynamicResource ThemeTextSecondary}" 
+                                     TextWrapping="Wrap" MaxWidth="400" Margin="0,0,0,24"/>
+                            
+                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                <Border Background="{StaticResource PremiumGradient}" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
+                                    <TextBlock Text="✓ Registry Deep Scan" FontSize="12" Foreground="White"/>
+                                </Border>
+                                <Border Background="{StaticResource SuccessGradient}" CornerRadius="8" Padding="12,6" Margin="0,0,8,0">
+                                    <TextBlock Text="✓ Service Analysis" FontSize="12" Foreground="White"/>
+                                </Border>
+                                <Border Background="{StaticResource WarningGradient}" CornerRadius="8" Padding="12,6">
+                                    <TextBlock Text="✓ BIOS/UEFI Scan" FontSize="12" Foreground="White"/>
+                                </Border>
+                            </StackPanel>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+
+                <!-- Right Panel - Settings and Info -->
+                <StackPanel Grid.Column="1" Margin="8,0,0,0">
+                    
+                    <!-- Scan Configuration Card -->
+                    <Border Style="{StaticResource PremiumCard}">
+                        <StackPanel>
+                            <TextBlock Text="⚙️ Scan Configuration" FontSize="18" FontWeight="Bold" 
+                                     Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+
+                            <TextBlock Text="Scan Depth" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <ComboBox x:Name="ScanDepthCombo" Margin="0,0,0,16">
+                                <ComboBoxItem Content="Surface - Quick scan (2-3 min)" Tag="Surface"/>
+                                <ComboBoxItem Content="Standard - Balanced scan (5-7 min)" Tag="Standard" IsSelected="True"/>
+                                <ComboBoxItem Content="Deep - Thorough scan (8-12 min)" Tag="Deep"/>
+                                <ComboBoxItem Content="Maximum - Complete scan (15+ min)" Tag="Maximum"/>
+                            </ComboBox>
+
+                            <TextBlock Text="Scan Areas" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <StackPanel Margin="0,0,0,16">
+                                <CheckBox x:Name="RegistryCheckBox" Content="Registry Editor" IsChecked="True" Margin="0,0,0,4"/>
+                                <CheckBox x:Name="ServicesCheckBox" Content="Windows Services" IsChecked="True" Margin="0,0,0,4"/>
+                                <CheckBox x:Name="BiosCheckBox" Content="BIOS/UEFI Settings" IsChecked="True" Margin="0,0,0,4"/>
+                                <CheckBox x:Name="GroupPolicyCheckBox" Content="Group Policy" IsChecked="True" Margin="0,0,0,4"/>
+                                <CheckBox x:Name="ThirdPartyCheckBox" Content="Third-party Optimizers" IsChecked="True"/>
+                            </StackPanel>
+
+                            <TextBlock Text="Safety Level" FontSize="14" FontWeight="SemiBold" Margin="0,0,0,8"/>
+                            <ComboBox x:Name="SafetyLevelCombo" Margin="0,0,0,16">
+                                <ComboBoxItem Content="Conservative - Only safe tweaks" Tag="Conservative"/>
+                                <ComboBoxItem Content="Balanced - Safe + low-risk tweaks" Tag="Balanced" IsSelected="True"/>
+                                <ComboBoxItem Content="Aggressive - Include risky tweaks" Tag="Aggressive"/>
+                            </ComboBox>
+
+                            <CheckBox x:Name="AutoSaveCheckBox" Content="Auto-save profile after scan" IsChecked="True" Margin="0,0,0,8"/>
+                            <CheckBox x:Name="CloudSyncCheckBox" Content="Sync to cloud profile" IsChecked="False"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- License Information Card -->
+                    <Border Style="{StaticResource PremiumCard}">
+                        <StackPanel>
+                            <TextBlock Text="📋 License Information" FontSize="18" FontWeight="Bold" 
+                                     Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+
+                            <Grid Margin="0,0,0,12">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="*"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Current Tier" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                    <TextBlock x:Name="CurrentTierText" Text="Enterprise" FontSize="14" FontWeight="Bold"/>
+                                </StackPanel>
+                                
+                                <StackPanel Grid.Column="1">
+                                    <TextBlock Text="Profiles Saved" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                    <TextBlock x:Name="ProfilesUsedText" Text="2 / 5" FontSize="14" FontWeight="Bold"/>
+                                </StackPanel>
+                            </Grid>
+
+                            <ProgressBar x:Name="ProfileUsageProgress" Height="8" Margin="0,0,0,12" 
+                                       Background="{DynamicResource ThemeBorder}" 
+                                       Foreground="{StaticResource PremiumGradient}" Value="40"/>
+
+                            <TextBlock Text="✓ Unlimited scan depth" FontSize="12" Margin="0,0,0,2"/>
+                            <TextBlock Text="✓ Cloud profile sharing" FontSize="12" Margin="0,0,0,2"/>
+                            <TextBlock Text="✓ Advanced tweak detection" FontSize="12" Margin="0,0,0,2"/>
+                            <TextBlock Text="✓ Priority support" FontSize="12"/>
+                        </StackPanel>
+                    </Border>
+
+                    <!-- Recent Profiles Card -->
+                    <Border Style="{StaticResource PremiumCard}">
+                        <StackPanel>
+                            <TextBlock Text="📁 Recent Profiles" FontSize="18" FontWeight="Bold" 
+                                     Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+
+                            <ListView x:Name="RecentProfilesList" Height="200" Background="Transparent" 
+                                    BorderThickness="0" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+                                <ListView.ItemTemplate>
+                                    <DataTemplate>
+                                        <Border Background="{DynamicResource ThemeBackgroundTertiary}" 
+                                              CornerRadius="6" Padding="12" Margin="0,0,0,6">
+                                            <Grid>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="*"/>
+                                                    <ColumnDefinition Width="Auto"/>
+                                                </Grid.ColumnDefinitions>
+
+                                                <StackPanel Grid.Column="0">
+                                                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="12"/>
+                                                    <TextBlock Text="{Binding CreatedDate, StringFormat={}Created: {0:MM/dd/yyyy}}" 
+                                                             FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                                    <TextBlock Text="{Binding TweakCount, StringFormat={}{0} tweaks}" 
+                                                             FontSize="10" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                                </StackPanel>
+
+                                                <Button Grid.Column="1" Content="📂" FontSize="12" 
+                                                      Background="Transparent" BorderThickness="0" 
+                                                      Foreground="{DynamicResource ThemeTextSecondary}" 
+                                                      ToolTip="Load Profile"/>
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </ListView.ItemTemplate>
+                            </ListView>
+
+                            <Button Content="📋 View All Profiles" Style="{StaticResource PremiumButton}" 
+                                  Background="{DynamicResource ThemeBackgroundTertiary}" 
+                                  Foreground="{DynamicResource ThemeTextPrimary}" 
+                                  HorizontalAlignment="Stretch" Margin="0,8,0,0" Click="ViewAllProfiles_Click"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </ScrollViewer>
+    </Grid>
+</UserControl>

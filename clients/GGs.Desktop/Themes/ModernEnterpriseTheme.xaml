@@ -1,0 +1,285 @@
+<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:controls="clr-namespace:GGs.Desktop.Views.Controls"
+                    xmlns:services="clr-namespace:GGs.Desktop.Services">
+
+    <!-- Enterprise Color Scheme -->
+    <SolidColorBrush x:Key="PrimaryBrush" Color="#2563EB"/>
+    <SolidColorBrush x:Key="PrimaryHoverBrush" Color="#1D4ED8"/>
+    <SolidColorBrush x:Key="SecondaryBrush" Color="#64748B"/>
+    <SolidColorBrush x:Key="AccentBrush" Color="#10B981"/>
+    <SolidColorBrush x:Key="DangerBrush" Color="#EF4444"/>
+    <SolidColorBrush x:Key="WarningBrush" Color="#F59E0B"/>
+    <SolidColorBrush x:Key="SuccessBrush" Color="#22C55E"/>
+    
+    <!-- Light Theme -->
+    <SolidColorBrush x:Key="SurfaceBrush" Color="#FFFFFF"/>
+    <SolidColorBrush x:Key="BackgroundBrush" Color="#F8FAFC"/>
+    <SolidColorBrush x:Key="BorderBrush" Color="#E2E8F0"/>
+    <SolidColorBrush x:Key="TextPrimaryBrush" Color="#1E293B"/>
+    <SolidColorBrush x:Key="TextSecondaryBrush" Color="#64748B"/>
+    <SolidColorBrush x:Key="TextMutedBrush" Color="#94A3B8"/>
+
+    <!-- Modern Button Style -->
+    <Style x:Key="PrimaryButton" TargetType="Button">
+        <Setter Property="Background" Value="{StaticResource PrimaryBrush}"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Padding" Value="16,10"/>
+        <Setter Property="FontWeight" Value="SemiBold"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Cursor" Value="Hand"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="Button">
+                    <Border x:Name="Border" 
+                            Background="{TemplateBinding Background}" 
+                            CornerRadius="8" 
+                            Padding="{TemplateBinding Padding}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Border" Property="Background" Value="{StaticResource PrimaryHoverBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Border" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Modern Card Style -->
+    <Style x:Key="ModernCard" TargetType="Border">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="CornerRadius" Value="12"/>
+        <Setter Property="Padding" Value="20"/>
+        <Setter Property="Effect">
+            <Setter.Value>
+                <DropShadowEffect BlurRadius="20" Direction="270" ShadowDepth="4" Color="#00000010"/>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Modern TextBox Style -->
+    <Style x:Key="ModernTextBox" TargetType="TextBox">
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBrush}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Padding" Value="12"/>
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="TextBox">
+                    <Border x:Name="Border" 
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="8">
+                        <ScrollViewer x:Name="PART_ContentHost" 
+                                      Margin="{TemplateBinding Padding}"
+                                      VerticalAlignment="Center"/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsFocused" Value="True">
+                            <Setter TargetName="Border" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                            <Setter TargetName="Border" Property="BorderThickness" Value="2"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Animation Resources -->
+    <Storyboard x:Key="FadeInAnimation">
+        <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.3"/>
+    </Storyboard>
+
+    <Storyboard x:Key="SlideInFromLeft">
+        <ThicknessAnimation Storyboard.TargetProperty="Margin" From="-100,0,0,0" To="0,0,0,0" Duration="0:0:0.4"/>
+    </Storyboard>
+
+<!-- ActivityFeed default style: Modern list of ActivityItem -->
+    <Style TargetType="controls:ActivityFeed">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:ActivityFeed">
+                    <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="12">
+                        <ItemsControl x:Name="PART_Items">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate DataType="{x:Type services:ActivityItem}">
+                                    <Grid Margin="0,6">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <!-- Severity dot -->
+                                        <Ellipse Width="10" Height="10" VerticalAlignment="Center" Margin="0,0,10,0">
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Fill" Value="{StaticResource SecondaryBrush}"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Severity}" Value="Info">
+                                                            <Setter Property="Fill" Value="{StaticResource AccentBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Severity}" Value="Warning">
+                                                            <Setter Property="Fill" Value="{StaticResource WarningBrush}"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Severity}" Value="Error">
+                                                            <Setter Property="Fill" Value="{StaticResource DangerBrush}"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+
+                                        <!-- Content -->
+                                        <StackPanel Grid.Column="1">
+                                            <TextBlock Text="{Binding Title}" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
+                                            <TextBlock Text="{Binding Description}" Foreground="{StaticResource TextSecondaryBrush}" FontSize="12"/>
+                                        </StackPanel>
+
+                                        <!-- Timestamp -->
+                                        <TextBlock Grid.Column="2" Text="{Binding Timestamp, StringFormat={}{0:HH:mm}}" Foreground="{StaticResource TextMutedBrush}" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- QuickActionButton template -->
+    <Style TargetType="controls:QuickActionButton" BasedOn="{StaticResource PrimaryButton}">
+        <Setter Property="Padding" Value="16"/>
+        <Setter Property="Background" Value="{StaticResource SurfaceBrush}"/>
+        <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:QuickActionButton">
+                    <Border x:Name="Root" Background="{TemplateBinding Background}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="16">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <!-- Icon Path -->
+                            <Path Grid.Column="0" Width="28" Height="28" Margin="0,0,12,0" Stretch="Uniform" Fill="{StaticResource AccentBrush}" Data="{TemplateBinding Icon}"/>
+                            <StackPanel Grid.Column="1">
+                                <TextBlock Text="{TemplateBinding Title}" FontSize="16" FontWeight="SemiBold"/>
+                                <TextBlock Text="{TemplateBinding Description}" FontSize="12" Foreground="{StaticResource TextSecondaryBrush}"/>
+                            </StackPanel>
+                        </Grid>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource PrimaryBrush}"/>
+                        </Trigger>
+                        <Trigger Property="IsPressed" Value="True">
+                            <Setter TargetName="Root" Property="RenderTransform">
+                                <Setter.Value>
+                                    <ScaleTransform ScaleX="0.98" ScaleY="0.98"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- PerformanceChart default style -->
+    <Style TargetType="controls:PerformanceChart">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:PerformanceChart">
+                    <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="8" Padding="8">
+                        <Canvas x:Name="PART_Canvas"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- ChatMessage default style: Modern chat bubble for ChatMessageViewModel items -->
+    <Style TargetType="controls:ChatMessage">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="controls:ChatMessage">
+                    <Grid x:Name="Root" Margin="0,8" DataContext="{TemplateBinding Message}">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Avatar / Side (optional) -->
+                        <Border x:Name="Avatar" Width="36" Height="36" CornerRadius="18" Background="{StaticResource SurfaceBrush}" Grid.Column="0" Visibility="Collapsed">
+                            <TextBlock Text="AI" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+
+                        <!-- Bubble -->
+                        <Border x:Name="Bubble" Grid.Column="1"
+                                Background="{StaticResource SurfaceBrush}"
+                                BorderBrush="{StaticResource BorderBrush}"
+                                BorderThickness="1"
+                                CornerRadius="10"
+                                Padding="12">
+                            <StackPanel>
+                                <TextBlock x:Name="MessageText" Text="{Binding Content}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap"/>
+                                <StackPanel Orientation="Horizontal" Margin="0,6,0,0" HorizontalAlignment="Right">
+                                    <TextBlock Text="{Binding Timestamp, StringFormat={}{0:HH:mm}}" Foreground="{StaticResource SecondaryBrush}" FontSize="11"/>
+                                    <!-- Optional token/cost info -->
+                                    <TextBlock Text="{Binding TokensUsed, StringFormat={}{0} tok}" Foreground="{StaticResource SecondaryBrush}" FontSize="11" Margin="8,0,0,0" Visibility="Collapsed"/>
+                                    <TextBlock Text="{Binding Cost, StringFormat={}{0:C}}" Foreground="{StaticResource SecondaryBrush}" FontSize="11" Margin="8,0,0,0" Visibility="Collapsed"/>
+                                </StackPanel>
+                            </StackPanel>
+                        </Border>
+
+                        <!-- Typing indicator -->
+                        <StackPanel x:Name="TypingIndicator" Grid.ColumnSpan="2" Orientation="Horizontal" Visibility="Collapsed">
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource SecondaryBrush}" Margin="0,0,4,0"/>
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource SecondaryBrush}" Margin="0,0,4,0"/>
+                            <Ellipse Width="6" Height="6" Fill="{StaticResource SecondaryBrush}"/>
+                        </StackPanel>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <!-- Align and bubble appearance based on Message.IsFromBot -->
+                        <DataTrigger Binding="{Binding ElementName=Root, Path=DataContext.IsFromBot}" Value="True">
+                            <Setter TargetName="Root" Property="HorizontalAlignment" Value="Left"/>
+                            <Setter TargetName="Bubble" Property="Background" Value="{StaticResource SurfaceBrush}"/>
+                            <Setter TargetName="MessageText" Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding ElementName=Root, Path=DataContext.IsFromBot}" Value="False">
+                            <Setter TargetName="Root" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="Bubble" Property="Background" Value="{StaticResource PrimaryBrush}"/>
+                            <Setter TargetName="MessageText" Property="Foreground" Value="White"/>
+                        </DataTrigger>
+
+                        <!-- Error state -->
+                        <DataTrigger Binding="{Binding ElementName=Root, Path=DataContext.IsError}" Value="True">
+                            <Setter TargetName="Bubble" Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
+                        </DataTrigger>
+
+                        <!-- Show typing indicator when Message.IsTyping -->
+                        <DataTrigger Binding="{Binding ElementName=Root, Path=DataContext.IsTyping}" Value="True">
+                            <Setter TargetName="TypingIndicator" Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+</ResourceDictionary>

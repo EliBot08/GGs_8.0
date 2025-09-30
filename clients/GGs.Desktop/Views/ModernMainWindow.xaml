@@ -1,0 +1,445 @@
+<Window x:Class="GGs.Desktop.Views.ModernMainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:views="clr-namespace:GGs.Desktop.Views"
+        xmlns:viewsAdmin="clr-namespace:GGs.Desktop.Views.Admin"
+        Title="GGs - Gaming Optimization Suite"
+        Height="800" Width="1400"
+        MinHeight="700" MinWidth="1200"
+        WindowStartupLocation="CenterScreen"
+        WindowStyle="SingleBorderWindow"
+        AllowsTransparency="False"
+        Background="{DynamicResource ThemeBackgroundPrimary}"
+        KeyboardNavigation.TabNavigation="Cycle">
+    
+    <WindowChrome.WindowChrome>
+        <WindowChrome CaptionHeight="40" ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0"/>
+    </WindowChrome.WindowChrome>
+    
+    
+    <Border Background="{DynamicResource ThemeBackgroundPrimary}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="40"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+            
+            <!-- Title Bar -->
+            <Grid Grid.Row="0" Background="{DynamicResource ThemeBackgroundSecondary}" WindowChrome.IsHitTestVisibleInChrome="True">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Logo -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" Margin="16,0">
+                    <TextBlock Text="GGs" FontSize="18" FontWeight="Bold" VerticalAlignment="Center" Foreground="{DynamicResource ThemeAccentGradient}"/>
+                    <TextBlock Text="PRO" FontSize="10" Foreground="{DynamicResource ThemeAccentSecondary}" 
+                             VerticalAlignment="Center" Margin="4,0,0,0"/>
+                </StackPanel>
+                
+                <!-- Status Bar -->
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+                    <TextBlock Text="Status:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,8,0"/>
+                    <TextBlock Text="● Optimized" Foreground="{DynamicResource ThemeSuccess}"/>
+                    <TextBlock Text="|" Foreground="{DynamicResource ThemeTextSecondary}" Margin="16,0"/>
+                    <TextBlock Text="License:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,8,0"/>
+                    <TextBlock x:Name="LicenseTypeText" Text="Premium" Foreground="{DynamicResource ThemeAccentSecondary}"/>
+                    <TextBlock Text="|" Foreground="{DynamicResource ThemeTextSecondary}" Margin="16,0"/>
+                    <TextBlock Text="Ping:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,8,0"/>
+                    <TextBlock x:Name="PingTitleText" Text="-- ms" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                </StackPanel>
+                
+                <!-- Window Controls -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal">
+                    <Grid Margin="0,0,4,0">
+                        <Button x:Name="BtnNotifications" Width="46" Height="40" Background="Transparent" BorderThickness="0" 
+                                Foreground="{DynamicResource ThemeTextSecondary}" FontSize="16" ToolTip="Notifications" 
+                                AutomationProperties.Name="Notifications" TabIndex="1" Click="BtnNotifications_Click">🔔</Button>
+                        <Border x:Name="NotificationsBadge" Background="{DynamicResource ThemeAccentPrimary}" CornerRadius="8" Width="18" Height="18" 
+                                HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,4,0" Visibility="Collapsed">
+                            <TextBlock x:Name="NotificationsBadgeText" Text="0" Foreground="White" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </Grid>
+                    <!-- Theme Toggle Button -->
+                    <Button x:Name="ThemeToggleButton" Width="46" Height="40" 
+                          Background="Transparent" Foreground="{DynamicResource TextSecondary}"
+                          BorderThickness="0" FontSize="16" ToolTip="Toggle Theme"
+                          AutomationProperties.Name="Toggle Theme" TabIndex="1"
+                          Click="ThemeToggleButton_Click">
+                        <TextBlock x:Name="ThemeIcon" Text="🌙" />
+                    </Button>
+                    <Button Content="─" Width="46" Height="40"
+                          Background="Transparent" Foreground="{DynamicResource TextSecondary}"
+                          BorderThickness="0" FontSize="14"
+                          AutomationProperties.Name="Minimize" TabIndex="2"
+                          Click="MinimizeButton_Click"/>
+                    <Button Content="□" Width="46" Height="40" 
+                          Background="Transparent" Foreground="{DynamicResource TextSecondary}"
+                          BorderThickness="0" FontSize="14"
+                          AutomationProperties.Name="Maximize" TabIndex="3"
+                          Click="MaximizeButton_Click"/>
+                    <Button x:Name="CloseButton" Content="✕" Width="46" Height="40" 
+                          Background="Transparent" Foreground="{DynamicResource TextSecondary}"
+                          BorderThickness="0" FontSize="16"
+                          AutomationProperties.Name="Close" TabIndex="4"
+                          Click="CloseButton_Click">
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="Button">
+                                            <Border x:Name="border" Background="{TemplateBinding Background}">
+                                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                            </Border>
+                                            <ControlTemplate.Triggers>
+                                                <Trigger Property="IsMouseOver" Value="True">
+                                                    <Setter TargetName="border" Property="Background" Value="#FFFF3366"/>
+                                                    <Setter Property="Foreground" Value="White"/>
+                                                </Trigger>
+                                            </ControlTemplate.Triggers>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                </StackPanel>
+            </Grid>
+            
+            <!-- Main Content Area -->
+            <Grid Grid.Row="1">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="200"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                
+                <!-- Side Navigation -->
+                <Border Grid.Column="0" Background="{DynamicResource ThemeBackgroundSecondary}" BorderBrush="{DynamicResource ThemeBorder}" 
+                        BorderThickness="0,0,1,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="*"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+                        
+                        <StackPanel Grid.Row="0" Margin="0,24,0,0">
+                            <RadioButton x:Name="DashboardNav" Style="{StaticResource NavButton}" 
+                                       Content="🏠  Dashboard" IsChecked="True"
+                                       AutomationProperties.Name="Dashboard" TabIndex="10"
+                                       Checked="NavigationChanged"/>
+                            <RadioButton x:Name="OptimizationNav" Style="{StaticResource NavButton}" 
+                                       Content="⚡  Optimization"
+                                       AutomationProperties.Name="Optimization" TabIndex="11"
+                                       Checked="NavigationChanged"/>
+                            <RadioButton x:Name="NetworkNav" Style="{StaticResource NavButton}" 
+                                       Content="🌐  Network"
+                                       AutomationProperties.Name="Network" TabIndex="12"
+                                       Checked="NavigationChanged"/>
+                            <RadioButton x:Name="MonitoringNav" Style="{StaticResource NavButton}" 
+                                       Content="📊  Monitoring"
+                                       AutomationProperties.Name="Monitoring" TabIndex="13"
+                                       Checked="NavigationChanged"/>
+                            <RadioButton x:Name="ProfilesNav" Style="{StaticResource NavButton}" 
+                                       Content="👤  Profiles"
+                                       AutomationProperties.Name="Profiles" TabIndex="14"
+                                       Checked="NavigationChanged"/>
+                            <RadioButton x:Name="SystemIntelligenceNav" Style="{StaticResource NavButton}" 
+                                       Content="🧠  System Intelligence"
+                                       AutomationProperties.Name="System Intelligence" TabIndex="15"
+                                       Checked="NavigationChanged"/>
+                            <RadioButton x:Name="NotificationsNav" Style="{StaticResource NavButton}" 
+                                       Content="🔔  Notifications"
+                                       AutomationProperties.Name="Notifications" TabIndex="16"
+                                       Checked="NavigationChanged"/>
+                            <RadioButton x:Name="SettingsNav" Style="{StaticResource NavButton}" 
+                                       Content="⚙️  Settings"
+                                       AutomationProperties.Name="Settings" TabIndex="17"
+                                       Checked="NavigationChanged"/>
+                        </StackPanel>
+                        
+                        <!-- User Info -->
+                        <Border Grid.Row="1" Padding="16" Background="{DynamicResource ThemeBackgroundTertiary}">
+                            <StackPanel>
+                                <TextBlock x:Name="UserNameText" Text="User" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                <TextBlock x:Name="UserEmailText" Text="—" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Border>
+                
+                <!-- Content Area -->
+                <Grid Grid.Column="1" x:Name="ContentArea">
+                    <!-- Dashboard View -->
+                    <ScrollViewer x:Name="DashboardView" Visibility="Visible" VerticalScrollBarVisibility="Auto">
+                        <Grid Margin="32">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*"/>
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Header -->
+                            <Grid Grid.Row="0" Margin="0,0,0,32">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <StackPanel Grid.Column="0">
+                                    <TextBlock Text="Welcome back!" FontSize="32" FontWeight="Light" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <TextBlock Text="Your system is optimized and running at peak performance" 
+                                             FontSize="14" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,8,0,0"/>
+                                </StackPanel>
+                                
+                                <Button Grid.Column="1" Content="Quick Optimize" Style="{StaticResource ActionButton}" 
+                                      Width="160" Click="QuickOptimize_Click"/>
+                            </Grid>
+                            
+                            <!-- Stats Cards -->
+                            <UniformGrid Grid.Row="1" Columns="4" Rows="1" Margin="0,0,0,24">
+                                <Border Style="{StaticResource StatCard}" Margin="0,0,12,0">
+                                    <StackPanel>
+                                        <TextBlock Text="CPU" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                        <TextBlock x:Name="CpuUsageText" Text="45%" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
+                                        <TextBlock Text="3.8 GHz" FontSize="12" Foreground="{DynamicResource ThemeSuccess}"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border Style="{StaticResource StatCard}" Margin="6,0">
+                                    <StackPanel>
+                                        <TextBlock Text="GPU" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                        <TextBlock x:Name="GpuUsageText" Text="62%" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
+                                        <TextBlock Text="RTX Ready" FontSize="12" Foreground="{DynamicResource ThemeSuccess}"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border Style="{StaticResource StatCard}" Margin="6,0">
+                                    <StackPanel>
+                                        <TextBlock Text="RAM" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                        <TextBlock x:Name="RamUsageText" Text="12.4 GB" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
+                                        <TextBlock Text="19.5 GB Free" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                    </StackPanel>
+                                </Border>
+                                
+                                <Border Style="{StaticResource StatCard}" Margin="12,0,0,0">
+                                    <StackPanel>
+                                        <TextBlock Text="Network" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                        <TextBlock x:Name="PingText" Text="12 ms" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
+                                        <TextBlock Text="Low Latency" FontSize="12" Foreground="{DynamicResource ThemeSuccess}"/>
+                                    </StackPanel>
+                                </Border>
+                            </UniformGrid>
+                            
+                            <!-- EliBot Section -->
+                            <Border Grid.Row="2" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="16" Margin="0,0,0,24">
+                                <StackPanel>
+                                    <TextBlock Text="EliBot" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <TextBox x:Name="EliQuestionBox" Width="420" HorizontalAlignment="Left"/>
+                                        <Button x:Name="BtnAskEli" Content="Ask" Width="100" Margin="12,0,0,0" Click="BtnAskEli_Click"/>
+                                    </StackPanel>
+                                    <TextBlock x:Name="EliAnswerText" Text="" TextWrapping="Wrap" Margin="0,8,0,0" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Quick Actions -->
+                            <Border Grid.Row="3" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="24" Margin="0,0,0,24">
+                                <StackPanel>
+                                    <TextBlock Text="Quick Actions" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+                                    <UniformGrid Columns="4" Rows="1">
+                                        <Button Content="🎮 Game Mode" Style="{StaticResource ActionButton}" Margin="0,0,8,0" Click="GameMode_Click"/>
+                                        <Button Content="🚀 Boost" Style="{StaticResource ActionButton}" Margin="4,0" Click="Boost_Click"/>
+                                        <Button Content="🧹 Clean" Style="{StaticResource ActionButton}" Margin="4,0" Click="Clean_Click"/>
+                                        <Button Content="🔇 Silent Mode" Style="{StaticResource ActionButton}" Margin="8,0,0,0" Click="SilentMode_Click"/>
+                                    </UniformGrid>
+                                </StackPanel>
+                            </Border>
+                            
+                            <!-- Performance Graph -->
+                            <Border Grid.Row="4" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="24" Height="300">
+                                <Grid>
+                                    <TextBlock Text="Performance Monitor" FontSize="16" FontWeight="SemiBold" 
+                                             Foreground="{DynamicResource ThemeTextPrimary}" VerticalAlignment="Top"/>
+                                    
+                                    <!-- Placeholder for graph -->
+                                    <Grid Margin="0,40,0,0">
+                                        <Canvas x:Name="PerformanceGraph" Background="{DynamicResource ThemeBackgroundTertiary}">
+                                            <Polyline x:Name="CpuPolyline" Stroke="{DynamicResource ThemeAccentSecondary}" StrokeThickness="2"/>
+                                        </Canvas>
+                                        <TextBlock Text="Real-time performance data will appear here" 
+                                                 HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                 Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                    </Grid>
+                                </Grid>
+                            </Border>
+                        </Grid>
+                    </ScrollViewer>
+                    
+                    <!-- Other Views (hidden by default) -->
+                    <views:OptimizationView x:Name="OptimizationView" Visibility="Collapsed" />
+                    
+                    <views:NetworkView x:Name="NetworkView" Visibility="Collapsed" />
+                    
+                    <Grid x:Name="MonitoringView" Visibility="Collapsed" Margin="32">
+                        <TextBlock Text="System Monitoring" FontSize="24" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                    </Grid>
+                    
+<viewsAdmin:CloudProfilesView x:Name="ProfilesView" Visibility="Collapsed" Margin="32"/>
+
+                    <!-- System Intelligence Views -->
+                    <TabControl x:Name="SystemIntelligenceView" Visibility="Collapsed" Margin="16" Background="Transparent" BorderThickness="0">
+                        <TabItem Header="🧠 System Intelligence">
+                            <views:SystemIntelligenceView x:Name="SystemIntelligenceMainView" />
+                        </TabItem>
+                        <TabItem Header="🏗️ Profile Architect">
+                            <views:ProfileArchitectView x:Name="ProfileArchitectMainView" />
+                        </TabItem>
+                        <TabItem Header="🌐 Community Hub">
+                            <views:CommunityHubView x:Name="CommunityHubMainView" />
+                        </TabItem>
+                    </TabControl>
+
+                    <views:NotificationsView x:Name="NotificationsView" Visibility="Collapsed" Margin="32"/>
+                    
+                    <Grid x:Name="SettingsView" Visibility="Collapsed" Margin="32">
+                        <StackPanel>
+                            <TextBlock Text="Settings" FontSize="24" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            
+                            <!-- Appearance -->
+                            <Border Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="8" Padding="16" Margin="0,16,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Appearance" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Theme:" Foreground="{DynamicResource ThemeTextSecondary}" Width="120"/>
+                                        <ComboBox x:Name="CmbTheme" Width="160">
+                                            <ComboBoxItem Content="system"/>
+                                            <ComboBoxItem Content="dark"/>
+                                            <ComboBoxItem Content="light"/>
+                                        </ComboBox>
+                                        <TextBlock Text="Font size:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="16,0,8,0"/>
+                                        <Slider x:Name="SldFontSize" Minimum="10" Maximum="22" Width="160"/>
+                                        <TextBlock x:Name="TxtFontSizeValue" Foreground="{DynamicResource ThemeTextSecondary}" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Accent primary:" Foreground="{DynamicResource ThemeTextSecondary}" Width="120"/>
+                                        <TextBox x:Name="TxtAccentPrimary" Width="140"/>
+                                        <Border x:Name="RectAccentPrimary" Width="24" Height="24" CornerRadius="4" Margin="8,0,0,0"/>
+                                        <TextBlock Text="Accent secondary:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="16,0,8,0"/>
+                                        <TextBox x:Name="TxtAccentSecondary" Width="140"/>
+                                        <Border x:Name="RectAccentSecondary" Width="24" Height="24" CornerRadius="4" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+                            <StackPanel Orientation="Horizontal" Margin="0,16,0,0">
+                                <CheckBox x:Name="ChkStartWithWindows" Content="Start with Windows" Foreground="White" Margin="0,0,24,0"/>
+                                <CheckBox x:Name="ChkLaunchMinimized" Content="Launch minimized to tray" Foreground="White"/>
+                            </StackPanel>
+                            <TextBlock Text="Changes are saved automatically" Foreground="#FF666677" Margin="0,8,0,0"/>
+
+                            <!-- Server Section -->
+                            <Border Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="8" Padding="16" Margin="0,16,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Server" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Base URL:" Foreground="{DynamicResource ThemeTextSecondary}" Width="120"/>
+                                        <TextBox x:Name="TxtServerBaseUrl" Width="360"/>
+                                        <Button x:Name="BtnSaveServer" Content="Save" Width="100" Margin="12,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock x:Name="TxtServerValidation" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,6,0,0"/>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Updates Section -->
+                            <Border Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="8" Padding="16" Margin="0,16,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Updates" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Channel:" Foreground="{DynamicResource ThemeTextSecondary}" Width="80"/>
+                                        <ComboBox x:Name="CmbUpdateChannel" Width="140">
+                                            <ComboBoxItem Content="stable"/>
+                                            <ComboBoxItem Content="beta"/>
+                                            <ComboBoxItem Content="dev"/>
+                                        </ComboBox>
+                                        <Button x:Name="BtnCheckUpdates" Content="Check for Updates" Width="160" Margin="16,0,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                        <TextBlock Text="Current version:" Foreground="{DynamicResource ThemeTextSecondary}" Width="120"/>
+                                        <TextBlock x:Name="TxtCurrentVersion" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,4,0,0">
+                                        <TextBlock Text="Last check:" Foreground="{DynamicResource ThemeTextSecondary}" Width="120"/>
+                                        <TextBlock x:Name="TxtLastUpdateCheck" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Secrets & Export/Import -->
+                            <Border Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="8" Padding="16" Margin="0,16,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Secrets &amp; Configuration" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <TextBlock Text="Cloud Profiles API Token:" Foreground="{DynamicResource ThemeTextSecondary}" Width="180"/>
+                                        <PasswordBox x:Name="PwdCloudProfiles" Width="280"/>
+                                        <Button x:Name="BtnSaveSecret" Content="Save Secret" Width="120" Margin="12,0,0,0"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                        <Button x:Name="BtnExportSettings" Content="Export Settings" Width="160"/>
+                                        <Button x:Name="BtnImportSettings" Content="Import Settings" Width="160" Margin="8,0,0,0"/>
+                                        <TextBlock x:Name="TxtSettingsStatus" Foreground="{DynamicResource ThemeTextSecondary}" Margin="12,0,0,0"/>
+                                    </StackPanel>
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Privacy & Diagnostics -->
+                            <Border Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="8" Padding="16" Margin="0,16,0,0">
+                                <StackPanel>
+                                    <TextBlock Text="Privacy &amp; Diagnostics" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <CheckBox x:Name="ChkCrashReporting" Content="Enable crash reporting (anonymized)" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                        <Button x:Name="BtnOpenCrashFolder" Content="Open Reports Folder" Width="160" Margin="16,0,0,0" />
+                                    </StackPanel>
+                                    <TextBlock Text="When enabled, anonymized crash data and last log lines are saved locally and can be sent to support." Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap" />
+                                </StackPanel>
+                            </Border>
+
+                            <!-- Deep Optimization (Admin/Service/Driver) -->
+                            <Border Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="8" Padding="16" Margin="0,16,0,24">
+                                <StackPanel>
+                                    <TextBlock Text="Deep Optimization" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    <TextBlock Text="Enable advanced optimizations using Administrator rights and the Agent Windows Service. Requires explicit consent." Foreground="{DynamicResource ThemeTextSecondary}" TextWrapping="Wrap" Margin="0,6,0,0"/>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
+                                        <CheckBox x:Name="ChkDeepOptimization" Content="Enable Deep Optimization Mode" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                        <TextBlock Text="Status:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="24,0,8,0"/>
+                                        <TextBlock x:Name="TxtAgentStatus" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                    </StackPanel>
+                                    <StackPanel Orientation="Horizontal" Margin="0,12,0,0">
+                                        <Button x:Name="BtnInstallAgent" Content="Install Service" Width="140"/>
+                                        <Button x:Name="BtnStartAgent" Content="Start Service" Width="140" Margin="8,0,0,0"/>
+                                        <Button x:Name="BtnStopAgent" Content="Stop Service" Width="140" Margin="8,0,0,0"/>
+                                        <Button x:Name="BtnUninstallAgent" Content="Uninstall Service" Width="160" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                    <TextBlock x:Name="TxtAgentActions" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,8,0,0"/>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </Grid>
+                    
+                    <!-- Busy Overlay -->
+                    <Grid x:Name="BusyOverlay" Visibility="Collapsed" Background="#80000000">
+                        <Border Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="8" Padding="16" HorizontalAlignment="Center" VerticalAlignment="Center">
+                            <StackPanel>
+                                <TextBlock x:Name="BusyOverlayText" Text="Working..." Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,8"/>
+                                <ProgressBar IsIndeterminate="True" Width="260" Height="16"/>
+                            </StackPanel>
+                        </Border>
+                    </Grid>
+                </Grid>
+            </Grid>
+        </Grid>
+    </Border>
+</Window>

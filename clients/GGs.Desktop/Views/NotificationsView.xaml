@@ -1,0 +1,35 @@
+<UserControl x:Class="GGs.Desktop.Views.NotificationsView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <Grid Margin="10">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+            <TextBlock Text="Filter:" VerticalAlignment="Center" Margin="0,0,6,0"/>
+            <ComboBox Width="140" ItemsSource="{Binding Types}" SelectedItem="{Binding FilterType}"/>
+            <CheckBox Content="Unread only" Margin="8,0,0,0" IsChecked="{Binding UnreadOnly}"/>
+            <Button Content="Mark all as read" Margin="8,0,0,0" Command="{Binding MarkAllAsReadCommand}"/>
+        </StackPanel>
+
+        <DataGrid Grid.Row="1" ItemsSource="{Binding NotificationsView}" AutoGenerateColumns="False" SelectedItem="{Binding Selected}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Time" Binding="{Binding TimeUtc}" Width="160"/>
+                <DataGridTextColumn Header="Type" Binding="{Binding Type}" Width="120"/>
+                <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*"/>
+                <DataGridCheckBoxColumn Header="Read" Binding="{Binding IsRead}" Width="80"/>
+            </DataGrid.Columns>
+        </DataGrid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Content="Mark selected as read" Command="{Binding MarkSelectedAsReadCommand}"/>
+        </StackPanel>
+    </Grid>
+</UserControl>
+

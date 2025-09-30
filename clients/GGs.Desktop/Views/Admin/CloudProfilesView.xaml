@@ -1,0 +1,353 @@
+<UserControl x:Class="GGs.Desktop.Views.Admin.CloudProfilesView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="800" d:DesignWidth="1200">
+    
+    <UserControl.Resources>
+        <!-- Enterprise styles -->
+        <Style x:Key="EnterpriseCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="BorderBrush" Value="#E0E0E0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="8"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="2" BlurRadius="8"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+        
+        <Style x:Key="TrustIndicatorStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="8,4"/>
+            <Setter Property="Margin" Value="4,0"/>
+        </Style>
+        
+        <Style x:Key="ActionButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="4"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" 
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="4"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
+    <Grid Background="#F8F9FA">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Header -->
+        <Border Grid.Row="0" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="24,16">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Vertical">
+                    <TextBlock Text="Cloud Profiles Marketplace" FontSize="24" FontWeight="Bold" Foreground="#1a202c"/>
+                    <TextBlock Text="Enterprise-verified tweak profiles with digital signature validation" 
+                               FontSize="14" Foreground="#6b7280" Margin="0,4,0,0"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Name="BtnRefresh" Content="🔄 Refresh" 
+                            Style="{StaticResource ActionButtonStyle}"
+                            Background="#3B82F6" Foreground="White" BorderBrush="#3B82F6"/>
+                    <Button Name="BtnUploadProfile" Content="📤 Upload Profile" 
+                            Style="{StaticResource ActionButtonStyle}"
+                            Background="#10B981" Foreground="White" BorderBrush="#10B981"/>
+                    <Button Name="BtnTrustedPublishers" Content="🔐 Trusted Publishers" 
+                            Style="{StaticResource ActionButtonStyle}"
+                            Background="#8B5CF6" Foreground="White" BorderBrush="#8B5CF6"/>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Search and Filters -->
+        <Border Grid.Row="1" Background="White" BorderBrush="#E0E0E0" BorderThickness="0,0,0,1" Padding="24,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <TextBox Name="TxtSearch" Grid.Column="0" 
+                         Text="{Binding SearchQuery, UpdateSourceTrigger=PropertyChanged}"
+                         Padding="12,8" Margin="0,0,8,0"
+                         FontSize="14" Background="#F9FAFB" BorderBrush="#D1D5DB" BorderThickness="1">
+                    <TextBox.Resources>
+                        <Style TargetType="TextBox">
+                            <Style.Triggers>
+                                <Trigger Property="Text" Value="">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <VisualBrush Stretch="None" AlignmentX="Left" AlignmentY="Center">
+                                                <VisualBrush.Visual>
+                                                    <TextBlock Text="🔍 Search profiles..." Foreground="#9CA3AF" Margin="12,0"/>
+                                                </VisualBrush.Visual>
+                                            </VisualBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </TextBox.Resources>
+                </TextBox>
+                
+                <ComboBox Name="CmbCategory" Grid.Column="1" 
+                          SelectedItem="{Binding SelectedCategory}"
+                          Padding="12,8" Margin="4,0" FontSize="14" Background="#F9FAFB">
+                    <ComboBoxItem Content="All Categories"/>
+                    <ComboBoxItem Content="Gaming"/>
+                    <ComboBoxItem Content="Performance"/>
+                    <ComboBoxItem Content="Privacy"/>
+                    <ComboBoxItem Content="System"/>
+                    <ComboBoxItem Content="Enterprise"/>
+                </ComboBox>
+                
+                <ComboBox Name="CmbTrustLevel" Grid.Column="2" 
+                          SelectedItem="{Binding SelectedTrustLevel}"
+                          Padding="12,8" Margin="4,0" FontSize="14" Background="#F9FAFB">
+                    <ComboBoxItem Content="All Trust Levels"/>
+                    <ComboBoxItem Content="Verified Publisher"/>
+                    <ComboBoxItem Content="Community"/>
+                    <ComboBoxItem Content="Enterprise Only"/>
+                </ComboBox>
+                
+                <ComboBox Name="CmbSortBy" Grid.Column="3" 
+                          SelectedItem="{Binding SortBy}"
+                          Padding="12,8" Margin="4,0" FontSize="14" Background="#F9FAFB">
+                    <ComboBoxItem Content="Most Popular"/>
+                    <ComboBoxItem Content="Recently Updated"/>
+                    <ComboBoxItem Content="Alphabetical"/>
+                    <ComboBoxItem Content="Trust Score"/>
+                </ComboBox>
+                
+                <CheckBox Name="ChkShowOnlyApproved" Grid.Column="4" 
+                          IsChecked="{Binding ShowOnlyApproved}"
+                          Content="Approved Only" Margin="8,0,0,0" 
+                          VerticalAlignment="Center" FontSize="14"/>
+            </Grid>
+        </Border>
+
+        <!-- Profiles Grid -->
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+            <ItemsControl Name="ProfilesContainer" ItemsSource="{Binding CloudProfiles}" Margin="16">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <UniformGrid Columns="3"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <Border Style="{StaticResource EnterpriseCardStyle}">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="*"/>
+                                    <RowDefinition Height="Auto"/>
+                                    <RowDefinition Height="Auto"/>
+                                </Grid.RowDefinitions>
+
+                                <!-- Header with Trust Indicator -->
+                                <Grid Grid.Row="0" Margin="0,0,0,12">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <TextBlock Grid.Column="0" Text="{Binding Name}" 
+                                               FontSize="18" FontWeight="SemiBold" 
+                                               Foreground="#1F2937" TextTrimming="CharacterEllipsis"/>
+                                    
+                                    <Border Grid.Column="1">
+                                        <Border.Style>
+                                            <Style TargetType="Border" BasedOn="{StaticResource TrustIndicatorStyle}">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsVerified}" Value="True">
+                                                        <Setter Property="Background" Value="#D1FAE5"/>
+                                                        <Setter Property="BorderBrush" Value="#10B981"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding IsVerified}" Value="False">
+                                                        <Setter Property="Background" Value="#FEF3C7"/>
+                                                        <Setter Property="BorderBrush" Value="#F59E0B"/>
+                                                        <Setter Property="BorderThickness" Value="1"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Border.Style>
+                                        <StackPanel Orientation="Horizontal">
+                                            <TextBlock Text="{Binding TrustIcon}" FontSize="12" Margin="0,0,4,0"/>
+                                            <TextBlock Text="{Binding TrustLevel}" FontSize="12" FontWeight="Medium"/>
+                                        </StackPanel>
+                                    </Border>
+                                </Grid>
+
+                                <!-- Metadata -->
+                                <Grid Grid.Row="1" Margin="0,0,0,8">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <StackPanel Grid.Column="0" Orientation="Horizontal">
+                                        <Border Background="#EDE9FE" Padding="6,2" CornerRadius="4" Margin="0,0,4,0">
+                                            <TextBlock Text="{Binding Category}" FontSize="11" Foreground="#7C3AED"/>
+                                        </Border>
+                                        <Border Background="#DBEAFE" Padding="6,2" CornerRadius="4">
+                                            <TextBlock Text="{Binding Version}" FontSize="11" Foreground="#3B82F6"/>
+                                        </Border>
+                                    </StackPanel>
+                                    
+                                    <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                        <TextBlock Text="⭐" FontSize="12" Margin="0,0,2,0"/>
+                                        <TextBlock Text="{Binding Rating, StringFormat=F1}" FontSize="12" Foreground="#6B7280"/>
+                                        <TextBlock Text="{Binding DownloadCount, StringFormat=({0:N0} downloads)}" 
+                                                   FontSize="11" Foreground="#9CA3AF" Margin="8,0,0,0"/>
+                                    </StackPanel>
+                                </Grid>
+
+                                <!-- Description -->
+                                <TextBlock Grid.Row="2" Text="{Binding Description}" 
+                                           FontSize="13" Foreground="#6B7280" 
+                                           TextWrapping="Wrap" LineHeight="18"
+                                           MaxHeight="72" TextTrimming="CharacterEllipsis"/>
+
+                                <!-- Publisher Info -->
+                                <Border Grid.Row="3" Background="#F9FAFB" Padding="8" CornerRadius="4" Margin="0,8,0,8">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="*"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        
+                                        <Border Grid.Column="0" Background="#E5E7EB" CornerRadius="12" 
+                                                Width="24" Height="24" Margin="0,0,8,0">
+                                            <TextBlock Text="{Binding PublisherInitials}" 
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                       FontSize="10" FontWeight="Bold" Foreground="#374151"/>
+                                        </Border>
+                                        
+                                        <StackPanel Grid.Column="1" Orientation="Vertical">
+                                            <TextBlock Text="{Binding PublisherName}" FontSize="12" FontWeight="Medium" Foreground="#374151"/>
+                                            <TextBlock Text="{Binding LastUpdated, StringFormat=Updated {0:MMM dd, yyyy}}" 
+                                                       FontSize="10" Foreground="#9CA3AF"/>
+                                        </StackPanel>
+                                        
+                                        <Border Grid.Column="2" Background="Red" CornerRadius="8" 
+                                                Width="16" Height="16"
+                                                Visibility="{Binding HasSignatureWarning, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <TextBlock Text="⚠" FontSize="10" Foreground="White" 
+                                                       HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                        </Border>
+                                    </Grid>
+                                </Border>
+
+                                <!-- Actions -->
+                                <Grid Grid.Row="4">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                        <ColumnDefinition Width="Auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    
+                                    <Button Grid.Column="0" Name="BtnDownload" 
+                                            Content="📥 Download" 
+                                            Style="{StaticResource ActionButtonStyle}"
+                                            Background="#059669" Foreground="White" BorderBrush="#059669"
+                                            Command="{Binding DataContext.DownloadProfileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"/>
+                                    
+                                    <Button Grid.Column="1" Name="BtnVerifySignature" 
+                                            Content="🔍" ToolTip="Verify Digital Signature"
+                                            Style="{StaticResource ActionButtonStyle}"
+                                            Background="#6366F1" Foreground="White" BorderBrush="#6366F1"
+                                            Command="{Binding DataContext.VerifySignatureCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"/>
+                                    
+                                    <Button Grid.Column="2" Name="BtnApprove" 
+                                            Content="✓" ToolTip="Approve for Organization"
+                                            Style="{StaticResource ActionButtonStyle}"
+                                            Background="#10B981" Foreground="White" BorderBrush="#10B981"
+                                            Command="{Binding DataContext.ApproveProfileCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
+                                            CommandParameter="{Binding}"
+                                            Visibility="{Binding DataContext.IsAdmin, RelativeSource={RelativeSource AncestorType=UserControl}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                </Grid>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="3" Background="#F3F4F6" BorderBrush="#E5E7EB" BorderThickness="0,1,0,0" Padding="24,12">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                
+                <StackPanel Grid.Column="0" Orientation="Horizontal">
+                    <TextBlock Text="{Binding TotalProfiles, StringFormat={}{0} profiles}" 
+                               FontSize="13" Foreground="#6B7280" Margin="0,0,16,0"/>
+                    <TextBlock Text="{Binding LoadingStatus}" 
+                               FontSize="13" Foreground="#3B82F6"/>
+                </StackPanel>
+                
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Border Background="#FEE2E2" Padding="8,4" CornerRadius="4" Margin="0,0,8,0"
+                            Visibility="{Binding HasSecurityWarnings, Converter={StaticResource BooleanToVisibilityConverter}}">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="⚠" FontSize="12" Foreground="#DC2626" Margin="0,0,4,0"/>
+                            <TextBlock Text="{Binding SecurityWarningCount, StringFormat={}{0} security warnings}" 
+                                       FontSize="12" Foreground="#DC2626"/>
+                        </StackPanel>
+                    </Border>
+                    
+                    <Border Background="#D1FAE5" Padding="8,4" CornerRadius="4">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="🔐" FontSize="12" Foreground="#059669" Margin="0,0,4,0"/>
+                            <TextBlock Text="{Binding TrustedPublisherCount, StringFormat={}{0} trusted publishers}" 
+                                       FontSize="12" Foreground="#059669"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>

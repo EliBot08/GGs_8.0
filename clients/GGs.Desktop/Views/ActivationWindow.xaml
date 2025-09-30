@@ -1,0 +1,153 @@
+<Window x:Class="GGs.Desktop.Views.ActivationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GGs.Desktop.Views"
+        xmlns:controls="clr-namespace:GGs.Desktop.Views.Controls"
+        mc:Ignorable="d"
+        Title="GGs" Height="720" Width="520" WindowStartupLocation="CenterScreen"
+        Background="Transparent" AllowsTransparency="False">
+    <Window.Resources>
+        <!-- Gradient brushes and reusable styles -->
+        <LinearGradientBrush x:Key="AppBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
+            <GradientStop Color="#161427" Offset="0"/>
+            <GradientStop Color="#24154A" Offset="0.5"/>
+            <GradientStop Color="#3D1E6E" Offset="1"/>
+        </LinearGradientBrush>
+
+        <DropShadowEffect x:Key="CardShadow" BlurRadius="20" ShadowDepth="0" Color="#80000000"/>
+        <CornerRadius x:Key="CardRadius">14</CornerRadius>
+
+        <Style x:Key="CardBorder" TargetType="Border">
+            <Setter Property="CornerRadius" Value="{StaticResource CardRadius}"/>
+            <Setter Property="Background" Value="#161824"/>
+            <Setter Property="Padding" Value="22"/>
+            <Setter Property="Effect" Value="{StaticResource CardShadow}"/>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button">
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Background">
+                <Setter.Value>
+                    <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                        <GradientStop Color="#7B3FF2" Offset="0"/>
+                        <GradientStop Color="#A169F7" Offset="1"/>
+                    </LinearGradientBrush>
+                </Setter.Value>
+            </Setter>
+            <Setter Property="Padding" Value="14,12"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+<ControlTemplate TargetType="Button">
+                        <Border x:Name="BtnRoot" CornerRadius="10" Background="{TemplateBinding Background}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="BtnRoot" Property="Opacity" Value="0.5"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="BtnRoot" Property="Opacity" Value="0.9"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="BtnRoot" Property="Opacity" Value="0.8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="ModernTextBox" TargetType="TextBox">
+            <Setter Property="Foreground" Value="#EAEAEA"/>
+            <Setter Property="Background" Value="#1F2233"/>
+            <Setter Property="BorderBrush" Value="#2B2F45"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="SnapsToDevicePixels" Value="True"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="TextBox">
+                        <Border x:Name="bd" CornerRadius="8" Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ScrollViewer x:Name="PART_ContentHost" Margin="0"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsKeyboardFocusWithin" Value="True">
+                                <Setter TargetName="bd" Property="BorderBrush" Value="#7740FF"/>
+                                <Setter TargetName="bd" Property="BorderThickness" Value="1.4"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Money color helpers -->
+        <SolidColorBrush x:Key="BasicAccent" Color="#2EA0F9"/>
+        <SolidColorBrush x:Key="ProAccent" Color="#8C5BFF"/>
+        <SolidColorBrush x:Key="EnterpriseAccent" Color="#FFB23C"/>
+    </Window.Resources>
+
+    <Grid Background="{StaticResource AppBackgroundBrush}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <!-- Title -->
+        <StackPanel Grid.Row="0" Margin="0,28,0,16" HorizontalAlignment="Center">
+            <TextBlock Text="GGs" FontFamily="Segoe UI" FontWeight="Bold" FontSize="36" Foreground="#F2ECFF" HorizontalAlignment="Center"/>
+            <TextBlock Text="Professional Windows Gaming Optimization" FontFamily="Segoe UI" FontSize="14" Foreground="#C7BFF1" HorizontalAlignment="Center"/>
+        </StackPanel>
+
+        <!-- Card Area -->
+        <Border Grid.Row="1" Style="{StaticResource CardBorder}" Margin="28" Background="#17192A">
+            <ScrollViewer VerticalScrollBarVisibility="Hidden">
+                <StackPanel>
+                    <!-- License Activation Header -->
+                    <StackPanel Orientation="Horizontal" Margin="0,4,0,12">
+                        <TextBlock Text="" FontFamily="Segoe MDL2 Assets" Foreground="#B896FF" Margin="0,0,10,0"/>
+                        <TextBlock Text="License Activation" FontFamily="Segoe UI" FontWeight="SemiBold" FontSize="20" Foreground="#FFFFFF"/>
+                    </StackPanel>
+                    <TextBlock Text="Enter your license to unlock premium gaming tweaks" Foreground="#A9AEC4" Margin="0,0,0,12"/>
+
+                    <!-- License Input -->
+                    <StackPanel>
+                        <Grid>
+                            <TextBox x:Name="LicenseTextBox" Style="{StaticResource ModernTextBox}" MaxLength="16" TextChanged="LicenseTextBox_TextChanged"/>
+                        </Grid>
+                        <Button x:Name="ActivateButton" Content="Activate License" Style="{StaticResource PrimaryButton}" Margin="0,14,0,0" Click="ActivateButton_Click" IsEnabled="False"/>
+                        <Button x:Name="PasteJsonButton" Content="Paste License JSON instead" Margin="0,8,0,0" Click="PasteJsonButton_Click"/>
+                    </StackPanel>
+
+                    <!-- Divider -->
+                    <Separator Margin="0,18,0,10" Background="#252B3F"/>
+                    <TextBlock Text="Available Subscription Tiers" Foreground="#C7CCE2" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+
+                    <!-- Tiers -->
+<StackPanel Margin="0,14,0,0">
+                        <controls:TierCard Title="Basic Gaming" Subtitle="Essential tweaks" Price="99 SEK" AccentBrush="{StaticResource BasicAccent}" Click="TierCard_Click" Margin="0,0,0,10"/>
+                        <controls:TierCard Title="Pro Gaming" Subtitle="Advanced optimization" Price="179 SEK" AccentBrush="{StaticResource ProAccent}" Click="TierCard_Click" Margin="0,0,0,10"/>
+                        <controls:TierCard Title="Enterprise" Subtitle="Complete suite" Price="249 SEK" AccentBrush="{StaticResource EnterpriseAccent}" Click="TierCard_Click"/>
+                    </StackPanel>
+
+                    <!-- Need a License box -->
+                    <Border Style="{StaticResource CardBorder}" Margin="0,16,0,0" Background="#14182A">
+                        <StackPanel>
+                            <TextBlock Text="Need a License?" Foreground="#E5E9FF" FontWeight="SemiBold"/>
+                            <TextBlock Text="Contact your administrator to get a valid license code for accessing the professional gaming optimization suite." TextWrapping="Wrap" Foreground="#9AA3BF" Margin="0,6,0,0"/>
+                        </StackPanel>
+                    </Border>
+                </StackPanel>
+            </ScrollViewer>
+        </Border>
+
+        <!-- Footer padding to avoid cramped edges -->
+        <Grid Grid.Row="2" Height="20"/>
+    </Grid>
+</Window>

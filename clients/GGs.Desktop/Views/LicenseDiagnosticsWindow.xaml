@@ -1,0 +1,54 @@
+<Window x:Class="GGs.Desktop.Views.LicenseDiagnosticsWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="License Diagnostics" Height="360" Width="560" WindowStartupLocation="CenterScreen">
+    <Grid Margin="16">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <TextBlock Text="License Diagnostics" FontSize="20" FontWeight="SemiBold"/>
+
+        <Grid Grid.Row="1" Margin="0,12,0,12">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="180"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Grid.Row="0" Grid.Column="0" Text="Device ID:" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="0" Grid.Column="1" x:Name="TxtDeviceId" Text="—"/>
+
+            <TextBlock Grid.Row="1" Grid.Column="0" Text="Key Fingerprint:" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="1" Grid.Column="1" x:Name="TxtKeyFingerprint" Text="—"/>
+
+            <TextBlock Grid.Row="2" Grid.Column="0" Text="Last Validation (UTC):" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="2" Grid.Column="1" x:Name="TxtLastValidation" Text="—"/>
+
+            <TextBlock Grid.Row="3" Grid.Column="0" Text="Last Online Check (UTC):" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="3" Grid.Column="1" x:Name="TxtLastOnline" Text="—"/>
+
+            <TextBlock Grid.Row="4" Grid.Column="0" Text="Next Revalidation (UTC):" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="4" Grid.Column="1" x:Name="TxtNextReval" Text="—"/>
+
+            <TextBlock Grid.Row="5" Grid.Column="0" Text="Status:" FontWeight="SemiBold"/>
+            <TextBlock Grid.Row="5" Grid.Column="1" x:Name="TxtStatus" Text="—"/>
+        </Grid>
+
+        <StackPanel Grid.Row="2" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button x:Name="BtnRefresh" Content="Refresh" Width="100" Margin="0,0,8,0"/>
+            <Button x:Name="BtnRevalidate" Content="Revalidate Now" Width="140" Margin="0,0,8,0"/>
+            <Button x:Name="BtnClose" Content="Close" Width="100"/>
+        </StackPanel>
+    </Grid>
+</Window>
+

@@ -1,0 +1,352 @@
+<UserControl x:Class="GGs.Desktop.Views.OptimizationView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="900">
+    
+    <Grid Background="#1a1d2e">
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="20">
+                <!-- Header -->
+                <TextBlock Text="System Optimization" 
+                          FontSize="28" 
+                          FontWeight="Bold" 
+                          Foreground="White"
+                          Margin="0,0,0,20"/>
+                
+                <!-- Quick Optimizations -->
+                <Border Background="#252a3e" 
+                        CornerRadius="12" 
+                        Padding="20"
+                        Margin="0,0,0,20">
+                    <StackPanel>
+                        <TextBlock Text="Quick Optimizations" 
+                                  FontSize="18" 
+                                  FontWeight="SemiBold"
+                                  Foreground="#00d9ff"
+                                  Margin="0,0,0,15"/>
+                        
+                        <UniformGrid Columns="3" Rows="2">
+                            <!-- Gaming Optimization -->
+                            <Button Name="GamingOptBtn" 
+                                   Click="GamingOptimization_Click"
+                                   Margin="5"
+                                   Height="80">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#FF00A8" Offset="0"/>
+                                                    <GradientStop Color="#FF0080" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                           CornerRadius="8"
+                                                           Padding="15">
+                                                        <StackPanel>
+                                                            <TextBlock Text="🎮" FontSize="24" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="Gaming Mode" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <!-- Performance Mode -->
+                            <Button Name="PerformanceBtn" 
+                                   Click="PerformanceMode_Click"
+                                   Margin="5"
+                                   Height="80">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#00FF88" Offset="0"/>
+                                                    <GradientStop Color="#00D960" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                           CornerRadius="8"
+                                                           Padding="15">
+                                                        <StackPanel>
+                                                            <TextBlock Text="⚡" FontSize="24" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="Performance" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <!-- Network Optimization -->
+                            <Button Name="NetworkOptBtn" 
+                                   Click="NetworkOpt_Click"
+                                   Margin="5"
+                                   Height="80">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#00D9FF" Offset="0"/>
+                                                    <GradientStop Color="#0099FF" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                           CornerRadius="8"
+                                                           Padding="15">
+                                                        <StackPanel>
+                                                            <TextBlock Text="🌐" FontSize="24" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="Network" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <!-- Clean System -->
+                            <Button Name="CleanSystemBtn" 
+                                   Click="CleanSystem_Click"
+                                   Margin="5"
+                                   Height="80">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#FFD700" Offset="0"/>
+                                                    <GradientStop Color="#FFA500" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                           CornerRadius="8"
+                                                           Padding="15">
+                                                        <StackPanel>
+                                                            <TextBlock Text="🧹" FontSize="24" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="Clean" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <!-- Memory Optimization -->
+                            <Button Name="MemoryOptBtn" 
+                                   Click="MemoryOpt_Click"
+                                   Margin="5"
+                                   Height="80">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#9C27B0" Offset="0"/>
+                                                    <GradientStop Color="#7B1FA2" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                           CornerRadius="8"
+                                                           Padding="15">
+                                                        <StackPanel>
+                                                            <TextBlock Text="💾" FontSize="24" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="Memory" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                            
+                            <!-- Startup Optimization -->
+                            <Button Name="StartupOptBtn" 
+                                   Click="StartupOpt_Click"
+                                   Margin="5"
+                                   Height="80">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Background">
+                                            <Setter.Value>
+                                                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                                                    <GradientStop Color="#FF5722" Offset="0"/>
+                                                    <GradientStop Color="#E64A19" Offset="1"/>
+                                                </LinearGradientBrush>
+                                            </Setter.Value>
+                                        </Setter>
+                                        <Setter Property="Foreground" Value="White"/>
+                                        <Setter Property="BorderThickness" Value="0"/>
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                           CornerRadius="8"
+                                                           Padding="15">
+                                                        <StackPanel>
+                                                            <TextBlock Text="🚀" FontSize="24" HorizontalAlignment="Center"/>
+                                                            <TextBlock Text="Startup" FontSize="14" HorizontalAlignment="Center" Margin="0,5,0,0"/>
+                                                        </StackPanel>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+                        </UniformGrid>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Advanced Tweaks -->
+                <Border Background="#252a3e" 
+                        CornerRadius="12" 
+                        Padding="20">
+                    <StackPanel>
+                        <TextBlock Text="Advanced Tweaks" 
+                                  FontSize="18" 
+                                  FontWeight="SemiBold"
+                                  Foreground="#00d9ff"
+                                  Margin="0,0,0,15"/>
+                        
+                        <ItemsControl Name="TweaksList">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Background="#1a1d2e" 
+                                           CornerRadius="8" 
+                                           Padding="15"
+                                           Margin="0,5">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto"/>
+                                                <ColumnDefinition Width="*"/>
+                                                <ColumnDefinition Width="Auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            
+                                            <CheckBox Grid.Column="0" 
+                                                     IsChecked="{Binding IsEnabled}"
+                                                     VerticalAlignment="Center"
+                                                     Margin="0,0,15,0"/>
+                                            
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock Text="{Binding Name}" 
+                                                          FontSize="14" 
+                                                          FontWeight="SemiBold"
+                                                          Foreground="White"/>
+                                                <TextBlock Text="{Binding Description}" 
+                                                          FontSize="12"
+                                                          Foreground="#8892a9"
+                                                          TextWrapping="Wrap"/>
+                                            </StackPanel>
+                                            
+                                            <TextBlock Grid.Column="2" 
+                                                      Text="{Binding Category}"
+                                                      FontSize="11"
+                                                      Foreground="#00d9ff"
+                                                      VerticalAlignment="Center"
+                                                      Padding="8,4"
+                                                      Background="#252a3e"
+                                                      Margin="10,0,0,0"/>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                        
+                        <Button Name="ApplyTweaksBtn" 
+                               Click="ApplyTweaks_Click"
+                               Content="Apply Selected Tweaks"
+                               FontSize="14"
+                               FontWeight="SemiBold"
+                               Padding="15,10"
+                               Margin="0,15,0,0"
+                               HorizontalAlignment="Right">
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background">
+                                        <Setter.Value>
+                                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                                <GradientStop Color="#00ff88" Offset="0"/>
+                                                <GradientStop Color="#00d9ff" Offset="1"/>
+                                            </LinearGradientBrush>
+                                        </Setter.Value>
+                                    </Setter>
+                                    <Setter Property="Foreground" Value="#1a1d2e"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                       CornerRadius="8"
+                                                       Padding="{TemplateBinding Padding}">
+                                                    <ContentPresenter HorizontalAlignment="Center" 
+                                                                    VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+                        </Button>
+                    </StackPanel>
+                </Border>
+                
+                <!-- Status Bar -->
+                <Border Background="#252a3e" 
+                        CornerRadius="8" 
+                        Padding="15"
+                        Margin="0,20,0,0">
+                    <TextBlock Name="StatusText" 
+                              Text="Ready to optimize"
+                              FontSize="13"
+                              Foreground="#8892a9"
+                              HorizontalAlignment="Center"/>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+    </Grid>
+</UserControl>
