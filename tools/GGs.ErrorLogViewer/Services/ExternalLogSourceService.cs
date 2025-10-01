@@ -219,35 +219,35 @@ namespace GGs.ErrorLogViewer.Services
 
         // Helper methods
 
-        private LogLevel ConvertEventLogLevel(EventLogEntryType entryType)
+        private Models.LogLevel ConvertEventLogLevel(EventLogEntryType entryType)
         {
             return entryType switch
             {
-                EventLogEntryType.Error => LogLevel.Error,
-                EventLogEntryType.Warning => LogLevel.Warning,
-                EventLogEntryType.Information => LogLevel.Information,
-                EventLogEntryType.SuccessAudit => LogLevel.Success,
-                EventLogEntryType.FailureAudit => LogLevel.Error,
-                _ => LogLevel.Information
+                EventLogEntryType.Error => Models.LogLevel.Error,
+                EventLogEntryType.Warning => Models.LogLevel.Warning,
+                EventLogEntryType.Information => Models.LogLevel.Information,
+                EventLogEntryType.SuccessAudit => Models.LogLevel.Success,
+                EventLogEntryType.FailureAudit => Models.LogLevel.Error,
+                _ => Models.LogLevel.Information
             };
         }
 
-        private LogLevel InferLogLevelFromMessage(string message)
+        private Models.LogLevel InferLogLevelFromMessage(string message)
         {
             var lower = message.ToLowerInvariant();
 
             if (lower.Contains("critical") || lower.Contains("fatal"))
-                return LogLevel.Critical;
+                return Models.LogLevel.Critical;
             if (lower.Contains("error") || lower.Contains("exception"))
-                return LogLevel.Error;
+                return Models.LogLevel.Error;
             if (lower.Contains("warning") || lower.Contains("warn"))
-                return LogLevel.Warning;
+                return Models.LogLevel.Warning;
             if (lower.Contains("debug"))
-                return LogLevel.Debug;
+                return Models.LogLevel.Debug;
             if (lower.Contains("trace"))
-                return LogLevel.Trace;
+                return Models.LogLevel.Trace;
 
-            return LogLevel.Information;
+            return Models.LogLevel.Information;
         }
 
         private DateTime TryParseTimestamp(string? timestampStr)
@@ -261,12 +261,12 @@ namespace GGs.ErrorLogViewer.Services
             return DateTime.Now;
         }
 
-        private LogLevel ParseLogLevel(string? levelStr)
+        private Models.LogLevel ParseLogLevel(string? levelStr)
         {
             if (string.IsNullOrEmpty(levelStr))
-                return LogLevel.Information;
+                return Models.LogLevel.Information;
 
-            if (Enum.TryParse<LogLevel>(levelStr, true, out var result))
+            if (Enum.TryParse<Models.LogLevel>(levelStr, true, out var result))
                 return result;
 
             return InferLogLevelFromMessage(levelStr);

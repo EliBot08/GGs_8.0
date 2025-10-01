@@ -326,17 +326,29 @@ Examples:
                     // Register early logging service as singleton (already initialized)
                     services.AddSingleton<IEarlyLoggingService>(_earlyLoggingService!);
 
-                    // Register services
+                    // Register core services
                     services.AddSingleton<ILogMonitoringService, LogMonitoringService>();
                     services.AddSingleton<ILogParsingService, LogParsingService>();
                     services.AddSingleton<IThemeService, ThemeService>();
-                    services.AddSingleton<IExportService, ExportService>();
                     services.AddSingleton<IPerformanceMonitoringService, PerformanceMonitoringService>();
                     services.AddSingleton<IAlertService, AlertService>();
                     services.AddSingleton<IAnalyticsService, AnalyticsService>();
+                    
+                    // Register enhanced professional services
+                    services.AddSingleton<IBookmarkService, BookmarkService>();
+                    services.AddSingleton<ISmartAlertService, SmartAlertService>();
+                    services.AddSingleton<IAnalyticsEngine, AnalyticsEngine>();
+                    services.AddSingleton<ISessionStateService, SessionStateService>();
+                    services.AddSingleton<IExportService, ExportService>();
+                    services.AddSingleton<IEnhancedExportService, EnhancedExportService>();
+                    services.AddSingleton<IExternalLogSourceService, ExternalLogSourceService>();
+                    
+                    // Register SessionStateService as hosted service for background work
+                    services.AddHostedService<SessionStateService>();
 
                     // Register ViewModels
                     services.AddTransient<MainViewModel>();
+                    services.AddTransient<EnhancedMainViewModel>();
 
                     // Register Views
                     services.AddTransient<MainWindow>();

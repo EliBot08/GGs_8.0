@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.IO;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
@@ -19,7 +20,7 @@ namespace GGs.ErrorLogViewer.Services
         event EventHandler<LogAlert>? AlertTriggered;
         
         SmartAlert AddAlert(string name, string pattern, bool useRegex = false, 
-            LogLevel minimumLevel = LogLevel.Warning, int threshold = 5, TimeSpan? window = null);
+            Models.LogLevel minimumLevel = Models.LogLevel.Warning, int threshold = 5, TimeSpan? window = null);
         void RemoveAlert(string alertId);
         void UpdateAlert(SmartAlert alert);
         void EnableAlert(string alertId);
@@ -51,20 +52,20 @@ namespace GGs.ErrorLogViewer.Services
         {
             // Create useful default alerts
             AddAlert("Repeated Exceptions", "exception|error", useRegex: true, 
-                minimumLevel: LogLevel.Error, threshold: 5, window: TimeSpan.FromMinutes(5));
+                minimumLevel: Models.LogLevel.Error, threshold: 5, window: TimeSpan.FromMinutes(5));
             
             AddAlert("Critical System Errors", "critical|fatal|crash", useRegex: true,
-                minimumLevel: LogLevel.Critical, threshold: 1, window: TimeSpan.FromMinutes(1));
+                minimumLevel: Models.LogLevel.Critical, threshold: 1, window: TimeSpan.FromMinutes(1));
             
             AddAlert("Authentication Failures", "authentication|login.*failed|unauthorized", useRegex: true,
-                minimumLevel: LogLevel.Warning, threshold: 10, window: TimeSpan.FromMinutes(5));
+                minimumLevel: Models.LogLevel.Warning, threshold: 10, window: TimeSpan.FromMinutes(5));
             
             AddAlert("Database Connection Issues", "database.*connection|sql.*timeout|deadlock", useRegex: true,
-                minimumLevel: LogLevel.Error, threshold: 3, window: TimeSpan.FromMinutes(2));
+                minimumLevel: Models.LogLevel.Error, threshold: 3, window: TimeSpan.FromMinutes(2));
         }
 
         public SmartAlert AddAlert(string name, string pattern, bool useRegex = false,
-            LogLevel minimumLevel = LogLevel.Warning, int threshold = 5, TimeSpan? window = null)
+            Models.LogLevel minimumLevel = Models.LogLevel.Warning, int threshold = 5, TimeSpan? window = null)
         {
             var alert = new SmartAlert
             {

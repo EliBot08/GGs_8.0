@@ -98,19 +98,16 @@ namespace GGs.ErrorLogViewer.Services
                     foreach (var error in topErrors)
                     {
                         md.AppendLine($"| {EscapeMarkdown(error.Key)} | {error.Value} |");
-                    }
-                    md.AppendLine();
                 }
 
-                // Recent Critical Logs
+                // Recent Critical/Error Logs
                 var criticalLogs = entries
-                    .Where(e => e.Level == LogLevel.Critical || e.Level == LogLevel.Error)
+                    .Where(e => e.Level == Models.LogLevel.Critical || e.Level == Models.LogLevel.Error)
                     .OrderByDescending(e => e.Timestamp)
-                    .Take(20)
+                    .Take(50)
                     .ToList();
 
                 if (criticalLogs.Any())
-                {
                     md.AppendLine("## Recent Critical/Error Logs");
                     md.AppendLine();
                     foreach (var log in criticalLogs)
@@ -257,7 +254,7 @@ namespace GGs.ErrorLogViewer.Services
 
             // Recent Critical/Error Logs
             var criticalLogs = entries
-                .Where(e => e.Level == LogLevel.Critical || e.Level == LogLevel.Error)
+                .Where(e => e.Level == Models.LogLevel.Critical || e.Level == Models.LogLevel.Error)
                 .OrderByDescending(e => e.Timestamp)
                 .Take(50)
                 .ToList();
@@ -271,9 +268,9 @@ namespace GGs.ErrorLogViewer.Services
 
                 foreach (var log in criticalLogs)
                 {
-                    var levelClass = log.Level == LogLevel.Critical ? "level-critical" :
-                                   log.Level == LogLevel.Error ? "level-error" :
-                                   log.Level == LogLevel.Warning ? "level-warning" : "level-info";
+                    var levelClass = log.Level == Models.LogLevel.Critical ? "level-critical" :
+                                   log.Level == Models.LogLevel.Error ? "level-error" :
+                                   log.Level == Models.LogLevel.Warning ? "level-warning" : "level-info";
                     
                     html.AppendLine("<tr>");
                     html.AppendLine($"<td>{log.FormattedTimestamp}</td>");

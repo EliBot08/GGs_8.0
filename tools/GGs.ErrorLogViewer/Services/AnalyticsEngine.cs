@@ -13,7 +13,7 @@ namespace GGs.ErrorLogViewer.Services
         // Statistics
         LogStatistics GetStatistics(IEnumerable<LogEntry> logs);
         Dictionary<DateTime, int> GetLogTrend(IEnumerable<LogEntry> logs, TimeSpan interval);
-        Dictionary<LogLevel, int> GetLogDistribution(IEnumerable<LogEntry> logs);
+        Dictionary<Models.LogLevel, int> GetLogDistribution(IEnumerable<LogEntry> logs);
         Dictionary<string, int> GetTopErrors(IEnumerable<LogEntry> logs, int count = 10);
         Dictionary<string, int> GetTopSources(IEnumerable<LogEntry> logs, int count = 10);
         
@@ -49,11 +49,11 @@ namespace GGs.ErrorLogViewer.Services
             var stats = new LogStatistics
             {
                 TotalLogs = logList.Count,
-                ErrorCount = logList.Count(l => l.Level == LogLevel.Error),
-                WarningCount = logList.Count(l => l.Level == LogLevel.Warning),
-                InfoCount = logList.Count(l => l.Level == LogLevel.Information),
-                CriticalCount = logList.Count(l => l.Level == LogLevel.Critical),
-                SuccessCount = logList.Count(l => l.Level == LogLevel.Success),
+                ErrorCount = logList.Count(l => l.Level == Models.LogLevel.Error),
+                WarningCount = logList.Count(l => l.Level == Models.LogLevel.Warning),
+                InfoCount = logList.Count(l => l.Level == Models.LogLevel.Information),
+                CriticalCount = logList.Count(l => l.Level == Models.LogLevel.Critical),
+                SuccessCount = logList.Count(l => l.Level == Models.LogLevel.Success),
                 OldestLog = logList.Min(l => l.Timestamp),
                 NewestLog = logList.Max(l => l.Timestamp)
             };
@@ -85,7 +85,7 @@ namespace GGs.ErrorLogViewer.Services
             return result;
         }
 
-        public Dictionary<LogLevel, int> GetLogDistribution(IEnumerable<LogEntry> logs)
+        public Dictionary<Models.LogLevel, int> GetLogDistribution(IEnumerable<LogEntry> logs)
         {
             return logs
                 .GroupBy(l => l.Level)
@@ -95,7 +95,7 @@ namespace GGs.ErrorLogViewer.Services
         public Dictionary<string, int> GetTopErrors(IEnumerable<LogEntry> logs, int count = 10)
         {
             return logs
-                .Where(l => l.Level == LogLevel.Error || l.Level == LogLevel.Critical)
+                .Where(l => l.Level == Models.LogLevel.Error || l.Level == Models.LogLevel.Critical)
                 .GroupBy(l => SimplifyErrorMessage(l.Message))
                 .OrderByDescending(g => g.Count())
                 .Take(count)
@@ -133,7 +133,7 @@ namespace GGs.ErrorLogViewer.Services
         public List<ErrorCluster> AnalyzeErrorPatterns(IEnumerable<LogEntry> logs, int minOccurrences = 3)
         {
             var errors = logs
-                .Where(l => l.Level == LogLevel.Error || l.Level == LogLevel.Critical)
+                .Where(l => l.Level == Models.LogLevel.Error || l.Level == Models.LogLevel.Critical)
                 .ToList();
 
             if (!errors.Any()) return new List<ErrorCluster>();
