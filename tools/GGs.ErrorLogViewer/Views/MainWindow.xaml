@@ -7,7 +7,6 @@
         xmlns:models="clr-namespace:GGs.ErrorLogViewer.Models"
         xmlns:converters="clr-namespace:GGs.ErrorLogViewer.Views.Converters"
         Title="GGs Error Log Viewer" 
-        Height="900" 
         Width="1600"
         MinHeight="720"
         MinWidth="1280"
@@ -16,6 +15,18 @@
         ui:WindowHelper.UseModernWindowStyle="True"
         ResizeMode="CanResizeWithGrip"
         Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+
+    <Window.InputBindings>
+        <!-- Phase 10 - Keyboard shortcuts for accessibility -->
+        <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
+        <KeyBinding Key="Delete" Command="{Binding ClearLogsCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="S" Command="{Binding ExportLogsCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="C" Command="{Binding CopySelectedCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="F" Command="{Binding ClearOldLogsCommand}" Modifiers="Ctrl+Shift"/>
+        <KeyBinding Key="D" Command="{Binding ToggleDetailsPaneCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="T" Command="{Binding ToggleThemeCommand}" Modifiers="Ctrl"/>
+        <KeyBinding Key="R" Command="{Binding ToggleDetailsPaneCommand}" Modifiers="Alt"/>
+    </Window.InputBindings>
 
     <Window.Resources>
         <!-- Log Level to Icon Converter -->

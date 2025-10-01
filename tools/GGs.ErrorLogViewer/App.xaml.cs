@@ -345,6 +345,10 @@ Examples:
                     services.AddSingleton<ILogComparisonService, LogComparisonService>();
                     services.AddSingleton<IRetentionPolicyService, RetentionPolicyService>();
                     
+                    // Phase 9 - Performance services
+                    services.AddSingleton<ILogCachingService, LogCachingService>();
+                    services.AddSingleton<IPerformanceAnalyzer, PerformanceAnalyzer>();
+                    
                     // Register background services
                     services.AddHostedService<SessionStateService>();
                     services.AddHostedService<RetentionPolicyService>();
