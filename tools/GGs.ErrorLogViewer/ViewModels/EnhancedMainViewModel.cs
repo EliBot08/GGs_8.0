@@ -154,7 +154,7 @@ namespace GGs.ErrorLogViewer.ViewModels
 
             // Initialize commands - Views
             SwitchToLogsViewCommand = new RelayCommand(() => ActiveView = "Logs");
-            SwitchToAnalyticsViewCommand = new RelayCommand(() => { ActiveView = "Analytics"; RefreshAnalyticsAsync(); });
+            SwitchToAnalyticsViewCommand = new RelayCommand(() => { ActiveView = "Analytics"; _ = RefreshAnalyticsAsync(); });
             SwitchToBookmarksViewCommand = new RelayCommand(() => ActiveView = "Bookmarks");
             SwitchToAlertsViewCommand = new RelayCommand(() => ActiveView = "Alerts");
 
@@ -254,7 +254,7 @@ namespace GGs.ErrorLogViewer.ViewModels
         }
 
         // Analytics Methods
-        private async Task RefreshAnalyticsAsync()
+        private Task RefreshAnalyticsAsync()
         {
             try
             {
@@ -271,9 +271,10 @@ namespace GGs.ErrorLogViewer.ViewModels
             {
                 _logger.LogError(ex, "Failed to refresh analytics");
             }
+            return Task.CompletedTask;
         }
 
-        private async Task AnalyzeErrorPatternsAsync()
+        private Task AnalyzeErrorPatternsAsync()
         {
             try
             {
@@ -287,9 +288,10 @@ namespace GGs.ErrorLogViewer.ViewModels
             {
                 _logger.LogError(ex, "Failed to analyze error patterns");
             }
+            return Task.CompletedTask;
         }
 
-        private async Task FindAnomaliesAsync()
+        private Task FindAnomaliesAsync()
         {
             try
             {
@@ -307,12 +309,14 @@ namespace GGs.ErrorLogViewer.ViewModels
             {
                 _logger.LogError(ex, "Failed to find anomalies");
             }
+            return Task.CompletedTask;
         }
 
-        private async Task ExportAnalyticsAsync()
+        private Task ExportAnalyticsAsync()
         {
             // Export analytics report
             _logger.LogInformation("Exporting analytics report");
+            return Task.CompletedTask;
         }
 
         // Export Methods
@@ -382,16 +386,18 @@ namespace GGs.ErrorLogViewer.ViewModels
             }
         }
 
-        private async Task ImportSyslogAsync()
+        private Task ImportSyslogAsync()
         {
             // Would open file dialog
             _logger.LogInformation("Importing syslog");
+            return Task.CompletedTask;
         }
 
-        private async Task ImportCustomFormatAsync()
+        private Task ImportCustomFormatAsync()
         {
             // Would open dialog for custom format
             _logger.LogInformation("Importing custom format");
+            return Task.CompletedTask;
         }
 
         public void ProcessLogEntry(LogEntry entry)

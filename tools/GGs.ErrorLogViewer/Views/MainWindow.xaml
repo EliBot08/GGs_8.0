@@ -133,6 +133,75 @@
             <Setter Property="FontSize" Value="12"/>
         </Style>
 
+        <!-- Navigation Button Style -->
+        <Style x:Key="NavButtonStyle" TargetType="RadioButton">
+            <Setter Property="Padding" Value="16,12"/>
+            <Setter Property="Margin" Value="4,2"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{DynamicResource SystemControlForegroundBaseHighBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="RadioButton">
+                        <Border x:Name="NavBorder" 
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="4"
+                                Margin="{TemplateBinding Margin}">
+                            <ContentPresenter HorizontalAlignment="Left" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsChecked" Value="True">
+                                <Setter TargetName="NavBorder" Property="Background" Value="{DynamicResource SystemControlAccentBrush}"/>
+                                <Setter Property="Foreground" Value="White"/>
+                                <Setter Property="FontWeight" Value="SemiBold"/>
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="NavBorder" Property="Background" Value="{DynamicResource SystemControlBackgroundBaseMediumBrush}"/>
+                            </Trigger>
+                            <MultiTrigger>
+                                <MultiTrigger.Conditions>
+                                    <Condition Property="IsChecked" Value="True"/>
+                                    <Condition Property="IsMouseOver" Value="True"/>
+                                </MultiTrigger.Conditions>
+                                <Setter TargetName="NavBorder" Property="Opacity" Value="0.9"/>
+                            </MultiTrigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Icon Button Style -->
+        <Style x:Key="IconButtonStyle" TargetType="Button">
+            <Setter Property="Padding" Value="12"/>
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="IconBorder" 
+                                Background="{TemplateBinding Background}"
+                                Padding="{TemplateBinding Padding}"
+                                CornerRadius="4">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="IconBorder" Property="Background" Value="{DynamicResource SystemControlBackgroundBaseMediumBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="IconBorder" Property="Opacity" Value="0.7"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
         <!-- DataGrid Styles -->
         <Style x:Key="LogDataGridStyle" TargetType="DataGrid" BasedOn="{StaticResource DefaultDataGridStyle}">
             <Setter Property="AutoGenerateColumns" Value="False"/>
@@ -161,12 +230,89 @@
     </Window.Resources>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/> <!-- Toolbar -->
-            <RowDefinition Height="Auto"/> <!-- Filters -->
-            <RowDefinition Height="*"/>    <!-- Main Content -->
-            <RowDefinition Height="Auto"/> <!-- Status Bar -->
-        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="200" MinWidth="160" MaxWidth="300"/> <!-- Sidebar -->
+            <ColumnDefinition Width="Auto"/> <!-- Splitter -->
+            <ColumnDefinition Width="*"/> <!-- Main Content -->
+        </Grid.ColumnDefinitions>
+
+        <!-- Sidebar Navigation -->
+        <Border Grid.Column="0" 
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="0,0,1,0">
+            <DockPanel>
+                <!-- App Title -->
+                <Border DockPanel.Dock="Top" 
+                        Background="{DynamicResource SystemControlAccentBrush}"
+                        Padding="16,20">
+                    <StackPanel>
+                        <TextBlock Text="GGs" 
+                                   FontSize="24" 
+                                   FontWeight="Bold"
+                                   Foreground="White"/>
+                        <TextBlock Text="Error Log Viewer" 
+                                   FontSize="12" 
+                                   Foreground="White"
+                                   Opacity="0.9"/>
+                    </StackPanel>
+                </Border>
+
+                <!-- Navigation Items -->
+                <StackPanel DockPanel.Dock="Top" Margin="0,16,0,0">
+                    <RadioButton x:Name="NavLogs" 
+                                 Content="Logs" 
+                                 IsChecked="True"
+                                 Style="{StaticResource NavButtonStyle}"
+                                 Command="{Binding SwitchToLogsViewCommand}"/>
+                    <RadioButton x:Name="NavAnalytics" 
+                                 Content="Analytics"
+                                 Style="{StaticResource NavButtonStyle}"
+                                 Command="{Binding SwitchToAnalyticsViewCommand}"/>
+                    <RadioButton x:Name="NavBookmarks" 
+                                 Content="Bookmarks"
+                                 Style="{StaticResource NavButtonStyle}"
+                                 Command="{Binding SwitchToBookmarksViewCommand}"/>
+                    <RadioButton x:Name="NavAlerts" 
+                                 Content="Alerts"
+                                 Style="{StaticResource NavButtonStyle}"
+                                 Command="{Binding SwitchToAlertsViewCommand}"/>
+                    <RadioButton x:Name="NavCompare" 
+                                 Content="Compare"
+                                 Style="{StaticResource NavButtonStyle}"/>
+                    <RadioButton x:Name="NavExport" 
+                                 Content="Export"
+                                 Style="{StaticResource NavButtonStyle}"/>
+                    <RadioButton x:Name="NavSettings" 
+                                 Content="Settings"
+                                 Style="{StaticResource NavButtonStyle}"/>
+                </StackPanel>
+
+                <!-- Bottom Actions -->
+                <StackPanel DockPanel.Dock="Bottom" Margin="8">
+                    <Button Command="{Binding ToggleThemeCommand}" 
+                            Style="{StaticResource IconButtonStyle}"
+                            ToolTip="Toggle Theme">
+                        <ui:SymbolIcon Symbol="{Binding ThemeService.IsDarkMode, Converter={StaticResource BooleanToSymbolConverter}, ConverterParameter='Sunny|ClearNight'}" />
+                    </Button>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <!-- Sidebar Splitter -->
+        <GridSplitter Grid.Column="1" 
+                      Width="4" 
+                      HorizontalAlignment="Center"
+                      Background="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"/>
+
+        <!-- Main Content Area -->
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/> <!-- Toolbar -->
+                <RowDefinition Height="Auto"/> <!-- Filters -->
+                <RowDefinition Height="*"/>    <!-- Content -->
+                <RowDefinition Height="Auto"/> <!-- Status Bar -->
+            </Grid.RowDefinitions>
 
         <!-- Toolbar -->
         <Border Grid.Row="0" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
@@ -665,7 +811,8 @@
                            Margin="16,0,0,0"/>
             </Grid>
         </Border>
-    </Grid>
+        </Grid> <!-- Close Grid.Column="2" Main Content Area -->
+    </Grid> <!-- Close Root Grid -->
 </Window>
 
 

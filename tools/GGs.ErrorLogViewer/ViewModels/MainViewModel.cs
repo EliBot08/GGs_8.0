@@ -99,6 +99,12 @@ namespace GGs.ErrorLogViewer.ViewModels
         public ICommand CopyCompactCommand { get; }
         public ICommand CopyDetailsCommand { get; }
         public ICommand ToggleDetailsPaneCommand { get; }
+        
+        // Navigation commands for dashboard
+        public ICommand SwitchToLogsViewCommand { get; }
+        public ICommand SwitchToAnalyticsViewCommand { get; }
+        public ICommand SwitchToBookmarksViewCommand { get; }
+        public ICommand SwitchToAlertsViewCommand { get; }
 
         public MainViewModel(
             ILogMonitoringService logMonitoringService,
@@ -138,6 +144,12 @@ namespace GGs.ErrorLogViewer.ViewModels
             CopyCompactCommand = new RelayCommand(CopyCompact, () => SelectedLogEntry != null);
             CopyDetailsCommand = new RelayCommand(CopyDetails, () => SelectedLogEntry != null);
             ToggleDetailsPaneCommand = new RelayCommand(() => IsDetailsPaneVisible = !IsDetailsPaneVisible);
+            
+            // Navigation commands
+            SwitchToLogsViewCommand = new RelayCommand(() => { /* Main logs view is already visible */ });
+            SwitchToAnalyticsViewCommand = new RelayCommand(() => { /* Switch to analytics - Phase 8 */ });
+            SwitchToBookmarksViewCommand = new RelayCommand(() => { /* Switch to bookmarks - Phase 8 */ });
+            SwitchToAlertsViewCommand = new RelayCommand(() => { /* Switch to alerts - Phase 8 */ });
 
             _logMonitoringService.LogEntriesAdded += OnLogEntriesAdded;
             _logMonitoringService.LogsCleared += OnLogsCleared;
