@@ -61,6 +61,7 @@ namespace GGs.ErrorLogViewer.ViewModels
         [ObservableProperty]
         private int _filteredLogCount;
 
+        [ObservableProperty]
         private string _statusMessage = "Ready";
 
         [ObservableProperty]
@@ -81,9 +82,15 @@ namespace GGs.ErrorLogViewer.ViewModels
 
         // Smart Filter: Track seen messages for deduplication
         private readonly HashSet<string> _seenMessages = new HashSet<string>();
+        private string _logDirectory = string.Empty;
 
         public ICommand StartMonitoringCommand { get; }
-{{ ... }}
+        public ICommand StopMonitoringCommand { get; }
+        public ICommand ToggleThemeCommand { get; }
+        public ICommand RefreshCommand { get; }
+        public ICommand ClearLogsCommand { get; }
+        public ICommand ExportLogsCommand { get; }
+        public ICommand CopySelectedCommand { get; }
         public ICommand OpenLogDirectoryCommand { get; }
         public ICommand ClearOldLogsCommand { get; }
         // New copy commands
@@ -96,21 +103,182 @@ namespace GGs.ErrorLogViewer.ViewModels
             ILogMonitoringService logMonitoringService,
             ILogParsingService logParsingService,
             IThemeService themeService,
-{{ ... }}
+            IExportService exportService,
+            IEarlyLoggingService earlyLoggingService,
+            IConfiguration configuration,
+            ILogger<MainViewModel> logger)
+        {
+            _logMonitoringService = logMonitoringService ?? throw new ArgumentNullException(nameof(logMonitoringService));
+            _logParsingService = logParsingService ?? throw new ArgumentNullException(nameof(logParsingService));
+            _themeService = themeService ?? throw new ArgumentNullException(nameof(themeService));
+            _exportService = exportService ?? throw new ArgumentNullException(nameof(exportService));
+            _earlyLoggingService = earlyLoggingService ?? throw new ArgumentNullException(nameof(earlyLoggingService));
+            _configuration = configuration ?? throw new ArgumentNullException(nameof(configuration));
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
+
+            LogEntries = new ObservableCollection<LogEntry>();
+            AvailableSources = new ObservableCollection<string> { "All" };
+
+            LogEntriesView = CollectionViewSource.GetDefaultView(LogEntries);
+            LogEntriesView.Filter = FilterLogEntry;
+
+            PropertyChanged += OnPropertyChanged;
+
+            StartMonitoringCommand = new AsyncRelayCommand(StartMonitoringInternalAsync, () => !IsMonitoring);
+            StopMonitoringCommand = new AsyncRelayCommand(StopMonitoringInternalAsync, () => IsMonitoring);
+            ToggleThemeCommand = new RelayCommand(_themeService.ToggleTheme);
+            RefreshCommand = new AsyncRelayCommand(RefreshLogsAsync);
+            ClearLogsCommand = new RelayCommand(ClearLogsInternal);
+            ExportLogsCommand = new AsyncRelayCommand(ExportLogsAsync);
+            CopySelectedCommand = new RelayCommand(CopySelected, () => SelectedLogEntry != null);
             OpenLogDirectoryCommand = new RelayCommand(OpenLogDirectory);
             ClearOldLogsCommand = new RelayCommand(ClearOldLogs);
-            // New: extra copy commands
             CopyRawCommand = new RelayCommand(CopyRaw, () => SelectedLogEntry != null);
             CopyCompactCommand = new RelayCommand(CopyCompact, () => SelectedLogEntry != null);
             CopyDetailsCommand = new RelayCommand(CopyDetails, () => SelectedLogEntry != null);
             ToggleDetailsPaneCommand = new RelayCommand(() => IsDetailsPaneVisible = !IsDetailsPaneVisible);
 
-            // Subscribe to log monitoring events
             _logMonitoringService.LogEntryAdded += OnLogEntryAdded;
-            _logMonitoringService.LogEntriesAdded += OnLogEntriesAdded; // New: batch event
+            _logMonitoringService.LogEntriesAdded += OnLogEntriesAdded;
             _logMonitoringService.LogsCleared += OnLogsCleared;
-{{ ... }
 
+            LogEntriesView.MoveCurrentToFirst();
+        }
+
+        public void SetLogDirectory(string directory)
+        {
+            if (string.IsNullOrWhiteSpace(directory) || !Directory.Exists(directory))
+            {
+                _logger.LogWarning("Requested log directory '{Directory}' is invalid", directory);
+                StatusMessage = "Log directory invalid";
+                return;
+            }
+
+            if (string.Equals(_logDirectory, directory, StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            _logDirectory = directory;
+            StatusMessage = $"Monitoring directory set to {_logDirectory}";
+
+            if (IsMonitoring)
+            {
+                _ = RestartMonitoringAsync();
+            }
+        }
+
+        public void AutoStartMonitoring()
+        {
+            _ = AutoStartMonitoringAsync();
+        }
+
+        public Task AutoStartMonitoringAsync()
+        {
+            return StartMonitoringInternalAsync();
+        }
+
+        private async Task StartMonitoringInternalAsync()
+        {
+            var targetDirectory = ResolveLogDirectory();
+            if (string.IsNullOrEmpty(targetDirectory))
+            {
+                StatusMessage = "No log directory configured";
+                return;
+            }
+
+            if (IsMonitoring)
+            {
+                StatusMessage = "Monitoring already active";
+                return;
+            }
+
+            try
+            {
+                await _logMonitoringService.StartMonitoringAsync(targetDirectory);
+                IsMonitoring = true;
+                StatusMessage = $"Monitoring {targetDirectory}";
+                RaiseMonitoringCommandCanExecuteChanged();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Failed to start monitoring: {ex.Message}";
+                _logger.LogError(ex, "Failed to start monitoring for directory {Directory}", targetDirectory);
+            }
+        }
+
+        private async Task StopMonitoringInternalAsync()
+        {
+            if (!IsMonitoring)
+            {
+                StatusMessage = "Monitoring already stopped";
+                return;
+            }
+
+            try
+            {
+                await _logMonitoringService.StopMonitoringAsync();
+                IsMonitoring = false;
+                StatusMessage = "Monitoring stopped";
+                RaiseMonitoringCommandCanExecuteChanged();
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Failed to stop monitoring: {ex.Message}";
+                _logger.LogError(ex, "Failed to stop monitoring");
+            }
+        }
+
+        private async Task RestartMonitoringAsync()
+        {
+            if (!IsMonitoring)
+            {
+                await StartMonitoringInternalAsync();
+                return;
+            }
+
+            await StopMonitoringInternalAsync();
+            await StartMonitoringInternalAsync();
+        }
+
+        private void RaiseMonitoringCommandCanExecuteChanged()
+        {
+            ((AsyncRelayCommand)StartMonitoringCommand).NotifyCanExecuteChanged();
+            ((AsyncRelayCommand)StopMonitoringCommand).NotifyCanExecuteChanged();
+        }
+
+        private string ResolveLogDirectory()
+        {
+            if (!string.IsNullOrEmpty(_logDirectory))
+            {
+                return _logDirectory;
+            }
+
+            var defaultDir = _configuration["Logging:DefaultDirectory"] ??
+                             Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "Logs");
+
+            if (!Directory.Exists(defaultDir))
+            {
+                Directory.CreateDirectory(defaultDir);
+            }
+
+            _logDirectory = defaultDir;
+            return _logDirectory;
+        }
+
+        private void ClearLogsInternal()
+        {
+            try
+            {
+                LogEntries.Clear();
+                _seenMessages.Clear();
+                UpdateCounts();
+                SelectedLogEntry = null;
+                StatusMessage = "Log view cleared";
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Failed to clear logs: {ex.Message}";
                 _logger.LogError(ex, "Failed to clear logs");
             }
         }
