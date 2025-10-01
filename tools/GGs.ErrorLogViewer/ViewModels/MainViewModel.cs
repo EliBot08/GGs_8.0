@@ -71,7 +71,7 @@ namespace GGs.ErrorLogViewer.ViewModels
         private LogEntry? _selectedLogEntry;
 
         [ObservableProperty]
-        private bool _isDetailsPaneVisible = false;
+        private bool _isDetailsPaneVisible = true;
 
         public ObservableCollection<LogEntry> LogEntries { get; }
         public ICollectionView LogEntriesView { get; }
