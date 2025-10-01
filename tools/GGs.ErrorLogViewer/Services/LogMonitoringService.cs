@@ -17,7 +17,6 @@ namespace GGs.ErrorLogViewer.Services
 {
     public interface ILogMonitoringService
     {
-        event EventHandler<LogEntry> LogEntryAdded;
         event EventHandler<IEnumerable<LogEntry>> LogEntriesAdded;
         event EventHandler LogsCleared;
 
@@ -51,7 +50,6 @@ namespace GGs.ErrorLogViewer.Services
         private readonly int _oldLogFileThresholdHours;
         private readonly string _seenHashesFilePath;
 
-        public event EventHandler<LogEntry>? LogEntryAdded;
         public event EventHandler<IEnumerable<LogEntry>>? LogEntriesAdded;
         public event EventHandler? LogsCleared;
 
@@ -109,7 +107,7 @@ namespace GGs.ErrorLogViewer.Services
             _logger.LogInformation("Log monitoring started successfully");
         }
 
-        public async Task StopMonitoringAsync()
+        public Task StopMonitoringAsync()
         {
             _logger.LogInformation("Stopping log monitoring...");
 
@@ -128,6 +126,8 @@ namespace GGs.ErrorLogViewer.Services
             SaveSeenHashes();
 
             _logger.LogInformation("Log monitoring stopped");
+            
+            return Task.CompletedTask;
         }
 
         private void ClearLogDirectory()

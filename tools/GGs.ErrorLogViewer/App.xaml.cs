@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -280,14 +281,14 @@ Examples:
             {
                 configBuilder.AddInMemoryCollection(new[]
                 {
-                    new KeyValuePair<string, string>("ErrorLogViewer:DefaultLogDirectory", _commandLineLogDirectory)
+                    new KeyValuePair<string, string?>("ErrorLogViewer:DefaultLogDirectory", _commandLineLogDirectory)
                 });
             }
             else
             {
                 configBuilder.AddInMemoryCollection(new[]
                 {
-                    new KeyValuePair<string, string>("ErrorLogViewer:DefaultLogDirectory", defaultLogDir)
+                    new KeyValuePair<string, string?>("ErrorLogViewer:DefaultLogDirectory", defaultLogDir)
                 });
             }
 
@@ -295,7 +296,7 @@ Examples:
             {
                 configBuilder.AddInMemoryCollection(new[]
                 {
-                    new KeyValuePair<string, string>("ErrorLogViewer:AutoStartWithGGs", "false")
+                    new KeyValuePair<string, string?>("ErrorLogViewer:AutoStartWithGGs", "false")
                 });
             }
 

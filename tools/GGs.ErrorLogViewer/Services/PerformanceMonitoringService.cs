@@ -27,8 +27,6 @@ namespace GGs.ErrorLogViewer.Services
         private Timer? _monitoringTimer;
         private PerformanceMetrics _currentMetrics;
         private bool _isMonitoring;
-        private long _previousDiskReads;
-        private long _previousDiskWrites;
         private int _logsProcessedSinceLastCheck;
         private readonly object _lockObject = new object();
 
