@@ -45,6 +45,9 @@ namespace GGs.ErrorLogViewer.Services
         private int _maxEntries;
         private int _refreshInterval;
         private readonly int _logRetentionDays;
+        private readonly int _loadHistoricalLogsFromHours;
+        private readonly bool _deleteOldLogFilesOnStartup;
+        private readonly int _oldLogFileThresholdHours;
         private readonly string _seenHashesFilePath;
 
         public event EventHandler<LogEntry>? LogEntryAdded;
@@ -60,9 +63,12 @@ namespace GGs.ErrorLogViewer.Services
             _parsingService = parsingService;
             _configuration = configuration;
 
-            _maxEntries = _configuration.GetValue<int>("ErrorLogViewer:MaxLogEntries", 50000);
-            _refreshInterval = _configuration.GetValue<int>("ErrorLogViewer:RefreshIntervalMs", 250);
-            _logRetentionDays = _configuration.GetValue<int>("ErrorLogViewer:LogRetentionDays", 30);
+            _maxEntries = _configuration.GetValue<int>("ErrorLogViewer:MaxLogEntries", 5000);
+            _refreshInterval = _configuration.GetValue<int>("ErrorLogViewer:RefreshIntervalMs", 1000);
+            _logRetentionDays = _configuration.GetValue<int>("ErrorLogViewer:LogRetentionDays", 7);
+            _loadHistoricalLogsFromHours = _configuration.GetValue<int>("ErrorLogViewer:LoadHistoricalLogsFromHours", 1);
+            _deleteOldLogFilesOnStartup = _configuration.GetValue<bool>("ErrorLogViewer:DeleteOldLogFilesOnStartup", true);
+            _oldLogFileThresholdHours = _configuration.GetValue<int>("ErrorLogViewer:OldLogFileThresholdHours", 24);
             _seenHashesFilePath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "seenHashes.json");
 
             LoadSeenHashes();
@@ -81,6 +87,11 @@ namespace GGs.ErrorLogViewer.Services
             if (_configuration.GetValue<bool>("ErrorLogViewer:ClearLogsOnStartup"))
             {
                 ClearLogDirectory();
+            }
+
+            if (_deleteOldLogFilesOnStartup)
+            {
+                DeleteOldLogFiles();
             }
 
             _logger.LogInformation("Starting log monitoring for directory: {LogDirectory}", _logDirectory);
@@ -147,6 +158,53 @@ namespace GGs.ErrorLogViewer.Services
             }
         }
 
+        private void DeleteOldLogFiles()
+        {
+            try
+            {
+                var cutoffTime = DateTime.UtcNow.AddHours(-_oldLogFileThresholdHours);
+                var logFiles = GetLogFiles(_logDirectory);
+                int deletedCount = 0;
+                long deletedBytes = 0;
+
+                _logger.LogInformation("Scanning for log files older than {Hours} hours (before {CutoffTime})...", _oldLogFileThresholdHours, cutoffTime);
+
+                foreach (var file in logFiles)
+                {
+                    try
+                    {
+                        var fileInfo = new FileInfo(file);
+                        if (fileInfo.LastWriteTimeUtc < cutoffTime)
+                        {
+                            deletedBytes += fileInfo.Length;
+                            File.Delete(file);
+                            deletedCount++;
+                            _logger.LogDebug("Deleted old log file: {File} (last modified: {LastWrite}, size: {Size} bytes)", 
+                                file, fileInfo.LastWriteTimeUtc, fileInfo.Length);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogWarning(ex, "Could not delete old log file: {File}", file);
+                    }
+                }
+
+                if (deletedCount > 0)
+                {
+                    _logger.LogInformation("Deleted {Count} old log files, freed {SizeMB:F2} MB of disk space", 
+                        deletedCount, deletedBytes / 1024.0 / 1024.0);
+                }
+                else
+                {
+                    _logger.LogInformation("No old log files found to delete");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Error deleting old log files");
+            }
+        }
+
         protected override async Task ExecuteAsync(CancellationToken stoppingToken)
         {
             // This service is manually started via StartMonitoringAsync
@@ -162,18 +220,30 @@ namespace GGs.ErrorLogViewer.Services
             {
                 var logFiles = GetLogFiles(_logDirectory);
                 var allEntries = new List<LogEntry>();
+                var cutoffTime = DateTime.UtcNow.AddHours(-_loadHistoricalLogsFromHours);
+
+                _logger.LogInformation("Loading logs from the last {Hours} hours (since {CutoffTime})", _loadHistoricalLogsFromHours, cutoffTime);
 
                 foreach (var file in logFiles.OrderBy(f => File.GetCreationTime(f)))
                 {
                     if (cancellationToken.IsCancellationRequested)
                         break;
 
-                    var entries = await LoadLogFileAsync(file, cancellationToken);
+                    // Skip files older than the cutoff
+                    var fileInfo = new FileInfo(file);
+                    if (fileInfo.LastWriteTimeUtc < cutoffTime)
+                    {
+                        _logger.LogDebug("Skipping old log file: {File} (last modified: {LastWrite})", file, fileInfo.LastWriteTimeUtc);
+                        continue;
+                    }
+
+                    var entries = await LoadLogFileAsync(file, cancellationToken, cutoffTime);
                     allEntries.AddRange(entries);
                 }
 
                 // Sort by timestamp and take most recent entries
                 var sortedEntries = allEntries
+                    .Where(e => e.Timestamp >= cutoffTime)
                     .OrderBy(e => e.Timestamp)
                     .TakeLast(_maxEntries)
                     .ToList();
@@ -195,7 +265,7 @@ namespace GGs.ErrorLogViewer.Services
             }
         }
 
-        private async Task<IEnumerable<LogEntry>> LoadLogFileAsync(string filePath, CancellationToken cancellationToken)
+        private async Task<IEnumerable<LogEntry>> LoadLogFileAsync(string filePath, CancellationToken cancellationToken, DateTime? cutoffTime = null)
         {
             var entries = new List<LogEntry>();
 
@@ -224,6 +294,12 @@ namespace GGs.ErrorLogViewer.Services
                     var entry = _parsingService.ParseLogLine(line, filePath, lineNumber);
                     if (entry != null)
                     {
+                        // Filter by cutoff time if specified
+                        if (cutoffTime.HasValue && entry.Timestamp < cutoffTime.Value)
+                        {
+                            continue;
+                        }
+
                         entry.Id = Interlocked.Increment(ref _nextLogId);
                         entries.Add(entry);
                     }
@@ -395,7 +471,7 @@ namespace GGs.ErrorLogViewer.Services
             // Wait a bit for the file to be fully created
             await Task.Delay(100);
 
-            var entries = await LoadLogFileAsync(filePath, CancellationToken.None);
+            var entries = await LoadLogFileAsync(filePath, CancellationToken.None, null);
             var entryList = entries.ToList();
 
             if (entryList.Any())
@@ -443,7 +519,7 @@ namespace GGs.ErrorLogViewer.Services
 
             foreach (var file in logFiles)
             {
-                var fileEntries = await LoadLogFileAsync(file, CancellationToken.None);
+                var fileEntries = await LoadLogFileAsync(file, CancellationToken.None, since);
                 if (since.HasValue)
                 {
                     fileEntries = fileEntries.Where(e => e.Timestamp >= since.Value);
