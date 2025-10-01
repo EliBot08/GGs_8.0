@@ -1,5 +1,6 @@
 #nullable enable
 using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Text.Json.Serialization;
 
@@ -9,6 +10,8 @@ namespace GGs.ErrorLogViewer.Models
     {
         private bool _isSelected;
         private bool _isHighlighted;
+        private bool _isBookmarked;
+        private bool _isExpanded;
 
         public long Id { get; set; }
         public DateTime Timestamp { get; set; }
@@ -108,6 +111,40 @@ namespace GGs.ErrorLogViewer.Models
                 }
             }
         }
+
+        [JsonIgnore]
+        public bool IsBookmarked
+        {
+            get => _isBookmarked;
+            set
+            {
+                if (_isBookmarked != value)
+                {
+                    _isBookmarked = value;
+                    OnPropertyChanged(nameof(IsBookmarked));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public bool IsExpanded
+        {
+            get => _isExpanded;
+            set
+            {
+                if (_isExpanded != value)
+                {
+                    _isExpanded = value;
+                    OnPropertyChanged(nameof(IsExpanded));
+                }
+            }
+        }
+
+        [JsonIgnore]
+        public List<LogTag> Tags { get; set; } = new();
+
+        [JsonIgnore]
+        public bool HasMultipleLines => !string.IsNullOrEmpty(StackTrace) || Message.Contains('\n');
 
         public event PropertyChangedEventHandler? PropertyChanged;
 
