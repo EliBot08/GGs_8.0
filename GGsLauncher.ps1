@@ -281,20 +281,40 @@ function Start-GGsDesktop {
 
 function Start-ErrorLogViewer {
     param([string]$CustomLogDir)
-    
+
     Write-SubHeader "Launching ErrorLogViewer"
-    
+
     $exePath = Join-Path $PSScriptRoot "tools\GGs.ErrorLogViewer\bin\$Configuration\net9.0-windows\GGs.ErrorLogViewer.exe"
-    
+
     if (-not (Test-Path $exePath)) {
         Write-LauncherLog "ErrorLogViewer executable not found: $exePath" -Level Warning
         Write-LauncherLog "Continuing without ErrorLogViewer" -Level Warning
         return $null
     }
-    
+
+    # Reuse existing ErrorLogViewer instance if it is already running
+    try {
+        $existing = Get-Process -Name "GGs.ErrorLogViewer" -ErrorAction SilentlyContinue
+    } catch {
+        $existing = $null
+    }
+
+    if ($existing) {
+        $pidList = ($existing | Select-Object -ExpandProperty Id) -join ', '
+        Write-LauncherLog "ErrorLogViewer already running (PID(s): $pidList). Reusing existing instance." -Level Warning
+        try {
+            Add-Type -AssemblyName Microsoft.VisualBasic -ErrorAction Stop
+            [Microsoft.VisualBasic.Interaction]::AppActivate($existing[0].Id) | Out-Null
+            Write-LauncherLog "Brought existing ErrorLogViewer window to the foreground" -Level Success
+        } catch {
+            Write-LauncherLog "Unable to focus existing ErrorLogViewer window: $_" -Level Debug
+        }
+        return $existing[0]
+    }
+
     try {
         Write-LauncherLog "Starting ErrorLogViewer..." -Level Info
-        
+
         if ($CustomLogDir) {
             Write-LauncherLog "Using custom log directory: $CustomLogDir" -Level Info
             $process = Start-Process -FilePath $exePath -ArgumentList @("--log-dir", $CustomLogDir) -PassThru -WindowStyle Normal

@@ -61,212 +61,56 @@ namespace GGs.ErrorLogViewer.ViewModels
         [ObservableProperty]
         private int _filteredLogCount;
 
-        [ObservableProperty]
         private string _statusMessage = "Ready";
 
         [ObservableProperty]
         private bool _autoScroll = false;
 
         [ObservableProperty]
+        [NotifyPropertyChangedFor(nameof(HasSelectedLogEntry))]
         private LogEntry? _selectedLogEntry;
+
+        [ObservableProperty]
+        private bool _isDetailsPaneVisible = false;
 
         public ObservableCollection<LogEntry> LogEntries { get; }
         public ICollectionView LogEntriesView { get; }
         public ObservableCollection<string> AvailableSources { get; }
         public IThemeService ThemeService => _themeService;
+        public bool HasSelectedLogEntry => SelectedLogEntry != null;
 
         // Smart Filter: Track seen messages for deduplication
         private readonly HashSet<string> _seenMessages = new HashSet<string>();
 
         public ICommand StartMonitoringCommand { get; }
-        public ICommand StopMonitoringCommand { get; }
-        public ICommand ClearLogsCommand { get; }
-        public ICommand ExportLogsCommand { get; }
-        public ICommand ToggleViewModeCommand { get; }
-        public ICommand ToggleThemeCommand { get; }
-        public ICommand RefreshCommand { get; }
-        public ICommand CopySelectedCommand { get; }
+{{ ... }}
         public ICommand OpenLogDirectoryCommand { get; }
         public ICommand ClearOldLogsCommand { get; }
         // New copy commands
         public ICommand CopyRawCommand { get; }
         public ICommand CopyCompactCommand { get; }
         public ICommand CopyDetailsCommand { get; }
+        public ICommand ToggleDetailsPaneCommand { get; }
 
         public MainViewModel(
             ILogMonitoringService logMonitoringService,
             ILogParsingService logParsingService,
             IThemeService themeService,
-            IExportService exportService,
-            IEarlyLoggingService earlyLoggingService,
-            IConfiguration configuration,
-            ILogger<MainViewModel> logger)
-        {
-            _logMonitoringService = logMonitoringService;
-            _logParsingService = logParsingService;
-            _themeService = themeService;
-            _exportService = exportService;
-            _earlyLoggingService = earlyLoggingService;
-            _configuration = configuration;
-            _logger = logger;
-
-            LogEntries = new ObservableCollection<LogEntry>();
-            AvailableSources = new ObservableCollection<string> { "All" };
-
-            // Set up collection view for filtering and sorting
-            LogEntriesView = CollectionViewSource.GetDefaultView(LogEntries);
-            LogEntriesView.Filter = FilterLogEntry;
-            LogEntriesView.SortDescriptions.Add(new SortDescription(nameof(LogEntry.Timestamp), ListSortDirection.Descending));
-
-            // Initialize commands
-            StartMonitoringCommand = new AsyncRelayCommand(StartMonitoringAsync);
-            StopMonitoringCommand = new RelayCommand(StopMonitoring);
-            ClearLogsCommand = new RelayCommand(ClearLogs);
-            ExportLogsCommand = new AsyncRelayCommand(ExportLogsAsync);
-            ToggleViewModeCommand = new RelayCommand(ToggleViewMode);
-            ToggleThemeCommand = new RelayCommand(_themeService.ToggleTheme);
-            RefreshCommand = new AsyncRelayCommand(RefreshLogsAsync);
-            CopySelectedCommand = new RelayCommand(CopySelected, () => SelectedLogEntry != null);
+{{ ... }}
             OpenLogDirectoryCommand = new RelayCommand(OpenLogDirectory);
             ClearOldLogsCommand = new RelayCommand(ClearOldLogs);
             // New: extra copy commands
             CopyRawCommand = new RelayCommand(CopyRaw, () => SelectedLogEntry != null);
             CopyCompactCommand = new RelayCommand(CopyCompact, () => SelectedLogEntry != null);
             CopyDetailsCommand = new RelayCommand(CopyDetails, () => SelectedLogEntry != null);
+            ToggleDetailsPaneCommand = new RelayCommand(() => IsDetailsPaneVisible = !IsDetailsPaneVisible);
 
             // Subscribe to log monitoring events
             _logMonitoringService.LogEntryAdded += OnLogEntryAdded;
             _logMonitoringService.LogEntriesAdded += OnLogEntriesAdded; // New: batch event
             _logMonitoringService.LogsCleared += OnLogsCleared;
+{{ ... }
 
-            // Subscribe to property changes for filtering
-            PropertyChanged += OnPropertyChanged;
-
-            // Load initial configuration
-            LoadConfiguration();
-
-            // Clear logs on startup
-            ClearLogs();
-
-            // Note: Auto-start is now handled by AutoStartMonitoring() method called from App.xaml.cs
-        }
-
-        // New: Set log directory from command line
-        public void SetLogDirectory(string logDirectory)
-        {
-            try
-            {
-                if (Directory.Exists(logDirectory))
-                {
-                    _logger.LogInformation("Log directory set from command line: {LogDirectory}", logDirectory);
-                    StatusMessage = $"Log directory set to: {logDirectory}";
-                }
-                else
-                {
-                    _logger.LogWarning("Command line log directory does not exist: {LogDirectory}", logDirectory);
-                    StatusMessage = $"Warning: Log directory does not exist: {logDirectory}";
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error setting log directory from command line: {LogDirectory}", logDirectory);
-                StatusMessage = $"Error setting log directory: {ex.Message}";
-            }
-        }
-
-        // New: Auto-start monitoring from command line
-        public void AutoStartMonitoring()
-        {
-            try
-            {
-                if (_configuration.GetValue<bool>("ErrorLogViewer:AutoStartWithGGs", true))
-                {
-                    _logger.LogInformation("Auto-starting monitoring from command line");
-                    _ = Task.Run(StartMonitoringAsync);
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error auto-starting monitoring");
-                StatusMessage = $"Error auto-starting monitoring: {ex.Message}";
-            }
-        }
-
-        private void LoadConfiguration()
-        {
-            try
-            {
-                AutoScroll = _configuration.GetValue<bool>("UI:AutoScroll", false);
-                IsRawMode = _configuration.GetValue<bool>("UI:DefaultViewMode", false);
-                // New: load regex toggle and font size
-                UseRegex = _configuration.GetValue<bool>("UI:UseRegex", false);
-                LogFontSize = _configuration.GetValue<double>("UI:LogFontSize", 12.0);
-                var defaultLevel = _configuration.GetValue<string>("UI:DefaultLogLevel", "All");
-                if (Enum.TryParse<Models.LogLevel>(defaultLevel, true, out var level))
-                {
-                    SelectedLogLevel = level;
-                }
-
-                _logger.LogInformation("Configuration loaded successfully");
-            }
-            catch (Exception ex)
-            {
-                _logger.LogWarning(ex, "Failed to load some configuration values, using defaults");
-            }
-        }
-
-        private async Task StartMonitoringAsync()
-        {
-            try
-            {
-                StatusMessage = "Starting log monitoring...";
-                
-                var logDirectory = _configuration["Logging:DefaultDirectory"] ?? 
-                                  Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "Logs");
-                
-                await _logMonitoringService.StartMonitoringAsync(logDirectory);
-                IsMonitoring = true;
-                StatusMessage = "Monitoring active";
-                _logger.LogInformation("Log monitoring started");
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = $"Failed to start monitoring: {ex.Message}";
-                _logger.LogError(ex, "Failed to start log monitoring");
-            }
-        }
-
-        private void StopMonitoring()
-        {
-            try
-            {
-                _logMonitoringService.StopMonitoringAsync();
-                IsMonitoring = false;
-                StatusMessage = "Monitoring stopped";
-                _logger.LogInformation("Log monitoring stopped");
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = $"Failed to stop monitoring: {ex.Message}";
-                _logger.LogError(ex, "Failed to stop log monitoring");
-            }
-        }
-
-        private void ClearLogs()
-        {
-            try
-            {
-                LogEntries.Clear();
-                AvailableSources.Clear();
-                AvailableSources.Add("All");
-                _seenMessages.Clear(); // Clear Smart Filter cache
-                UpdateCounts();
-                StatusMessage = "Logs cleared";
-                _logger.LogInformation("Log entries cleared");
-            }
-            catch (Exception ex)
-            {
-                StatusMessage = $"Failed to clear logs: {ex.Message}";
                 _logger.LogError(ex, "Failed to clear logs");
             }
         }

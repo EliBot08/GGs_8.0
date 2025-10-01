@@ -1,4 +1,4 @@
-﻿using System.Security.Cryptography;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
@@ -128,7 +128,6 @@ public partial class App : System.Windows.Application
         var licensed = licenseSvc.CurrentPayload != null;
         try { EntitlementsService.Initialize(licenseSvc.CurrentPayload?.Tier ?? GGs.Shared.Enums.LicenseTier.Basic, new GGs.Shared.Api.AuthService(new System.Net.Http.HttpClient()).CurrentRoles); } catch { }
 
-        // Force LaunchMinimized to false to ensure window is always visible
         try
         {
             SettingsService.LaunchMinimized = false;
@@ -144,11 +143,15 @@ public partial class App : System.Windows.Application
         try
         {
             AppLogger.LogInfo("Creating ModernMainWindow...");
+            this.ShutdownMode = ShutdownMode.OnMainWindowClose;
             created = new Views.ModernMainWindow();
             AppLogger.LogInfo("ModernMainWindow created successfully");
-            
+
+            this.MainWindow = created;
+
             // Force window to be visible - multiple approaches for reliability
             created.WindowState = WindowState.Normal;
+            created.WindowStartupLocation = WindowStartupLocation.CenterScreen;
             created.Visibility = Visibility.Visible;
             created.ShowInTaskbar = true;
             created.Topmost = true; // Temporarily topmost to ensure visibility
@@ -156,18 +159,18 @@ public partial class App : System.Windows.Application
             created.Activate();
             created.Focus();
             created.Topmost = false; // Remove topmost after showing
-            
-            // Set as main window to prevent background-only running
-            this.MainWindow = created;
-            this.ShutdownMode = ShutdownMode.OnMainWindowClose;
-            
-            if (!string.IsNullOrWhiteSpace(navArg)) created.NavigateTo(navArg);
-            AppLogger.LogSuccess("Main window shown and activated - NOT running in background 🎉");
+
+            if (!string.IsNullOrWhiteSpace(navArg))
+            {
+                created.NavigateTo(navArg);
+            }
+
+            AppLogger.LogSuccess("Main window shown and activated - NOT running in background ");
         }
         catch (Exception ex)
         {
             AppLogger.LogError("Failed to create or show ModernMainWindow", ex);
-            
+
             // Try to create a simple fallback window
             try
             {
@@ -203,16 +206,8 @@ public partial class App : System.Windows.Application
                 SafeShowRecoveryWindow($"Both main and fallback windows failed: {ex.Message}");
             }
         }
-        
-        // Initialize tray for background behavior
-        TrayIconService.Instance.Initialize();
-        // Start background license revalidation when licensed
-        try { Services.LicenseRevalidationService.Instance.Start(); } catch { }
-        // Start game detection/optimization service
-        try { new Services.GameDetectionService().Start(); } catch { }
-        // Mark readiness once tray and main are up
-        try { new StartupHealthService().MarkReady(); } catch { }
-    }
+
+        }
 
     protected override void OnExit(ExitEventArgs e)
     {
