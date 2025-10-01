@@ -342,15 +342,16 @@ Examples:
                     services.AddSingleton<IExportService, ExportService>();
                     services.AddSingleton<IEnhancedExportService, EnhancedExportService>();
                     services.AddSingleton<IExternalLogSourceService, ExternalLogSourceService>();
+                    services.AddSingleton<ILogComparisonService, LogComparisonService>();
+                    services.AddSingleton<IRetentionPolicyService, RetentionPolicyService>();
                     
-                    // Register SessionStateService as hosted service for background work
+                    // Register background services
                     services.AddHostedService<SessionStateService>();
+                    services.AddHostedService<RetentionPolicyService>();
 
                     // Register ViewModels
                     services.AddTransient<MainViewModel>();
                     services.AddTransient<EnhancedMainViewModel>();
-
-                    // Register Views
                     services.AddTransient<MainWindow>();
                 })
                 .UseSerilog()
