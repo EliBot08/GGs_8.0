@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using System.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;
+using Xunit.Extensions.Logging;
 
 namespace GGs.Enterprise.Tests;
 
@@ -14,7 +15,7 @@ namespace GGs.Enterprise.Tests;
 public class EnterpriseIntegrationTests : IDisposable
 {
     private readonly ITestOutputHelper _output;
-    private readonly IServiceProvider _serviceProvider;
+    private readonly ServiceProvider _serviceProvider;
     private readonly ILogger<EnterpriseIntegrationTests> _logger;
     private readonly IConfiguration _configuration;
 
@@ -30,7 +31,12 @@ public class EnterpriseIntegrationTests : IDisposable
             .Build();
         
         services.AddSingleton<IConfiguration>(configuration);
-        services.AddLogging(builder => builder.AddXUnit(output));
+        services.AddLogging(builder => 
+        {
+            builder.AddConsole();
+            builder.AddDebug();
+            builder.SetMinimumLevel(LogLevel.Information);
+        });
         
         _serviceProvider = services.BuildServiceProvider();
         _logger = _serviceProvider.GetRequiredService<ILogger<EnterpriseIntegrationTests>>();
