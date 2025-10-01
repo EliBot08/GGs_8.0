@@ -36,12 +36,23 @@ public sealed class TestAppFactory : WebApplicationFactory<GGs.Server.Program>
 
         builder.ConfigureServices((ctx, services) =>
         {
-            // Apply migrations proactively to ensure schema is current (including MetadataJson on AspNetUsers)
-            using var sp = services.BuildServiceProvider();
-            using var scope = sp.CreateScope();
-            var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-            // Apply EF migrations (best effort)
-            try { db.Database.Migrate(); } catch { /* continue with fallback DDL */ }
+            // Apply migrations and schema setup will happen after host is built
+        });
+    }
+
+    protected override Microsoft.Extensions.Hosting.IHost CreateHost(Microsoft.Extensions.Hosting.IHostBuilder builder)
+    {
+        var host = base.CreateHost(builder);
+        
+        // Now seed the database using the properly configured service provider
+        using var scope = host.Services.CreateScope();
+        var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        var userManager = scope.ServiceProvider.GetRequiredService<UserManager<ApplicationUser>>();
+        var roleManager = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
+        var configuration = scope.ServiceProvider.GetRequiredService<IConfiguration>();
+        
+        // Apply EF migrations (best effort)
+        try { db.Database.Migrate(); } catch { /* continue with fallback DDL */ }
 
             // Fallback: ensure missing tables/columns exist for tests when migrations are incomplete
             try
@@ -98,7 +109,40 @@ public sealed class TestAppFactory : WebApplicationFactory<GGs.Server.Program>
                 try { db.Database.ExecuteSqlRaw("ALTER TABLE TweakLogs ADD COLUMN UndoScript TEXT"); } catch { }
             }
             catch { /* ignore fallback DDL errors */ }
-        });
+            
+        // Seed test data
+        try
+        {
+            // Ensure Admin role exists
+            if (!roleManager.RoleExistsAsync("Admin").GetAwaiter().GetResult())
+            {
+                roleManager.CreateAsync(new IdentityRole("Admin")).GetAwaiter().GetResult();
+            }
+            
+            // Ensure test admin user exists
+            var adminEmail = configuration["Seed:AdminEmail"] ?? "admin@ggs.local";
+            var adminPassword = configuration["Seed:AdminPassword"] ?? "ChangeMe!123";
+            
+            var adminUser = userManager.FindByEmailAsync(adminEmail).GetAwaiter().GetResult();
+            if (adminUser == null)
+            {
+                adminUser = new ApplicationUser
+                {
+                    UserName = adminEmail,
+                    Email = adminEmail,
+                    EmailConfirmed = true
+                };
+                
+                var createResult = userManager.CreateAsync(adminUser, adminPassword).GetAwaiter().GetResult();
+                if (createResult.Succeeded)
+                {
+                    userManager.AddToRoleAsync(adminUser, "Admin").GetAwaiter().GetResult();
+                }
+            }
+        }
+        catch { /* ignore seeding errors - they'll be caught by tests */ }
+        
+        return host;
     }
 
     protected override void Dispose(bool disposing)

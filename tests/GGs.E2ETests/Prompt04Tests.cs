@@ -1,8 +1,10 @@
 using System.Net;
+using System.Net.Http;
 using System.Net.Http.Json;
 using GGs.Shared.Tweaks;
 using Microsoft.AspNetCore.Mvc.Testing;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
 using Xunit;
 
 namespace GGs.E2ETests;

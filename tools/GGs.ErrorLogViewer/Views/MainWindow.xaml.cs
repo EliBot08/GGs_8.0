@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.ComponentModel;
 using System.Windows;
@@ -46,7 +47,7 @@ namespace GGs.ErrorLogViewer.Views
             }
         }
 
-        private void OnClosing(object sender, CancelEventArgs e)
+        private void OnClosing(object? sender, CancelEventArgs e)
         {
             try
             {

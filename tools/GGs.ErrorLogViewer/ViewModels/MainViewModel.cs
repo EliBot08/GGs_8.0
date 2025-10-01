@@ -1,3 +1,4 @@
+#nullable enable
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -138,7 +139,6 @@ namespace GGs.ErrorLogViewer.ViewModels
             CopyDetailsCommand = new RelayCommand(CopyDetails, () => SelectedLogEntry != null);
             ToggleDetailsPaneCommand = new RelayCommand(() => IsDetailsPaneVisible = !IsDetailsPaneVisible);
 
-            _logMonitoringService.LogEntryAdded += OnLogEntryAdded;
             _logMonitoringService.LogEntriesAdded += OnLogEntriesAdded;
             _logMonitoringService.LogsCleared += OnLogsCleared;
 
@@ -543,36 +543,7 @@ namespace GGs.ErrorLogViewer.ViewModels
             }
         }
 
-        private void OnLogEntryAdded(object? sender, LogEntry logEntry)
-        {
-            try
-            {
-                Application.Current.Dispatcher.Invoke(() =>
-                {
-                    LogEntries.Add(logEntry);
-                    
-                    // Update available sources
-                    if (!string.IsNullOrEmpty(logEntry.Source) && !AvailableSources.Contains(logEntry.Source))
-                    {
-                        AvailableSources.Add(logEntry.Source);
-                    }
-                    
-                    UpdateCounts();
-                    
-                    // Auto-scroll if enabled
-                    if (AutoScroll && LogEntriesView.CurrentItem != logEntry)
-                    {
-                        LogEntriesView.MoveCurrentTo(logEntry);
-                    }
-                });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "Error processing single log entry");
-            }
-        }
-
-        // New: Handle batch log entries for better performance
+        // Handle batch log entries for better performance
         private void OnLogEntriesAdded(object? sender, System.Collections.Generic.IEnumerable<LogEntry> logEntries)
         {
             try
