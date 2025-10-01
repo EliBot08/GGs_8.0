@@ -70,7 +70,6 @@ The `GGs.LoadTests` project fails to compile due to NBomber library upgrade from
 ## 3. NewE2ETests - Test Server Configuration Issues ⚠️
 
 **Status:** NEEDS INVESTIGATION  
-**Priority:** MEDIUM  
 **Impact:** 7 of 9 tests failing due to dependency injection issues
 
 ### Issue Details
@@ -78,15 +77,18 @@ Tests fail with: `Unable to resolve service for type 'Microsoft.AspNetCore.Ident
 
 This indicates the test WebApplicationFactory is not properly configured with required Identity services.
 
-### Estimated Effort
-- **Time:** 2-4 hours
-- **Complexity:** Low-Medium
+### Low Priority: NewE2ETests DI Config  
+- **Issue:** 7 failing tests due to Identity services not being resolved in test context
+- **Root Cause:** GGs.Server.Program.cs may not properly register Identity services, or WebApplicationFactory test setup doesn't trigger Identity registration
+- **Estimated Effort:** 4-6 hours (requires deep investigation of Server startup and Identity configuration)
+- **Status:** Attempted fix in TestAppFactory.cs - UserManager/RoleManager still not resolvable  
+- **Next Steps:** Investigate Server/Program.cs to ensure AddIdentity() is properly called and services are registered
 - **Risk:** Low
 
 ### Recommended Actions
-1. Add proper Identity service configuration to test factory
-2. Ensure test database is seeded with required data
-3. Review WebApplicationFactory setup in test files
+1. Investigate GGs.Server/Program.cs Identity service registration
+2. Verify WebApplicationFactory properly inherits server DI configuration
+3. Consider creating a dedicated test authentication helper that bypasses Identity
 
 ---
 
