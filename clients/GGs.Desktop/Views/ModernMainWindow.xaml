@@ -1,4 +1,4 @@
-<Window x:Class="GGs.Desktop.Views.ModernMainWindow"
+﻿<Window x:Class="GGs.Desktop.Views.ModernMainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:views="clr-namespace:GGs.Desktop.Views"
@@ -11,7 +11,14 @@
         AllowsTransparency="False"
         Background="{DynamicResource ThemeBackgroundPrimary}"
         KeyboardNavigation.TabNavigation="Cycle">
-    
+    <Window.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="../Themes/EnterpriseControlStyles.xaml"/>
+                <ResourceDictionary Source="../Themes/EnterpriseThemes.xaml"/>
+            </ResourceDictionary.MergedDictionaries>
+        </ResourceDictionary>
+    </Window.Resources>
     <WindowChrome.WindowChrome>
         <WindowChrome CaptionHeight="40" ResizeBorderThickness="8" GlassFrameThickness="0" CornerRadius="0"/>
     </WindowChrome.WindowChrome>
@@ -42,7 +49,7 @@
                 <!-- Status Bar -->
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
                     <TextBlock Text="Status:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,8,0"/>
-                    <TextBlock Text="● Optimized" Foreground="{DynamicResource ThemeSuccess}"/>
+                    <TextBlock Text=" Optimized" Foreground="{DynamicResource ThemeSuccess}"/>
                     <TextBlock Text="|" Foreground="{DynamicResource ThemeTextSecondary}" Margin="16,0"/>
                     <TextBlock Text="License:" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,8,0"/>
                     <TextBlock x:Name="LicenseTypeText" Text="Premium" Foreground="{DynamicResource ThemeAccentSecondary}"/>
@@ -56,7 +63,7 @@
                     <Grid Margin="0,0,4,0">
                         <Button x:Name="BtnNotifications" Width="46" Height="40" Background="Transparent" BorderThickness="0" 
                                 Foreground="{DynamicResource ThemeTextSecondary}" FontSize="16" ToolTip="Notifications" 
-                                AutomationProperties.Name="Notifications" TabIndex="1" Click="BtnNotifications_Click">🔔</Button>
+                                AutomationProperties.Name="Notifications" TabIndex="1" Click="BtnNotifications_Click"></Button>
                         <Border x:Name="NotificationsBadge" Background="{DynamicResource ThemeAccentPrimary}" CornerRadius="8" Width="18" Height="18" 
                                 HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,4,0" Visibility="Collapsed">
                             <TextBlock x:Name="NotificationsBadgeText" Text="0" Foreground="White" FontSize="10" HorizontalAlignment="Center" VerticalAlignment="Center"/>
@@ -68,19 +75,19 @@
                           BorderThickness="0" FontSize="16" ToolTip="Toggle Theme"
                           AutomationProperties.Name="Toggle Theme" TabIndex="1"
                           Click="ThemeToggleButton_Click">
-                        <TextBlock x:Name="ThemeIcon" Text="🌙" />
+                        <TextBlock x:Name="ThemeIcon" Text="" />
                     </Button>
-                    <Button Content="─" Width="46" Height="40"
+                    <Button Content="" Width="46" Height="40"
                           Background="Transparent" Foreground="{DynamicResource TextSecondary}"
                           BorderThickness="0" FontSize="14"
                           AutomationProperties.Name="Minimize" TabIndex="2"
                           Click="MinimizeButton_Click"/>
-                    <Button Content="□" Width="46" Height="40" 
+                    <Button Content="" Width="46" Height="40" 
                           Background="Transparent" Foreground="{DynamicResource TextSecondary}"
                           BorderThickness="0" FontSize="14"
                           AutomationProperties.Name="Maximize" TabIndex="3"
                           Click="MaximizeButton_Click"/>
-                    <Button x:Name="CloseButton" Content="✕" Width="46" Height="40" 
+                    <Button x:Name="CloseButton" Content="" Width="46" Height="40" 
                           Background="Transparent" Foreground="{DynamicResource TextSecondary}"
                           BorderThickness="0" FontSize="16"
                           AutomationProperties.Name="Close" TabIndex="4"
@@ -127,35 +134,35 @@
                         
                         <StackPanel Grid.Row="0" Margin="0,32,0,0">
                             <RadioButton x:Name="DashboardNav" Style="{StaticResource NavButton}" 
-                                       Content="🏠  Dashboard" IsChecked="True"
+                                       Content="  Dashboard" IsChecked="True"
                                        AutomationProperties.Name="Dashboard" TabIndex="10"
                                        Checked="NavigationChanged"/>
                             <RadioButton x:Name="OptimizationNav" Style="{StaticResource NavButton}" 
-                                       Content="⚡  Optimization"
+                                       Content="  Optimization"
                                        AutomationProperties.Name="Optimization" TabIndex="11"
                                        Checked="NavigationChanged"/>
                             <RadioButton x:Name="NetworkNav" Style="{StaticResource NavButton}" 
-                                       Content="🌐  Network"
+                                       Content="  Network"
                                        AutomationProperties.Name="Network" TabIndex="12"
                                        Checked="NavigationChanged"/>
                             <RadioButton x:Name="MonitoringNav" Style="{StaticResource NavButton}" 
-                                       Content="📊  Monitoring"
+                                       Content="  Monitoring"
                                        AutomationProperties.Name="Monitoring" TabIndex="13"
                                        Checked="NavigationChanged"/>
                             <RadioButton x:Name="ProfilesNav" Style="{StaticResource NavButton}" 
-                                       Content="👤  Profiles"
+                                       Content="  Profiles"
                                        AutomationProperties.Name="Profiles" TabIndex="14"
                                        Checked="NavigationChanged"/>
                             <RadioButton x:Name="SystemIntelligenceNav" Style="{StaticResource NavButton}" 
-                                       Content="🧠  System Intelligence"
+                                       Content="  System Intelligence"
                                        AutomationProperties.Name="System Intelligence" TabIndex="15"
                                        Checked="NavigationChanged"/>
                             <RadioButton x:Name="NotificationsNav" Style="{StaticResource NavButton}" 
-                                       Content="🔔  Notifications"
+                                       Content="  Notifications"
                                        AutomationProperties.Name="Notifications" TabIndex="16"
                                        Checked="NavigationChanged"/>
                             <RadioButton x:Name="SettingsNav" Style="{StaticResource NavButton}" 
-                                       Content="⚙️  Settings"
+                                       Content="  Settings"
                                        AutomationProperties.Name="Settings" TabIndex="17"
                                        Checked="NavigationChanged"/>
                         </StackPanel>
@@ -164,7 +171,7 @@
                         <Border Grid.Row="1" Padding="16" Background="{DynamicResource ThemeBackgroundTertiary}">
                             <StackPanel>
                                 <TextBlock x:Name="UserNameText" Text="User" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
-                                <TextBlock x:Name="UserEmailText" Text="—" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                <TextBlock x:Name="UserEmailText" Text="" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
                             </StackPanel>
                         </Border>
                     </Grid>
@@ -252,10 +259,10 @@
                                 <StackPanel>
                                     <TextBlock Text="Quick Actions" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
                                     <UniformGrid Columns="4" Rows="1">
-                                        <Button Content="🎮 Game Mode" Style="{StaticResource ActionButton}" Margin="0,0,12,0" Click="GameMode_Click"/>
-                                        <Button Content="🚀 Boost" Style="{StaticResource ActionButton}" Margin="6,0" Click="Boost_Click"/>
-                                        <Button Content="🧹 Clean" Style="{StaticResource ActionButton}" Margin="6,0" Click="Clean_Click"/>
-                                        <Button Content="🔇 Silent Mode" Style="{StaticResource ActionButton}" Margin="12,0,0,0" Click="SilentMode_Click"/>
+                                        <Button Content=" Game Mode" Style="{StaticResource ActionButton}" Margin="0,0,12,0" Click="GameMode_Click"/>
+                                        <Button Content=" Boost" Style="{StaticResource ActionButton}" Margin="6,0" Click="Boost_Click"/>
+                                        <Button Content=" Clean" Style="{StaticResource ActionButton}" Margin="6,0" Click="Clean_Click"/>
+                                        <Button Content=" Silent Mode" Style="{StaticResource ActionButton}" Margin="12,0,0,0" Click="SilentMode_Click"/>
                                     </UniformGrid>
                                 </StackPanel>
                             </Border>
@@ -293,13 +300,13 @@
 
                     <!-- System Intelligence Views -->
                     <TabControl x:Name="SystemIntelligenceView" Visibility="Collapsed" Margin="16" Background="Transparent" BorderThickness="0">
-                        <TabItem Header="🧠 System Intelligence">
+                        <TabItem Header=" System Intelligence">
                             <views:SystemIntelligenceView x:Name="SystemIntelligenceMainView" />
                         </TabItem>
-                        <TabItem Header="🏗️ Profile Architect">
+                        <TabItem Header=" Profile Architect">
                             <views:ProfileArchitectView x:Name="ProfileArchitectMainView" />
                         </TabItem>
-                        <TabItem Header="🌐 Community Hub">
+                        <TabItem Header=" Community Hub">
                             <views:CommunityHubView x:Name="CommunityHubMainView" />
                         </TabItem>
                     </TabControl>
@@ -443,3 +450,9 @@
         </Grid>
     </Border>
 </Window>
+
+
+
+
+
+
