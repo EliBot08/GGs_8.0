@@ -3,373 +3,301 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:GGs.Desktop.Views"
         mc:Ignorable="d"
-        Title="GGs Error Log Viewer"
-        Width="1280"
-        Height="720"
+        Title="Error Log Viewer"
+        Height="800"
+        Width="1200"
+        MinHeight="650"
+        MinWidth="800"
         WindowStartupLocation="CenterScreen"
-        Background="{DynamicResource ThemeBackgroundPrimary}"
-        FontFamily="Segoe UI Variable">
-    <Window.Resources>
-        <Thickness x:Key="CardPadding">16</Thickness>
-
-        <Style x:Key="LevelBadgeStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="6" />
-            <Setter Property="Padding" Value="6,2" />
-            <Setter Property="VerticalAlignment" Value="Center" />
-            <Setter Property="Background" Value="#33414B" />
-            <Setter Property="Child">
-                <Setter.Value>
-                    <TextBlock Foreground="White"
-                               FontWeight="SemiBold"
-                               Text="{Binding Level}" />
-                </Setter.Value>
-            </Setter>
-            <Style.Triggers>
-                <DataTrigger Binding="{Binding Level}" Value="ERROR">
-                    <Setter Property="Background" Value="#FFDC2626" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Level}" Value="WARNING">
-                    <Setter Property="Background" Value="#FFF59E0B" />
-                    <Setter Property="Child">
-                        <Setter.Value>
-                            <TextBlock Foreground="#011627" FontWeight="SemiBold" Text="{Binding Level}" />
-                        </Setter.Value>
-                    </Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Level}" Value="WARN">
-                    <Setter Property="Background" Value="#FFF59E0B" />
-                    <Setter Property="Child">
-                        <Setter.Value>
-                            <TextBlock Foreground="#011627" FontWeight="SemiBold" Text="{Binding Level}" />
-                        </Setter.Value>
-                    </Setter>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Level}" Value="INFO">
-                    <Setter Property="Background" Value="#FF2563EB" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Level}" Value="DEBUG">
-                    <Setter Property="Background" Value="#FF6B7280" />
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Level}" Value="OK">
-                    <Setter Property="Background" Value="#FF22C55E" />
-                </DataTrigger>
-            </Style.Triggers>
-        </Style>
-
-        <Style TargetType="DataGrid" BasedOn="{StaticResource {x:Type DataGrid}}">
-            <Setter Property="RowHeaderWidth" Value="0" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="HorizontalGridLinesBrush" Value="#11FFFFFF" />
-            <Setter Property="VerticalGridLinesBrush" Value="#11FFFFFF" />
-        </Style>
-
-        <Style TargetType="DataGridRow">
-            <Setter Property="FontSize" Value="14" />
-            <Setter Property="Height" Value="32" />
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-            <Setter Property="Background" Value="Transparent" />
-            <Setter Property="BorderThickness" Value="0" />
-            <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="DataGridRow">
-                        <Border x:Name="RowBorder"
-                                Background="Transparent"
-                                CornerRadius="6"
-                                Padding="6,0">
-                            <SelectiveScrollingGrid>
-                                <SelectiveScrollingGrid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </SelectiveScrollingGrid.ColumnDefinitions>
-                                <SelectiveScrollingGrid.RowDefinitions>
-                                    <RowDefinition Height="*" />
-                                    <RowDefinition Height="Auto" />
-                                </SelectiveScrollingGrid.RowDefinitions>
-                                <DataGridCellsPresenter Grid.ColumnSpan="2" />
-                                <DataGridDetailsPresenter Grid.Row="1" Grid.ColumnSpan="2" />
-                            </SelectiveScrollingGrid>
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsSelected" Value="True">
-                                <Setter TargetName="RowBorder" Property="Background" Value="#331F81B3" />
-                            </Trigger>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="RowBorder" Property="Background" Value="#191A2B3C" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style x:Key="CommandBarButtonStyle" TargetType="Button">
-            <Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimary}" />
-            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundTertiary}" />
-            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}" />
-            <Setter Property="BorderThickness" Value="1" />
-            <Setter Property="FontWeight" Value="SemiBold" />
-            <Setter Property="Padding" Value="14,6" />
-            <Setter Property="Margin" Value="0,0,12,8" />
-            <Setter Property="MinWidth" Value="120" />
-            <Setter Property="Height" Value="34" />
-            <Setter Property="Cursor" Value="Hand" />
-            <Setter Property="HorizontalAlignment" Value="Stretch" />
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Border x:Name="Outer"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                CornerRadius="8"
-                                Padding="{TemplateBinding Padding}">
-                            <ContentPresenter HorizontalAlignment="Center"
-                                              VerticalAlignment="Center"
-                                              RecognizesAccessKey="True" />
-                        </Border>
-                        <ControlTemplate.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter TargetName="Outer" Property="BorderBrush" Value="{DynamicResource ThemeAccentPrimary}" />
-                                <Setter Property="Foreground" Value="{DynamicResource ThemeAccentPrimary}" />
-                            </Trigger>
-                            <Trigger Property="IsPressed" Value="True">
-                                <Setter TargetName="Outer" Property="Background" Value="#1AFFFFFF" />
-                            </Trigger>
-                            <Trigger Property="IsEnabled" Value="False">
-                                <Setter TargetName="Outer" Property="Opacity" Value="0.5" />
-                            </Trigger>
-                        </ControlTemplate.Triggers>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
+        Background="{DynamicResource ThemeBackgroundPrimary}">
 
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" />
-            <RowDefinition Height="*" />
-            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*" />
-            <ColumnDefinition Width="360" />
-        </Grid.ColumnDefinitions>
 
-        <!-- Command Bar -->
-        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{DynamicResource ThemeBackgroundSecondary}" Padding="16,12" BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,0,0,1">
-            <Grid>
+        <!-- Filter Panel -->
+        <Border Grid.Row="0" Background="{DynamicResource ThemeBackgroundSecondary}" BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,0,0,1">
+            <Grid Margin="20,16">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0" >
-                    <TextBox Width="280"
-                             Margin="0,0,16,0"
-                             Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
-                             ToolTip="Search by message, source, or raw text"
-                             AutomationProperties.Name="Search logs"
-                             VerticalContentAlignment="Center" />
-
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <CheckBox Content="Info"
-                                  Margin="0,0,8,0"
-                                  IsChecked="{Binding IncludeInfo}"
-                                  AutomationProperties.Name="Include informational logs" />
-                        <CheckBox Content="Warn"
-                                  Margin="0,0,8,0"
-                                  IsChecked="{Binding IncludeWarning}"
-                                  AutomationProperties.Name="Include warning logs" />
-                        <CheckBox Content="Error"
-                                  Margin="0,0,8,0"
-                                  IsChecked="{Binding IncludeError}"
-                                  AutomationProperties.Name="Include error logs" />
-                        <CheckBox Content="Debug"
-                                  IsChecked="{Binding IncludeDebug}"
-                                  AutomationProperties.Name="Include debug logs" />
-                    </StackPanel>
+                <!-- Level Filters -->
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="Levels:" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,12,0"/>
+                    <CheckBox Content="Info" IsChecked="{Binding IncludeInfo}" Margin="0,0,8,0" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                    <CheckBox Content="Warning" IsChecked="{Binding IncludeWarning}" Margin="0,0,8,0" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                    <CheckBox Content="Error" IsChecked="{Binding IncludeError}" Margin="0,0,8,0" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                    <CheckBox Content="Debug" IsChecked="{Binding IncludeDebug}" Margin="0,0,16,0" Foreground="{DynamicResource ThemeTextPrimary}"/>
                 </StackPanel>
 
-                <WrapPanel Grid.Column="1"
-                           Orientation="Horizontal"
-                           HorizontalAlignment="Right"
-                           MaxWidth="680">
+                <!-- Search Filter -->
+                <TextBox Grid.Column="1" Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                         Margin="20,0"
+                         VerticalAlignment="Center"
+                         Background="{DynamicResource ThemeBackgroundTertiary}"
+                         Foreground="{DynamicResource ThemeTextPrimary}"
+                         BorderBrush="{DynamicResource ThemeBorder}"
+                         Padding="8,4"
+                         FontSize="14">
+                    <TextBox.Style>
+                        <Style TargetType="TextBox">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="TextBox">
+                                        <Border Background="{TemplateBinding Background}"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                CornerRadius="4">
+                                            <Grid>
+                                                <ScrollViewer x:Name="PART_ContentHost" Margin="12,0"/>
+                                                <TextBlock x:Name="PlaceholderText"
+                                                           Text="Search logs..."
+                                                           Foreground="{DynamicResource ThemeTextSecondary}"
+                                                           IsHitTestVisible="False"
+                                                           Margin="12,6,12,0"
+                                                           Visibility="Collapsed"/>
+                                            </Grid>
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <Trigger Property="Text" Value="">
+                                                <Setter TargetName="PlaceholderText" Property="Visibility" Value="Visible"/>
+                                            </Trigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </TextBox.Style>
+                </TextBox>
+
+                <!-- Auto Scroll and Action Buttons -->
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <CheckBox Content="Auto Scroll" IsChecked="{Binding AutoScrollToBottom}" 
+                              Margin="0,0,24,0" VerticalAlignment="Center" Foreground="{DynamicResource ThemeTextPrimary}"/>
                     <Button Content="{Binding PauseButtonText}"
                             Command="{Binding TogglePauseCommand}"
-                            Style="{StaticResource CommandBarButtonStyle}"
-                            ToolTip="Pause or resume live log ingestion"
-                            AutomationProperties.Name="Toggle live updates" />
-                    <Button Content="Load Older"
-                            Command="{Binding LoadMoreCommand}"
-                            Style="{StaticResource CommandBarButtonStyle}"
-                            ToolTip="Load older records into the view"
-                            AutomationProperties.Name="Load older log entries" />
+                            Margin="0,0,12,0"
+                            Padding="16,8"
+                            Background="{DynamicResource ThemeAccentSecondary}"
+                            Foreground="{DynamicResource ThemeTextPrimary}"
+                            BorderThickness="0"
+                            FontWeight="SemiBold"/>
+                    <Button Content="Clear"
+                            Command="{Binding ClearCommand}"
+                            Margin="0,0,12,0"
+                            Padding="16,8"
+                            Background="{DynamicResource ThemeError}"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontWeight="SemiBold"/>
                     <Button Content="Export"
                             Command="{Binding ExportCommand}"
-                            Style="{StaticResource CommandBarButtonStyle}"
-                            ToolTip="Export visible entries to JSON"
-                            AutomationProperties.Name="Export log entries" />
-                    <Button Content="Clear Index"
-                            Command="{Binding ClearCommand}"
-                            Style="{StaticResource CommandBarButtonStyle}"
-                            ToolTip="Clear the indexed cache"
-                            AutomationProperties.Name="Clear cached log index" />
+                            Margin="0,0,12,0"
+                            Padding="16,8"
+                            Background="{DynamicResource ThemeSuccess}"
+                            Foreground="White"
+                            BorderThickness="0"
+                            FontWeight="SemiBold"/>
                     <Button Content="Open Folder"
                             Command="{Binding OpenFolderCommand}"
-                            Style="{StaticResource CommandBarButtonStyle}"
-                            ToolTip="Open the log directory"
-                            AutomationProperties.Name="Open log folder" />
-                </WrapPanel>
+                            Padding="16,8"
+                            Background="{DynamicResource ThemeBackgroundTertiary}"
+                            Foreground="{DynamicResource ThemeTextPrimary}"
+                            BorderBrush="{DynamicResource ThemeBorder}"
+                            FontWeight="SemiBold"/>
+                </StackPanel>
             </Grid>
         </Border>
 
-        <!-- Log Grid -->
-        <Border Grid.Row="1" Grid.Column="0" Margin="16" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="12">
-            <DataGrid ItemsSource="{Binding Logs}"
-                      SelectedItem="{Binding SelectedLog, Mode=TwoWay}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      CanUserDeleteRows="False"
-                      CanUserResizeRows="True"
-                      HeadersVisibility="Column"
-                      GridLinesVisibility="Horizontal"
-                      IsReadOnly="True"
-                      ScrollViewer.CanContentScroll="True"
-                      EnableRowVirtualization="True"
-                      EnableColumnVirtualization="True"
-                      VirtualizingPanel.IsVirtualizing="True"
-                      VirtualizingPanel.VirtualizationMode="Recycling"
-                      SelectionMode="Single"
-                      SelectionUnit="FullRow"
-                      KeyboardNavigation.TabNavigation="Continue"
-                      Background="Transparent"
-                      RowStyle="{StaticResource {x:Type DataGridRow}}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Time"
-                                        Binding="{Binding TimestampText}"
-                                        Width="200"
-                                        FontFamily="Consolas"
-                                        ClipboardContentBinding="{Binding TimestampText}" />
-                    <DataGridTemplateColumn Header="Level" Width="140">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock Text="{Binding Emoji}" FontSize="16" Margin="0,0,8,0" />
-                                    <Border Style="{StaticResource LevelBadgeStyle}" />
-                                </StackPanel>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                    <DataGridTextColumn Header="Source"
-                                        Binding="{Binding Source}"
-                                        Width="200"
-                                        ClipboardContentBinding="{Binding Source}" />
-                    <DataGridTextColumn Header="Message"
-                                        Binding="{Binding Message}"
-                                        Width="*"
-                                        ClipboardContentBinding="{Binding Message}" />
-                </DataGrid.Columns>
-            </DataGrid>
-        </Border>
+        <!-- Log Entries List -->
+        <DataGrid x:Name="LogDataGrid"
+                  Grid.Row="1"
+                  ItemsSource="{Binding Logs}"
+                  SelectedItem="{Binding SelectedLog}"
+                  AutoGenerateColumns="False"
+                  IsReadOnly="True"
+                  Background="{DynamicResource ThemeBackgroundPrimary}"
+                  Foreground="{DynamicResource ThemeTextPrimary}"
+                  BorderThickness="0"
+                  GridLinesVisibility="Horizontal"
+                  HeadersVisibility="Column"
+                  SelectionMode="Single"
+                  CanUserResizeColumns="True"
+                  CanUserSortColumns="True"
+                  CanUserReorderColumns="False"
+                  ScrollViewer.CanContentScroll="True"
+                  VirtualizingPanel.IsVirtualizing="True"
+                  VirtualizingPanel.VirtualizationMode="Recycling">
 
-        <!-- Detail Panel -->
-        <Border Grid.Row="1"
-                Grid.Column="1"
-                Margin="16"
-                Background="{DynamicResource ThemeBackgroundSecondary}"
-                CornerRadius="12"
-                Padding="16"
-                BorderBrush="{DynamicResource ThemeBorder}"
-                BorderThickness="1">
-            <Grid>
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                    <RowDefinition Height="Auto" />
-                    <RowDefinition Height="*" />
-                </Grid.RowDefinitions>
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Time" Binding="{Binding TimestampText}" Width="180" CanUserSort="True" SortDirection="Descending">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
+                            <Setter Property="FontFamily" Value="Consolas"/>
+                            <Setter Property="FontSize" Value="12"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Level" Binding="{Binding Level}" Width="100" CanUserSort="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="FontSize" Value="12"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Source" Binding="{Binding Source}" Width="140" CanUserSort="True">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="Foreground" Value="{DynamicResource ThemeTextSecondary}"/>
+                            <Setter Property="FontSize" Value="12"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+
+                <DataGridTextColumn Header="Message" Binding="{Binding Message}" Width="*" CanUserSort="False">
+                    <DataGridTextColumn.ElementStyle>
+                        <Style TargetType="TextBlock">
+                            <Setter Property="TextWrapping" Value="Wrap"/>
+                            <Setter Property="FontSize" Value="12"/>
+                        </Style>
+                    </DataGridTextColumn.ElementStyle>
+                </DataGridTextColumn>
+            </DataGrid.Columns>
+
+            <DataGrid.RowStyle>
+                <Style TargetType="DataGridRow">
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="Background" Value="{DynamicResource ThemeAccentSecondary}"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding Level}" Value="ERROR">
+                            <Setter Property="Background" Value="{DynamicResource ThemeErrorBackground}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding Level}" Value="WARNING">
+                            <Setter Property="Background" Value="{DynamicResource ThemeWarningBackground}"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </DataGrid.RowStyle>
+        </DataGrid>
+
+        <!-- Load More Button -->
+        <Border Grid.Row="2" Background="{DynamicResource ThemeBackgroundSecondary}" BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,1,0,0">
+            <Grid Margin="20,12">
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
-                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Log Details" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" />
+                <Button Grid.Column="0" Content="Load More"
+                        Command="{Binding LoadMoreCommand}"
+                        Padding="20,10"
+                        Background="{DynamicResource ThemeAccent}"
+                        Foreground="{DynamicResource ThemeTextPrimary}"
+                        BorderThickness="0"
+                        FontWeight="SemiBold"
+                        HorizontalAlignment="Left"/>
 
-                <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,12">
-                    <TextBlock Text="{Binding SelectedLog.TimestampText, FallbackValue='Select a log entry to review details.'}"
+                <TextBlock Grid.Column="1" Text="{Binding StatusText}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Center"
+                           Foreground="{DynamicResource ThemeTextSecondary}"
+                           FontSize="14"/>
+
+                <TextBlock Grid.Column="2" Text="{Binding LastRefreshedDisplay}"
+                           VerticalAlignment="Center"
+                           HorizontalAlignment="Right"
+                           Foreground="{DynamicResource ThemeTextSecondary}"
+                           FontSize="12"/>
+            </Grid>
+        </Border>
+
+        <!-- Details Panel -->
+        <Border Grid.Row="3" Background="{DynamicResource ThemeBackgroundSecondary}" BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,1,0,0" MinHeight="200">
+            <Grid Margin="20,16">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" MinWidth="400"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="250" MinWidth="200"/>
+                </Grid.ColumnDefinitions>
+
+                <!-- Raw Message -->
+                <Grid Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <TextBlock Grid.Row="0" Text="Raw Log Entry" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,12"/>
+                    <TextBox Grid.Row="1"
+                             Text="{Binding SelectedLog.Raw, Mode=OneWay}"
+                             IsReadOnly="True"
+                             Background="{DynamicResource ThemeBackgroundTertiary}"
+                             Foreground="{DynamicResource ThemeTextPrimary}"
+                             BorderBrush="{DynamicResource ThemeBorder}"
+                             FontFamily="Consolas"
+                             FontSize="11"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
+                             HorizontalScrollBarVisibility="Auto"
+                             AcceptsReturn="True"
+                             Padding="8"/>
+                </Grid>
+
+                <!-- Separator -->
+                <Border Grid.Column="1" Width="1" Background="{DynamicResource ThemeBorder}" Margin="20,0"/>
+
+                <!-- File Info -->
+                <StackPanel Grid.Column="2" Orientation="Vertical">
+                    <TextBlock Text="File Information" FontWeight="SemiBold" FontSize="14" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,12"/>
+                    <TextBlock Text="File Path:" Foreground="{DynamicResource ThemeTextSecondary}" FontSize="12" FontWeight="SemiBold"/>
+                    <TextBox Text="{Binding SelectedLog.FilePath, Mode=OneWay}"
+                             IsReadOnly="True"
+                             Background="{DynamicResource ThemeBackgroundTertiary}"
+                             Foreground="{DynamicResource ThemeTextPrimary}"
+                             BorderBrush="{DynamicResource ThemeBorder}"
+                             FontFamily="Consolas"
+                             FontSize="10"
+                             Margin="0,8,0,16"
+                             TextWrapping="Wrap"
+                             VerticalScrollBarVisibility="Auto"
+                             Padding="8"
+                             MinHeight="60"/>
+                    <TextBlock Text="Line Number:" Foreground="{DynamicResource ThemeTextSecondary}" FontSize="12" FontWeight="SemiBold"/>
+                    <TextBlock Text="{Binding SelectedLog.LineNumber, Mode=OneWay}"
+                               Foreground="{DynamicResource ThemeTextPrimary}"
                                FontFamily="Consolas"
                                FontSize="14"
-                               Foreground="{DynamicResource ThemeTextSecondary}" />
+                               FontWeight="Bold"
+                               Margin="0,8,0,0"/>
                 </StackPanel>
-
-                <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Level:" FontWeight="SemiBold" />
-                        <Border Style="{StaticResource LevelBadgeStyle}" DataContext="{Binding SelectedLog}" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Source:" FontWeight="SemiBold" />
-                        <TextBlock Text="{Binding SelectedLog.Source, FallbackValue='[Unknown]'}" TextWrapping="Wrap" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="File:" FontWeight="SemiBold" />
-                        <TextBlock Text="{Binding SelectedLog.FilePath, FallbackValue='[Unknown]'}" TextWrapping="Wrap" />
-                    </StackPanel>
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Text="Line:" FontWeight="SemiBold" />
-                        <TextBlock Text="{Binding SelectedLog.LineNumber, FallbackValue='0'}" />
-                    </StackPanel>
-                </StackPanel>
-
-                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Message" FontWeight="SemiBold" Margin="0,12,0,4" />
-                <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2" Background="#11000000" BorderThickness="0" VerticalScrollBarVisibility="Auto">
-                    <TextBlock Text="{Binding SelectedLog.Message, FallbackValue='No message for the selected entry.'}"
-                               TextWrapping="Wrap"
-                               FontSize="14"
-                               Foreground="{DynamicResource ThemeTextPrimary}" />
-                </ScrollViewer>
-
-                <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Raw Entry" FontWeight="SemiBold" Margin="0,12,0,4" />
-                <ScrollViewer Grid.Row="5" Grid.ColumnSpan="2" Background="#0D000000" BorderThickness="0" VerticalScrollBarVisibility="Auto">
-                    <TextBox Text="{Binding SelectedLog.Raw, FallbackValue='Raw payload not available.'}"
-                             FontFamily="Consolas"
-                             TextWrapping="Wrap"
-                             IsReadOnly="True"
-                             Background="Transparent"
-                             BorderThickness="0"
-                             Foreground="{DynamicResource ThemeTextPrimary}" />
-                </ScrollViewer>
             </Grid>
         </Border>
 
-        <!-- Status Bar -->
-        <Border Grid.Row="2" Grid.ColumnSpan="2"
-                Background="{DynamicResource ThemeBackgroundSecondary}"
-                BorderBrush="{DynamicResource ThemeBorder}"
-                BorderThickness="1,1,1,0"
-                Padding="16,8">
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="Auto" />
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource ThemeTextSecondary}" FontWeight="SemiBold" />
-                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
-                    <TextBlock Text="{Binding TotalCount, StringFormat='Total: {0}'}"
-                               Foreground="{DynamicResource ThemeTextSecondary}" />
-                    <Rectangle Width="1"
-                               Height="12"
-                               Margin="12,0"
-                               Fill="{DynamicResource ThemeBorder}" />
-                    <TextBlock Text="{Binding LastRefreshedDisplay}"
-                               Foreground="{DynamicResource ThemeTextSecondary}" />
-                </StackPanel>
-            </Grid>
+        <!-- Busy Indicator -->
+        <Border Grid.Row="0" Grid.RowSpan="4"
+                Background="{DynamicResource ThemeBackgroundOverlay}"
+                Visibility="{Binding IsBusy, Converter={StaticResource BooleanToVisibilityConverter}}"
+                Panel.ZIndex="100">
+            <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center">
+                <ProgressBar IsIndeterminate="True" Width="200" Height="4" Margin="0,0,0,16"/>
+                <TextBlock Text="Loading..." Foreground="{DynamicResource ThemeTextPrimary}" FontSize="14"/>
+            </StackPanel>
         </Border>
     </Grid>
 </Window>

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 using System.Windows;
 using GGs.Desktop.Services;
@@ -16,6 +17,8 @@ public partial class ErrorLogViewer : Window
         InitializeComponent();
         _viewModel = new ErrorLogViewerViewModel();
         DataContext = _viewModel;
+
+        _viewModel.AutoScrollRequested += OnAutoScrollRequested;
 
         Loaded += OnLoaded;
         Closed += OnClosed;
@@ -40,8 +43,19 @@ public partial class ErrorLogViewer : Window
         }
     }
 
+    private void OnAutoScrollRequested(object? sender, EventArgs e)
+    {
+        // Scroll to the bottom of the DataGrid
+        if (LogDataGrid.Items.Count > 0)
+        {
+            LogDataGrid.ScrollIntoView(LogDataGrid.Items[^1]);
+        }
+    }
+
     private async void OnClosed(object? sender, EventArgs e)
     {
+        _viewModel.AutoScrollRequested -= OnAutoScrollRequested;
+
         try
         {
             await _viewModel.DisposeAsync();

@@ -52,6 +52,9 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
     private bool includeDebug;
 
     [ObservableProperty]
+    private bool autoScrollToBottom;
+
+    [ObservableProperty]
     private bool isPaused;
 
     [ObservableProperty]
@@ -71,6 +74,8 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
 
     [ObservableProperty]
     private string lastRefreshedDisplay = "Updated —";
+
+    public event EventHandler? AutoScrollRequested;
 
     public ReadOnlyObservableCollection<LogEntryViewModel> Logs => _readonlyLogs;
 
@@ -271,6 +276,12 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
         TrimLogBuffer();
         StatusText = $"Showing {_logs.Count} of {TotalCount} entries";
         UpdateLastRefreshed();
+
+        // Request auto-scroll if enabled and new entries were added at the top (live updates)
+        if (atTop && AutoScrollToBottom && entries.Count > 0)
+        {
+            AutoScrollRequested?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     private void TrimLogBuffer()
