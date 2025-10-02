@@ -1,17 +1,7 @@
 ﻿using System;
-
-    [ObservableProperty]
-    private string pauseButtonText = "Pause Live";
-using System.Diagnostics;
-
-}
-    }
-    [ObservableProperty]
-    private LogEntryViewModel? selectedLog;
-}
-using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
@@ -71,6 +61,12 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
 
     [ObservableProperty]
     private string statusText = "Ready";
+
+    [ObservableProperty]
+    private string pauseButtonText = "Pause Live";
+
+    [ObservableProperty]
+    private LogEntryViewModel? selectedLog;
 
     public ReadOnlyObservableCollection<LogEntryViewModel> Logs => _readonlyLogs;
 
@@ -380,12 +376,6 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
     {
         IsPaused = !IsPaused;
     }
-        else
-        {
-            _ = _ingestionService.ResumeAsync();
-            _ = RefreshHeadAsync(PageSize);
-        }
-    }
 
     private void OpenFolder()
     {
@@ -393,7 +383,7 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
         {
             var target = string.IsNullOrWhiteSpace(LogDirectory) ? ResolveLogDirectory() : LogDirectory;
             Directory.CreateDirectory(target);
-            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            Process.Start(new ProcessStartInfo
             {
                 FileName = target,
                 UseShellExecute = true
@@ -527,7 +517,7 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
         }
         catch
         {
-            // ignored - fallback below
+            // ignore env access failure
         }
 
         return Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "logs");
@@ -569,6 +559,10 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
     {
         if (_isInitialized)
         {
+            _ = ApplyFilterAsync();
+        }
+    }
+
     partial void OnIsPausedChanged(bool value)
     {
         PauseButtonText = value ? "Resume Live" : "Pause Live";
@@ -588,9 +582,6 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
         {
             _ = _ingestionService.ResumeAsync();
             _ = RefreshHeadAsync(PageSize);
-        }
-    }
-            _ = ApplyFilterAsync();
         }
     }
 
@@ -614,4 +605,3 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
         _filterCts?.Dispose();
     }
 }
-

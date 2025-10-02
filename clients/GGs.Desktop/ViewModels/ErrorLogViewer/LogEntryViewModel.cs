@@ -38,3 +38,4 @@ public sealed partial class LogEntryViewModel : ObservableObject
         OnPropertyChanged(nameof(TimestampText));
     }
 }
+

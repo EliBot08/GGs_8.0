@@ -1,0 +1,50 @@
+﻿EliNextSteps
+===========
+
+Checkpoint Ledger
+-----------------
+[x] CP-001 – ViewModel property scaffolding:
+    • Introduced `pauseButtonText` to `clients/GGs.Desktop/ViewModels/ErrorLogViewer/ErrorLogViewerViewModel.cs` so the UI can reflect the live/pause state without hard-coded strings.
+    • Added `selectedLog` to the same ViewModel to support the new detail panel; the object is nullable and has safe defaults to avoid binding null reference crashes.
+    • Registered the corresponding partial `OnIsPausedChanged` hook so toggling the pause state updates button text, status messaging, and resumes ingestion when unpausing.
+    • Ensured `OnIncludeDebugChanged` mirrors the other filter toggles by re-issuing the debounce pipeline (`_ = ApplyFilterAsync();`).
+    • Normalized `Process.Start` calls to use `ProcessStartInfo` with `UseShellExecute = true` for directory opens; this avoids shell-execution exceptions in Win11 hardened environments.
+
+[x] CP-002 – XAML shell adjustments:
+    • Expanded `clients/GGs.Desktop/Views/ErrorLogViewer.xaml` into a two-column layout (log grid + detail inspector) so power-users get contextual data while scrolling.
+    • Swapped row templates for accurate selection styling (distinct hover/selection colors, accessible focus support).
+    • Added toolbar binding hooks for the new ViewModel properties (Pause button now binds to `PauseButtonText`, DataGrid selection binds to `SelectedLog`, detail panel binds to the selected entry properties).
+    • Replaced fixed pixel toolbar layout with responsive host containers that avoid reflows when window width shrinks.
+
+[x] CP-003 – Event plumbing cleanup:
+    • Simplified `TogglePause()` implementation so the MVVM source-of-truth is the generated partial `OnIsPausedChanged`. This prevents double execution of resume logic and keeps state transitions observable for testing.
+    • Propagated consistent filter-debounce re-execution across all severity toggles (`IncludeInfo`, `IncludeWarning`, `IncludeError`, `IncludeDebug`).
+
+Open Work Queue
+----------------
+[ ] CP-004 – Data ingestion service integration:
+    • Wire up the planned `ILogIngestionService` + `ILogIndex` (Sqlite pipeline) to the ViewModel. Ensure `_ingestionService` and `_index` are resolved from DI rather than newing inside the ViewModel so that they can be mocked in tests.
+    • Confirm ingestion thread handles large files (100k+ lines); add cancellation tokens and back-pressure metrics exposed via `StatusText`.
+    • Provide benchmarking hooks to validate 60fps scrolling with virtualization toggled.
+
+[ ] CP-005 – Detail pane polish:
+    • Replace placeholder emoji `?` with the same mapped glyphs the parser assigns (`📝`, `⚠`, etc.) so list and detail views stay consistent.
+    • Add copy-to-clipboard commands for the raw payload and file path with keyboard shortcuts (Ctrl+C while a field is focused).
+    • Include a collapsible stack for exception information when present (highlight stack traces, show aggregated context fields).
+
+[ ] CP-006 – Testing & diagnostics:
+    • Author unit tests for `ErrorLogViewerViewModel` covering pause/resume, filter debounce, and selection state transitions (use MSTest/XUnit from `tests/GGs.ErrorLogViewer.Tests`).
+    • Schedule integration tests for the WPF UI (FlaUI/WinAppDriver) to ensure hover/click no longer crash; capture baseline performance metrics.
+    • Capture before/after perf notes (open 100k-line log file, measure memory footprint, record UI interaction latency); store results in `docs/perf/error-log-viewer.md` (to be created).
+
+[ ] CP-007 – Logging/telemetry consolidation:
+    • Finish migrating App startup to the structured `RollingFileLoggerProvider` draft (currently not checked in) and wire `AppLogger.ConfigureFallbackLogPath` to the disk path chosen in settings.
+    • Emit diagnostic breadcrumbs when ingestion pauses/resumes (leverage `CrashReportingService` breadcrumb pipeline for cross-feature observability).
+    • Introduce developer-mode toggles (keyboard shortcut) to dump ingestion queue depth and SQL page cache stats to a temporary diagnostics panel.
+
+Notes & Next Actions
+--------------------
+• Next coding session: focus on CP-004 (ingestion + indexing). Draft the DI wiring in `App.xaml.cs` and register `ILogIngestionService`/`ILogIndex` in the service container so ViewModel construction can be simplified.
+• Keep an eye on spacing removal in XAML—reintroduce layout breathing room via `Margin`/`Padding` since native `Spacing` is unavailable in .NET 9 WPF.
+• Emoji fallback remains `?`; align this with the parser mapping when the service layer lands.
+• Once ingestion is in place, update the status bar to show live metrics: total rows, ingest rate, and pause indicator.
