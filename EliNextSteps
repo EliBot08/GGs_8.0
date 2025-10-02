@@ -1,53 +1,79 @@
-GGs Error Log Viewer – Stabilization & UX Upgrade Plan
-======================================================
+GGs Premium Experience Playbook
+================================
 
-## Phase 1 – Crash Reproduction & Root Cause Containment
-- **P1.1 Capture crash telemetry**
-  - Reproduce the hover crash in `tools/GGs.ErrorLogViewer/Views/MainWindow.xaml` with WPF diagnostics logging enabled.
-  - Collect the `InvalidOperationException` stack trace triggered by the `ToolbarButtonStyle` storyboard animating `RenderTransform.ScaleX/ScaleY` on a `Border` lacking a concrete `ScaleTransform` instance.
-- **P1.2 Implement immediate guard**
-  - Update `ToolbarButtonStyle` and any templates that animate transforms to include a default `<Border.RenderTransform><ScaleTransform/></Border.RenderTransform>` so the storyboard targets an animatable object.
-  - Validate hover/press interactions no longer throw using `Snoop` or VS Live Visual Tree.
-- **P1.3 Regression harness**
-  - Add an automated UI smoke test (FlaUI) that hovers each toolbar button to ensure the animation executes without exceptions before future releases.
+## Pillar A – Unified Visual Language & Depth
+- **A1. Design token refactor (`clients/GGs.Desktop/Themes/`)**
+  - Replace ad-hoc resource dictionaries with a `ThemeTokens.xaml` defining spacing scale, radius scale, elevation shadows, gradient ramps, and dynamic accent palette slots (Primary, Secondary, Success, Critical, FrostedOverlay).
+  - Introduce typography tokens (Display, Title, Body, MicroCopy) tuned to `Segoe UI Variable` optical sizes with precise letter-spacing for light/dark modes. Update `App.xaml` merges accordingly.
+  - Normalize blur, frosted glass, and neon edge treatments by creating reusable `Style`/`ControlTemplate` assets for cards, modals, quick action chips, and nav items.
+- **A2. Spatial hierarchy polishing (`clients/GGs.Desktop/Views/ModernMainWindow.xaml`)**
+  - Re-grid the shell using a 12-column layout that scales between 1200–1920px, ensuring side navigation locks to 240px and content uses responsive gutters.
+  - Add layered backgrounds with parallax-ready `Grid` zones (e.g., a subtle gradient wash in the content root, elevated cards with `DropShadowEffect` and `OpacityMask`).
+  - Audit every `Margin`/`Padding` to align with the spacing scale (4/8/12/16/24). Replace magic numbers in `DashboardView.xaml`, `OptimizationView.xaml`, and `ErrorLogViewer.xaml`.
 
-## Phase 2 – Toolbar & Command Experience Polish
-- **P2.1 Normalize command bindings**
-  - Audit `EnhancedMainViewModel` to ensure every toolbar button references a concrete `ICommand`. Stub or remove buttons that still point at placeholder commands.
-  - Add `CanExecute` logic so disabled buttons expose intentional tooltips (e.g., “Start monitoring” disabled while running).
-- **P2.2 Refine button styling**
-  - Reduce horizontal padding and introduce a responsive `WrapPanel`/`UniformGrid` so buttons reflow gracefully on narrow widths.
-  - Add `ToolTipService.ShowDuration` to avoid sticky tips while hovering rapidly across controls.
-- **P2.3 Accessibility verification**
-  - Confirm keyboard focus visuals remain after template change; add `FocusVisualStyle` if necessary.
+## Pillar B – Motion System & Micro-Interactions
+- **B1. Navigation choreography (`ModernMainWindow.xaml.cs`)**
+  - Replace manual `Visibility` toggles with a `TransitioningContentControl` (WPF Toolkit or custom) to animate cross-fades + slight Z translate when swapping views.
+  - Define storyboard resources for nav selection (color morph, icon bounce, background sweep). Trigger on `Checked` via `EventSetter`.
+- **B2. Command surface response (`Views/ErrorLogViewer.xaml`, `Views/OptimizationView.xaml`)**
+  - Add hover lift + glow micro-interactions using `ScaleTransform` + `DropShadowEffect` animations triggered on pointer over/out.
+  - Implement press ripple using a short-lived `VisualBrush` ripple overlay (Composition API) for premium click feedback.
+- **B3. Activation/onboarding delight (`ModernActivationWindow.xaml`)**
+  - Layer in staged animations: hero illustration fade-in, input focus pulse, success confetti (particle effect via `CompositionTarget.Rendering`).
+  - Extend existing fade to include blur reveal and spring easing.
 
-## Phase 3 – Layout Breathing Room & Detail Panel Ergonomics
-- **P3.1 Grid restructuring**
-  - Convert the header/tool/filter rows into a vertical `Grid` that adds `Margin`/`Padding` spacing between sections.
-  - Introduce a `GridLength.Auto` row for filters with `MinHeight` to prevent crowding and enable wrapping.
-- **P3.2 Responsive log/result panes**
-  - Ensure the log `DataGrid` and details panel share space via `GridSplitter`; provide minimum widths to avoid truncation.
-  - Add `ScrollViewer` around the detail panel content with `Padding` so text doesn’t stick to borders.
-- **P3.3 Theme consistency**
-  - Adjust brushes to maintain contrast after spacing changes; verify both dark and light modes via `ThemeService` toggle.
+## Pillar C – Data Fidelity & Live Feedback
+- **C1. Replace mock telemetry (`Services/SystemMonitorService.cs`)**
+  - Integrate Windows Performance Counters + WMI fallbacks into an async sampling pipeline with smoothing filters (EMA) to avoid jumpy charts.
+  - Surface network throughput (Mbps up/down) and GPU memory usage to feed new chart tracks.
+  - Emit `StatsUpdated` cadence at 1s; push incremental deltas to UI for real-time feel.
+- **C2. Dashboard realism (`Views/DashboardView.xaml`, `DashboardView.xaml.cs`)**
+  - Swap placeholder copy for data-driven `StatCard` animations (count-up, delta tickers). Use `DispatcherTimer` to animate number transitions.
+  - Upgrade `PerformanceChart` to render smoothed polylines with gradient fill + glowing indicator dot, refreshed via binding to the history queue.
+- **C3. Error Log insights (`Views/ErrorLogViewer.xaml`, `ViewModels/ErrorLogViewer/ErrorLogViewerViewModel.cs`)**
+  - Introduce live ingestion badges, progress shimmer when filtering, and skeleton loaders for the details panel.
+  - Add segmented toggle for level filters with animated underline + dynamic counts (bind to `TotalCount` per level).
+  - Provide “smart summary” banner synthesizing the last 10 errors via `LogParser` heuristics.
 
-## Phase 4 – Sidebar Navigation From Placeholder to Functional
-- **P4.1 Command wiring**
-  - Implement `SwitchToCompareViewCommand`, `SwitchToExportViewCommand`, and `SwitchToSettingsViewCommand` in `EnhancedMainViewModel` with backing view-state properties.
-  - Bind each content region to dedicated `UserControl`s (e.g., `CompareView`, `ExportView`, `SettingsView`) to avoid “placeholder” tabs.
-- **P4.2 Visual feedback**
-  - Update the `NavButtonStyle` to display icons and selection indicators; ensure `IsChecked` toggles highlight correctly.
-- **P4.3 Content scaffolding**
-  - Provide minimal but functional layouts for Analytics, Bookmarks, Alerts, Compare, Export, and Settings to prevent empty states (e.g., summary text, call-to-action buttons).
-- **P4.4 Navigation tests**
-  - Add unit tests that validate `ActiveView` transitions and verify `Visibility` bindings respond when commands execute.
+## Pillar D – Feature Surface Elevation
+- **D1. Dashboard hero zone**
+  - Embed a 3D GPU showcase card (Composition surface or Lottie animation) reacting to CPU/GPU load.
+  - Add contextual tips carousel with auto-transition and swipe gestures for touch (use `TransitioningContentControl`).
+- **D2. Optimization workflow**
+  - Convert quick action buttons into glossy `CommandChip` controls with asynchronous status (spinners, checkmarks). Wire `SystemMonitorService` to reflect immediate effect metrics.
+  - Build a progress timeline modal for longer running tweaks (step badges, micro charts, confetti on completion).
+- **D3. Notifications center (`Views/NotificationsView.xaml`)**
+  - Replace `DataGrid` with card list using `ItemsControl` + `AdaptiveGridView` styling, featuring priority color bars, iconography, and swipe-to-mark-read interactions.
+  - Add grouped headers by day/hour with sticky behavior and time-relative badges.
+- **D4. EliBot chat stage (`Views/DashboardView.xaml`)**
+  - Introduce typewriter animation for responses, bubble morph transitions, and ambient “breathing” idle state for the bot avatar.
+  - Implement streaming responses with partial text updates and typing indicator ellipsis animation tied to signal latency.
 
-## Phase 5 – Validation & Release Readiness
-- **P5.1 Manual smoke pass**
-  - Exercise hover/perf interactions on high-DPI hardware and ensure no layout overlap.
-- **P5.2 Automated suite**
-  - Run `dotnet test` and the UI smoke harness created in P1.3 on CI.
-- **P5.3 Documentation & changelog**
-  - Update `clients/GGs.Desktop/README` (or new `docs/ui/error-log-viewer.md`) summarizing the UX improvements and test coverage.
-- **P5.4 Deployment checklist**
-  - Capture before/after screenshots, confirm zero warnings, and sign off with QA.
+## Pillar E – Feedback, Audio, and Delight
+- **E1. Haptic-inspired sound design**
+  - Curate subtle UI sounds (hover, confirm, error) with volume ducking. Expose toggles in `SettingsView` to enable/disable or choose themes.
+- **E2. Ambient states**
+  - Build dynamic background pulses in fullscreen overlays (e.g., scanning screens) that react to system stats.
+- **E3. Achievement system**
+  - Add toast banners for key milestones (first optimization, export complete) using `Snackbar`-style control with slide-in animation.
+
+## Pillar F – Performance & Polish Assurance
+- **F1. Frame diagnostics**
+  - Instrument `CompositionTarget.Rendering` to log frame times and enforce <8ms render budget on key views.
+  - Add `PerfframeOverlay` developer toggle to visualize layout & render passes.
+- **F2. Animation QA scripts**
+  - Create Playwright/WPF UI automation scripts capturing GIFs before/after to verify animation plays and no visual regressions.
+- **F3. Visual regression snapshots**
+  - Integrate `Verify.WPF` snapshot tests for hero cards, nav, and modal states across dark/light.
+
+## Execution Cadence
+- **Sprint 1 – Tokens & Shell**: Deliver Pillar A + B1 foundations. Output updated resource dictionaries, nav transitions, documentation of motion curves.
+- **Sprint 2 – Data & Dashboards**: Complete Pillar C + D1 with live telemetry plumbing and hero zone visuals.
+- **Sprint 3 – Workflows & Feedback**: Execute D2–D4, E1–E3, ensuring micro-interactions and audio cues ship together.
+- **Sprint 4 – QA & Showcase**: Finalize Pillar F, generate promo-ready screen captures, and script a launch-ready product tour.
+
+## Deliverables Checklist
+- Updated design system documentation (`docs/ux/premium-style-guide.md`) with tokens, motion specs, sound palette.
+- Before/after video reels (Error Log Viewer filtering, EliBot conversation, Optimization timeline) demonstrating premium transitions.
+- Automated regression suite entries for animations, visuals, and telemetry bindings.
+- Rollout notes for customer success highlighting premium experience upgrades.
