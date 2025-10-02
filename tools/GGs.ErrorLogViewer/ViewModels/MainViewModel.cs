@@ -160,6 +160,9 @@ namespace GGs.ErrorLogViewer.ViewModels
             _logMonitoringService.LogsCleared += OnLogsCleared;
 
             LogEntriesView.MoveCurrentToFirst();
+
+            // Always start with AutoScroll off, regardless of session restore
+            AutoScroll = false;
         }
 
         public void SetLogDirectory(string directory)
@@ -584,10 +587,23 @@ namespace GGs.ErrorLogViewer.ViewModels
                     
                     UpdateCounts();
                     
-                    // Auto-scroll to latest if enabled
+                    // Robust autoscroll: only scroll if enabled and view is in Logs
                     if (AutoScroll && entriesToAdd.Any())
                     {
                         LogEntriesView.MoveCurrentTo(entriesToAdd.Last());
+                        // Use Dispatcher.BeginInvoke to ensure scroll happens after UI update
+                        Application.Current.Dispatcher.BeginInvoke(new Action(() =>
+                        {
+                            var mainWindow = Application.Current.Windows.OfType<Window>().FirstOrDefault(w => w.IsActive);
+                            if (mainWindow != null)
+                            {
+                                var dataGrid = mainWindow.FindName("LogEntriesDataGrid") as System.Windows.Controls.DataGrid;
+                                if (dataGrid != null && dataGrid.Items.Count > 0)
+                                {
+                                    dataGrid.ScrollIntoView(dataGrid.Items[dataGrid.Items.Count - 1]);
+                                }
+                            }
+                        }), System.Windows.Threading.DispatcherPriority.Background);
                     }
                     
                     _logger.LogDebug("Processed batch of {Count} log entries", entriesToAdd.Count);
