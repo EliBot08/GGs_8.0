@@ -46,11 +46,12 @@
         
         <!-- Enhanced Button Styles with Smooth Animations -->
         <Style x:Key="ToolbarButtonStyle" TargetType="Button" BasedOn="{StaticResource DefaultButtonStyle}">
-            <Setter Property="Margin" Value="4,2"/>
-            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Margin" Value="6,4"/>
+            <Setter Property="Padding" Value="10,6"/>
             <Setter Property="MinWidth" Value="80"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="RenderTransformOrigin" Value="0.5,0.5"/>
+            <Setter Property="ToolTipService.ShowDuration" Value="5000"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
@@ -60,6 +61,9 @@
                                 BorderThickness="{TemplateBinding BorderThickness}"
                                 CornerRadius="6"
                                 Padding="{TemplateBinding Padding}">
+                            <Border.RenderTransform>
+                                <ScaleTransform/>
+                            </Border.RenderTransform>
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                         <ControlTemplate.Triggers>
@@ -330,7 +334,7 @@
         <Border Grid.Row="0" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
                 BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" 
                 BorderThickness="0,0,0,1">
-            <DockPanel Margin="16,8">
+            <DockPanel Margin="20,12">
                 <StackPanel Orientation="Horizontal" DockPanel.Dock="Left" VerticalAlignment="Center">
                     <Button Command="{Binding StartMonitoringCommand}" 
                             Style="{StaticResource ToolbarButtonStyle}"
@@ -441,10 +445,8 @@
                            FontSize="16" FontWeight="SemiBold" Margin="0,0,12,0"/>
             </DockPanel>
         </Border>        <!-- Filters -->
-        <Border Grid.Row="1" Background="{DynamicResource SystemControlBackgroundAltMediumBrush}" 
-                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" 
-                BorderThickness="0,0,0,1" Margin="0,5,0,0">
-            <Grid Margin="8,6">
+        <Border Grid.Row="1" Background="{DynamicResource SystemControlBackgroundAltMediumBrush}" BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" BorderThickness="0,0,0,1" Padding="16,10" Margin="0,8,0,0">
+            <Grid Margin="12,8">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
@@ -523,272 +525,215 @@
         </Border>
 
         <!-- Main Content -->
-        <Grid Grid.Row="2" Margin="0,12,0,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="720"/>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="420" MinWidth="320"/>
-            </Grid.ColumnDefinitions>
+        <!-- Content Area with View Switching -->
+        <ContentControl Grid.Row="2" Margin="16,12,16,0">
+            <ContentControl.Style>
+                <Style TargetType="ContentControl">
+                    <Style.Triggers>
+                        <!-- Logs View -->
+                        <DataTrigger Binding="{Binding ActiveView}" Value="Logs">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" MinWidth="720"/>
+                                            <ColumnDefinition Width="Auto"/>
+                                            <ColumnDefinition Width="420" MinWidth="320"/>
+                                        </Grid.ColumnDefinitions>
 
-            <!-- Log Entries DataGrid -->
-            <DataGrid Grid.Column="0"
-                      ItemsSource="{Binding LogEntriesView}"
-                      SelectedItem="{Binding SelectedLogEntry}"
-                      Style="{StaticResource LogDataGridStyle}"
-                      Margin="16,0,8,12"
-                      EnableRowVirtualization="True"
-                      EnableColumnVirtualization="True">
-                
-                <DataGrid.Columns>
-                    <!-- Level Icon -->
-                    <DataGridTemplateColumn Header="" Width="40" CanUserResize="False" CanUserSort="False">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <ui:SymbolIcon Symbol="{Binding Level, Converter={StaticResource LogLevelToIconConverter}}"
-                                               Foreground="{Binding Level, Converter={StaticResource LogLevelToColorConverter}}"
-                                               HorizontalAlignment="Center"
-                                               VerticalAlignment="Center"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                                        <!-- Log Entries DataGrid -->
+                                        <DataGrid Grid.Column="0"
+                                                  ItemsSource="{Binding LogEntriesView}"
+                                                  SelectedItem="{Binding SelectedLogEntry}"
+                                                  Style="{StaticResource LogDataGridStyle}"
+                                                  Margin="0,0,8,12"
+                                                  EnableRowVirtualization="True"
+                                                  EnableColumnVirtualization="True">
+                                            
+                                            <DataGrid.Columns>
+                                                <!-- Level Icon -->
+                                                <DataGridTemplateColumn Header="" Width="40" CanUserResize="False" CanUserSort="False">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <ui:SymbolIcon Symbol="{Binding Level, Converter={StaticResource LogLevelToIconConverter}}"
+                                                                           Foreground="{Binding Level, Converter={StaticResource LogLevelToColorConverter}}"
+                                                                           HorizontalAlignment="Center"
+                                                                           VerticalAlignment="Center"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
 
-                    <!-- Timestamp -->
-                    <DataGridTextColumn Header="Time" 
-                                        Binding="{Binding FormattedTimestamp}" 
-                                        Width="140"
-                                        SortDirection="Descending"/>
+                                                <!-- Timestamp -->
+                                                <DataGridTextColumn Header="Time" 
+                                                                    Binding="{Binding FormattedTimestamp}" 
+                                                                    Width="140"
+                                                                    SortDirection="Descending"/>
 
-                    <!-- Level -->
-                    <DataGridTextColumn Header="Level" 
-                                        Binding="{Binding Level}" 
-                                        Width="80"/>
+                                                <!-- Level -->
+                                                <DataGridTextColumn Header="Level" 
+                                                                    Binding="{Binding Level}" 
+                                                                    Width="80"/>
 
-                    <!-- Source -->
-                    <DataGridTemplateColumn Header="Source" Width="100">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="{Binding Source}"
-                                           Foreground="{Binding Source, Converter={StaticResource SourceToColorConverter}}"
-                                           FontWeight="SemiBold"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                                                <!-- Source -->
+                                                <DataGridTemplateColumn Header="Source" Width="100">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Text="{Binding Source}"
+                                                                       Foreground="{Binding Source, Converter={StaticResource SourceToColorConverter}}"
+                                                                       FontWeight="SemiBold"/>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
 
-                    <!-- Message (updated to template with MultiBinding and style) -->
-                    <DataGridTemplateColumn Header="Message" Width="*">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <TextBlock Style="{StaticResource LogMessageTextStyle}">
-                                    <TextBlock.Text>
-                                        <MultiBinding Converter="{StaticResource RawOrCompactMessageConverter}">
-                                            <Binding Path="DataContext.IsRawMode" RelativeSource="{RelativeSource AncestorType=Window}"/>
-                                            <Binding/>
-                                        </MultiBinding>
-                                    </TextBlock.Text>
-                                </TextBlock>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
+                                                <!-- Message -->
+                                                <DataGridTemplateColumn Header="Message" Width="*">
+                                                    <DataGridTemplateColumn.CellTemplate>
+                                                        <DataTemplate>
+                                                            <TextBlock Style="{StaticResource LogMessageTextStyle}">
+                                                                <TextBlock.Text>
+                                                                    <MultiBinding Converter="{StaticResource RawOrCompactMessageConverter}">
+                                                                        <Binding Path="DataContext.IsRawMode" RelativeSource="{RelativeSource AncestorType=Window}"/>
+                                                                        <Binding/>
+                                                                    </MultiBinding>
+                                                                </TextBlock.Text>
+                                                            </TextBlock>
+                                                        </DataTemplate>
+                                                    </DataGridTemplateColumn.CellTemplate>
+                                                </DataGridTemplateColumn>
+                                            </DataGrid.Columns>
 
-                    <!-- Category -->
-                    <DataGridTextColumn Header="Category" 
-                                        Binding="{Binding Category}" 
-                                        Width="120"
-                                        Visibility="{Binding IsRawMode, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                            <!-- Row Styling -->
+                                            <DataGrid.RowStyle>
+                                                <Style TargetType="DataGridRow" BasedOn="{StaticResource DefaultDataGridRowStyle}">
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding Level}" Value="Error">
+                                                            <Setter Property="Background" Value="#FF2D1B1B"/>
+                                                            <Setter Property="BorderBrush" Value="#FFDC3545"/>
+                                                            <Setter Property="BorderThickness" Value="0,0,3,0"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding Level}" Value="Warning">
+                                                            <Setter Property="Background" Value="#FF2D241B"/>
+                                                            <Setter Property="BorderBrush" Value="#FFFFC107"/>
+                                                            <Setter Property="BorderThickness" Value="0,0,3,0"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </DataGrid.RowStyle>
+                                        </DataGrid>
 
-                    <!-- File -->
-                    <DataGridTextColumn Header="File" 
-                                        Binding="{Binding FileName}" 
-                                        Width="150"
-                                        Visibility="{Binding IsRawMode, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                                        <!-- Vertical Splitter -->
+                                        <GridSplitter Grid.Column="1" 
+                                                      Width="6" 
+                                                      HorizontalAlignment="Center"
+                                                      Background="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                                                      Visibility="{Binding IsDetailsPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                    <!-- Line -->
-                    <DataGridTextColumn Header="Line" 
-                                        Binding="{Binding LineNumber}" 
-                                        Width="60"
-                                        Visibility="{Binding IsRawMode, RelativeSource={RelativeSource AncestorType=Window}, Converter={StaticResource BooleanToVisibilityConverter}}"/>
-                </DataGrid.Columns>
+                                        <!-- Details Panel -->
+                                        <Border Grid.Column="2" 
+                                                Background="{DynamicResource SystemControlBackgroundAltMediumBrush}"
+                                                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                                                BorderThickness="1,0,0,0"
+                                                Padding="16"
+                                                Margin="8,0,0,12"
+                                                Visibility="{Binding IsDetailsPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
+                                            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                <StackPanel DataContext="{Binding SelectedLogEntry}">
+                                                    <TextBlock Text="Log Entry Details" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,16"/>
+                                                    <TextBlock Text="{Binding Message}" TextWrapping="Wrap" Margin="0,0,0,12"/>
+                                                    <TextBlock Text="{Binding FormattedTimestamp}" FontSize="12" Opacity="0.7"/>
+                                                </StackPanel>
+                                            </ScrollViewer>
+                                        </Border>
+                                    </Grid>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
 
-                <!-- Enhanced Row Styling with Better Color Visibility -->
-                <DataGrid.RowStyle>
-                    <Style TargetType="DataGridRow" BasedOn="{StaticResource DefaultDataGridRowStyle}">
-                        <Setter Property="ContextMenu">
-                            <Setter.Value>
-                                <ContextMenu>
-                                    <MenuItem Header="Copy Raw" Command="{Binding DataContext.CopyRawCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                    <MenuItem Header="Copy Compact" Command="{Binding DataContext.CopyCompactCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                    <MenuItem Header="Copy Details" Command="{Binding DataContext.CopyDetailsCommand, RelativeSource={RelativeSource AncestorType=Window}}"/>
-                                </ContextMenu>
-                            </Setter.Value>
-                        </Setter>
-                        <Style.Triggers>
-                            <DataTrigger Binding="{Binding Level}" Value="Error">
-                                <Setter Property="Background" Value="#FF2D1B1B"/>
-                                <Setter Property="BorderBrush" Value="#FFDC3545"/>
-                                <Setter Property="BorderThickness" Value="0,0,3,0"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Level}" Value="Critical">
-                                <Setter Property="Background" Value="#FF1B0D0D"/>
-                                <Setter Property="BorderBrush" Value="#FFDC3545"/>
-                                <Setter Property="BorderThickness" Value="0,0,4,0"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Level}" Value="Warning">
-                                <Setter Property="Background" Value="#FF2D241B"/>
-                                <Setter Property="BorderBrush" Value="#FFFFC107"/>
-                                <Setter Property="BorderThickness" Value="0,0,3,0"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Level}" Value="Success">
-                                <Setter Property="Background" Value="#FF1B2D1B"/>
-                                <Setter Property="BorderBrush" Value="#FF28A745"/>
-                                <Setter Property="BorderThickness" Value="0,0,3,0"/>
-                            </DataTrigger>
-                            <DataTrigger Binding="{Binding Level}" Value="Information">
-                                <Setter Property="Background" Value="#FF1B1B2D"/>
-                                <Setter Property="BorderBrush" Value="#FF17A2B8"/>
-                                <Setter Property="BorderThickness" Value="0,0,3,0"/>
-                            </DataTrigger>
-                        </Style.Triggers>
-                    </Style>
-                </DataGrid.RowStyle>
-            </DataGrid>
+                        <!-- Analytics View -->
+                        <DataTrigger Binding="{Binding ActiveView}" Value="Analytics">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <TextBlock Text="Analytics Dashboard" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                                            <TextBlock Text="View log statistics and trends" FontSize="14" Opacity="0.7"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
 
-            <!-- Vertical Splitter -->
-            <GridSplitter Grid.Column="1" 
-                          Width="6" 
-                          HorizontalAlignment="Center"
-                          Background="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                          ResizeBehavior="PreviousAndNext"
-                          ShowsPreview="True"
-                          Visibility="{Binding IsDetailsPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
+                        <!-- Bookmarks View -->
+                        <DataTrigger Binding="{Binding ActiveView}" Value="Bookmarks">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <TextBlock Text="Bookmarks" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                                            <TextBlock Text="Your saved log entries" FontSize="14" Opacity="0.7"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
 
-            <!-- Details Panel -->
-            <Border Grid.Column="2" 
-                    Background="{DynamicResource SystemControlBackgroundAltMediumBrush}"
-                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
-                    BorderThickness="1,0,0,0"
-                    Margin="8,0,12,12"
-                    Visibility="{Binding IsDetailsPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
-                
-                <ScrollViewer VerticalScrollBarVisibility="Auto" Margin="8">
-                    <StackPanel DataContext="{Binding SelectedLogEntry}">
-                        
-                        <!-- Header -->
-                        <Grid Margin="0,0,0,8">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            
-                            <TextBlock Grid.Column="0" 
-                                       Text="Log Entry Details" 
-                                       FontSize="18" 
-                                       FontWeight="SemiBold"/>
-                            
-                            <Button Grid.Column="1" 
-                                    Command="{Binding DataContext.CopySelectedCommand, RelativeSource={RelativeSource AncestorType=Window}}"
-                                    Content="Copy"
-                                    Style="{StaticResource ToolbarButtonStyle}"/>
-                        </Grid>
+                        <!-- Alerts View -->
+                        <DataTrigger Binding="{Binding ActiveView}" Value="Alerts">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                        <StackPanel Margin="20">
+                                            <TextBlock Text="Smart Alerts" FontSize="24" FontWeight="SemiBold" Margin="0,0,0,20"/>
+                                            <TextBlock Text="Configure and manage log alerts" FontSize="14" Opacity="0.7"/>
+                                        </StackPanel>
+                                    </ScrollViewer>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
 
-                        <!-- Details Grid -->
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
+                        <!-- Compare View -->
+                        <DataTrigger Binding="{Binding ActiveView}" Value="Compare">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <local:CompareView/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
 
-                            <!-- Timestamp -->
-                            <TextBlock Grid.Row="0" Grid.Column="0" Text="Timestamp:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
-                            <TextBlock Grid.Row="0" Grid.Column="1" Text="{Binding Timestamp}" Margin="0,2" FontSize="14"/>
+                        <!-- Export View -->
+                        <DataTrigger Binding="{Binding ActiveView}" Value="Export">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <local:ExportView/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
 
-                            <!-- Level -->
-                            <TextBlock Grid.Row="1" Grid.Column="0" Text="Level:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
-                            <StackPanel Grid.Row="1" Grid.Column="1" Orientation="Horizontal" Margin="0,2">
-                                <ui:SymbolIcon Symbol="{Binding Level, Converter={StaticResource LogLevelToIconConverter}}"
-                                               Foreground="{Binding Level, Converter={StaticResource LogLevelToColorConverter}}"
-                                               Margin="0,0,4,0"/>
-                                <TextBlock Text="{Binding Level}" FontSize="14"/>
-                            </StackPanel>
-
-                            <!-- Source -->
-                            <TextBlock Grid.Row="2" Grid.Column="0" Text="Source:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
-                            <TextBlock Grid.Row="2" Grid.Column="1" Text="{Binding Source}" Margin="0,2" FontSize="14"/>
-
-                            <!-- Category -->
-                            <TextBlock Grid.Row="3" Grid.Column="0" Text="Category:" FontWeight="SemiBold" Margin="0,2,8,2"
-                                       Visibility="{Binding Category, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
-                            <TextBlock Grid.Row="3" Grid.Column="1" Text="{Binding Category}" Margin="0,2"
-                                       Visibility="{Binding Category, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
-
-                            <!-- File Location -->
-                            <TextBlock Grid.Row="4" Grid.Column="0" Text="Location:" FontWeight="SemiBold" Margin="0,2,8,2" FontSize="14"/>
-                            <TextBlock Grid.Row="4" Grid.Column="1" Margin="0,2" FontSize="14">
-                                <Run Text="{Binding FileName}"/>
-                                <Run Text=":" Foreground="{DynamicResource SystemControlForegroundBaseMediumBrush}"/>
-                                <Run Text="{Binding LineNumber}"/>
-                            </TextBlock>
-
-                            <!-- Exception -->
-                            <TextBlock Grid.Row="5" Grid.Column="0" Text="Exception:" FontWeight="SemiBold" Margin="0,2,8,2"
-                                       Visibility="{Binding Exception, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
-                            <TextBlock Grid.Row="5" Grid.Column="1" Text="{Binding Exception}" Margin="0,2"
-                                       Foreground="{DynamicResource SystemControlErrorTextForegroundBrush}"
-                                       Visibility="{Binding Exception, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
-
-                            <!-- Message -->
-                            <TextBlock Grid.Row="6" Grid.Column="0" Text="Message:" FontWeight="SemiBold" Margin="0,8,8,2" VerticalAlignment="Top" FontSize="14"/>
-                            <TextBox Grid.Row="6" Grid.Column="1" 
-                                     Text="{Binding Message, Mode=OneWay}" 
-                                     IsReadOnly="True"
-                                     TextWrapping="Wrap"
-                                     AcceptsReturn="True"
-                                     VerticalScrollBarVisibility="Auto"
-                                     MaxHeight="100"
-                                     Margin="0,8,0,2"
-                                     Background="Transparent"
-                                     BorderThickness="0" FontSize="14"/>
-
-                            <!-- Stack Trace -->
-                            <TextBlock Grid.Row="7" Grid.Column="0" Text="Stack Trace:" FontWeight="SemiBold" Margin="0,8,8,2" VerticalAlignment="Top"
-                                       Visibility="{Binding StackTrace, Converter={StaticResource NullToVisibilityConverter}}" FontSize="14"/>
-                            <TextBox Grid.Row="7" Grid.Column="1" 
-                                     Text="{Binding StackTrace, Mode=OneWay}" 
-                                     IsReadOnly="True"
-                                     TextWrapping="Wrap"
-                                     AcceptsReturn="True"
-                                     VerticalScrollBarVisibility="Auto"
-                                     FontFamily="Consolas"
-                                     FontSize="13"
-                                     Margin="0,8,0,2"
-                                     Background="Transparent"
-                                     BorderThickness="0"
-                                     Visibility="{Binding StackTrace, Converter={StaticResource NullToVisibilityConverter}}"/>
-                        </Grid>
-                    </StackPanel>
-                </ScrollViewer>
-            </Border>
-        </Grid>
-
+                        <!-- Settings View -->
+                        <DataTrigger Binding="{Binding ActiveView}" Value="Settings">
+                            <Setter Property="Content">
+                                <Setter.Value>
+                                    <local:SettingsView/>
+                                </Setter.Value>
+                            </Setter>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </ContentControl.Style>
+        </ContentControl>
         <!-- Status Bar -->
-        <Border Grid.Row="3" Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}" 
-                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}" 
-                BorderThickness="0,1,0,0">
-            <Grid Margin="8,4">
+        <Border Grid.Row="3" 
+                Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                BorderThickness="0,1,0,0"
+                Padding="12,8">
+            <Grid>
                 <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="Auto"/>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Status Message -->

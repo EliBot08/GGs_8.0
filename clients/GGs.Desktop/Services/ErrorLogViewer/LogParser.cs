@@ -1,5 +1,6 @@
-﻿using System;
-using System.Text.Json;\nusing System.IO;
+using System;
+using System.Text.Json;
+using System.IO;
 using System.Text.RegularExpressions;
 
 namespace GGs.Desktop.Services.ErrorLogViewer;

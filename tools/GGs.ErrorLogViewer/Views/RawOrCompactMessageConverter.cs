@@ -23,7 +23,7 @@ namespace GGs.ErrorLogViewer.Views.Converters
 
         public object[] ConvertBack(object value, Type[] targetTypes, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return new object[] { System.Windows.DependencyProperty.UnsetValue };
         }
     }
 }

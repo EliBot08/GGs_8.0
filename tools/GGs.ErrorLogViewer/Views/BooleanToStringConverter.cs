@@ -1,6 +1,7 @@
 #nullable enable
 using System;
 using System.Globalization;
+using System.Windows;
 using System.Windows.Data;
 
 namespace GGs.ErrorLogViewer.Views.Converters
@@ -22,7 +23,7 @@ namespace GGs.ErrorLogViewer.Views.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return DependencyProperty.UnsetValue;
         }
     }
 }

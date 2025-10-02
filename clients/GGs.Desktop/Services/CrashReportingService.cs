@@ -96,7 +96,7 @@ public sealed class CrashReportingService
     {
         try
         {
-            var baseDir = Path.GetDirectoryName(AppLogger.LogFilePath) ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+            var baseDir = Path.GetDirectoryName(AppLogger.FallbackLogPath) ?? Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
             var root = Path.Combine(baseDir, "crash-reports");
             return root;
         }
@@ -125,11 +125,11 @@ public sealed class CrashReportingService
     {
         try
         {
-            var path = AppLogger.LogFilePath;
+            var path = AppLogger.FallbackLogPath;
             if (string.IsNullOrWhiteSpace(path) || !File.Exists(path)) return string.Empty;
             // Efficient tail read
             var lines = new List<string>(lineCount);
-            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            using var fs = new FileStream(path, FileMode.Open, FileAccess.Read, FileShare.ReadWrite, 4096, FileOptions.SequentialScan);
             using var sr = new StreamReader(fs);
             var q = new Queue<string>(lineCount);
             while (!sr.EndOfStream)

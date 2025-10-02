@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -239,7 +239,7 @@ public sealed class RollingFileLoggerProvider : ILoggerProvider
             _provider = provider;
         }
 
-        public IDisposable? BeginScope<TState>(TState state) => NullScope.Instance;
+        public IDisposable? BeginScope<TState>(TState state) where TState : notnull => NullScope.Instance;
 
         public bool IsEnabled(LogLevel logLevel) => logLevel >= _provider.MinimumLevel;
 

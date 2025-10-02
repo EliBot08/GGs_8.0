@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
@@ -11,6 +11,7 @@ using System.Windows;
 using System.Windows.Threading;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using GGs.Desktop.Services;
 using GGs.Desktop.Services.ErrorLogViewer;
 
 namespace GGs.Desktop.ViewModels.ErrorLogViewer;
@@ -95,9 +96,9 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
         InitializeCommand = new AsyncRelayCommand(InitializeAsync, CanInitialize);
         LoadMoreCommand = new AsyncRelayCommand(LoadMoreAsync, CanLoadMore);
         ExportCommand = new AsyncRelayCommand(ExportAsync, () => _logs.Count > 0);
-        TogglePauseCommand = new RelayCommand(TogglePause);
+        TogglePauseCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(TogglePause);
         ClearCommand = new AsyncRelayCommand(ClearAsync);
-        OpenFolderCommand = new RelayCommand(OpenFolder);
+        OpenFolderCommand = new CommunityToolkit.Mvvm.Input.RelayCommand(OpenFolder);
     }
 
     public async Task ApplyFilterAsync()

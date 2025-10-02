@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using CommunityToolkit.Mvvm.ComponentModel;
 
 namespace GGs.Desktop.ViewModels.ErrorLogViewer;
@@ -32,7 +32,7 @@ public sealed partial class LogEntryViewModel : ObservableObject
     [ObservableProperty]
     private int lineNumber;
 
-    public string TimestampText => timestamp.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fff");
+    public string TimestampText => Timestamp.ToLocalTime().ToString("yyyy-MM-dd HH:mm:ss.fff");
     partial void OnTimestampChanged(DateTime value)
     {
         OnPropertyChanged(nameof(TimestampText));

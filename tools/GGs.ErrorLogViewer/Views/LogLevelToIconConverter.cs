@@ -30,7 +30,7 @@ namespace GGs.ErrorLogViewer.Views.Converters
 
         public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotImplementedException();
+            return System.Windows.DependencyProperty.UnsetValue;
         }
     }
 }

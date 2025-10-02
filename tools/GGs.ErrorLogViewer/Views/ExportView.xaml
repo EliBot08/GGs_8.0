@@ -1,0 +1,134 @@
+<UserControl x:Class="GGs.ErrorLogViewer.Views.ExportView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             Background="{DynamicResource SystemControlBackgroundAltHighBrush}">
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <!-- Header -->
+            <StackPanel Grid.Row="0" Margin="0,0,0,24">
+                <TextBlock Text="Export Logs" 
+                           FontSize="24" 
+                           FontWeight="SemiBold"
+                           Margin="0,0,0,8"/>
+                <TextBlock Text="Export your logs in various formats for analysis and reporting" 
+                           FontSize="14" 
+                           Opacity="0.7"/>
+            </StackPanel>
+
+            <!-- Quick Export Actions -->
+            <Border Grid.Row="1" 
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="20"
+                    Margin="0,0,0,20">
+                <StackPanel>
+                    <TextBlock Text="Quick Export" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Margin="0,0,0,16"/>
+                    
+                    <WrapPanel Orientation="Horizontal">
+                        <Button Command="{Binding ExportLogsCommand}"
+                                Style="{StaticResource AccentButtonStyle}"
+                                Margin="0,0,12,12"
+                                MinWidth="140"
+                                Padding="16,10">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Save" Margin="0,0,8,0"/>
+                                <TextBlock Text="Export CSV/JSON"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding ExportToPdfCommand}"
+                                Margin="0,0,12,12"
+                                MinWidth="140"
+                                Padding="16,10">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Document" Margin="0,0,8,0"/>
+                                <TextBlock Text="Export PDF"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding ExportToMarkdownCommand}"
+                                Margin="0,0,12,12"
+                                MinWidth="140"
+                                Padding="16,10">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Edit" Margin="0,0,8,0"/>
+                                <TextBlock Text="Export Markdown"/>
+                            </StackPanel>
+                        </Button>
+
+                        <Button Command="{Binding ExportLast24HoursCommand}"
+                                Margin="0,0,12,12"
+                                MinWidth="140"
+                                Padding="16,10">
+                            <StackPanel Orientation="Horizontal">
+                                <ui:SymbolIcon Symbol="Clock" Margin="0,0,8,0"/>
+                                <TextBlock Text="Last 24 Hours"/>
+                            </StackPanel>
+                        </Button>
+                    </WrapPanel>
+                </StackPanel>
+            </Border>
+
+            <!-- Advanced Export Options -->
+            <Border Grid.Row="2" 
+                    Background="{DynamicResource SystemControlBackgroundChromeMediumBrush}"
+                    BorderBrush="{DynamicResource SystemControlForegroundBaseMediumLowBrush}"
+                    BorderThickness="1"
+                    CornerRadius="8"
+                    Padding="20">
+                <StackPanel>
+                    <TextBlock Text="Advanced Options" 
+                               FontSize="18" 
+                               FontWeight="SemiBold" 
+                               Margin="0,0,0,16"/>
+                    
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        
+                        <StackPanel Grid.Column="0" Margin="0,0,12,0">
+                            <TextBlock Text="Date Range" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,8"/>
+                            <DatePicker Margin="0,0,0,8"/>
+                            <DatePicker Margin="0,0,0,16"/>
+                            
+                            <CheckBox Content="Include timestamps" IsChecked="True" Margin="0,0,0,8"/>
+                            <CheckBox Content="Include source information" IsChecked="True" Margin="0,0,0,8"/>
+                            <CheckBox Content="Include stack traces" IsChecked="True" Margin="0,0,0,8"/>
+                        </StackPanel>
+                        
+                        <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                            <TextBlock Text="Log Levels" 
+                                       FontWeight="SemiBold" 
+                                       Margin="0,0,0,8"/>
+                            <CheckBox Content="Information" IsChecked="True" Margin="0,0,0,8"/>
+                            <CheckBox Content="Warning" IsChecked="True" Margin="0,0,0,8"/>
+                            <CheckBox Content="Error" IsChecked="True" Margin="0,0,0,8"/>
+                            <CheckBox Content="Debug" Margin="0,0,0,16"/>
+                            
+                            <Button Content="Export with Custom Settings" 
+                                    Style="{StaticResource AccentButtonStyle}"
+                                    HorizontalAlignment="Left"
+                                    Padding="20,10"/>
+                        </StackPanel>
+                    </Grid>
+                </StackPanel>
+            </Border>
+        </Grid>
+    </ScrollViewer>
+</UserControl>

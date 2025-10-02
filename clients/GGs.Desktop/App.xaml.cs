@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -19,7 +19,7 @@ namespace GGs.Desktop;
 
 public partial class App : Application
 {
-    public static bool IsExiting { get; private set; }
+    public static bool IsExiting { get; internal set; }
     public static IServiceProvider? ServiceProvider { get; private set; }
 
     private static Mutex? _singleInstanceMutex;

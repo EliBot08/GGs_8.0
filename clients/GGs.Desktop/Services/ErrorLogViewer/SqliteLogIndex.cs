@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -133,7 +133,9 @@ public sealed class SqliteLogIndex : ILogIndex
 
             await command.ExecuteNonQueryAsync(cancellationToken).ConfigureAwait(false);
 
-            var assignedId = connection.LastInsertRowId;
+            await using var lastIdCmd = connection.CreateCommand();
+            lastIdCmd.CommandText = "SELECT last_insert_rowid()";
+            var assignedId = Convert.ToInt64(await lastIdCmd.ExecuteScalarAsync(cancellationToken).ConfigureAwait(false) ?? 0L);
             inserted.Add(new LogEntryRecord
             {
                 Id = assignedId,
@@ -141,7 +143,7 @@ public sealed class SqliteLogIndex : ILogIndex
                 Level = entry.Level,
                 Source = entry.Source,
                 Message = entry.Message,
-                Raw = entry.Raw,
+                Raw = entry.Raw ?? string.Empty,
                 FilePath = entry.FilePath,
                 LineNumber = entry.LineNumber
             });

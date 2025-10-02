@@ -1,13 +1,29 @@
 <Application x:Class="GGs.ErrorLogViewer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:ui="http://schemas.modernwpf.com/2019">
+             xmlns:ui="http://schemas.modernwpf.com/2019"
+             xmlns:converters="clr-namespace:GGs.ErrorLogViewer.Views.Converters">
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>
+
+            <!-- Global converters accessible across dynamically loaded views -->
+            <converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
+            <converters:LogLevelToColorConverter x:Key="LogLevelToColorConverter"/>
+            <converters:SourceToColorConverter x:Key="SourceToColorConverter"/>
+            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
+            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
+            <converters:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
+            <converters:BooleanToSymbolConverter x:Key="BooleanToSymbolConverter"/>
+            <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
+            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
+            <converters:BooleanToMessageConverter x:Key="BooleanToMessageConverter"/>
+            <converters:RawOrCompactMessageConverter x:Key="RawOrCompactMessageConverter"/>
+            <converters:StringEqualsToVisibilityConverter x:Key="StringEqualsToVisibilityConverter"/>
+
         </ResourceDictionary>
     </Application.Resources>
 </Application>
