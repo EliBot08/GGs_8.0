@@ -274,3 +274,6 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\tests\GGs.ErrorLogVie
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\tests\GGs.ErrorLogViewer.Tests\obj\Debug\net9.0-windows\GGs.ErrorLogViewer.Tests.pdb
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\tests\GGs.ErrorLogViewer.Tests\obj\Debug\net9.0-windows\GGs.ErrorLogViewer.Tests.genruntimeconfig.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\tests\GGs.ErrorLogViewer.Tests\obj\Debug\net9.0-windows\ref\GGs.ErrorLogViewer.Tests.dll
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tests\GGs.ErrorLogViewer.Tests\obj\Debug\net9.0-windows\GGs.ErrorLogViewer.Tests.dll
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tests\GGs.ErrorLogViewer.Tests\obj\Debug\net9.0-windows\refint\GGs.ErrorLogViewer.Tests.dll
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tests\GGs.ErrorLogViewer.Tests\obj\Debug\net9.0-windows\GGs.ErrorLogViewer.Tests.pdb

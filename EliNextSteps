@@ -1,41 +1,157 @@
-Eli Launcher Reliability Blueprint
-==================================
+﻿GGs Enterprise UI/UX Overhaul — Master Plan (Desktop + ErrorLogViewer)
 
-## Objective
-- **Mission**: Guarantee that every launcher execution pulls the latest code, builds cleanly, and starts all components without errors.
-- **Scope**: `Launch-All-New.bat`, `Test-Launchers.bat`, any shared PowerShell helpers, desktop binaries under `clients/`, and all artifacts logged in `launcher-logs/`.
+Non‑negotiables
+- All features must be fully functional and polished (no rough edges).
+- Zero placeholders and zero nulls across UI, bindings, texts, icons, and commands.
+- Fix root causes, not symptoms. If something is unclear, make a logical assessment and continue.
+- Three launchers only: Launch-Desktop.bat, Launch-ErrorLogViewer.bat, Launch-All.bat — all crash-proof.
+- Smooth startups with welcoming onboarding for both apps.
+- Multiple hacker/tweaker themes with persistence and fast micro-interactions.
+- Verified via builds, smokes, and targeted tests; nothing crashes.
 
-## Phase 1 – Source freshness and repository guardrails
-- **Automate git sync**: Prepend `git fetch --all` + `git rebase origin/main` (or active release branch) inside `Launch-All-New.bat`; abort if conflicts or untracked files remain (`git status --porcelain`).
-- **Submodule / package alignment**: Run `git submodule sync --recursive` and `git submodule update --init --recursive` plus `dotnet restore` (or relevant package restore) before any build; capture output to `launcher-logs/master-launcher.log`.
-- **Commit provenance display**: Embed the short commit hash and timestamp into the launcher splash screen or console banner so operators can verify they are on the latest bits.
+Vision & Vibe
+- Identity: “GGs Pro” — sleek dark neon, subtle circuit textures, glass overlays, cohesive gradients.
+- Mood: Hacker/tweaker confidence without gimmicks; enterprise-grade polish.
+- Motion: Purposeful micro-animations (80–200ms) with smooth easing; never intrusive.
+- Themes: Midnight Cyan (primary), Vapor Purple, Tactical Green, Carbon Minimal, plus Auto (OS-follow).
 
-## Phase 2 – Build reproducibility & environment hygiene
-- **Clean builds by default**: Force `dotnet clean` + `dotnet build --configuration Release` for every solution the launcher touches; mirror the exact pipeline in `Test-Launchers.bat`.
-- **Purge stale artifacts**: Delete `bin/`, `obj/`, installer caches, and temporary deployment folders before rebuilding to prevent stale DLL reuse.
-- **Runtime prerequisites check**: Validate required runtimes (e.g., .NET Desktop Runtime, VC++ redistributables) and critical environment variables; emit warnings and exit non-zero if anything is missing.
+Phase 1 — Foundation (Design System & Theme)
+- Theme dictionaries per app (colors, typography, depth, effects, animations, controls) with shared naming:
+  - ThemeBackground*, ThemeText*, ThemeAccent*, ThemeBorder*.
+- Animations (reusable Storyboards): FadeIn, SlideUp, SlideFromLeft, ScaleIn, Glow, Pulse.
+- Controls: PrimaryButton, SecondaryButton, GhostButton, IconButton (press/hover spring + ripple),
+  ElevatedCard, SectionCard, Badge, TagPill, TogglePill, TextBox/ComboBox enterprise styles.
+- Theme engine: ThemeManagerService per app (CurrentTheme, AvailableThemes, Save/Load to profile),
+  auto-detect OS light/dark with manual override + persistence.
+- Accessibility: Focus visuals, minimum contrast, keyboard navigation defaults.
 
-## Phase 3 – Launcher script modernization
-- **Centralize shared logic**: Extract common steps into `scripts/launcher-prereqs.ps1`; have both BAT files call the PowerShell script, keeping each wrapper as a thin entry point.
-- **Configuration verification**: Compare `appsettings.*`, `Secrets.config`, and other critical configs against checksum or schema templates; block launch on mismatches and provide remediation hints.
-- **Deployment staging**: Copy freshly built binaries to staging folders only after a successful build; use atomic swaps (rename temp to live) to avoid partial updates.
+Deliverables:
+- GGs.Desktop: Views/Themes/EnterpriseThemes.xaml, EnterpriseControlStyles.xaml.
+- ErrorLogViewer: Views/EnterpriseThemes.xaml, EnterpriseControlStyles.xaml.
+- ThemeManagerService (desktop), extend IThemeService (viewer) for persistence.
 
-## Phase 4 – Pre-launch verification & automated tests
-- **Integrated test battery**: Run `dotnet test` for critical projects, WPF UI smoke tests, and any integration harness before starting services; store TRX/JUnit outputs in `launcher-logs/tests/`.
-- **Static analysis & linting**: Optionally invoke analyzers (StyleCop, Roslyn, ESLint for web assets) to catch regressions before launch; treat new errors as blockers.
-- **Manual review checkpoints**: Provide a concise checklist for operators (latest commit hash, clean git status, tests succeeded) and require acknowledgment before proceeding.
+Phase 2 — Navigation & Shell
+- Desktop (ModernMainWindow):
+  - Title bar: accent gradient line, app title, status (license/ping), window controls.
+  - Left nav rail: glowing selection, tooltips, hotkeys, full keyboard support.
+  - Content area: card-based dashboards; consistent paddings; animated page transitions.
+- ErrorLogViewer (MainWindow):
+  - Hero header with live status (monitoring, directory breadcrumb, counts).
+  - Left workspace panel: Logs, Analytics, Bookmarks, Alerts, Compare, Export, Settings.
+  - Content region: premium DataGrid for Logs; stat cards for Analytics; actionable cards for
+    Bookmarks/Alerts; dedicated views for Compare/Export/Settings.
 
-## Phase 5 – Runtime smoke checks & rollback safety
-- **Health probe cycle**: Start each service in diagnostic mode, verify health endpoints or ping checks, and fail fast if any component logs errors or refuses to bind.
-- **Port/process collision detection**: Scan for conflicting listeners with PowerShell `Get-NetTCPConnection` before launching services; surface actionable guidance if a port is occupied.
-- **Rollback switch**: Maintain a fallback set of last-known-good binaries and expose a `--rollback` flag that swaps to the prior build when smoke checks fail.
+Phase 3 — Onboarding & Startup Experience
+- Desktop:
+  - Smooth cold start: Welcome hero — “Welcome to GGs — Optimizing your experience…”.
+  - Background init (logging, telemetry, entitlements, theme) with busy overlay; no UI thread stalls.
+  - First-run checklist and “Get Started” CTA (profiles/settings).
+- ErrorLogViewer:
+  - Welcome banner: “Error Intelligence Center — Ready to analyze.”
+  - Quick actions: Open logs folder, Start Monitoring, Import Sample Log.
+  - Restore last directory/view/layout across launches.
 
-## Phase 6 – Observability, logging, and zero-error policy
-- **Structured logs**: Normalize launcher logs to JSON or consistent text with timestamps, commit hash, and component tags; ensure `launcher-logs/master-launcher.log` captures every stage.
-- **Alert thresholds**: Define acceptable warning/error counts per run. Exceeding the budget should abort the launch and notify responsible engineers (e.g., via Teams webhook).
-- **Telemetry export**: Forward launcher metrics (duration, success state, failure stage) to a dashboard (Azure Monitor, Grafana) for trend analysis.
+Phase 4 — Button/Action Wiring & Zero‑Placeholder Guarantee
+- Inventory all buttons/menus across both apps.
+- For every command:
+  - Implement full behavior or disable intentionally with a clear tooltip explaining why.
+  - No placeholder text, icons, or dead buttons.
+- Replace all garbled unicode; use clean glyphs/vectors only.
+- Guard every binding (value converters & defaults) — no null reference risks.
 
-## Phase 7 – Documentation & ownership
-- **README refresh**: Update `LAUNCHER-README.md` with the new automated workflow, guardrails, log locations, and troubleshooting paths.
-- **Change ownership**: Assign primary/secondary owners for launcher maintenance; record escalation contacts inside the README and within the scripts.
-- **Continuous improvement cadence**: Schedule quarterly retrospectives to review failed launches, update scripts, and add new automated checks as the product evolves.
+Deliverables:
+- Command audit checklist & implementations; disabled-with-explanation where out of scope.
+- Lint pass for “placeholder”, “lorem”, TODOs, garbled glyphs.
+
+Phase 5 — Error Log Viewer: Logs View (Enterprise DataGrid)
+- DataGrid polish:
+  - Virtualization on, row templates by level: left accent bar; distinct hover/selected.
+  - Columns: level icon, timestamp, source pill, compact/raw message (toggle), optional file path.
+  - Context menu: Copy Selected / Raw / Compact / Details.
+- Details panel:
+  - Message, source, timestamp, level, tags, Raw payload expander, Exception/StackTrace expanders (monospace). 
+- Filters:
+  - Text search with regex toggle, level/source filters, Smart Filter (dedupe), font-size slider, auto-scroll toggle.
+
+Deliverables:
+- Null-safe converters; no runtime binding errors.
+- Export selected logs to CSV/JSON; verified SaveFileDialog flow.
+
+Phase 6 — Error Log Viewer: Analytics, Bookmarks, Alerts
+- Analytics:
+  - Stat cards: Health Score, Errors/Warns, rates, Top Sources; anomaly triggers (basic).
+- Bookmarks:
+  - Add/Remove/GoTo; TagPill rendering; persisted bookmarks.
+- Alerts:
+  - Simple rules; Triggered alert cards (name, pattern, time), Acknowledge action.
+
+Deliverables:
+- EnhancedMainViewModel commands wired; disable with explanation when no data.
+- All features functional and polished in these sections.
+
+Phase 7 — GGs.Desktop Views Revamp
+- Dashboard: Health, Recommendations, Quick Actions (Game Mode, Boost, Clean) as polished cards.
+- Optimization & Monitoring: enterprise styles for toggles/sliders; helper text; safe background tasks.
+- Network/Profiles/System Intelligence/Notifications/Settings: apply design system, real commands,
+  clear disabled states for unimplemented.
+- Theme toggle: animated icon swap and fade, persisted.
+
+Deliverables:
+- Clean iconography; no garbled content; consistent spacing & elevation.
+
+Phase 8 — Accessibility, Keyboard, Performance
+- Keyboard nav: TabIndex where needed; focus visuals.
+- High contrast variants & sufficient contrast ratios.
+- Respect “Reduce motion” if available; keep animations subtle.
+- Offload heavy work to background threads; never block UI >100ms.
+
+Deliverables:
+- Manual keyboard test script; optional perf traces for heavy views.
+
+Phase 9 — Launchers (exactly 3)
+- Launch-ErrorLogViewer.bat
+  - Clean → Build → Verify exe → Launch; flags: --release, --no-restore, --no-launch; detailed logs.
+- Launch-Desktop.bat
+  - Clean → Build → Verify exe → Launch; optional --with-server (auto-start local server).
+- Launch-All.bat
+  - Clean/build server+desktop+viewer; run solution tests; launch both apps; shared flags; logs.
+- All launchers are crash-proof with clear messages and non-zero exit codes on failure.
+
+Deliverables:
+- Remove old launchers; keep these 3 only. Smoke-test common failure modes.
+
+Phase 10 — Test Strategy (Builds, Smokes, Functionals)
+- Builds: dotnet build solution in Debug and Release.
+- UI smokes:
+  - Both apps launch; welcome experience shows; nav works; theme toggle persists across restarts.
+- ErrorLogViewer functionals:
+  - Regex search, level/source filter, raw/compact toggle, export CSV/JSON, details expanders, bookmarks, alerts.
+- Launchers:
+  - Simulate missing SDK/build errors/missing exe; confirm graceful exits and accurate log messages.
+- Enforcement:
+  - Automated scans for placeholders/garbled glyphs; runtime check for binding errors (Output window).
+
+Deliverables:
+- Test checklist with pass/fail for all polished features.
+- Batch test helpers for quick local verification.
+
+Phase 11 — Root‑Cause Fix Policy
+- Any discovered issue is fixed at the source:
+  - Null bindings → set defaults, add converters, or initialize properties.
+  - Missing command → implement or explicitly disable with clear UX text.
+  - Layout issues → correct styles/templates, not band-aid Visibility hacks.
+
+Deliverables:
+- Issue log with root-cause notes and file references.
+
+Phase 12 — Final Polish & Handoff
+- Consistency pass on spacing, typography, shadows, hover states.
+- Verify theme persistence & cross-app identity.
+- Verify launcher logs and exit codes are pristine.
+- Short user guide covering themes, navigation, key tasks, exporting, and launchers.
+
+Execution Notes
+- Work autonomously; make logical assessments where requirements are underspecified.
+- Keep changes focused and high quality; do not introduce placeholders.
+- All features must be polished before sign-off.
+- Final verification: dotnet build (Debug/Release), run all launchers, execute smoke + functional tests.

@@ -1,4 +1,4 @@
-<Application x:Class="GGs.ErrorLogViewer.App"
+﻿<Application x:Class="GGs.ErrorLogViewer.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:ui="http://schemas.modernwpf.com/2019"
@@ -6,6 +6,8 @@
     <Application.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Views/Themes/EnterpriseThemes.xaml"/>
+                <ResourceDictionary Source="Views/Themes/EnterpriseAnimations.xaml"/>
                 <ui:ThemeResources />
                 <ui:XamlControlsResources />
             </ResourceDictionary.MergedDictionaries>

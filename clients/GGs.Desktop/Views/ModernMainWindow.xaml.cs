@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Animation;
@@ -85,7 +85,7 @@ public ModernMainWindow()
         {
             LicenseTypeText.Text = payload.Tier.ToString();
             UserNameText.Text = payload.IsAdminKey ? "Admin" : payload.Tier.ToString();
-            UserEmailText.Text = string.IsNullOrWhiteSpace(payload.UserId) ? "—" : payload.UserId;
+            UserEmailText.Text = string.IsNullOrWhiteSpace(payload.UserId) ? "â€”" : payload.UserId;
         }
 
         // Notifications badge wiring
@@ -343,8 +343,8 @@ public ModernMainWindow()
             var secondary = (string?)null;
             if (theme == "founder")
             {
-                // Gold accents on dark
-                _themeManager!.CurrentTheme = Services.AppTheme.Dark;
+                // Gold accents on neutral carbon palette
+                _themeManager!.CurrentTheme = Services.AppTheme.Carbon;
                 primary = "#FFD700"; // gold
                 secondary = "#EAB308"; // amber
             }
@@ -356,19 +356,19 @@ public ModernMainWindow()
             }
             else if (theme == "gaming")
             {
-                _themeManager!.CurrentTheme = Services.AppTheme.Dark;
+                _themeManager!.CurrentTheme = Services.AppTheme.Vapor;
                 primary = "#7C3AED"; // violet-600
                 secondary = "#22D3EE"; // cyan-400
             }
             else if (theme == "admin" || theme == "support")
             {
-                _themeManager!.CurrentTheme = Services.AppTheme.Dark;
+                _themeManager!.CurrentTheme = Services.AppTheme.Tactical;
                 primary = "#10B981"; // emerald-500
                 secondary = "#34D399"; // green-400
             }
             else
             {
-                _themeManager!.CurrentTheme = theme == "light" ? Services.AppTheme.Light : Services.AppTheme.Dark;
+                _themeManager!.CurrentTheme = theme == "light" ? Services.AppTheme.Light : Services.AppTheme.Midnight;
             }
             _themeManager.ApplyTheme();
             _themeManager.SetAccentOverrides(primary, secondary);
@@ -897,7 +897,7 @@ public ModernMainWindow()
             
             await System.Threading.Tasks.Task.Delay(2000);
             
-            button.Content = "✓ Optimized";
+            button.Content = "âœ“ Optimized";
             await System.Threading.Tasks.Task.Delay(1000);
             
             button.Content = "Quick Optimize";
@@ -926,7 +926,7 @@ public ModernMainWindow()
             // Simulate game mode activation
             await System.Threading.Tasks.Task.Delay(1000);
             
-            button.Content = "✓ Game Mode ON";
+            button.Content = "âœ“ Game Mode ON";
             button.IsEnabled = true;
             
             ShowNotification("Game Mode activated - CPU and GPU prioritized for gaming", NotificationType.Success);
@@ -947,7 +947,7 @@ public ModernMainWindow()
         {
             if (sender is not Button button) return;
             button.IsEnabled = false;
-            await WithBusyOverlay("Applying performance boost…", async () =>
+            await WithBusyOverlay("Applying performance boostâ€¦", async () =>
             {
                 await System.Threading.Tasks.Task.Delay(1500);
             });
@@ -971,13 +971,13 @@ public ModernMainWindow()
         {
             if (sender is not Button button) return;
             button.IsEnabled = false;
-            button.Content = "🧹 Cleaning...";
-            await WithBusyOverlay("Cleaning temporary files…", async () =>
+            button.Content = "ðŸ§¹ Cleaning...";
+            await WithBusyOverlay("Cleaning temporary filesâ€¦", async () =>
             {
                 await System.Threading.Tasks.Task.Delay(2000);
             });
             
-            button.Content = "🧹 Clean";
+            button.Content = "ðŸ§¹ Clean";
             button.IsEnabled = true;
             
             ShowNotification("Cleaned 2.3 GB of temporary files", NotificationType.Success);
@@ -987,7 +987,7 @@ public ModernMainWindow()
             Debug.WriteLine($"Clean error: {ex.Message}");
             if (sender is Button btn)
             {
-                btn.Content = "🧹 Clean";
+                btn.Content = "ðŸ§¹ Clean";
                 btn.IsEnabled = true;
             }
         }
@@ -1138,7 +1138,7 @@ public ModernMainWindow()
     {
         try
         {
-            if (BtnAskEli != null) { BtnAskEli.IsEnabled = false; BtnAskEli.Content = "Thinking…"; }
+            if (BtnAskEli != null) { BtnAskEli.IsEnabled = false; BtnAskEli.Content = "Thinkingâ€¦"; }
             var q = EliQuestionBox?.Text ?? string.Empty;
             var response = await _eli.AskQuestionAsync(q);
             if (EliAnswerText != null) EliAnswerText.Text = response.Answer;
@@ -1181,7 +1181,7 @@ public ModernMainWindow()
             {
                 if (ThemeIcon != null)
                 {
-                    ThemeIcon.Text = _themeManager.IsDarkMode ? "🌙" : "☀️";
+                    ThemeIcon.Text = _themeManager.IsDarkMode ? "ðŸŒ™" : "â˜€ï¸";
                 }
                 
                 if (ThemeToggleButton != null)
@@ -1194,7 +1194,7 @@ public ModernMainWindow()
                 // Default to dark theme icons if theme manager is not available
                 if (ThemeIcon != null)
                 {
-                    ThemeIcon.Text = "🌙";
+                    ThemeIcon.Text = "ðŸŒ™";
                 }
                 
                 if (ThemeToggleButton != null)
@@ -1209,3 +1209,5 @@ public ModernMainWindow()
         }
     }
 }
+
+

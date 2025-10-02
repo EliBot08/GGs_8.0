@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "lbq4kC4x9FE=",
+  "dgSpecHash": "M8OhgoIOX2g=",
   "success": true,
-  "projectFilePath": "c:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\GGs.ErrorLogViewer.Tests.csproj",
+  "projectFilePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\GGs.ErrorLogViewer.Tests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\307824\\.nuget\\packages\\castle.core\\5.1.1\\castle.core.5.1.1.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\communitytoolkit.mvvm\\8.2.2\\communitytoolkit.mvvm.8.2.2.nupkg.sha512",

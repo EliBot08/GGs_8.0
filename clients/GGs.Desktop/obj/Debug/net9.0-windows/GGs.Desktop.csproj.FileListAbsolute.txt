@@ -422,3 +422,9 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Deskt
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\GGs.Desktop.pdb
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\GGs.Desktop.genruntimeconfig.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\ref\GGs.Desktop.dll
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\EnterpriseAnimations.baml
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Carbon.baml
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Light.baml
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Midnight.baml
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Tactical.baml
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Vapor.baml

@@ -8,10 +8,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using GGs.ErrorLogViewer.Models;
-using GGs.ErrorLogViewer.ViewModels;
-using GGs.ErrorLogViewer.Views;
-using GGs.ErrorLogViewer.Views.Converters;
 using ModernWpf;
 using ModernWpf.Controls;
 using ModernWpf.Controls.Primitives;

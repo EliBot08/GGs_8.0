@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET9_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\App.xaml
-36-1187774978
+42353980917
 
 1151853716547
 2861301196716
-MainWindow.xaml;Themes\EnterpriseControlStyles.xaml;Themes\EnterpriseThemes.xaml;Views\ActivationWindow.xaml;Views\Admin\CloudProfilesView.xaml;Views\Admin\DeviceManagementView.xaml;Views\Admin\LicenseManagementView.xaml;Views\Admin\RemoteManagementView.xaml;Views\Admin\TrustedPublishersWindow.xaml;Views\Admin\TweakManagementView.xaml;Views\Admin\UserManagementView.xaml;Views\AnalyticsView.xaml;Views\Analytics\AuditSearchView.xaml;Views\CommunityHubView.xaml;Views\Controls\AnimatedProgressBar.xaml;Views\Controls\FeatureHighlight.xaml;Views\Controls\ProgressDot.xaml;Views\Controls\StatCard.xaml;Views\Controls\SystemTweaksPanel.xaml;Views\Controls\TierCard.xaml;Views\DashboardView.xaml;Views\ErrorLogViewer.xaml;Views\LicenseDiagnosticsWindow.xaml;Views\LicenseWindow.xaml;Views\LoginWindow.xaml;Views\ModernActivationWindow.xaml;Views\ModernMainWindow.xaml;Views\NetworkView.xaml;Views\NotificationsView.xaml;Views\OnboardingChecklist.xaml;Views\OptimizationView.xaml;Views\OwnerDashboard.xaml;Views\ProfileArchitectView.xaml;Views\RecoveryWindow.xaml;Views\SystemIntelligenceView.xaml;Views\UpdateWindow.xaml;
+MainWindow.xaml;Themes\EnterpriseAnimations.xaml;Themes\EnterpriseControlStyles.xaml;Themes\EnterpriseThemes.xaml;Themes\Palettes\Carbon.xaml;Themes\Palettes\Light.xaml;Themes\Palettes\Midnight.xaml;Themes\Palettes\Tactical.xaml;Themes\Palettes\Vapor.xaml;Views\ActivationWindow.xaml;Views\Admin\CloudProfilesView.xaml;Views\Admin\DeviceManagementView.xaml;Views\Admin\LicenseManagementView.xaml;Views\Admin\RemoteManagementView.xaml;Views\Admin\TrustedPublishersWindow.xaml;Views\Admin\TweakManagementView.xaml;Views\Admin\UserManagementView.xaml;Views\AnalyticsView.xaml;Views\Analytics\AuditSearchView.xaml;Views\CommunityHubView.xaml;Views\Controls\AnimatedProgressBar.xaml;Views\Controls\FeatureHighlight.xaml;Views\Controls\ProgressDot.xaml;Views\Controls\StatCard.xaml;Views\Controls\SystemTweaksPanel.xaml;Views\Controls\TierCard.xaml;Views\DashboardView.xaml;Views\ErrorLogViewer.xaml;Views\LicenseDiagnosticsWindow.xaml;Views\LicenseWindow.xaml;Views\LoginWindow.xaml;Views\ModernActivationWindow.xaml;Views\ModernMainWindow.xaml;Views\NetworkView.xaml;Views\NotificationsView.xaml;Views\OnboardingChecklist.xaml;Views\OptimizationView.xaml;Views\OwnerDashboard.xaml;Views\ProfileArchitectView.xaml;Views\RecoveryWindow.xaml;Views\SystemIntelligenceView.xaml;Views\UpdateWindow.xaml;
 
-False
+True
 

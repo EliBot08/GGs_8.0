@@ -4236,11 +4236,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "c:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\GGs.ErrorLogViewer.Tests.csproj",
+      "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\GGs.ErrorLogViewer.Tests.csproj",
       "projectName": "GGs.ErrorLogViewer.Tests",
-      "projectPath": "c:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\GGs.ErrorLogViewer.Tests.csproj",
+      "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\GGs.ErrorLogViewer.Tests.csproj",
       "packagesPath": "C:\\Users\\307824\\.nuget\\packages\\",
-      "outputPath": "c:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\obj\\",
+      "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.ErrorLogViewer.Tests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\307824\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -4255,8 +4255,8 @@
         "net9.0-windows7.0": {
           "targetAlias": "net9.0-windows",
           "projectReferences": {
-            "c:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tools\\GGs.ErrorLogViewer\\GGs.ErrorLogViewer.csproj": {
-              "projectPath": "c:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tools\\GGs.ErrorLogViewer\\GGs.ErrorLogViewer.csproj"
+            "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tools\\GGs.ErrorLogViewer\\GGs.ErrorLogViewer.csproj": {
+              "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tools\\GGs.ErrorLogViewer\\GGs.ErrorLogViewer.csproj"
             }
           }
         }
