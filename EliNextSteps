@@ -1,79 +1,41 @@
-GGs Premium Experience Playbook
-================================
+Eli Launcher Reliability Blueprint
+==================================
 
-## Pillar A – Unified Visual Language & Depth
-- **A1. Design token refactor (`clients/GGs.Desktop/Themes/`)**
-  - Replace ad-hoc resource dictionaries with a `ThemeTokens.xaml` defining spacing scale, radius scale, elevation shadows, gradient ramps, and dynamic accent palette slots (Primary, Secondary, Success, Critical, FrostedOverlay).
-  - Introduce typography tokens (Display, Title, Body, MicroCopy) tuned to `Segoe UI Variable` optical sizes with precise letter-spacing for light/dark modes. Update `App.xaml` merges accordingly.
-  - Normalize blur, frosted glass, and neon edge treatments by creating reusable `Style`/`ControlTemplate` assets for cards, modals, quick action chips, and nav items.
-- **A2. Spatial hierarchy polishing (`clients/GGs.Desktop/Views/ModernMainWindow.xaml`)**
-  - Re-grid the shell using a 12-column layout that scales between 1200–1920px, ensuring side navigation locks to 240px and content uses responsive gutters.
-  - Add layered backgrounds with parallax-ready `Grid` zones (e.g., a subtle gradient wash in the content root, elevated cards with `DropShadowEffect` and `OpacityMask`).
-  - Audit every `Margin`/`Padding` to align with the spacing scale (4/8/12/16/24). Replace magic numbers in `DashboardView.xaml`, `OptimizationView.xaml`, and `ErrorLogViewer.xaml`.
+## Objective
+- **Mission**: Guarantee that every launcher execution pulls the latest code, builds cleanly, and starts all components without errors.
+- **Scope**: `Launch-All-New.bat`, `Test-Launchers.bat`, any shared PowerShell helpers, desktop binaries under `clients/`, and all artifacts logged in `launcher-logs/`.
 
-## Pillar B – Motion System & Micro-Interactions
-- **B1. Navigation choreography (`ModernMainWindow.xaml.cs`)**
-  - Replace manual `Visibility` toggles with a `TransitioningContentControl` (WPF Toolkit or custom) to animate cross-fades + slight Z translate when swapping views.
-  - Define storyboard resources for nav selection (color morph, icon bounce, background sweep). Trigger on `Checked` via `EventSetter`.
-- **B2. Command surface response (`Views/ErrorLogViewer.xaml`, `Views/OptimizationView.xaml`)**
-  - Add hover lift + glow micro-interactions using `ScaleTransform` + `DropShadowEffect` animations triggered on pointer over/out.
-  - Implement press ripple using a short-lived `VisualBrush` ripple overlay (Composition API) for premium click feedback.
-- **B3. Activation/onboarding delight (`ModernActivationWindow.xaml`)**
-  - Layer in staged animations: hero illustration fade-in, input focus pulse, success confetti (particle effect via `CompositionTarget.Rendering`).
-  - Extend existing fade to include blur reveal and spring easing.
+## Phase 1 – Source freshness and repository guardrails
+- **Automate git sync**: Prepend `git fetch --all` + `git rebase origin/main` (or active release branch) inside `Launch-All-New.bat`; abort if conflicts or untracked files remain (`git status --porcelain`).
+- **Submodule / package alignment**: Run `git submodule sync --recursive` and `git submodule update --init --recursive` plus `dotnet restore` (or relevant package restore) before any build; capture output to `launcher-logs/master-launcher.log`.
+- **Commit provenance display**: Embed the short commit hash and timestamp into the launcher splash screen or console banner so operators can verify they are on the latest bits.
 
-## Pillar C – Data Fidelity & Live Feedback
-- **C1. Replace mock telemetry (`Services/SystemMonitorService.cs`)**
-  - Integrate Windows Performance Counters + WMI fallbacks into an async sampling pipeline with smoothing filters (EMA) to avoid jumpy charts.
-  - Surface network throughput (Mbps up/down) and GPU memory usage to feed new chart tracks.
-  - Emit `StatsUpdated` cadence at 1s; push incremental deltas to UI for real-time feel.
-- **C2. Dashboard realism (`Views/DashboardView.xaml`, `DashboardView.xaml.cs`)**
-  - Swap placeholder copy for data-driven `StatCard` animations (count-up, delta tickers). Use `DispatcherTimer` to animate number transitions.
-  - Upgrade `PerformanceChart` to render smoothed polylines with gradient fill + glowing indicator dot, refreshed via binding to the history queue.
-- **C3. Error Log insights (`Views/ErrorLogViewer.xaml`, `ViewModels/ErrorLogViewer/ErrorLogViewerViewModel.cs`)**
-  - Introduce live ingestion badges, progress shimmer when filtering, and skeleton loaders for the details panel.
-  - Add segmented toggle for level filters with animated underline + dynamic counts (bind to `TotalCount` per level).
-  - Provide “smart summary” banner synthesizing the last 10 errors via `LogParser` heuristics.
+## Phase 2 – Build reproducibility & environment hygiene
+- **Clean builds by default**: Force `dotnet clean` + `dotnet build --configuration Release` for every solution the launcher touches; mirror the exact pipeline in `Test-Launchers.bat`.
+- **Purge stale artifacts**: Delete `bin/`, `obj/`, installer caches, and temporary deployment folders before rebuilding to prevent stale DLL reuse.
+- **Runtime prerequisites check**: Validate required runtimes (e.g., .NET Desktop Runtime, VC++ redistributables) and critical environment variables; emit warnings and exit non-zero if anything is missing.
 
-## Pillar D – Feature Surface Elevation
-- **D1. Dashboard hero zone**
-  - Embed a 3D GPU showcase card (Composition surface or Lottie animation) reacting to CPU/GPU load.
-  - Add contextual tips carousel with auto-transition and swipe gestures for touch (use `TransitioningContentControl`).
-- **D2. Optimization workflow**
-  - Convert quick action buttons into glossy `CommandChip` controls with asynchronous status (spinners, checkmarks). Wire `SystemMonitorService` to reflect immediate effect metrics.
-  - Build a progress timeline modal for longer running tweaks (step badges, micro charts, confetti on completion).
-- **D3. Notifications center (`Views/NotificationsView.xaml`)**
-  - Replace `DataGrid` with card list using `ItemsControl` + `AdaptiveGridView` styling, featuring priority color bars, iconography, and swipe-to-mark-read interactions.
-  - Add grouped headers by day/hour with sticky behavior and time-relative badges.
-- **D4. EliBot chat stage (`Views/DashboardView.xaml`)**
-  - Introduce typewriter animation for responses, bubble morph transitions, and ambient “breathing” idle state for the bot avatar.
-  - Implement streaming responses with partial text updates and typing indicator ellipsis animation tied to signal latency.
+## Phase 3 – Launcher script modernization
+- **Centralize shared logic**: Extract common steps into `scripts/launcher-prereqs.ps1`; have both BAT files call the PowerShell script, keeping each wrapper as a thin entry point.
+- **Configuration verification**: Compare `appsettings.*`, `Secrets.config`, and other critical configs against checksum or schema templates; block launch on mismatches and provide remediation hints.
+- **Deployment staging**: Copy freshly built binaries to staging folders only after a successful build; use atomic swaps (rename temp to live) to avoid partial updates.
 
-## Pillar E – Feedback, Audio, and Delight
-- **E1. Haptic-inspired sound design**
-  - Curate subtle UI sounds (hover, confirm, error) with volume ducking. Expose toggles in `SettingsView` to enable/disable or choose themes.
-- **E2. Ambient states**
-  - Build dynamic background pulses in fullscreen overlays (e.g., scanning screens) that react to system stats.
-- **E3. Achievement system**
-  - Add toast banners for key milestones (first optimization, export complete) using `Snackbar`-style control with slide-in animation.
+## Phase 4 – Pre-launch verification & automated tests
+- **Integrated test battery**: Run `dotnet test` for critical projects, WPF UI smoke tests, and any integration harness before starting services; store TRX/JUnit outputs in `launcher-logs/tests/`.
+- **Static analysis & linting**: Optionally invoke analyzers (StyleCop, Roslyn, ESLint for web assets) to catch regressions before launch; treat new errors as blockers.
+- **Manual review checkpoints**: Provide a concise checklist for operators (latest commit hash, clean git status, tests succeeded) and require acknowledgment before proceeding.
 
-## Pillar F – Performance & Polish Assurance
-- **F1. Frame diagnostics**
-  - Instrument `CompositionTarget.Rendering` to log frame times and enforce <8ms render budget on key views.
-  - Add `PerfframeOverlay` developer toggle to visualize layout & render passes.
-- **F2. Animation QA scripts**
-  - Create Playwright/WPF UI automation scripts capturing GIFs before/after to verify animation plays and no visual regressions.
-- **F3. Visual regression snapshots**
-  - Integrate `Verify.WPF` snapshot tests for hero cards, nav, and modal states across dark/light.
+## Phase 5 – Runtime smoke checks & rollback safety
+- **Health probe cycle**: Start each service in diagnostic mode, verify health endpoints or ping checks, and fail fast if any component logs errors or refuses to bind.
+- **Port/process collision detection**: Scan for conflicting listeners with PowerShell `Get-NetTCPConnection` before launching services; surface actionable guidance if a port is occupied.
+- **Rollback switch**: Maintain a fallback set of last-known-good binaries and expose a `--rollback` flag that swaps to the prior build when smoke checks fail.
 
-## Execution Cadence
-- **Sprint 1 – Tokens & Shell**: Deliver Pillar A + B1 foundations. Output updated resource dictionaries, nav transitions, documentation of motion curves.
-- **Sprint 2 – Data & Dashboards**: Complete Pillar C + D1 with live telemetry plumbing and hero zone visuals.
-- **Sprint 3 – Workflows & Feedback**: Execute D2–D4, E1–E3, ensuring micro-interactions and audio cues ship together.
-- **Sprint 4 – QA & Showcase**: Finalize Pillar F, generate promo-ready screen captures, and script a launch-ready product tour.
+## Phase 6 – Observability, logging, and zero-error policy
+- **Structured logs**: Normalize launcher logs to JSON or consistent text with timestamps, commit hash, and component tags; ensure `launcher-logs/master-launcher.log` captures every stage.
+- **Alert thresholds**: Define acceptable warning/error counts per run. Exceeding the budget should abort the launch and notify responsible engineers (e.g., via Teams webhook).
+- **Telemetry export**: Forward launcher metrics (duration, success state, failure stage) to a dashboard (Azure Monitor, Grafana) for trend analysis.
 
-## Deliverables Checklist
-- Updated design system documentation (`docs/ux/premium-style-guide.md`) with tokens, motion specs, sound palette.
-- Before/after video reels (Error Log Viewer filtering, EliBot conversation, Optimization timeline) demonstrating premium transitions.
-- Automated regression suite entries for animations, visuals, and telemetry bindings.
-- Rollout notes for customer success highlighting premium experience upgrades.
+## Phase 7 – Documentation & ownership
+- **README refresh**: Update `LAUNCHER-README.md` with the new automated workflow, guardrails, log locations, and troubleshooting paths.
+- **Change ownership**: Assign primary/secondary owners for launcher maintenance; record escalation contacts inside the README and within the scripts.
+- **Continuous improvement cadence**: Schedule quarterly retrospectives to review failed launches, update scripts, and add new automated checks as the product evolves.
