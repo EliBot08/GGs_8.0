@@ -125,7 +125,7 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
                         
-                        <StackPanel Grid.Row="0" Margin="0,24,0,0">
+                        <StackPanel Grid.Row="0" Margin="0,32,0,0">
                             <RadioButton x:Name="DashboardNav" Style="{StaticResource NavButton}" 
                                        Content="🏠  Dashboard" IsChecked="True"
                                        AutomationProperties.Name="Dashboard" TabIndex="10"
@@ -201,8 +201,8 @@
                             </Grid>
                             
                             <!-- Stats Cards -->
-                            <UniformGrid Grid.Row="1" Columns="4" Rows="1" Margin="0,0,0,24">
-                                <Border Style="{StaticResource StatCard}" Margin="0,0,12,0">
+                            <UniformGrid Grid.Row="1" Columns="4" Rows="1" Margin="0,0,0,32">
+                                <Border Style="{StaticResource StatCard}" Margin="0,0,16,0">
                                     <StackPanel>
                                         <TextBlock Text="CPU" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
                                         <TextBlock x:Name="CpuUsageText" Text="45%" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
@@ -210,7 +210,7 @@
                                     </StackPanel>
                                 </Border>
                                 
-                                <Border Style="{StaticResource StatCard}" Margin="6,0">
+                                <Border Style="{StaticResource StatCard}" Margin="8,0">
                                     <StackPanel>
                                         <TextBlock Text="GPU" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
                                         <TextBlock x:Name="GpuUsageText" Text="62%" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
@@ -218,7 +218,7 @@
                                     </StackPanel>
                                 </Border>
                                 
-                                <Border Style="{StaticResource StatCard}" Margin="6,0">
+                                <Border Style="{StaticResource StatCard}" Margin="8,0">
                                     <StackPanel>
                                         <TextBlock Text="RAM" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
                                         <TextBlock x:Name="RamUsageText" Text="12.4 GB" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
@@ -226,7 +226,7 @@
                                     </StackPanel>
                                 </Border>
                                 
-                                <Border Style="{StaticResource StatCard}" Margin="12,0,0,0">
+                                <Border Style="{StaticResource StatCard}" Margin="16,0,0,0">
                                     <StackPanel>
                                         <TextBlock Text="Network" FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}"/>
                                         <TextBlock x:Name="PingText" Text="12 ms" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,4"/>
@@ -236,7 +236,7 @@
                             </UniformGrid>
                             
                             <!-- EliBot Section -->
-                            <Border Grid.Row="2" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="16" Margin="0,0,0,24">
+                            <Border Grid.Row="2" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="24" Margin="0,0,0,32">
                                 <StackPanel>
                                     <TextBlock Text="EliBot" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
                                     <StackPanel Orientation="Horizontal" Margin="0,12,0,0" VerticalAlignment="Center">
@@ -248,14 +248,14 @@
                             </Border>
 
                             <!-- Quick Actions -->
-                            <Border Grid.Row="3" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="24" Margin="0,0,0,24">
+                            <Border Grid.Row="3" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="24" Margin="0,0,0,32">
                                 <StackPanel>
                                     <TextBlock Text="Quick Actions" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
                                     <UniformGrid Columns="4" Rows="1">
-                                        <Button Content="🎮 Game Mode" Style="{StaticResource ActionButton}" Margin="0,0,8,0" Click="GameMode_Click"/>
-                                        <Button Content="🚀 Boost" Style="{StaticResource ActionButton}" Margin="4,0" Click="Boost_Click"/>
-                                        <Button Content="🧹 Clean" Style="{StaticResource ActionButton}" Margin="4,0" Click="Clean_Click"/>
-                                        <Button Content="🔇 Silent Mode" Style="{StaticResource ActionButton}" Margin="8,0,0,0" Click="SilentMode_Click"/>
+                                        <Button Content="🎮 Game Mode" Style="{StaticResource ActionButton}" Margin="0,0,12,0" Click="GameMode_Click"/>
+                                        <Button Content="🚀 Boost" Style="{StaticResource ActionButton}" Margin="6,0" Click="Boost_Click"/>
+                                        <Button Content="🧹 Clean" Style="{StaticResource ActionButton}" Margin="6,0" Click="Clean_Click"/>
+                                        <Button Content="🔇 Silent Mode" Style="{StaticResource ActionButton}" Margin="12,0,0,0" Click="SilentMode_Click"/>
                                     </UniformGrid>
                                 </StackPanel>
                             </Border>
