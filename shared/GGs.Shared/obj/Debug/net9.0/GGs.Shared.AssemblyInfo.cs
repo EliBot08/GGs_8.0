@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GGs.Shared")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d548f2cda60444c146bb2f62558398f02f7a7bd8")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f50cfc369ab77cda351114afed0f93e45cd01ffa")]
 [assembly: System.Reflection.AssemblyProductAttribute("GGs.Shared")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.Shared")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

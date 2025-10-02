@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GGs.ErrorLogViewer.Tests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7575dfd44c4960cb1543dc6dfdfa9fb28352e59")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f50cfc369ab77cda351114afed0f93e45cd01ffa")]
 [assembly: System.Reflection.AssemblyProductAttribute("GGs.ErrorLogViewer.Tests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.ErrorLogViewer.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

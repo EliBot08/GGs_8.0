@@ -1,4 +1,4 @@
-#nullable enable
+﻿#nullable enable
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -351,20 +351,14 @@ namespace GGs.ErrorLogViewer.Services
             };
         }
 
-        private ThemeDefinition ResolveDefinition(AppTheme theme)
-        {
-            if (_definitions.TryGetValue(theme, out var definition))
-            {
-                return definition;
-            }
-
-            return _definitions[AppTheme.Midnight];
-        }
-
-        protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
+        private void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
 }
+
+
+
+
 
