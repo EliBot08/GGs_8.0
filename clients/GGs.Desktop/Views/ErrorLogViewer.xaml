@@ -1,82 +1,325 @@
-<Window x:Class="GGs.Desktop.Views.ErrorLogViewer"
+﻿<Window x:Class="GGs.Desktop.Views.ErrorLogViewer"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         mc:Ignorable="d"
-        Title="GGs Error Log Viewer" Height="600" Width="1000"
-        WindowStartupLocation="CenterScreen">
+        Title="GGs Error Log Viewer"
+        Width="1280"
+        Height="720"
+        WindowStartupLocation="CenterScreen"
+        Background="{DynamicResource ThemeBackgroundPrimary}"
+        FontFamily="Segoe UI Variable">
     <Window.Resources>
-        <Style TargetType="TextBlock" x:Key="LevelStyle">
+        <Thickness x:Key="CardPadding">16</Thickness>
+
+        <Style x:Key="LevelBadgeStyle" TargetType="Border">
+            <Setter Property="CornerRadius" Value="6" />
+            <Setter Property="Padding" Value="6,2" />
+            <Setter Property="VerticalAlignment" Value="Center" />
+            <Setter Property="Background" Value="#33414B" />
+            <Setter Property="Child">
+                <Setter.Value>
+                    <TextBlock Foreground="White"
+                               FontWeight="SemiBold"
+                               Text="{Binding Level}" />
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <DataTrigger Binding="{Binding Level}" Value="ERROR">
-                    <Setter Property="Foreground" Value="Tomato"/>
-                    <Setter Property="FontWeight" Value="Bold"/>
+                    <Setter Property="Background" Value="#FFDC2626" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Level}" Value="WARNING">
+                    <Setter Property="Background" Value="#FFF59E0B" />
+                    <Setter Property="Child">
+                        <Setter.Value>
+                            <TextBlock Foreground="#011627" FontWeight="SemiBold" Text="{Binding Level}" />
+                        </Setter.Value>
+                    </Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Level}" Value="WARN">
-                    <Setter Property="Foreground" Value="DarkOrange"/>
-                    <Setter Property="FontWeight" Value="SemiBold"/>
-                </DataTrigger>
-                <DataTrigger Binding="{Binding Level}" Value="OK">
-                    <Setter Property="Foreground" Value="SeaGreen"/>
+                    <Setter Property="Background" Value="#FFF59E0B" />
+                    <Setter Property="Child">
+                        <Setter.Value>
+                            <TextBlock Foreground="#011627" FontWeight="SemiBold" Text="{Binding Level}" />
+                        </Setter.Value>
+                    </Setter>
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Level}" Value="INFO">
-                    <Setter Property="Foreground" Value="DodgerBlue"/>
+                    <Setter Property="Background" Value="#FF2563EB" />
                 </DataTrigger>
                 <DataTrigger Binding="{Binding Level}" Value="DEBUG">
-                    <Setter Property="Foreground" Value="Gray"/>
+                    <Setter Property="Background" Value="#FF6B7280" />
+                </DataTrigger>
+                <DataTrigger Binding="{Binding Level}" Value="OK">
+                    <Setter Property="Background" Value="#FF22C55E" />
                 </DataTrigger>
             </Style.Triggers>
         </Style>
+
+        <Style TargetType="DataGrid" BasedOn="{StaticResource {x:Type DataGrid}}">
+            <Setter Property="RowHeaderWidth" Value="0" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="HorizontalGridLinesBrush" Value="#11FFFFFF" />
+            <Setter Property="VerticalGridLinesBrush" Value="#11FFFFFF" />
+        </Style>
+
+        <Style TargetType="DataGridRow">
+            <Setter Property="FontSize" Value="14" />
+            <Setter Property="Height" Value="32" />
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="Background" Value="Transparent" />
+            <Setter Property="BorderThickness" Value="0" />
+            <Setter Property="KeyboardNavigation.IsTabStop" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridRow">
+                        <Border x:Name="RowBorder"
+                                Background="Transparent"
+                                CornerRadius="6"
+                                Padding="6,0">
+                            <SelectiveScrollingGrid>
+                                <SelectiveScrollingGrid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </SelectiveScrollingGrid.ColumnDefinitions>
+                                <SelectiveScrollingGrid.RowDefinitions>
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </SelectiveScrollingGrid.RowDefinitions>
+                                <DataGridCellsPresenter Grid.ColumnSpan="2" />
+                                <DataGridDetailsPresenter Grid.Row="1" Grid.ColumnSpan="2" />
+                            </SelectiveScrollingGrid>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter TargetName="RowBorder" Property="Background" Value="#331F81B3" />
+                            </Trigger>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="RowBorder" Property="Background" Value="#191A2B3C" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
-    <DockPanel>
-        <StackPanel Orientation="Horizontal" DockPanel.Dock="Top" Margin="8" VerticalAlignment="Center">
-            <TextBlock Text="Filter:" VerticalAlignment="Center"/>
-            <CheckBox x:Name="ChkInfo" Content="Info" IsChecked="True"/>
-            <CheckBox x:Name="ChkWarn" Content="Warn" IsChecked="True"/>
-            <CheckBox x:Name="ChkError" Content="Error" IsChecked="True"/>
-            <CheckBox x:Name="ChkDebug" Content="Debug"/>
-            <Separator Width="12"/>
-            <TextBox x:Name="TxtSearch" Width="240" ToolTip="Type to filter new entries"/>
-            <Button x:Name="BtnPause" Content="Pause" Width="80"/>
-            <Button x:Name="BtnClear" Content="Clear" Width="80"/>
-            <Button x:Name="BtnExport" Content="Export" Width="80"/>
-            <Button x:Name="BtnOpenFolder" Content="Open Logs Folder" Width="140"/>
-            <TextBlock Text="Log folder:" VerticalAlignment="Center" Margin="16,0,4,0"/>
-            <TextBlock x:Name="TxtFolder" VerticalAlignment="Center"/>
-            <TextBlock Text="|" Margin="16,0,16,0" VerticalAlignment="Center" Foreground="Gray"/>
-            <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                <Rectangle Width="10" Height="10" Fill="Tomato" Margin="0,0,4,0"/>
-                <TextBlock Text="Error" Margin="0,0,8,0"/>
-                <Rectangle Width="10" Height="10" Fill="DarkOrange" Margin="0,0,4,0"/>
-                <TextBlock Text="Warn" Margin="0,0,8,0"/>
-                <Rectangle Width="10" Height="10" Fill="SeaGreen" Margin="0,0,4,0"/>
-                <TextBlock Text="OK" Margin="0,0,8,0"/>
-                <Rectangle Width="10" Height="10" Fill="DodgerBlue" Margin="0,0,4,0"/>
-                <TextBlock Text="Info" Margin="0,0,8,0"/>
-                <Rectangle Width="10" Height="10" Fill="Gray" Margin="0,0,4,0"/>
-                <TextBlock Text="Debug"/>
-            </StackPanel>
-            <TextBlock x:Name="TxtStats" Margin="16,0,0,0" VerticalAlignment="Center"/>
-        </StackPanel>
 
-        <DataGrid x:Name="GridLogs"
-                  AutoGenerateColumns="False"
-                  IsReadOnly="True"
-                  Margin="8"
-                  CanUserAddRows="False"
-                  CanUserDeleteRows="False"
-                  EnableRowVirtualization="True"
-                  VirtualizingPanel.VirtualizationMode="Recycling"
-                  ItemsSource="{Binding Entries}">
-            <DataGrid.Columns>
-                <DataGridTextColumn Binding="{Binding Timestamp, StringFormat=yyyy-MM-dd HH:mm:ss.fff}" Header="Time" Width="170"/>
-                <DataGridTextColumn Binding="{Binding Emoji}" Header=" " Width="40"/>
-                <DataGridTextColumn Binding="{Binding Level}" Header="Level" Width="70" ElementStyle="{StaticResource LevelStyle}"/>
-                <DataGridTextColumn Binding="{Binding Source}" Header="Source" Width="120"/>
-                <DataGridTextColumn Binding="{Binding Message}" Header="Message" Width="*"/>
-            </DataGrid.Columns>
-        </DataGrid>
-    </DockPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="360" />
+        </Grid.ColumnDefinitions>
+
+        <!-- Command Bar -->
+        <Border Grid.Row="0" Grid.ColumnSpan="2" Background="{DynamicResource ThemeBackgroundSecondary}" Padding="16,12" BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="0,0,0,1">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Orientation="Horizontal" VerticalAlignment="Center" Margin="0" >
+                    <TextBox Width="280"
+                             Margin="0,0,16,0"
+                             Text="{Binding FilterText, UpdateSourceTrigger=PropertyChanged}"
+                             ToolTip="Search by message, source, or raw text"
+                             AutomationProperties.Name="Search logs"
+                             VerticalContentAlignment="Center" />
+
+                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
+                        <CheckBox Content="Info"
+                                  Margin="0,0,8,0"
+                                  IsChecked="{Binding IncludeInfo}"
+                                  AutomationProperties.Name="Include informational logs" />
+                        <CheckBox Content="Warn"
+                                  Margin="0,0,8,0"
+                                  IsChecked="{Binding IncludeWarning}"
+                                  AutomationProperties.Name="Include warning logs" />
+                        <CheckBox Content="Error"
+                                  Margin="0,0,8,0"
+                                  IsChecked="{Binding IncludeError}"
+                                  AutomationProperties.Name="Include error logs" />
+                        <CheckBox Content="Debug"
+                                  IsChecked="{Binding IncludeDebug}"
+                                  AutomationProperties.Name="Include debug logs" />
+                    </StackPanel>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                    <Button Content="{Binding PauseButtonText}"
+                            Command="{Binding TogglePauseCommand}"
+                            Width="110"
+                            Height="32"
+                            Margin="0,0,8,0"
+                            AutomationProperties.Name="Toggle live updates" />
+                    <Button Content="Load Older"
+                            Command="{Binding LoadMoreCommand}"
+                            Width="120"
+                            Height="32"
+                            Margin="0,0,8,0"
+                            AutomationProperties.Name="Load older log entries" />
+                    <Button Content="Export"
+                            Command="{Binding ExportCommand}"
+                            Width="96"
+                            Height="32"
+                            Margin="0,0,8,0"
+                            AutomationProperties.Name="Export log entries" />
+                    <Button Content="Clear Index"
+                            Command="{Binding ClearCommand}"
+                            Width="110"
+                            Height="32"
+                            Margin="0,0,8,0"
+                            AutomationProperties.Name="Clear cached log index" />
+                    <Button Content="Open Folder"
+                            Command="{Binding OpenFolderCommand}"
+                            Width="120"
+                            Height="32"
+                            AutomationProperties.Name="Open log folder" />
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <!-- Log Grid -->
+        <Border Grid.Row="1" Grid.Column="0" Margin="16" Background="{DynamicResource ThemeBackgroundSecondary}" CornerRadius="12" Padding="12">
+            <DataGrid ItemsSource="{Binding Logs}"
+                      SelectedItem="{Binding SelectedLog, Mode=TwoWay}"
+                      AutoGenerateColumns="False"
+                      CanUserAddRows="False"
+                      CanUserDeleteRows="False"
+                      CanUserResizeRows="True"
+                      HeadersVisibility="Column"
+                      GridLinesVisibility="Horizontal"
+                      IsReadOnly="True"
+                      ScrollViewer.CanContentScroll="True"
+                      EnableRowVirtualization="True"
+                      EnableColumnVirtualization="True"
+                      VirtualizingPanel.IsVirtualizing="True"
+                      VirtualizingPanel.VirtualizationMode="Recycling"
+                      SelectionMode="Single"
+                      SelectionUnit="FullRow"
+                      KeyboardNavigation.TabNavigation="Continue"
+                      Background="Transparent"
+                      RowStyle="{StaticResource {x:Type DataGridRow}}">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Time"
+                                        Binding="{Binding TimestampText}"
+                                        Width="200"
+                                        FontFamily="Consolas"
+                                        ClipboardContentBinding="{Binding TimestampText}" />
+                    <DataGridTemplateColumn Header="Level" Width="140">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Emoji}" FontSize="16" Margin="0,0,8,0" />
+                                    <Border Style="{StaticResource LevelBadgeStyle}" />
+                                </StackPanel>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="Source"
+                                        Binding="{Binding Source}"
+                                        Width="200"
+                                        ClipboardContentBinding="{Binding Source}" />
+                    <DataGridTextColumn Header="Message"
+                                        Binding="{Binding Message}"
+                                        Width="*"
+                                        ClipboardContentBinding="{Binding Message}" />
+                </DataGrid.Columns>
+            </DataGrid>
+        </Border>
+
+        <!-- Detail Panel -->
+        <Border Grid.Row="1"
+                Grid.Column="1"
+                Margin="16"
+                Background="{DynamicResource ThemeBackgroundSecondary}"
+                CornerRadius="12"
+                Padding="16"
+                BorderBrush="{DynamicResource ThemeBorder}"
+                BorderThickness="1">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+
+                <TextBlock Grid.Row="0" Grid.ColumnSpan="2" Text="Log Details" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" />
+
+                <StackPanel Grid.Row="1" Grid.ColumnSpan="2" Margin="0,12,0,12">
+                    <TextBlock Text="{Binding SelectedLog.TimestampText, FallbackValue='Select a log entry to review details.'}"
+                               FontFamily="Consolas"
+                               FontSize="14"
+                               Foreground="{DynamicResource ThemeTextSecondary}" />
+                </StackPanel>
+
+                <StackPanel Grid.Row="2" Grid.ColumnSpan="2" Orientation="Vertical" Spacing="6">
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="Level:" FontWeight="SemiBold" />
+                        <Border Style="{StaticResource LevelBadgeStyle}" DataContext="{Binding SelectedLog}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="Source:" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding SelectedLog.Source, FallbackValue='[Unknown]'}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="File:" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding SelectedLog.FilePath, FallbackValue='[Unknown]'}" TextWrapping="Wrap" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Spacing="8">
+                        <TextBlock Text="Line:" FontWeight="SemiBold" />
+                        <TextBlock Text="{Binding SelectedLog.LineNumber, FallbackValue='0'}" />
+                    </StackPanel>
+                </StackPanel>
+
+                <TextBlock Grid.Row="3" Grid.ColumnSpan="2" Text="Message" FontWeight="SemiBold" Margin="0,12,0,4" />
+                <ScrollViewer Grid.Row="3" Grid.ColumnSpan="2" Background="#11000000" BorderThickness="0" VerticalScrollBarVisibility="Auto">
+                    <TextBlock Text="{Binding SelectedLog.Message, FallbackValue='No message for the selected entry.'}"
+                               TextWrapping="Wrap"
+                               FontSize="14"
+                               Foreground="{DynamicResource ThemeTextPrimary}" />
+                </ScrollViewer>
+
+                <TextBlock Grid.Row="4" Grid.ColumnSpan="2" Text="Raw Entry" FontWeight="SemiBold" Margin="0,12,0,4" />
+                <ScrollViewer Grid.Row="5" Grid.ColumnSpan="2" Background="#0D000000" BorderThickness="0" VerticalScrollBarVisibility="Auto">
+                    <TextBox Text="{Binding SelectedLog.Raw, FallbackValue='Raw payload not available.'}"
+                             FontFamily="Consolas"
+                             TextWrapping="Wrap"
+                             IsReadOnly="True"
+                             Background="Transparent"
+                             BorderThickness="0"
+                             Foreground="{DynamicResource ThemeTextPrimary}" />
+                </ScrollViewer>
+            </Grid>
+        </Border>
+
+        <!-- Status Bar -->
+        <Border Grid.Row="2" Grid.ColumnSpan="2"
+                Background="{DynamicResource ThemeBackgroundSecondary}"
+                BorderBrush="{DynamicResource ThemeBorder}"
+                BorderThickness="1,1,1,0"
+                Padding="16,8">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource ThemeTextSecondary}" />
+                <TextBlock Grid.Column="1" Text="{Binding TotalCount, StringFormat='Total: {0}'}" Foreground="{DynamicResource ThemeTextSecondary}" />
+            </Grid>
+        </Border>
+    </Grid>
 </Window>
-

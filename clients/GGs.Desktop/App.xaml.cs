@@ -1,308 +1,505 @@
-using System.Security.Cryptography;
-using System.Text;
-using System.Text.Json;
+﻿using System;
+using System.Diagnostics;
+using System.IO;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Threading;
-using GGs.Desktop.Services;
-using GGs.Shared.Licensing;
-using GGs.Desktop.Telemetry;
-using System.Diagnostics;
 using GGs.Desktop.Configuration;
+using GGs.Desktop.Services;
+using GGs.Desktop.Services.Logging;
+using GGs.Desktop.Telemetry;
+using GGs.Shared.Licensing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using System.IO;
-using System.Windows.Controls;
 
 namespace GGs.Desktop;
 
-public partial class App : System.Windows.Application
+public partial class App : Application
 {
-    public static bool IsExiting { get; set; }
-    private static System.Threading.Mutex? _singleInstanceMutex;
-    private static bool _mutexCreated = false;
+    public static bool IsExiting { get; private set; }
     public static IServiceProvider? ServiceProvider { get; private set; }
+
+    private static Mutex? _singleInstanceMutex;
+    private static bool _mutexCreated;
+
+    private RollingFileLoggerProvider? _fileLoggerProvider;
+    private StartupHealthService? _startupHealth;
+    private string? _navigationTarget;
 
     protected override void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
-        // Deep-link navigation: parse args like /nav=Network or nav=Network
-        string? navArg = null;
-        try
-        {
-            foreach (var arg in e.Args)
-            {
-                if (arg.StartsWith("nav=", StringComparison.OrdinalIgnoreCase) || arg.StartsWith("/nav=", StringComparison.OrdinalIgnoreCase))
-                {
-                    navArg = arg.Split('=')[1];
-                    break;
-                }
-            }
-        }
-        catch { }
 
-        // Initialize OpenTelemetry early for startup tracing/metrics/logs
-        try { OpenTelemetryConfig.Initialize(); } catch { }
-        using var startupActivity = TelemetrySources.Startup.StartActivity("app.startup", ActivityKind.Internal);
+        _navigationTarget = ParseNavigationTarget(e.Args);
 
-        // Initialize service provider
-        var services = new ServiceCollection();
-        services.AddLogging(builder => builder.AddConsole().AddDebug());
-        ServiceProvider = services.BuildServiceProvider();
+        ConfigureLogging();
+        AppLogger.LogInfo("Starting application bootstrap");
 
-        // Initialize AppLogger with a generic logger
-        var loggerFactory = ServiceProvider.GetRequiredService<ILoggerFactory>();
-        var logger = loggerFactory.CreateLogger("GGs.Desktop");
-        AppLogger.Initialize(logger);
-
-        // Single-instance guard with proper cleanup
-        try
-        {
-            _singleInstanceMutex = new System.Threading.Mutex(true, "GGs.Desktop.Singleton.v4.0", out _mutexCreated);
-            if (!_mutexCreated)
-            {
-                AppLogger.LogWarn("Another instance of GGs Desktop is already running");
-                System.Windows.MessageBox.Show(
-                    "GGs Desktop is already running.\n\nPlease check your taskbar or system tray.",
-                    "GGs - Already Running",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information);
-                System.Windows.Application.Current?.Shutdown();
-                return;
-            }
-            AppLogger.LogInfo("Single instance mutex acquired successfully");
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Failed to create single instance mutex", ex);
-        }
-
-        // Initialize friendly file logger and global exception handlers
-        AppLogger.Initialize();
-        AppLogger.LogInfo("Starting application bootstrap 🧩");
         RegisterGlobalExceptionHandlers();
         RegisterSystemEvents();
 
-        // Apply persisted appearance (theme, accents, font scale) early
-        try { 
-            var us = new SettingsManager().Load(); 
-            ThemeManagerService.Instance.ApplyAppearance(us); 
-            AppLogger.LogInfo("Theme resources applied successfully");
-        } catch (Exception ex) {
-            AppLogger.LogWarn($"Could not apply theme resources: {ex.Message}");
-        }
-
-        // Ensure theme resources are loaded before creating windows
-        try
+        if (!EnsureSingleInstance())
         {
-            // Force theme resource loading
-            var themeService = ThemeManagerService.Instance;
-            themeService.ApplyTheme();
-            AppLogger.LogInfo("Theme resources initialized");
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogWarn($"Could not initialize theme resources: {ex.Message}");
+            Shutdown();
+            return;
         }
 
-        // Initialize crash reporting (opt-in)
-        try { CrashReportingService.Instance.Initialize(); CrashReportingService.Instance.AddBreadcrumb("App startup", "lifecycle"); } catch { }
+        _startupHealth = new StartupHealthService();
+        _startupHealth.OnStartupBegin();
 
-        // Startup health tracking
-        var health = new StartupHealthService();
-        health.OnStartupBegin();
-        // Temporarily disable crash-loop detection to fix startup issues
-        // var crashLoop = health.IsCrashLoop(thresholdCount: 3, windowSeconds: 60);
-        // if (crashLoop)
-        // {
-        //     AppLogger.LogWarn("Crash-loop detected (>=3 unclean startups in 60s). Entering minimal mode with RecoveryWindow only.");
-        //     try { Views.RecoveryWindow rw = new("Crash-loop detected. Running in minimal mode."); rw.Show(); } catch { }
-        //     return;
-        // }
+        ApplyThemeWithFallback();
+        InitializeCrashReporting();
 
-        // Device enrollment (client certificate + server registration)
-        try { DeviceEnrollmentService.EnsureEnrolledAsync().GetAwaiter().GetResult(); AppLogger.LogInfo("Device enrollment ensured."); } catch { }
-
-        // Initialize licensing and entitlements
-        var licenseSvc = new Services.LicenseService();
-        var licensed = licenseSvc.CurrentPayload != null;
-        try { EntitlementsService.Initialize(licenseSvc.CurrentPayload?.Tier ?? GGs.Shared.Enums.LicenseTier.Basic, new GGs.Shared.Api.AuthService(new System.Net.Http.HttpClient()).CurrentRoles); } catch { }
-
-        try
-        {
-            SettingsService.LaunchMinimized = false;
-            AppLogger.LogInfo("Forced LaunchMinimized to false");
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogWarn($"Could not force LaunchMinimized setting: {ex.Message}");
-        }
-
-        // CRITICAL: Always show the main window - ensure it's visible and NOT running in background
-        Views.ModernMainWindow? created = null;
-        try
-        {
-            AppLogger.LogInfo("Creating ModernMainWindow...");
-            this.ShutdownMode = ShutdownMode.OnMainWindowClose;
-            created = new Views.ModernMainWindow();
-            AppLogger.LogInfo("ModernMainWindow created successfully");
-
-            this.MainWindow = created;
-
-            // Force window to be visible - multiple approaches for reliability
-            created.WindowState = WindowState.Normal;
-            created.WindowStartupLocation = WindowStartupLocation.CenterScreen;
-            created.Visibility = Visibility.Visible;
-            created.ShowInTaskbar = true;
-            created.Topmost = true; // Temporarily topmost to ensure visibility
-            created.Show();
-            created.Activate();
-            created.Focus();
-            created.Topmost = false; // Remove topmost after showing
-
-            if (!string.IsNullOrWhiteSpace(navArg))
-            {
-                created.NavigateTo(navArg);
-            }
-
-            AppLogger.LogSuccess("Main window shown and activated - NOT running in background ");
-        }
-        catch (Exception ex)
-        {
-            AppLogger.LogError("Failed to create or show ModernMainWindow", ex);
-
-            // Try to create a simple fallback window
-            try
-            {
-                AppLogger.LogInfo("Attempting to create fallback window...");
-                var fallbackWindow = new System.Windows.Window
-                {
-                    Title = "GGs - Gaming Optimization Suite",
-                    Width = 800,
-                    Height = 600,
-                    WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                    Background = System.Windows.Media.Brushes.DarkBlue
-                };
-                
-                var textBlock = new System.Windows.Controls.TextBlock
-                {
-                    Text = "GGs Desktop Application\n\nIf you can see this window, the main application is working but there was an issue with the modern UI.\n\nPlease check the logs for more details.",
-                    Foreground = System.Windows.Media.Brushes.White,
-                    FontSize = 16,
-                    TextAlignment = TextAlignment.Center,
-                    VerticalAlignment = VerticalAlignment.Center,
-                    HorizontalAlignment = HorizontalAlignment.Center
-                };
-                
-                fallbackWindow.Content = textBlock;
-                fallbackWindow.Show();
-                fallbackWindow.Activate();
-                fallbackWindow.Focus();
-                AppLogger.LogSuccess("Fallback window created and shown");
-            }
-            catch (Exception fallbackEx)
-            {
-                AppLogger.LogError("Failed to create fallback window", fallbackEx);
-                SafeShowRecoveryWindow($"Both main and fallback windows failed: {ex.Message}");
-            }
-        }
-
-        }
+        InitializeMainWindow();
+        StartBackgroundInitialization();
+    }
 
     protected override void OnExit(ExitEventArgs e)
     {
         IsExiting = true;
-        
-        try { new StartupHealthService().MarkCleanExit(); } catch { }
+
         try
         {
-            Microsoft.Win32.SystemEvents.SessionEnding -= OnSessionEnding;
-            Microsoft.Win32.SystemEvents.PowerModeChanged -= OnPowerModeChanged;
-            AppLogger.LogInfo("Application exiting... 👋");
+            _startupHealth?.MarkCleanExit();
         }
-        finally { AppLogger.LogAppClosing(); }
-        
-        // Release mutex to allow future instances
+        catch (Exception ex)
+        {
+            AppLogger.LogWarn($"Failed to mark clean exit: {ex.Message}");
+        }
+
+        UnregisterSystemEvents();
+        ReleaseSingleInstanceMutex();
+
         try
         {
-            if (_mutexCreated && _singleInstanceMutex != null)
+            OpenTelemetryConfig.Shutdown();
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogWarn($"OpenTelemetry shutdown failed: {ex.Message}");
+        }
+
+        AppLogger.LogAppClosing();
+        _fileLoggerProvider?.Dispose();
+
+        base.OnExit(e);
+    }
+
+    private string? ParseNavigationTarget(string[] args)
+    {
+        foreach (var arg in args)
+        {
+            try
+            {
+                if (arg.StartsWith("nav=", StringComparison.OrdinalIgnoreCase))
+                {
+                    return arg.Split('=', 2)[1];
+                }
+
+                if (arg.StartsWith("/nav=", StringComparison.OrdinalIgnoreCase))
+                {
+                    return arg.Split('=', 2)[1];
+                }
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogWarn($"Failed to parse navigation argument '{arg}': {ex.Message}");
+            }
+        }
+
+        return null;
+    }
+
+    private void ConfigureLogging()
+    {
+        try
+        {
+            var baseDirOverride = Environment.GetEnvironmentVariable("GGS_DATA_DIR");
+            var baseDir = !string.IsNullOrWhiteSpace(baseDirOverride)
+                ? baseDirOverride!
+                : Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData);
+
+            var logDirectory = Path.Combine(baseDir, "GGs", "Logs");
+            Directory.CreateDirectory(logDirectory);
+
+            var options = new RollingFileLoggerOptions
+            {
+                FileName = "desktop.log",
+                MaxFileSizeBytes = 10 * 1024 * 1024,
+                MaxRetainedFiles = 7,
+                MinimumLevel = LogLevel.Information
+            };
+
+            _fileLoggerProvider = new RollingFileLoggerProvider(logDirectory, options);
+
+            var services = new ServiceCollection();
+            services.AddSingleton(_fileLoggerProvider);
+            services.AddLogging(builder =>
+            {
+                builder.ClearProviders();
+                builder.AddProvider(_fileLoggerProvider);
+                builder.AddDebug();
+                builder.AddConsole();
+                builder.SetMinimumLevel(LogLevel.Information);
+            });
+
+            ServiceProvider = services.BuildServiceProvider();
+            var loggerFactory = ServiceProvider.GetRequiredService<ILoggerFactory>();
+            var logger = loggerFactory.CreateLogger("GGs.Desktop");
+            AppLogger.Initialize(logger);
+            AppLogger.ConfigureFallbackLogPath(Path.Combine(logDirectory, "desktop-fallback.log"));
+        }
+        catch (Exception ex)
+        {
+            AppLogger.Initialize();
+            AppLogger.LogWarn($"Structured logging setup failed: {ex.Message}");
+        }
+    }
+
+    private bool EnsureSingleInstance()
+    {
+        try
+        {
+            _singleInstanceMutex = new Mutex(initiallyOwned: true, "GGs.Desktop.Singleton.v5.0", out _mutexCreated);
+            if (!_mutexCreated)
+            {
+                AppLogger.LogWarn("Another instance of GGs Desktop is already running");
+                MessageBox.Show(
+                    "GGs Desktop is already running. Check the taskbar or system tray to bring it to the foreground.",
+                    "GGs Desktop",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+                return false;
+            }
+
+            AppLogger.LogInfo("Single instance mutex acquired successfully");
+            return true;
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogWarn($"Failed to acquire single instance mutex: {ex.Message}");
+            return true; // Continue so the app is still usable even if mutex creation fails
+        }
+    }
+
+    private void ReleaseSingleInstanceMutex()
+    {
+        if (_singleInstanceMutex == null)
+        {
+            return;
+        }
+
+        try
+        {
+            if (_mutexCreated)
             {
                 _singleInstanceMutex.ReleaseMutex();
-                _singleInstanceMutex.Dispose();
-                _singleInstanceMutex = null;
-                AppLogger.LogInfo("Single instance mutex released");
             }
         }
         catch (Exception ex)
         {
-            AppLogger.LogWarn($"Failed to release mutex: {ex.Message}");
+            AppLogger.LogWarn($"Failed to release single instance mutex: {ex.Message}");
         }
-        
-        try { OpenTelemetryConfig.Shutdown(); } catch { }
-        base.OnExit(e);
+        finally
+        {
+            _singleInstanceMutex.Dispose();
+            _singleInstanceMutex = null;
+        }
+    }
+
+    private void ApplyThemeWithFallback()
+    {
+        try
+        {
+            var settings = new SettingsManager().Load();
+            ThemeManagerService.Instance.ApplyAppearance(settings);
+            ThemeManagerService.Instance.ApplyTheme();
+            AppLogger.LogInfo("Theme resources applied successfully");
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogWarn($"Failed to apply theme resources: {ex.Message}");
+        }
+    }
+
+    private void InitializeCrashReporting()
+    {
+        try
+        {
+            CrashReportingService.Instance.Initialize();
+            CrashReportingService.Instance.AddBreadcrumb("App startup", "lifecycle");
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogWarn($"Crash reporting initialization failed: {ex.Message}");
+        }
+    }
+
+    private void InitializeMainWindow()
+    {
+        Dispatcher.Invoke(() =>
+        {
+            ShutdownMode = ShutdownMode.OnMainWindowClose;
+
+            try
+            {
+                var window = new Views.ModernMainWindow();
+                MainWindow = window;
+                window.Loaded += OnMainWindowLoaded;
+                window.Show();
+                window.Activate();
+                window.Focus();
+                AppLogger.LogInfo("Main window created and shown");
+            }
+            catch (Exception ex)
+            {
+                HandleGlobalException("Main window initialization", ex, notifyUser: true, userMessage: "We could not load the main dashboard UI. Running in limited recovery mode.");
+                ShowFallbackShell();
+            }
+        }, DispatcherPriority.Send);
+    }
+
+    private void OnMainWindowLoaded(object? sender, RoutedEventArgs e)
+    {
+        if (sender is not Views.ModernMainWindow window)
+        {
+            return;
+        }
+
+        window.Loaded -= OnMainWindowLoaded;
+
+        if (!string.IsNullOrWhiteSpace(_navigationTarget))
+        {
+            SafeUiAction(() => window.NavigateTo(_navigationTarget!), "navigate to requested tab");
+        }
+    }
+
+    private void ShowFallbackShell()
+    {
+        var fallback = new Window
+        {
+            Title = "GGs Desktop - Recovery Mode",
+            Width = 640,
+            Height = 400,
+            WindowStartupLocation = WindowStartupLocation.CenterScreen,
+            Content = new Grid
+            {
+                Margin = new Thickness(24),
+                Children =
+                {
+                    new TextBlock
+                    {
+                        Text = "GGs Desktop is running in recovery mode. Critical UI components failed to load. Review the logs for details.",
+                        TextWrapping = TextWrapping.Wrap,
+                        FontSize = 14,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        TextAlignment = TextAlignment.Center
+                    }
+                }
+            }
+        };
+
+        fallback.Show();
+        fallback.Activate();
+        fallback.Focus();
+    }
+
+    private void SafeUiAction(Action action, string context)
+    {
+        try
+        {
+            action();
+        }
+        catch (Exception ex)
+        {
+            HandleGlobalException(context, ex, notifyUser: true);
+        }
+    }
+
+    private void StartBackgroundInitialization()
+    {
+        Task.Run(async () =>
+        {
+            try
+            {
+                using var activity = TelemetrySources.Startup.StartActivity("app.startup", ActivityKind.Internal);
+
+                await InitializeTelemetryAsync().ConfigureAwait(false);
+                await InitializeDeviceEnrollmentAsync().ConfigureAwait(false);
+                await InitializeLicenseAndEntitlementsAsync().ConfigureAwait(false);
+                await InitializeSettingsAsync().ConfigureAwait(false);
+            }
+            catch (Exception ex)
+            {
+                HandleGlobalException("Background initialization", ex, notifyUser: true, userMessage: "Background initialization failed. Some features may be limited until the next restart.");
+            }
+        });
+    }
+
+    private Task InitializeTelemetryAsync()
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                OpenTelemetryConfig.Initialize();
+                AppLogger.LogInfo("OpenTelemetry initialized");
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogWarn($"OpenTelemetry initialization failed: {ex.Message}");
+            }
+        });
+    }
+
+    private async Task InitializeDeviceEnrollmentAsync()
+    {
+        try
+        {
+            await DeviceEnrollmentService.EnsureEnrolledAsync().ConfigureAwait(false);
+            AppLogger.LogInfo("Device enrollment ensured");
+        }
+        catch (Exception ex)
+        {
+            HandleGlobalException("Device enrollment", ex, notifyUser: true, userMessage: "Device enrollment failed. Secure services may be unavailable.");
+        }
+    }
+
+    private Task InitializeSettingsAsync()
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                SettingsService.LaunchMinimized = false;
+                AppLogger.LogInfo("LaunchMinimized flag reset to false");
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogWarn($"Failed to update settings: {ex.Message}");
+            }
+        });
+    }
+
+    private Task InitializeLicenseAndEntitlementsAsync()
+    {
+        return Task.Run(() =>
+        {
+            try
+            {
+                var licenseService = new LicenseService();
+                var payload = licenseService.CurrentPayload;
+
+                if (payload != null)
+                {
+                    AppLogger.LogInfo($"License detected for {payload.UserId} at tier {payload.Tier}");
+                }
+                else
+                {
+                    AppLogger.LogInfo("No license payload found; defaulting to Basic tier");
+                }
+
+                string[] roles = Array.Empty<string>();
+                try
+                {
+                    roles = new GGs.Shared.Api.AuthService(new System.Net.Http.HttpClient()).CurrentRoles;
+                }
+                catch (Exception ex)
+                {
+                    AppLogger.LogWarn($"Failed to load current roles: {ex.Message}");
+                }
+
+                EntitlementsService.Initialize(payload?.Tier ?? GGs.Shared.Enums.LicenseTier.Basic, roles);
+                AppLogger.LogInfo("Entitlements initialized");
+            }
+            catch (Exception ex)
+            {
+                AppLogger.LogWarn($"License or entitlements initialization failed: {ex.Message}");
+            }
+        });
     }
 
     private void RegisterGlobalExceptionHandlers()
     {
-        // UI thread exceptions
-        this.DispatcherUnhandledException += (sender, args) =>
+        try
         {
-            try
+            DispatcherUnhandledException += (_, args) =>
             {
-                AppLogger.LogError("CRITICAL ERROR: Dispatcher Unhandled Exception", args.Exception);
-                try { CrashReportingService.Instance.AddBreadcrumb("UI exception", "exception", "error"); CrashReportingService.Instance.CaptureException(args.Exception, "DispatcherUnhandledException"); } catch { }
-                
-                // Use the improved SafeShowRecoveryWindow method
-                SafeShowRecoveryWindow($"Dispatcher Unhandled Exception: {args.Exception?.Message}");
-                
-                args.Handled = true; // Keep app running
-            }
-            catch (Exception ex)
-            {
-                // If even the error handling fails, try to log to file directly
-                try
-                {
-                    var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "Logs", "critical_error.log");
-                    Directory.CreateDirectory(Path.GetDirectoryName(logPath) ?? ".");
-                    File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - CRITICAL: Dispatcher exception handling failed: {ex.Message}\n");
-                }
-                catch
-                {
-                    // If even file logging fails, we can't do anything more
-                }
-            }
-        };
+                HandleGlobalException("UI thread", args.Exception, notifyUser: true, userMessage: "Something went wrong, but we recovered. The issue has been logged.");
+                args.Handled = true;
+            };
 
-        // Non-UI thread exceptions
-        AppDomain.CurrentDomain.UnhandledException += (sender, args) =>
-        {
-            try
+            AppDomain.CurrentDomain.UnhandledException += (_, args) =>
             {
-                var ex = args.ExceptionObject as Exception;
-                AppLogger.LogError("CRITICAL ERROR: Application startup failed", ex!);
-                try { CrashReportingService.Instance.AddBreadcrumb("Background exception", "exception", "error"); CrashReportingService.Instance.CaptureException(ex, "UnhandledException"); } catch { }
-            }
-            catch
-            {
-                // If logging fails, we can't do much more
-            }
-        };
+                HandleGlobalException("Background thread", args.ExceptionObject as Exception, notifyUser: true, userMessage: "A background operation failed. Features may be partially degraded.");
+            };
 
-        // Task exceptions
-        TaskScheduler.UnobservedTaskException += (sender, args) =>
+            TaskScheduler.UnobservedTaskException += (_, args) =>
+            {
+                HandleGlobalException("Task scheduler", args.Exception, notifyUser: false);
+                args.SetObserved();
+            };
+        }
+        catch (Exception ex)
         {
-            try
+            AppLogger.LogWarn($"Failed to register global exception handlers: {ex.Message}");
+        }
+    }
+
+    private void HandleGlobalException(string context, Exception? exception, bool notifyUser, string? userMessage = null)
+    {
+        var safeContext = string.IsNullOrWhiteSpace(context) ? "Unknown context" : context;
+        var safeMessage = exception?.Message ?? "[Unknown error]";
+
+        if (exception != null)
+        {
+            AppLogger.LogCritical($"Unhandled exception in {safeContext}: {safeMessage}", exception);
+        }
+        else
+        {
+            AppLogger.LogCritical($"Unhandled exception in {safeContext}: {safeMessage}", new Exception(safeMessage));
+        }
+
+        try
+        {
+            CrashReportingService.Instance.AddBreadcrumb(safeContext, "exception");
+            if (exception != null)
             {
-                AppLogger.LogError("A task failed in the background. We noted it and carry on.", args.Exception);
-                try { CrashReportingService.Instance.AddBreadcrumb("Task exception", "exception", "warning"); CrashReportingService.Instance.CaptureException(args.Exception, "UnobservedTaskException"); } catch { }
-                args.SetObserved();
+                CrashReportingService.Instance.CaptureException(exception, safeContext);
             }
-            catch
-            {
-                // If logging fails, just observe the exception
-                args.SetObserved();
-            }
-        };
+        }
+        catch
+        {
+            // Ignore crash reporting failures
+        }
+
+        if (notifyUser)
+        {
+            var toastMessage = string.IsNullOrWhiteSpace(userMessage) ? $"{safeContext}: {safeMessage}" : userMessage;
+            PostToast(NotificationType.Error, toastMessage);
+        }
+    }
+
+    private void PostToast(NotificationType type, string message)
+    {
+        void Show()
+        {
+            var safeMessage = string.IsNullOrWhiteSpace(message) ? "An unexpected error occurred." : message;
+            NotificationCenter.Add(type, safeMessage, showToast: true);
+        }
+
+        if (Dispatcher.CheckAccess())
+        {
+            Show();
+        }
+        else
+        {
+            Dispatcher.BeginInvoke((Action)Show, DispatcherPriority.Background);
+        }
     }
 
     private void RegisterSystemEvents()
@@ -318,154 +515,26 @@ public partial class App : System.Windows.Application
         }
     }
 
+    private void UnregisterSystemEvents()
+    {
+        try
+        {
+            Microsoft.Win32.SystemEvents.SessionEnding -= OnSessionEnding;
+            Microsoft.Win32.SystemEvents.PowerModeChanged -= OnPowerModeChanged;
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogWarn($"Unable to unregister system events: {ex.Message}");
+        }
+    }
+
     private void OnSessionEnding(object? sender, Microsoft.Win32.SessionEndingEventArgs e)
     {
-        try { AppLogger.LogInfo($"Session ending: Reason={e.Reason}"); } catch { }
+        AppLogger.LogInfo($"Session ending: {e.Reason}");
     }
 
     private void OnPowerModeChanged(object? sender, Microsoft.Win32.PowerModeChangedEventArgs e)
     {
-        try { AppLogger.LogInfo($"Power mode changed: {e.Mode}"); } catch { }
-    }
-
-    private bool TryShowWithRetry(Func<Window> factory, string windowName, int retries = 3)
-    {
-        for (int attempt = 1; attempt <= retries; attempt++)
-        {
-            try
-            {
-                AppLogger.LogInfo($"Opening {windowName} (attempt {attempt}/{retries})...");
-                var win = factory();
-                win.Show();
-                AppLogger.LogSuccess($"{windowName} opened ✅");
-                return true;
-            }
-            catch (Exception ex)
-            {
-                AppLogger.LogError($"Failed to open {windowName} on attempt {attempt}", ex);
-                // Short backoff, continue trying
-                System.Threading.Thread.Sleep(300);
-            }
-        }
-        return false;
-    }
-
-    private void SafeShowRecoveryWindow(string message)
-    {
-        try
-        {
-            // Ensure we're on the UI thread
-            if (!Dispatcher.CheckAccess())
-            {
-                Dispatcher.BeginInvoke(() => SafeShowRecoveryWindow(message));
-                return;
-            }
-
-            // Create a simple error window without complex dependencies
-            var errorWindow = new System.Windows.Window
-            {
-                Title = "GGs - Error Recovery",
-                Width = 500,
-                Height = 300,
-                WindowStartupLocation = WindowStartupLocation.CenterScreen,
-                Background = System.Windows.Media.Brushes.DarkRed,
-                ResizeMode = ResizeMode.NoResize
-            };
-
-            var stackPanel = new System.Windows.Controls.StackPanel
-            {
-                Margin = new Thickness(20, 20, 20, 20)
-            };
-
-            var titleText = new System.Windows.Controls.TextBlock
-            {
-                Text = "⚠️ Critical Error Occurred",
-                FontSize = 18,
-                FontWeight = FontWeights.Bold,
-                Foreground = System.Windows.Media.Brushes.White,
-                Margin = new Thickness(0, 0, 0, 10),
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-
-            var messageText = new System.Windows.Controls.TextBlock
-            {
-                Text = message ?? "An unknown error occurred",
-                FontSize = 14,
-                Foreground = System.Windows.Media.Brushes.White,
-                TextWrapping = TextWrapping.Wrap,
-                Margin = new Thickness(0, 0, 0, 20)
-            };
-
-            var buttonPanel = new System.Windows.Controls.StackPanel
-            {
-                Orientation = Orientation.Horizontal,
-                HorizontalAlignment = HorizontalAlignment.Center
-            };
-
-            var retryButton = new System.Windows.Controls.Button
-            {
-                Content = "Retry Application",
-                Padding = new Thickness(15, 8, 15, 8),
-                Margin = new Thickness(5, 5, 5, 5),
-                Background = System.Windows.Media.Brushes.DarkBlue,
-                Foreground = System.Windows.Media.Brushes.White,
-                BorderThickness = new Thickness(1, 1, 1, 1),
-                BorderBrush = System.Windows.Media.Brushes.White
-            };
-
-            var closeButton = new System.Windows.Controls.Button
-            {
-                Content = "Close",
-                Padding = new Thickness(15, 8, 15, 8),
-                Margin = new Thickness(5, 5, 5, 5),
-                Background = System.Windows.Media.Brushes.DarkGray,
-                Foreground = System.Windows.Media.Brushes.White,
-                BorderThickness = new Thickness(1, 1, 1, 1),
-                BorderBrush = System.Windows.Media.Brushes.White
-            };
-
-            retryButton.Click += (s, e) =>
-            {
-                try
-                {
-                    errorWindow.Close();
-                    // Try to restart the main window
-                    var mainWindow = new Views.ModernMainWindow();
-                    mainWindow.Show();
-                }
-                catch (Exception restartEx)
-                {
-                    AppLogger.LogError("Failed to restart main window", restartEx);
-                }
-            };
-
-            closeButton.Click += (s, e) => errorWindow.Close();
-
-            buttonPanel.Children.Add(retryButton);
-            buttonPanel.Children.Add(closeButton);
-
-            stackPanel.Children.Add(titleText);
-            stackPanel.Children.Add(messageText);
-            stackPanel.Children.Add(buttonPanel);
-
-            errorWindow.Content = stackPanel;
-            errorWindow.Show();
-
-            AppLogger.LogWarn("Recovery window opened to keep the app running and logs flowing.");
-        }
-        catch (Exception ex)
-        {
-            // As an absolute last resort: try to log to file directly
-            try
-            {
-                var logPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "Logs", "critical_error.log");
-                Directory.CreateDirectory(Path.GetDirectoryName(logPath) ?? ".");
-                File.AppendAllText(logPath, $"{DateTime.Now:yyyy-MM-dd HH:mm:ss} - CRITICAL: RecoveryWindow failed: {ex.Message}\n");
-            }
-            catch
-            {
-                // If even file logging fails, we can't do anything more
-            }
-        }
+        AppLogger.LogInfo($"Power mode changed: {e.Mode}");
     }
 }
