@@ -103,6 +103,48 @@
                 </Setter.Value>
             </Setter>
         </Style>
+
+        <Style x:Key="CommandBarButtonStyle" TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource ThemeTextPrimary}" />
+            <Setter Property="Background" Value="{DynamicResource ThemeBackgroundTertiary}" />
+            <Setter Property="BorderBrush" Value="{DynamicResource ThemeBorder}" />
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="FontWeight" Value="SemiBold" />
+            <Setter Property="Padding" Value="14,6" />
+            <Setter Property="Margin" Value="0,0,12,8" />
+            <Setter Property="MinWidth" Value="120" />
+            <Setter Property="Height" Value="34" />
+            <Setter Property="Cursor" Value="Hand" />
+            <Setter Property="HorizontalAlignment" Value="Stretch" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="Outer"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8"
+                                Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center"
+                                              VerticalAlignment="Center"
+                                              RecognizesAccessKey="True" />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="Outer" Property="BorderBrush" Value="{DynamicResource ThemeAccentPrimary}" />
+                                <Setter Property="Foreground" Value="{DynamicResource ThemeAccentPrimary}" />
+                            </Trigger>
+                            <Trigger Property="IsPressed" Value="True">
+                                <Setter TargetName="Outer" Property="Background" Value="#1AFFFFFF" />
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="Outer" Property="Opacity" Value="0.5" />
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
     </Window.Resources>
 
     <Grid>
@@ -151,37 +193,36 @@
                     </StackPanel>
                 </StackPanel>
 
-                <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
+                <WrapPanel Grid.Column="1"
+                           Orientation="Horizontal"
+                           HorizontalAlignment="Right"
+                           MaxWidth="680">
                     <Button Content="{Binding PauseButtonText}"
                             Command="{Binding TogglePauseCommand}"
-                            Width="110"
-                            Height="32"
-                            Margin="0,0,8,0"
+                            Style="{StaticResource CommandBarButtonStyle}"
+                            ToolTip="Pause or resume live log ingestion"
                             AutomationProperties.Name="Toggle live updates" />
                     <Button Content="Load Older"
                             Command="{Binding LoadMoreCommand}"
-                            Width="120"
-                            Height="32"
-                            Margin="0,0,8,0"
+                            Style="{StaticResource CommandBarButtonStyle}"
+                            ToolTip="Load older records into the view"
                             AutomationProperties.Name="Load older log entries" />
                     <Button Content="Export"
                             Command="{Binding ExportCommand}"
-                            Width="96"
-                            Height="32"
-                            Margin="0,0,8,0"
+                            Style="{StaticResource CommandBarButtonStyle}"
+                            ToolTip="Export visible entries to JSON"
                             AutomationProperties.Name="Export log entries" />
                     <Button Content="Clear Index"
                             Command="{Binding ClearCommand}"
-                            Width="110"
-                            Height="32"
-                            Margin="0,0,8,0"
+                            Style="{StaticResource CommandBarButtonStyle}"
+                            ToolTip="Clear the indexed cache"
                             AutomationProperties.Name="Clear cached log index" />
                     <Button Content="Open Folder"
                             Command="{Binding OpenFolderCommand}"
-                            Width="120"
-                            Height="32"
+                            Style="{StaticResource CommandBarButtonStyle}"
+                            ToolTip="Open the log directory"
                             AutomationProperties.Name="Open log folder" />
-                </StackPanel>
+                </WrapPanel>
             </Grid>
         </Border>
 
@@ -317,8 +358,17 @@
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource ThemeTextSecondary}" />
-                <TextBlock Grid.Column="1" Text="{Binding TotalCount, StringFormat='Total: {0}'}" Foreground="{DynamicResource ThemeTextSecondary}" />
+                <TextBlock Text="{Binding StatusText}" Foreground="{DynamicResource ThemeTextSecondary}" FontWeight="SemiBold" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <TextBlock Text="{Binding TotalCount, StringFormat='Total: {0}'}"
+                               Foreground="{DynamicResource ThemeTextSecondary}" />
+                    <Rectangle Width="1"
+                               Height="12"
+                               Margin="12,0"
+                               Fill="{DynamicResource ThemeBorder}" />
+                    <TextBlock Text="{Binding LastRefreshedDisplay}"
+                               Foreground="{DynamicResource ThemeTextSecondary}" />
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>

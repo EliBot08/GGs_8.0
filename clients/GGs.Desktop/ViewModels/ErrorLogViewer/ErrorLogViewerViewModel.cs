@@ -69,6 +69,9 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
     [ObservableProperty]
     private LogEntryViewModel? selectedLog;
 
+    [ObservableProperty]
+    private string lastRefreshedDisplay = "Updated —";
+
     public ReadOnlyObservableCollection<LogEntryViewModel> Logs => _readonlyLogs;
 
     public IAsyncRelayCommand InitializeCommand { get; }
@@ -213,6 +216,7 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
             AppendEntries(entriesTask.Result, atTop: false);
             StatusText = TotalCount > 0 ? $"{TotalCount} entries" : "No log entries";
             ExportCommand.NotifyCanExecuteChanged();
+            UpdateLastRefreshed();
         }
         finally
         {
@@ -266,6 +270,7 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
 
         TrimLogBuffer();
         StatusText = $"Showing {_logs.Count} of {TotalCount} entries";
+        UpdateLastRefreshed();
     }
 
     private void TrimLogBuffer()
@@ -363,6 +368,7 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
             });
             TotalCount = 0;
             StatusText = "Log index cleared";
+            UpdateLastRefreshed();
         }
         finally
         {
@@ -432,6 +438,7 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
             TotalCount = countTask.Result;
             ApplyHeadSnapshot(entriesTask.Result);
             ExportCommand.NotifyCanExecuteChanged();
+            UpdateLastRefreshed();
         }
         finally
         {
@@ -604,5 +611,16 @@ public sealed partial class ErrorLogViewerViewModel : ObservableObject, IAsyncDi
         await _index.DisposeAsync().ConfigureAwait(false);
         _refreshSemaphore.Dispose();
         _filterCts?.Dispose();
+    }
+
+    private void UpdateLastRefreshed()
+    {
+        if (!_dispatcher.CheckAccess())
+        {
+            _dispatcher.Invoke(UpdateLastRefreshed);
+            return;
+        }
+
+        LastRefreshedDisplay = $"Updated {DateTime.Now:HH:mm:ss}";
     }
 }
