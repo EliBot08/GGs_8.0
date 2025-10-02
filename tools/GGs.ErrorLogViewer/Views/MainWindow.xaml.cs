@@ -11,7 +11,6 @@ namespace GGs.ErrorLogViewer.Views
     public partial class MainWindow : Window
     {
         private readonly ILogger<MainWindow> _logger;
-
         public MainWindow()
         {
             InitializeComponent();
@@ -19,8 +18,8 @@ namespace GGs.ErrorLogViewer.Views
             // Get logger from DI container
             _logger = ((App)Application.Current).ServiceProvider.GetRequiredService<ILogger<MainWindow>>();
             
-            // Set DataContext to MainViewModel from DI container
-            DataContext = ((App)Application.Current).ServiceProvider.GetRequiredService<MainViewModel>();
+            // Set DataContext to EnhancedMainViewModel from DI container
+            DataContext = ((App)Application.Current).ServiceProvider.GetRequiredService<EnhancedMainViewModel>();
             
             // Handle window events
             Loaded += OnLoaded;
@@ -51,10 +50,20 @@ namespace GGs.ErrorLogViewer.Views
         {
             try
             {
-                // Stop monitoring when closing
-                if (DataContext is MainViewModel viewModel && viewModel.IsMonitoring)
+                // Stop monitoring and dispose ViewModel when closing
+                if (DataContext is MainViewModel viewModel)
                 {
-                    viewModel.StopMonitoringCommand.Execute(null);
+                    if (viewModel.IsMonitoring)
+                    {
+                        viewModel.StopMonitoringCommand.Execute(null);
+                    }
+
+                    // Dispose the ViewModel to clean up resources
+                    if (viewModel is IDisposable disposable)
+                    {
+                        disposable.Dispose();
+                        _logger.LogInformation("ViewModel disposed");
+                    }
                 }
                 
                 _logger.LogInformation("MainWindow closing");

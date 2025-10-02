@@ -19,8 +19,9 @@ using GGs.ErrorLogViewer.Views;
 
 namespace GGs.ErrorLogViewer.ViewModels
 {
-    public partial class MainViewModel : ObservableObject
+    public partial class MainViewModel : ObservableObject, IDisposable
     {
+        private bool _disposed = false;
         private readonly ILogMonitoringService _logMonitoringService;
         private readonly ILogParsingService _logParsingService;
         private readonly IThemeService _themeService;
@@ -28,6 +29,10 @@ namespace GGs.ErrorLogViewer.ViewModels
         private readonly IEarlyLoggingService _earlyLoggingService;
         private readonly IConfiguration _configuration;
         private readonly ILogger<MainViewModel> _logger;
+        private static class SectionNames
+        {
+            public const string Logs = "Logs";
+        }
 
         [ObservableProperty]
         private bool _isMonitoring;
@@ -84,27 +89,28 @@ namespace GGs.ErrorLogViewer.ViewModels
         // Smart Filter: Track seen messages for deduplication
         private readonly HashSet<string> _seenMessages = new HashSet<string>();
         private string _logDirectory = string.Empty;
+        public string? CurrentLogDirectory => string.IsNullOrWhiteSpace(_logDirectory) ? null : _logDirectory;
 
-        public ICommand StartMonitoringCommand { get; }
-        public ICommand StopMonitoringCommand { get; }
-        public ICommand ToggleThemeCommand { get; }
-        public ICommand RefreshCommand { get; }
-        public ICommand ClearLogsCommand { get; }
-        public ICommand ExportLogsCommand { get; }
-        public ICommand CopySelectedCommand { get; }
-        public ICommand OpenLogDirectoryCommand { get; }
-        public ICommand ClearOldLogsCommand { get; }
+        public ICommand StartMonitoringCommand { get; protected set; }
+        public ICommand StopMonitoringCommand { get; protected set; }
+        public ICommand ToggleThemeCommand { get; protected set; }
+        public ICommand RefreshCommand { get; protected set; }
+        public ICommand ClearLogsCommand { get; protected set; }
+        public ICommand ExportLogsCommand { get; protected set; }
+        public ICommand CopySelectedCommand { get; protected set; }
+        public ICommand OpenLogDirectoryCommand { get; protected set; }
+        public ICommand ClearOldLogsCommand { get; protected set; }
         // New copy commands
-        public ICommand CopyRawCommand { get; }
-        public ICommand CopyCompactCommand { get; }
-        public ICommand CopyDetailsCommand { get; }
-        public ICommand ToggleDetailsPaneCommand { get; }
+        public ICommand CopyRawCommand { get; protected set; }
+        public ICommand CopyCompactCommand { get; protected set; }
+        public ICommand CopyDetailsCommand { get; protected set; }
+        public ICommand ToggleDetailsPaneCommand { get; protected set; }
         
-        // Navigation commands for dashboard
-        public ICommand SwitchToLogsViewCommand { get; }
-        public ICommand SwitchToAnalyticsViewCommand { get; }
-        public ICommand SwitchToBookmarksViewCommand { get; }
-        public ICommand SwitchToAlertsViewCommand { get; }
+        // Navigation commands (placeholders - implemented in enhanced VM)
+        public ICommand SwitchToLogsViewCommand { get; protected set; }
+        public ICommand SwitchToAnalyticsViewCommand { get; protected set; }
+        public ICommand SwitchToBookmarksViewCommand { get; protected set; }
+        public ICommand SwitchToAlertsViewCommand { get; protected set; }
 
         public MainViewModel(
             ILogMonitoringService logMonitoringService,
@@ -144,12 +150,11 @@ namespace GGs.ErrorLogViewer.ViewModels
             CopyCompactCommand = new RelayCommand(CopyCompact, () => SelectedLogEntry != null);
             CopyDetailsCommand = new RelayCommand(CopyDetails, () => SelectedLogEntry != null);
             ToggleDetailsPaneCommand = new RelayCommand(() => IsDetailsPaneVisible = !IsDetailsPaneVisible);
-            
-            // Navigation commands
-            SwitchToLogsViewCommand = new RelayCommand(() => { /* Main logs view is already visible */ });
-            SwitchToAnalyticsViewCommand = new RelayCommand(() => { /* Switch to analytics - Phase 8 */ });
-            SwitchToBookmarksViewCommand = new RelayCommand(() => { /* Switch to bookmarks - Phase 8 */ });
-            SwitchToAlertsViewCommand = new RelayCommand(() => { /* Switch to alerts - Phase 8 */ });
+
+            SwitchToLogsViewCommand = new RelayCommand(() => { /* Placeholder - Enhanced VM handles actual navigation */ });
+            SwitchToAnalyticsViewCommand = new RelayCommand(() => { /* Placeholder */ });
+            SwitchToBookmarksViewCommand = new RelayCommand(() => { /* Placeholder */ });
+            SwitchToAlertsViewCommand = new RelayCommand(() => { /* Placeholder */ });
 
             _logMonitoringService.LogEntriesAdded += OnLogEntriesAdded;
             _logMonitoringService.LogsCleared += OnLogsCleared;
@@ -278,7 +283,7 @@ namespace GGs.ErrorLogViewer.ViewModels
             return _logDirectory;
         }
 
-        private void ClearLogsInternal()
+        protected virtual void ClearLogsInternal()
         {
             try
             {
@@ -556,7 +561,7 @@ namespace GGs.ErrorLogViewer.ViewModels
         }
 
         // Handle batch log entries for better performance
-        private void OnLogEntriesAdded(object? sender, System.Collections.Generic.IEnumerable<LogEntry> logEntries)
+        protected virtual void OnLogEntriesAdded(object? sender, System.Collections.Generic.IEnumerable<LogEntry> logEntries)
         {
             try
             {
@@ -569,7 +574,7 @@ namespace GGs.ErrorLogViewer.ViewModels
                     foreach (var entry in entriesToAdd)
                     {
                         LogEntries.Add(entry);
-                        
+                        AfterLogEntryAdded(entry);
                         // Update available sources
                         if (!string.IsNullOrEmpty(entry.Source) && !AvailableSources.Contains(entry.Source))
                         {
@@ -587,6 +592,7 @@ namespace GGs.ErrorLogViewer.ViewModels
                     
                     _logger.LogDebug("Processed batch of {Count} log entries", entriesToAdd.Count);
                 });
+
             }
             catch (Exception ex)
             {
@@ -594,13 +600,18 @@ namespace GGs.ErrorLogViewer.ViewModels
             }
         }
 
-        private void OnLogsCleared(object? sender, EventArgs e)
+        protected virtual void OnLogsCleared(object? sender, EventArgs e)
         {
             System.Windows.Application.Current.Dispatcher.Invoke(() =>
             {
                 LogEntries.Clear();
                 UpdateCounts();
             });
+        }
+
+        protected virtual void AfterLogEntryAdded(LogEntry entry)
+        {
+            // Hook for derived classes (e.g., EnhancedMainViewModel) to decorate entries
         }
 
         private void OnPropertyChanged(object? sender, PropertyChangedEventArgs e)
@@ -696,12 +707,66 @@ namespace GGs.ErrorLogViewer.ViewModels
         protected override void OnPropertyChanged(PropertyChangedEventArgs e)
         {
             base.OnPropertyChanged(e);
-            
-            // Update command can execute states
+
             if (e.PropertyName == nameof(SelectedLogEntry))
             {
                 ((RelayCommand)CopySelectedCommand).NotifyCanExecuteChanged();
+                ((RelayCommand)CopyRawCommand).NotifyCanExecuteChanged();
+                ((RelayCommand)CopyCompactCommand).NotifyCanExecuteChanged();
+                ((RelayCommand)CopyDetailsCommand).NotifyCanExecuteChanged();
             }
+        }
+
+        protected virtual void Dispose(bool disposing)
+        {
+            if (!_disposed)
+            {
+                if (disposing)
+                {
+                    try
+                    {
+                        // Stop monitoring if active
+                        if (IsMonitoring)
+                        {
+                            _logger.LogInformation("Stopping log monitoring during disposal");
+                            try
+                            {
+                                StopMonitoringCommand.Execute(null);
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogWarning(ex, "Error stopping monitoring during disposal");
+                            }
+                        }
+
+                        // Clear collections
+                        try
+                        {
+                            LogEntries.Clear();
+                            AvailableSources.Clear();
+                            _seenMessages.Clear();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.LogWarning(ex, "Error clearing collections during disposal");
+                        }
+
+                        _logger.LogInformation("MainViewModel disposed successfully");
+                    }
+                    catch (Exception ex)
+                    {
+                        _logger.LogError(ex, "Error during MainViewModel disposal");
+                    }
+                }
+
+                _disposed = true;
+            }
+        }
+
+        public void Dispose()
+        {
+            Dispose(true);
+            GC.SuppressFinalize(this);
         }
     }
 }

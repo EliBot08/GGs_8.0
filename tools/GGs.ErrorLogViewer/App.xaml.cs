@@ -82,7 +82,6 @@ namespace GGs.ErrorLogViewer
                 // Create and configure host
                 _host = CreateHost(configuration);
 
-                // Start the host
                 _host.Start();
 
                 _earlyLoggingService.LogApplicationEvent("Application", "Host started successfully");
@@ -90,8 +89,8 @@ namespace GGs.ErrorLogViewer
                 // Show main window
                 var mainWindow = _host.Services.GetRequiredService<MainWindow>();
                 
-                // Apply command line settings to ViewModel
-                var viewModel = _host.Services.GetRequiredService<MainViewModel>();
+                // Apply command line settings to EnhancedMainViewModel
+                var viewModel = _host.Services.GetRequiredService<EnhancedMainViewModel>();
                 if (!string.IsNullOrEmpty(_commandLineLogDirectory))
                 {
                     viewModel.SetLogDirectory(_commandLineLogDirectory);

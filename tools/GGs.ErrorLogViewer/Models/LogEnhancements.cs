@@ -125,7 +125,9 @@ namespace GGs.ErrorLogViewer.Models
         public LogLevel? FilterLevel { get; set; }
         public string? FilterSource { get; set; }
         public List<string> BookmarkIds { get; set; } = new();
+        public List<LogEntry> Logs { get; set; } = new();
         public DateTime SavedAt { get; set; } = DateTime.UtcNow;
+        public DateTime LastUpdatedUtc { get; set; } = DateTime.UtcNow;
         public string? ActiveView { get; set; } // "Logs", "Analytics", "Compare", etc.
     }
 

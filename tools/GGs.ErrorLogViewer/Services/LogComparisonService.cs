@@ -15,6 +15,8 @@ namespace GGs.ErrorLogViewer.Services
             IEnumerable<LogEntry> rightLogs,
             double similarityThreshold = 0.8);
         
+        Task<LogComparisonResult> GenerateComparisonReportAsync(IEnumerable<LogEntry> logs);
+        
         double CalculateSimilarity(LogEntry left, LogEntry right);
         List<(LogEntry Left, LogEntry Right)> FindSimilarEntries(
             IEnumerable<LogEntry> leftLogs, 
@@ -240,6 +242,22 @@ namespace GGs.ErrorLogViewer.Services
             var matchScore = (identical * 1.0 + similar * 0.7) / maxCount;
             
             return Math.Min(100.0, matchScore * 100.0);
+        }
+
+        public async Task<LogComparisonResult> GenerateComparisonReportAsync(IEnumerable<LogEntry> logs)
+        {
+            return await Task.Run(() =>
+            {
+                var logList = logs.ToList();
+                var midPoint = logList.Count / 2;
+                var left = logList.Take(midPoint).ToList();
+                var right = logList.Skip(midPoint).ToList();
+
+                _logger.LogInformation("Generating comparison report for {Total} logs (split: {Left}/{Right})", 
+                    logList.Count, left.Count, right.Count);
+
+                return CompareLogsAsync(left, right).Result;
+            });
         }
     }
 }
