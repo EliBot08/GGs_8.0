@@ -1,4 +1,4 @@
-﻿<Window x:Class="GGs.ErrorLogViewer.Views.MainWindow" xmlns:ui="http://schemas.modernwpf.com/2019"
+<Window x:Class="GGs.ErrorLogViewer.Views.MainWindow" xmlns:ui="http://schemas.modernwpf.com/2019"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:local="clr-namespace:GGs.ErrorLogViewer.Views"
@@ -12,7 +12,7 @@
         WindowStartupLocation="CenterScreen"
         WindowState="Maximized"
         ResizeMode="CanResizeWithGrip"
-        Background="#090B14">
+        Background="{DynamicResource ThemeBackgroundPrimary}">
 
     <Window.InputBindings>
         <KeyBinding Key="F5" Command="{Binding RefreshCommand}"/>
@@ -25,311 +25,8 @@
         <KeyBinding Key="R" Command="{Binding ToggleDetailsPaneCommand}" Modifiers="Alt"/>
     </Window.InputBindings>
 
-    <Window.Resources>
-        <ResourceDictionary>
-            <!-- Theme Colors -->
-            <Color x:Key="BrandPrimaryColor">#FF3C6FFF</Color>
-            <Color x:Key="BrandSecondaryColor">#FF743CFF</Color>
-            <Color x:Key="SurfaceColor">#111424</Color>
-            <Color x:Key="SurfaceAltColor">#171B2F</Color>
-            <Color x:Key="SurfaceElevatedColor">#1E233A</Color>
-            <Color x:Key="StrokeColor">#2C324D</Color>
-            <Color x:Key="TextPrimaryColor">#FFFFFFFF</Color>
-            <Color x:Key="TextSecondaryColor">#FFB5C1DA</Color>
-            <Color x:Key="TextMutedColor">#FF8090B0</Color>
-            <Color x:Key="SuccessColor">#FF31D3A3</Color>
-            <Color x:Key="WarningColor">#FFFFC35B</Color>
-            <Color x:Key="DangerColor">#FFFF6A7A</Color>
 
-            <!-- Brushes -->
-            <SolidColorBrush x:Key="BrandPrimaryBrush" Color="{StaticResource BrandPrimaryColor}"/>
-            <SolidColorBrush x:Key="BrandSecondaryBrush" Color="{StaticResource BrandSecondaryColor}"/>
-            <SolidColorBrush x:Key="SurfaceBrush" Color="{StaticResource SurfaceColor}"/>
-            <SolidColorBrush x:Key="SurfaceAltBrush" Color="{StaticResource SurfaceAltColor}"/>
-            <SolidColorBrush x:Key="SurfaceElevatedBrush" Color="{StaticResource SurfaceElevatedColor}"/>
-            <SolidColorBrush x:Key="StrokeBrush" Color="{StaticResource StrokeColor}"/>
-            <SolidColorBrush x:Key="TextPrimaryBrush" Color="{StaticResource TextPrimaryColor}"/>
-            <SolidColorBrush x:Key="TextSecondaryBrush" Color="{StaticResource TextSecondaryColor}"/>
-            <SolidColorBrush x:Key="TextMutedBrush" Color="{StaticResource TextMutedColor}"/>
-            <SolidColorBrush x:Key="SuccessBrush" Color="{StaticResource SuccessColor}"/>
-            <SolidColorBrush x:Key="WarningBrush" Color="{StaticResource WarningColor}"/>
-            <SolidColorBrush x:Key="DangerBrush" Color="{StaticResource DangerColor}"/>
-
-            <LinearGradientBrush x:Key="HeroBackgroundBrush" StartPoint="0,0" EndPoint="1,1">
-                <GradientStop Color="#FF1A2364" Offset="0"/>
-                <GradientStop Color="#FF0F152E" Offset="1"/>
-            </LinearGradientBrush>
-
-            <DropShadowEffect x:Key="PanelShadow"
-                              BlurRadius="20"
-                              Direction="270"
-                              ShadowDepth="6"
-                              Opacity="0.32"
-                              Color="#E0000000"/>
-
-            <!-- Converters -->
-            <converters:LogLevelToIconConverter x:Key="LogLevelToIconConverter"/>
-            <converters:LogLevelToColorConverter x:Key="LogLevelToColorConverter"/>
-            <converters:SourceToColorConverter x:Key="SourceToColorConverter"/>
-            <converters:BooleanToVisibilityConverter x:Key="BooleanToVisibilityConverter"/>
-            <converters:InverseBooleanConverter x:Key="InverseBooleanConverter"/>
-            <converters:BooleanToStringConverter x:Key="BooleanToStringConverter"/>
-            <converters:BooleanToSymbolConverter x:Key="BooleanToSymbolConverter"/>
-            <converters:BooleanToBrushConverter x:Key="BooleanToBrushConverter"/>
-            <converters:NullToVisibilityConverter x:Key="NullToVisibilityConverter"/>
-            <converters:BooleanToMessageConverter x:Key="BooleanToMessageConverter"/>
-            <converters:RawOrCompactMessageConverter x:Key="RawOrCompactMessageConverter"/>
-            <converters:StringEqualsConverter x:Key="StringEqualsConverter"/>
-
-            <!-- Primary Buttons -->
-            <Style x:Key="PrimaryButtonStyle" TargetType="Button">
-                <Setter Property="Foreground" Value="White"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Padding" Value="16,10"/>
-                <Setter Property="Margin" Value="0,0,12,0"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Background">
-                    <Setter.Value>
-                        <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                            <GradientStop Color="#FF3C6FFF" Offset="0"/>
-                            <GradientStop Color="#FF743CFF" Offset="1"/>
-                        </LinearGradientBrush>
-                    </Setter.Value>
-                </Setter>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="Button">
-                            <Border x:Name="Root"
-                                    Background="{TemplateBinding Background}"
-                                    CornerRadius="12"
-                                    Padding="{TemplateBinding Padding}">
-                                <Border.RenderTransform>
-                                    <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1"/>
-                                </Border.RenderTransform>
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="1.04" Duration="0:0:0.12"/>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="1.04" Duration="0:0:0.12"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.12"/>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.12"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                                <Trigger Property="IsPressed" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="0.96" Duration="0:0:0.08"/>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="0.96" Duration="0:0:0.08"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="1.04" Duration="0:0:0.12"/>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="1.04" Duration="0:0:0.12"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter Property="Opacity" Value="0.45"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <Style x:Key="GhostButtonStyle" TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}">
-                <Setter Property="Background" Value="{StaticResource SurfaceAltBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeBrush}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-            </Style>
-
-            <Style TargetType="Button" BasedOn="{StaticResource PrimaryButtonStyle}"/>
-
-            <!-- Navigation Toggle -->
-            <Style x:Key="NavigationToggleStyle" TargetType="ToggleButton">
-                <Setter Property="Margin" Value="0,8,0,0"/>
-                <Setter Property="Padding" Value="14,10"/>
-                <Setter Property="Background" Value="{StaticResource SurfaceAltBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeBrush}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border x:Name="Root"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="12"
-                                    Padding="{TemplateBinding Padding}">
-                                <Border.RenderTransform>
-                                    <ScaleTransform x:Name="Scale" ScaleX="1" ScaleY="1"/>
-                                </Border.RenderTransform>
-                                <Grid>
-                                    <Border x:Name="Accent" Width="4" HorizontalAlignment="Left" CornerRadius="4" Background="{StaticResource BrandPrimaryBrush}" Opacity="0"/>
-                                    <ContentPresenter Margin="16,0,0,0" VerticalAlignment="Center"/>
-                                </Grid>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="Root" Property="Background" Value="{StaticResource SurfaceElevatedBrush}"/>
-                                    <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrandPrimaryBrush}"/>
-                                    <Setter TargetName="Accent" Property="Opacity" Value="1"/>
-                                    <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Trigger.EnterActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="1.03" Duration="0:0:0.12"/>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="1.03" Duration="0:0:0.12"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.EnterActions>
-                                    <Trigger.ExitActions>
-                                        <BeginStoryboard>
-                                            <Storyboard>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleX" To="1" Duration="0:0:0.12"/>
-                                                <DoubleAnimation Storyboard.TargetName="Scale" Storyboard.TargetProperty="ScaleY" To="1" Duration="0:0:0.12"/>
-                                            </Storyboard>
-                                        </BeginStoryboard>
-                                    </Trigger.ExitActions>
-                                </Trigger>
-                                <Trigger Property="IsEnabled" Value="False">
-                                    <Setter TargetName="Root" Property="Opacity" Value="0.4"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <!-- Filter Toggle -->
-            <Style x:Key="FilterToggleStyle" TargetType="ToggleButton">
-                <Setter Property="Margin" Value="0,0,12,0"/>
-                <Setter Property="Padding" Value="10,6"/>
-                <Setter Property="Background" Value="{StaticResource SurfaceAltBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-                <Setter Property="BorderBrush" Value="{StaticResource StrokeBrush}"/>
-                <Setter Property="BorderThickness" Value="1"/>
-                <Setter Property="Cursor" Value="Hand"/>
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ToggleButton">
-                            <Border x:Name="Root"
-                                    Background="{TemplateBinding Background}"
-                                    BorderBrush="{TemplateBinding BorderBrush}"
-                                    BorderThickness="{TemplateBinding BorderThickness}"
-                                    CornerRadius="10"
-                                    Padding="{TemplateBinding Padding}">
-                                <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                            </Border>
-                            <ControlTemplate.Triggers>
-                                <Trigger Property="IsChecked" Value="True">
-                                    <Setter TargetName="Root" Property="Background" Value="{StaticResource BrandPrimaryBrush}"/>
-                                    <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrandPrimaryBrush}"/>
-                                    <Setter Property="Foreground" Value="White"/>
-                                </Trigger>
-                                <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter TargetName="Root" Property="BorderBrush" Value="{StaticResource BrandPrimaryBrush}"/>
-                                </Trigger>
-                            </ControlTemplate.Triggers>
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-
-            <!-- DataGrid Styles -->
-            <Style x:Key="PremiumColumnHeaderStyle" TargetType="DataGridColumnHeader">
-                <Setter Property="Background" Value="#131A33"/>
-                <Setter Property="Foreground" Value="{StaticResource TextSecondaryBrush}"/>
-                <Setter Property="FontWeight" Value="SemiBold"/>
-                <Setter Property="Padding" Value="12,10"/>
-                <Setter Property="BorderBrush" Value="#22283F"/>
-                <Setter Property="BorderThickness" Value="0,0,0,1"/>
-            </Style>
-
-            <Style x:Key="PremiumDataGridRowStyle" TargetType="DataGridRow">
-                <Setter Property="Background" Value="Transparent"/>
-                <Setter Property="BorderBrush" Value="Transparent"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="Padding" Value="4"/>
-                <Setter Property="Margin" Value="0,0,0,6"/>
-                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-                <Style.Triggers>
-                    <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background" Value="#20294B"/>
-                    </Trigger>
-                    <Trigger Property="IsSelected" Value="True">
-                        <Setter Property="Background" Value="#2B3664"/>
-                        <Setter Property="BorderBrush" Value="{StaticResource BrandPrimaryBrush}"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,2"/>
-                    </Trigger>
-                    <DataTrigger Binding="{Binding Level}" Value="Warning">
-                        <Setter Property="BorderBrush" Value="{StaticResource WarningBrush}"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,2"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="Error">
-                        <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,3"/>
-                    </DataTrigger>
-                    <DataTrigger Binding="{Binding Level}" Value="Critical">
-                        <Setter Property="Background" Value="#341E1E"/>
-                        <Setter Property="BorderBrush" Value="{StaticResource DangerBrush}"/>
-                        <Setter Property="BorderThickness" Value="0,0,0,3"/>
-                    </DataTrigger>
-                </Style.Triggers>
-            </Style>
-
-            <Style x:Key="PremiumDataGridStyle" TargetType="DataGrid">
-                <Setter Property="Background" Value="{StaticResource SurfaceElevatedBrush}"/>
-                <Setter Property="Foreground" Value="{StaticResource TextPrimaryBrush}"/>
-                <Setter Property="BorderThickness" Value="0"/>
-                <Setter Property="RowBackground" Value="Transparent"/>
-                <Setter Property="AlternatingRowBackground" Value="#151C33"/>
-                <Setter Property="GridLinesVisibility" Value="None"/>
-                <Setter Property="HeadersVisibility" Value="Column"/>
-                <Setter Property="RowHeaderWidth" Value="0"/>
-                <Setter Property="SelectionMode" Value="Extended"/>
-                <Setter Property="SelectionUnit" Value="FullRow"/>
-                <Setter Property="CanUserAddRows" Value="False"/>
-                <Setter Property="CanUserDeleteRows" Value="False"/>
-                <Setter Property="CanUserResizeRows" Value="False"/>
-                <Setter Property="HorizontalGridLinesBrush" Value="#22283F"/>
-                <Setter Property="VerticalGridLinesBrush" Value="#22283F"/>
-                <Setter Property="RowHeight" Value="40"/>
-                <Setter Property="SnapsToDevicePixels" Value="True"/>
-            </Style>
-
-            <Style x:Key="TagPillStyle" TargetType="Border">
-                <Setter Property="Background" Value="#1F2B4F"/>
-                <Setter Property="CornerRadius" Value="12"/>
-                <Setter Property="Padding" Value="10,4"/>
-                <Setter Property="Margin" Value="0,0,10,10"/>
-            </Style>
-        </ResourceDictionary>    </Window.Resources>
-
-    <Grid Background="{StaticResource SurfaceBrush}">
+    <Grid Background="{DynamicResource ThemeSurface}">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
@@ -337,70 +34,175 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <!-- Hero Section Placeholder -->
-        <Border Grid.Row="0" Background="{StaticResource HeroBackgroundBrush}" CornerRadius="18" Padding="32" Margin="24,24,24,16" Effect="{StaticResource PanelShadow}">
+        <!-- Hero Section with Live Status -->
+        <Border Grid.Row="0" Background="{DynamicResource ThemeBackgroundGradient}" CornerRadius="18" Padding="32" Margin="24,24,24,16" Effect="{DynamicResource ThemeShadow.Card}">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <StackPanel>
-                    <TextBlock Text="GGs Error Intelligence Center" FontSize="28" FontWeight="Bold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                    <TextBlock Text="Enterprise-grade monitoring with real-time intelligence" Margin="0,8,0,0" Foreground="{StaticResource TextSecondaryBrush}"/>
-                </StackPanel>
+                <!-- Main Header -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
-                    <Button Content="Start Monitoring" Command="{Binding StartMonitoringCommand}"/>
-                    <Button Content="Stop" Command="{Binding StopMonitoringCommand}"/>
-                    <Button Content="Refresh" Command="{Binding RefreshCommand}"/>
-                    <Button Content="Clear" Command="{Binding ClearLogsCommand}"/>
-                    <Button Content="Export" Command="{Binding ExportLogsCommand}"/>
-                </WrapPanel>
+                    <StackPanel>
+                        <TextBlock Text="GGs Error Intelligence Center" FontSize="28" FontWeight="Bold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                        <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
+                            <TextBlock Text="Enterprise-grade monitoring with real-time intelligence" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                            <Border Background="{DynamicResource ThemeSurfaceActive}" CornerRadius="8" Padding="8,4" Margin="16,0,0,0">
+                                <StackPanel Orientation="Horizontal">
+                                    <Ellipse Width="8" Height="8" Margin="0,0,6,0" VerticalAlignment="Center">
+                                        <Ellipse.Style>
+                                            <Style TargetType="Ellipse">
+                                                <Setter Property="Fill" Value="{DynamicResource ThemeTextTertiary}"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMonitoring}" Value="True">
+                                                        <Setter Property="Fill" Value="{DynamicResource ThemeSuccess}"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Ellipse.Style>
+                                    </Ellipse>
+                                    <TextBlock FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="Ready"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding IsMonitoring}" Value="True">
+                                                        <Setter Property="Text" Value="Monitoring"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </StackPanel>
+                            </Border>
+                        </StackPanel>
+                    </StackPanel>
+
+                    <WrapPanel Grid.Column="1" HorizontalAlignment="Right" VerticalAlignment="Center">
+                        <Button Content="Start Monitoring" Command="{Binding StartMonitoringCommand}" Margin="0,0,8,0" TabIndex="10" AutomationProperties.Name="Start monitoring"/>
+                        <Button Content="Stop" Command="{Binding StopMonitoringCommand}" Margin="0,0,8,0" TabIndex="11" AutomationProperties.Name="Stop monitoring"/>
+                        <Button Content="Refresh" Command="{Binding RefreshCommand}" Margin="0,0,8,0" TabIndex="12" AutomationProperties.Name="Refresh logs"/>
+                        <Button Content="Clear" Command="{Binding ClearLogsCommand}" Margin="0,0,8,0" TabIndex="13" AutomationProperties.Name="Clear logs"/>
+                        <Button Content="Export" Command="{Binding ExportLogsCommand}" TabIndex="14" AutomationProperties.Name="Export logs"/>
+                    </WrapPanel>
+                </Grid>
+
+                <!-- Quick Actions Bar (First Run) -->
+                <Border x:Name="QuickActionsBar" Grid.Row="1" Background="{DynamicResource ThemeSurfaceHover}"
+                        CornerRadius="12" Padding="20" Margin="0,16,0,0" Visibility="Collapsed">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0" Text="🚀" FontSize="24" VerticalAlignment="Center" Margin="0,0,16,0"/>
+
+                        <StackPanel Grid.Column="1" VerticalAlignment="Center">
+                            <TextBlock Text="Welcome! Get started with these quick actions:"
+                                      FontSize="14" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                            <TextBlock Text="Monitor logs in real-time, analyze patterns, and export insights"
+                                      FontSize="12" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,4,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                            <Button Content="Open Logs Folder" Command="{Binding OpenLogsFolderCommand}" Margin="0,0,8,0"/>
+                            <Button Content="Import Sample" Command="{Binding ImportSampleLogCommand}" Margin="0,0,8,0"/>
+                            <Button x:Name="DismissQuickActions" Content="✕" Width="32" Height="32"
+                                   ToolTip="Dismiss" Click="DismissQuickActions_Click"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
             </Grid>
         </Border>
 
-        <!-- Filter Bar Placeholder -->
-        <Border Grid.Row="1" Background="{StaticResource SurfaceAltBrush}" CornerRadius="14" Margin="24,0,24,18" Padding="20" Effect="{StaticResource PanelShadow}">
+        <!-- Filter Bar -->
+        <Border Grid.Row="1" Background="{DynamicResource ThemeSurfaceHover}" CornerRadius="14" Margin="24,0,24,18" Padding="20" Effect="{DynamicResource ThemeShadow.Card}">
             <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="2*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
 
-                <TextBox x:Name="SearchBox" Grid.Column="0" Margin="0,0,16,0" Height="34"
-                         Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
-                         Foreground="{StaticResource TextPrimaryBrush}"
-                         Background="{StaticResource SurfaceElevatedBrush}"
-                         BorderBrush="{StaticResource StrokeBrush}"
-                         BorderThickness="1"
-                         Padding="14,4"
-                         ToolTip="Search message, source or raw line"/>
+                <!-- Main Filter Row -->
+                <Grid Grid.Row="0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="2*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
 
-                <ComboBox Grid.Column="1" Margin="0,0,16,0" Height="34"
-                          SelectedItem="{Binding SelectedLogLevel}">
-                    <ComboBox.Items>
-                        <models:LogLevel>All</models:LogLevel>
-                        <models:LogLevel>Verbose</models:LogLevel>
-                        <models:LogLevel>Debug</models:LogLevel>
-                        <models:LogLevel>Information</models:LogLevel>
-                        <models:LogLevel>Warning</models:LogLevel>
-                        <models:LogLevel>Error</models:LogLevel>
-                        <models:LogLevel>Critical</models:LogLevel>
-                    </ComboBox.Items>
-                </ComboBox>
+                    <TextBox x:Name="SearchBox" Grid.Column="0" Margin="0,0,16,0" Height="34"
+                             Text="{Binding SearchText, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Foreground="{DynamicResource ThemeTextPrimary}"
+                             Background="{DynamicResource ThemeSurfaceActive}"
+                             BorderBrush="{DynamicResource ThemeBorder}"
+                             BorderThickness="1"
+                             Padding="14,4"
+                             ToolTip="Search message, source or raw line"
+                             TabIndex="1"
+                             AutomationProperties.Name="Search logs"/>
 
-                <ComboBox Grid.Column="2" Margin="0,0,16,0" Height="34"
-                          ItemsSource="{Binding AvailableSources}"
-                          SelectedItem="{Binding SelectedSource}"/>
+                    <ComboBox Grid.Column="1" Margin="0,0,16,0" Height="34"
+                              SelectedItem="{Binding SelectedLogLevel}"
+                              TabIndex="2"
+                              AutomationProperties.Name="Filter by log level">
+                        <ComboBox.Items>
+                            <models:LogLevel>All</models:LogLevel>
+                            <models:LogLevel>Verbose</models:LogLevel>
+                            <models:LogLevel>Debug</models:LogLevel>
+                            <models:LogLevel>Information</models:LogLevel>
+                            <models:LogLevel>Warning</models:LogLevel>
+                            <models:LogLevel>Error</models:LogLevel>
+                            <models:LogLevel>Critical</models:LogLevel>
+                        </ComboBox.Items>
+                    </ComboBox>
 
-                <ToggleButton Grid.Column="3" Content="Regex" Style="{StaticResource FilterToggleStyle}" IsChecked="{Binding UseRegex}"/>
-                <ToggleButton Grid.Column="4" Content="Smart Filter" Style="{StaticResource FilterToggleStyle}" IsChecked="{Binding SmartFilter}"/>
-                <ToggleButton Grid.Column="5" Content="Auto Scroll" Style="{StaticResource FilterToggleStyle}" IsChecked="{Binding AutoScroll}"/>
+                    <ComboBox Grid.Column="2" Margin="0,0,16,0" Height="34"
+                              ItemsSource="{Binding AvailableSources}"
+                              SelectedItem="{Binding SelectedSource}"
+                              TabIndex="3"
+                              AutomationProperties.Name="Filter by source"/>
+
+                    <ToggleButton Grid.Column="3" Content="Regex" Style="{StaticResource FilterToggleStyle}" IsChecked="{Binding UseRegex}" ToolTip="Enable regex search" TabIndex="4" AutomationProperties.Name="Enable regex search"/>
+                    <ToggleButton Grid.Column="4" Content="Smart Filter" Style="{StaticResource FilterToggleStyle}" IsChecked="{Binding SmartFilter}" ToolTip="Deduplicate similar entries" TabIndex="5" AutomationProperties.Name="Enable smart filter"/>
+                    <ToggleButton Grid.Column="5" Content="Auto Scroll" Style="{StaticResource FilterToggleStyle}" IsChecked="{Binding AutoScroll}" ToolTip="Auto-scroll to new entries" TabIndex="6" AutomationProperties.Name="Enable auto scroll"/>
+                    <ToggleButton Grid.Column="6" Content="Raw" Style="{StaticResource FilterToggleStyle}" IsChecked="{Binding IsRawMode}" ToolTip="Toggle raw/compact message view" TabIndex="7" AutomationProperties.Name="Toggle raw mode"/>
+                </Grid>
+
+                <!-- Secondary Controls Row -->
+                <Grid Grid.Row="1" Margin="0,12,0,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="200"/>
+                        <ColumnDefinition Width="*"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="Font Size:" Foreground="{DynamicResource ThemeTextSecondary}"
+                              VerticalAlignment="Center" Margin="0,0,12,0"/>
+                    <Slider Grid.Column="1" Minimum="10" Maximum="20" Value="{Binding LogFontSize}"
+                           TickFrequency="1" IsSnapToTickEnabled="True" VerticalAlignment="Center"
+                           ToolTip="{Binding LogFontSize, StringFormat='Font size: {0}pt'}"/>
+                    <TextBlock Grid.Column="2" HorizontalAlignment="Right" VerticalAlignment="Center"
+                              Foreground="{DynamicResource ThemeTextHint}">
+                        <Run Text="Showing"/>
+                        <Run Text="{Binding FilteredLogCount, Mode=OneWay}" FontWeight="SemiBold"/>
+                        <Run Text="of"/>
+                        <Run Text="{Binding TotalLogCount, Mode=OneWay}" FontWeight="SemiBold"/>
+                        <Run Text="entries"/>
+                    </TextBlock>
+                </Grid>
             </Grid>
         </Border>
 
@@ -411,40 +213,40 @@
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border Grid.Column="0" Margin="0,0,24,0" Background="{StaticResource SurfaceAltBrush}" Padding="20" CornerRadius="14" Effect="{StaticResource PanelShadow}">
+            <Border Grid.Column="0" Margin="0,0,24,0" Background="{DynamicResource ThemeSurfaceHover}" Padding="20" CornerRadius="14" Effect="{DynamicResource ThemeShadow.Card}">
                 <StackPanel>
-                    <TextBlock Text="Workspace" FontSize="16" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                    <ToggleButton x:Name="NavLogs" Content="Live Logs" Command="{Binding SwitchToLogsViewCommand}" Style="{StaticResource NavigationToggleStyle}">
+                    <TextBlock Text="Workspace" FontSize="16" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                    <ToggleButton x:Name="NavLogs" Content="Live Logs" Command="{Binding SwitchToLogsViewCommand}" Style="{StaticResource NavigationToggleStyle}" TabIndex="20" AutomationProperties.Name="Navigate to Live Logs">
                         <ToggleButton.IsChecked>
                             <Binding Path="ActiveView" Converter="{StaticResource StringEqualsConverter}" ConverterParameter="Logs"/>
                         </ToggleButton.IsChecked>
                     </ToggleButton>
-                    <ToggleButton x:Name="NavAnalytics" Content="Analytics" Command="{Binding SwitchToAnalyticsViewCommand}" Style="{StaticResource NavigationToggleStyle}">
+                    <ToggleButton x:Name="NavAnalytics" Content="Analytics" Command="{Binding SwitchToAnalyticsViewCommand}" Style="{StaticResource NavigationToggleStyle}" TabIndex="21" AutomationProperties.Name="Navigate to Analytics">
                         <ToggleButton.IsChecked>
                             <Binding Path="ActiveView" Converter="{StaticResource StringEqualsConverter}" ConverterParameter="Analytics"/>
                         </ToggleButton.IsChecked>
                     </ToggleButton>
-                    <ToggleButton x:Name="NavBookmarks" Content="Bookmarks" Command="{Binding SwitchToBookmarksViewCommand}" Style="{StaticResource NavigationToggleStyle}">
+                    <ToggleButton x:Name="NavBookmarks" Content="Bookmarks" Command="{Binding SwitchToBookmarksViewCommand}" Style="{StaticResource NavigationToggleStyle}" TabIndex="22" AutomationProperties.Name="Navigate to Bookmarks">
                         <ToggleButton.IsChecked>
                             <Binding Path="ActiveView" Converter="{StaticResource StringEqualsConverter}" ConverterParameter="Bookmarks"/>
                         </ToggleButton.IsChecked>
                     </ToggleButton>
-                    <ToggleButton x:Name="NavAlerts" Content="Smart Alerts" Command="{Binding SwitchToAlertsViewCommand}" Style="{StaticResource NavigationToggleStyle}">
+                    <ToggleButton x:Name="NavAlerts" Content="Smart Alerts" Command="{Binding SwitchToAlertsViewCommand}" Style="{StaticResource NavigationToggleStyle}" TabIndex="23" AutomationProperties.Name="Navigate to Smart Alerts">
                         <ToggleButton.IsChecked>
                             <Binding Path="ActiveView" Converter="{StaticResource StringEqualsConverter}" ConverterParameter="Alerts"/>
                         </ToggleButton.IsChecked>
                     </ToggleButton>
-                    <ToggleButton x:Name="NavCompare" Content="Compare Runs" Command="{Binding SwitchToCompareViewCommand}" Style="{StaticResource NavigationToggleStyle}">
+                    <ToggleButton x:Name="NavCompare" Content="Compare Runs" Command="{Binding SwitchToCompareViewCommand}" Style="{StaticResource NavigationToggleStyle}" TabIndex="24" AutomationProperties.Name="Navigate to Compare Runs">
                         <ToggleButton.IsChecked>
                             <Binding Path="ActiveView" Converter="{StaticResource StringEqualsConverter}" ConverterParameter="Compare"/>
                         </ToggleButton.IsChecked>
                     </ToggleButton>
-                    <ToggleButton x:Name="NavExport" Content="Exports" Command="{Binding SwitchToExportViewCommand}" Style="{StaticResource NavigationToggleStyle}">
+                    <ToggleButton x:Name="NavExport" Content="Exports" Command="{Binding SwitchToExportViewCommand}" Style="{StaticResource NavigationToggleStyle}" TabIndex="25" AutomationProperties.Name="Navigate to Exports">
                         <ToggleButton.IsChecked>
                             <Binding Path="ActiveView" Converter="{StaticResource StringEqualsConverter}" ConverterParameter="Export"/>
                         </ToggleButton.IsChecked>
                     </ToggleButton>
-                    <ToggleButton x:Name="NavSettings" Content="Settings" Command="{Binding SwitchToSettingsViewCommand}" Style="{StaticResource NavigationToggleStyle}">
+                    <ToggleButton x:Name="NavSettings" Content="Settings" Command="{Binding SwitchToSettingsViewCommand}" Style="{StaticResource NavigationToggleStyle}" TabIndex="26" AutomationProperties.Name="Navigate to Settings">
                         <ToggleButton.IsChecked>
                             <Binding Path="ActiveView" Converter="{StaticResource StringEqualsConverter}" ConverterParameter="Settings"/>
                         </ToggleButton.IsChecked>
@@ -452,7 +254,7 @@
                 </StackPanel>
             </Border>
 
-            <Border Grid.Column="1" Background="{StaticResource SurfaceAltBrush}" CornerRadius="18" Padding="24" Effect="{StaticResource PanelShadow}">
+            <Border Grid.Column="1" Background="{DynamicResource ThemeSurfaceHover}" CornerRadius="18" Padding="24" Effect="{DynamicResource ThemeShadow.Card}">
                 <ContentControl>
                     <ContentControl.Style>
                         <Style TargetType="ContentControl">
@@ -460,7 +262,7 @@
                                 <Setter.Value>
                                     <DataTemplate>
                                         <Grid>
-                                            <TextBlock Text="Choose a module from the navigation to get started." Foreground="{StaticResource TextSecondaryBrush}" FontSize="16"/>
+                                            <TextBlock Text="Choose a module from the navigation to get started." Foreground="{DynamicResource ThemeTextSecondary}" FontSize="16"/>
                                         </Grid>
                                     </DataTemplate>
                                 </Setter.Value>
@@ -533,17 +335,29 @@
                                                                     </DataTemplate>
                                                                 </DataGridTemplateColumn.CellTemplate>
                                                             </DataGridTemplateColumn>
+                                                            <DataGridTemplateColumn Header="File" Width="250" Visibility="{Binding DataContext.ShowFilePathColumn, RelativeSource={RelativeSource AncestorType=DataGrid}, Converter={StaticResource BooleanToVisibilityConverter}, FallbackValue=Collapsed}">
+                                                                <DataGridTemplateColumn.CellTemplate>
+                                                                    <DataTemplate>
+                                                                        <TextBlock Text="{Binding FilePath, TargetNullValue='—', FallbackValue='—'}"
+                                                                                  Foreground="{DynamicResource ThemeTextSecondary}"
+                                                                                  FontFamily="{DynamicResource ThemeFontFamilyMonospace}"
+                                                                                  FontSize="11"
+                                                                                  TextTrimming="CharacterEllipsis"
+                                                                                  ToolTip="{Binding FilePath}"/>
+                                                                    </DataTemplate>
+                                                                </DataGridTemplateColumn.CellTemplate>
+                                                            </DataGridTemplateColumn>
                                                         </DataGrid.Columns>
                                                     </DataGrid>
 
                                                     <GridSplitter Grid.Column="1" HorizontalAlignment="Center" Margin="0,0,8,0" Width="6" Background="#1F243D"
                                                                   Visibility="{Binding IsDetailsPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}"/>
 
-                                                    <Border Grid.Column="2" Background="{StaticResource SurfaceElevatedBrush}" CornerRadius="16" Padding="20" BorderBrush="#202740" BorderThickness="1"
+                                                    <Border Grid.Column="2" Background="{DynamicResource ThemeSurfaceActive}" CornerRadius="16" Padding="20" BorderBrush="#202740" BorderThickness="1"
                                                             Visibility="{Binding IsDetailsPaneVisible, Converter={StaticResource BooleanToVisibilityConverter}}">
                                                         <ScrollViewer VerticalScrollBarVisibility="Auto">
                                                             <StackPanel DataContext="{Binding SelectedLogEntry}">
-                                                                <TextBlock Text="Log Entry Details" FontSize="20" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}" Margin="0,0,0,16"/>
+                                                                <TextBlock Text="Log Entry Details" FontSize="20" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
                                                                 <ContentControl Content="{Binding}">
                                                                     <ContentControl.Style>
                                                                         <Style TargetType="ContentControl">
@@ -552,7 +366,7 @@
                                                                                     <Setter Property="ContentTemplate">
                                                                                         <Setter.Value>
                                                                                             <DataTemplate>
-                                                                                                <TextBlock Text="Select an event to see full diagnostics." Foreground="{StaticResource TextSecondaryBrush}" FontStyle="Italic"/>
+                                                                                                <TextBlock Text="Select an event to see full diagnostics." Foreground="{DynamicResource ThemeTextSecondary}" FontStyle="Italic"/>
                                                                                             </DataTemplate>
                                                                                         </Setter.Value>
                                                                                     </Setter>
@@ -562,18 +376,18 @@
                                                                     </ContentControl.Style>
                                                                 </ContentControl>
                                                                 <StackPanel Visibility="{Binding Converter={StaticResource NullToVisibilityConverter}}">
-                                                                    <TextBlock Text="{Binding Message}" Foreground="{StaticResource TextPrimaryBrush}" TextWrapping="Wrap" Margin="0,0,0,12" FontSize="15"/>
-                                                                    <TextBlock Foreground="{StaticResource TextSecondaryBrush}">
+                                                                    <TextBlock Text="{Binding Message}" Foreground="{DynamicResource ThemeTextPrimary}" TextWrapping="Wrap" Margin="0,0,0,12" FontSize="15"/>
+                                                                    <TextBlock Foreground="{DynamicResource ThemeTextSecondary}">
                                                                         <Run Text="Source:"/>
                                                                         <Run Text=" "/>
                                                                         <Run Text="{Binding Source}" FontWeight="SemiBold"/>
                                                                     </TextBlock>
-                                                                    <TextBlock Foreground="{StaticResource TextSecondaryBrush}">
+                                                                    <TextBlock Foreground="{DynamicResource ThemeTextSecondary}">
                                                                         <Run Text="Timestamp:"/>
                                                                         <Run Text=" "/>
                                                                         <Run Text="{Binding FormattedTimestamp}" FontWeight="SemiBold"/>
                                                                     </TextBlock>
-                                                                    <TextBlock Foreground="{StaticResource TextSecondaryBrush}">
+                                                                    <TextBlock Foreground="{DynamicResource ThemeTextSecondary}">
                                                                         <Run Text="Level:"/>
                                                                         <Run Text=" "/>
                                                                         <Run Text="{Binding Level}" FontWeight="SemiBold"/>
@@ -588,7 +402,7 @@
                                                                             <ItemsControl.ItemTemplate>
                                                                                 <DataTemplate>
                                                                                     <Border Style="{StaticResource TagPillStyle}">
-                                                                                        <TextBlock Text="{Binding Name}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                                        <TextBlock Text="{Binding Name}" Foreground="{DynamicResource ThemeTextSecondary}"/>
                                                                                     </Border>
                                                                                 </DataTemplate>
                                                                             </ItemsControl.ItemTemplate>
@@ -596,15 +410,15 @@
                                                                     </StackPanel>
                                                                     <Expander Header="Raw Payload" Margin="0,12,0,0">
                                                                         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="120">
-                                                                            <TextBlock Text="{Binding RawLine}" FontFamily="Consolas" TextWrapping="Wrap" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                            <TextBlock Text="{Binding RawLine}" FontFamily="Consolas" TextWrapping="Wrap" Foreground="{DynamicResource ThemeTextSecondary}"/>
                                                                         </ScrollViewer>
                                                                     </Expander>
                                                                     <Expander Header="Exception" Margin="0,12,0,0" Visibility="{Binding Exception, Converter={StaticResource NullToVisibilityConverter}}">
-                                                                        <TextBlock Text="{Binding Exception}" TextWrapping="Wrap" Foreground="{StaticResource DangerBrush}"/>
+                                                                        <TextBlock Text="{Binding Exception}" TextWrapping="Wrap" Foreground="{DynamicResource ThemeError}"/>
                                                                     </Expander>
                                                                     <Expander Header="Stack Trace" Margin="0,12,0,0" Visibility="{Binding StackTrace, Converter={StaticResource NullToVisibilityConverter}}">
                                                                         <ScrollViewer VerticalScrollBarVisibility="Auto" Height="180">
-                                                                            <TextBlock Text="{Binding StackTrace}" FontFamily="Consolas" TextWrapping="Wrap" Foreground="{StaticResource TextSecondaryBrush}"/>
+                                                                            <TextBlock Text="{Binding StackTrace}" FontFamily="Consolas" TextWrapping="Wrap" Foreground="{DynamicResource ThemeTextSecondary}"/>
                                                                         </ScrollViewer>
                                                                     </Expander>
                                                                 </StackPanel>
@@ -621,12 +435,119 @@
                                     <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
-                                                <StackPanel>
-                                                    <TextBlock Text="Operational Analytics" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                                                    <TextBlock Text="Refresh analytics to compute health scores and anomaly reports." Margin="0,4,0,16" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                    <Button Content="Run Analytics" Command="{Binding RefreshAnalyticsCommand}" Width="160"/>
-                                                    <Button Content="Detect Anomalies" Command="{Binding FindAnomaliesCommand}" Width="180" Style="{StaticResource GhostButtonStyle}" Margin="12,12,0,0"/>
-                                                </StackPanel>
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <StackPanel>
+                                                        <!-- Header -->
+                                                        <Grid Margin="0,0,0,24">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="Operational Analytics" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                                                <TextBlock Text="Real-time health metrics and anomaly detection" Margin="0,4,0,0" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="Refresh Analytics" Command="{Binding RefreshAnalyticsCommand}" Width="160" Margin="0,0,12,0"/>
+                                                                <Button Content="Detect Anomalies" Command="{Binding FindAnomaliesCommand}" Width="160" Style="{StaticResource GhostButtonStyle}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+
+                                                        <!-- Stat Cards -->
+                                                        <Grid Margin="0,0,0,24">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="*"/>
+                                                            </Grid.ColumnDefinitions>
+
+                                                            <!-- Health Score Card -->
+                                                            <Border Grid.Column="0" Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="20" Margin="0,0,12,0" Effect="{DynamicResource ThemeShadow.Card}">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="Health Score" FontSize="13" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,8"/>
+                                                                    <TextBlock Text="{Binding CurrentStatistics.HealthScore, FallbackValue='—', TargetNullValue='—'}" FontSize="36" FontWeight="Bold" Foreground="{DynamicResource ThemeSuccess}"/>
+                                                                    <TextBlock Text="System Status: Healthy" FontSize="11" Foreground="{DynamicResource ThemeTextHint}" Margin="0,4,0,0"/>
+                                                                </StackPanel>
+                                                            </Border>
+
+                                                            <!-- Error Count Card -->
+                                                            <Border Grid.Column="1" Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="20" Margin="0,0,12,0" Effect="{DynamicResource ThemeShadow.Card}">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="Errors" FontSize="13" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,8"/>
+                                                                    <TextBlock Text="{Binding CurrentStatistics.ErrorCount, FallbackValue='0', TargetNullValue='0'}" FontSize="36" FontWeight="Bold" Foreground="{DynamicResource ThemeError}"/>
+                                                                    <TextBlock Text="Last 24 hours" FontSize="11" Foreground="{DynamicResource ThemeTextHint}" Margin="0,4,0,0"/>
+                                                                </StackPanel>
+                                                            </Border>
+
+                                                            <!-- Warning Count Card -->
+                                                            <Border Grid.Column="2" Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="20" Margin="0,0,12,0" Effect="{DynamicResource ThemeShadow.Card}">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="Warnings" FontSize="13" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,8"/>
+                                                                    <TextBlock Text="{Binding CurrentStatistics.WarningCount, FallbackValue='0', TargetNullValue='0'}" FontSize="36" FontWeight="Bold" Foreground="{DynamicResource ThemeWarning}"/>
+                                                                    <TextBlock Text="Last 24 hours" FontSize="11" Foreground="{DynamicResource ThemeTextHint}" Margin="0,4,0,0"/>
+                                                                </StackPanel>
+                                                            </Border>
+
+                                                            <!-- Event Rate Card -->
+                                                            <Border Grid.Column="3" Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="20" Effect="{DynamicResource ThemeShadow.Card}">
+                                                                <StackPanel>
+                                                                    <TextBlock Text="Event Rate" FontSize="13" Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,8"/>
+                                                                    <TextBlock FontSize="36" FontWeight="Bold" Foreground="{DynamicResource ThemeAccentPrimary}">
+                                                                        <Run Text="{Binding CurrentStatistics.EventsPerMinute, FallbackValue='0', TargetNullValue='0', StringFormat='{}{0:F1}'}"/>
+                                                                    </TextBlock>
+                                                                    <TextBlock Text="events/min" FontSize="11" Foreground="{DynamicResource ThemeTextHint}" Margin="0,4,0,0"/>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </Grid>
+
+                                                        <!-- Top Sources -->
+                                                        <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="24" Margin="0,0,0,24" Effect="{DynamicResource ThemeShadow.Card}">
+                                                            <StackPanel>
+                                                                <TextBlock Text="Top Sources" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+                                                                <ItemsControl ItemsSource="{Binding TopSources}">
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <Grid Margin="0,0,0,12">
+                                                                                <Grid.ColumnDefinitions>
+                                                                                    <ColumnDefinition Width="200"/>
+                                                                                    <ColumnDefinition Width="*"/>
+                                                                                    <ColumnDefinition Width="Auto"/>
+                                                                                </Grid.ColumnDefinitions>
+                                                                                <TextBlock Grid.Column="0" Text="{Binding Key}" Foreground="{DynamicResource ThemeTextPrimary}" FontWeight="SemiBold"/>
+                                                                                <ProgressBar Grid.Column="1" Value="{Binding Value}" Maximum="100" Height="8" Margin="12,0" Background="{DynamicResource ThemeSurfaceActive}"/>
+                                                                                <TextBlock Grid.Column="2" Text="{Binding Value}" Foreground="{DynamicResource ThemeTextSecondary}" FontFamily="{DynamicResource ThemeFontFamilyMonospace}"/>
+                                                                            </Grid>
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+                                                                </ItemsControl>
+                                                            </StackPanel>
+                                                        </Border>
+
+                                                        <!-- Log Level Distribution -->
+                                                        <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="24" Effect="{DynamicResource ThemeShadow.Card}">
+                                                            <StackPanel>
+                                                                <TextBlock Text="Log Level Distribution" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+                                                                <ItemsControl ItemsSource="{Binding LogLevelDistribution}">
+                                                                    <ItemsControl.ItemTemplate>
+                                                                        <DataTemplate>
+                                                                            <Grid Margin="0,0,0,12">
+                                                                                <Grid.ColumnDefinitions>
+                                                                                    <ColumnDefinition Width="120"/>
+                                                                                    <ColumnDefinition Width="*"/>
+                                                                                    <ColumnDefinition Width="Auto"/>
+                                                                                </Grid.ColumnDefinitions>
+                                                                                <TextBlock Grid.Column="0" Text="{Binding Key}" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                                                                <ProgressBar Grid.Column="1" Value="{Binding Value}" Maximum="100" Height="8" Margin="12,0" Background="{DynamicResource ThemeSurfaceActive}"/>
+                                                                                <TextBlock Grid.Column="2" Text="{Binding Value}" Foreground="{DynamicResource ThemeTextSecondary}" FontFamily="{DynamicResource ThemeFontFamilyMonospace}"/>
+                                                                            </Grid>
+                                                                        </DataTemplate>
+                                                                    </ItemsControl.ItemTemplate>
+                                                                </ItemsControl>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </ScrollViewer>
                                             </DataTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -636,11 +557,95 @@
                                     <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
-                                                <StackPanel>
-                                                    <TextBlock Text="Bookmarked Incidents" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                                                    <TextBlock Text="Bookmarks let you tag high value events for later triage." Margin="0,4,0,16" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                    <Button Content="Add Bookmark" Command="{Binding AddBookmarkCommand}" Width="150"/>
-                                                </StackPanel>
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <StackPanel>
+                                                        <!-- Header -->
+                                                        <Grid Margin="0,0,0,24">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="Bookmarked Incidents" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                                                <TextBlock Text="Tag and organize critical log entries for later review" Margin="0,4,0,0" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                                            </StackPanel>
+                                                            <Button Grid.Column="1" Content="Add Bookmark" Command="{Binding AddBookmarkCommand}" Width="150"
+                                                                   IsEnabled="{Binding HasSelectedLogEntry}" ToolTip="Select a log entry first"/>
+                                                        </Grid>
+
+                                                        <!-- Bookmarks List -->
+                                                        <ItemsControl ItemsSource="{Binding Bookmarks}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="20" Margin="0,0,0,16" Effect="{DynamicResource ThemeShadow.Card}">
+                                                                        <Grid>
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                            </Grid.ColumnDefinitions>
+
+                                                                            <StackPanel Grid.Column="0">
+                                                                                <!-- Bookmark Title -->
+                                                                                <TextBlock Text="{Binding Title, FallbackValue='Untitled Bookmark'}" FontSize="16" FontWeight="SemiBold"
+                                                                                          Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,8"/>
+
+                                                                                <!-- Log Entry Message -->
+                                                                                <TextBlock Text="{Binding LogEntry.Message, FallbackValue='No message'}" TextWrapping="Wrap"
+                                                                                          Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,12"/>
+
+                                                                                <!-- Metadata -->
+                                                                                <StackPanel Orientation="Horizontal" Margin="0,0,0,8">
+                                                                                    <TextBlock Text="{Binding LogEntry.FormattedTimestamp, FallbackValue='—'}"
+                                                                                              Foreground="{DynamicResource ThemeTextHint}" FontSize="12" Margin="0,0,16,0"/>
+                                                                                    <TextBlock Text="{Binding LogEntry.Source, FallbackValue='—'}"
+                                                                                              Foreground="{DynamicResource ThemeTextHint}" FontSize="12" Margin="0,0,16,0"/>
+                                                                                    <TextBlock Text="{Binding LogEntry.Level, FallbackValue='—'}"
+                                                                                              Foreground="{Binding LogEntry.LevelColor, FallbackValue={StaticResource ThemeTextHint}}" FontSize="12"/>
+                                                                                </StackPanel>
+
+                                                                                <!-- Tags -->
+                                                                                <ItemsControl ItemsSource="{Binding Tags}">
+                                                                                    <ItemsControl.ItemsPanel>
+                                                                                        <ItemsPanelTemplate>
+                                                                                            <WrapPanel/>
+                                                                                        </ItemsPanelTemplate>
+                                                                                    </ItemsControl.ItemsPanel>
+                                                                                    <ItemsControl.ItemTemplate>
+                                                                                        <DataTemplate>
+                                                                                            <Border Style="{StaticResource TagPillStyle}">
+                                                                                                <TextBlock Text="{Binding Name}" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                                                                            </Border>
+                                                                                        </DataTemplate>
+                                                                                    </ItemsControl.ItemTemplate>
+                                                                                </ItemsControl>
+                                                                            </StackPanel>
+
+                                                                            <!-- Actions -->
+                                                                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Top">
+                                                                                <Button Content="Go To" Command="{Binding DataContext.GoToBookmarkCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                                       CommandParameter="{Binding}" Width="80" Margin="0,0,8,0" Style="{StaticResource GhostButtonStyle}"/>
+                                                                                <Button Content="Remove" Command="{Binding DataContext.RemoveBookmarkCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                                       CommandParameter="{Binding}" Width="80" Style="{StaticResource GhostButtonStyle}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+
+                                                        <!-- Empty State -->
+                                                        <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="48"
+                                                               Visibility="{Binding Bookmarks.Count, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                                            <StackPanel HorizontalAlignment="Center">
+                                                                <TextBlock Text="📌" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                                                                <TextBlock Text="No bookmarks yet" FontSize="18" FontWeight="SemiBold"
+                                                                          Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                                                                <TextBlock Text="Select a log entry and click 'Add Bookmark' to get started"
+                                                                          Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </ScrollViewer>
                                             </DataTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -650,11 +655,127 @@
                                     <Setter Property="ContentTemplate">
                                         <Setter.Value>
                                             <DataTemplate>
-                                                <StackPanel>
-                                                    <TextBlock Text="Smart Alert Center" FontSize="22" FontWeight="SemiBold" Foreground="{StaticResource TextPrimaryBrush}"/>
-                                                    <TextBlock Text="Manage predictive alerts that surface error storms automatically." Margin="0,4,0,16" Foreground="{StaticResource TextSecondaryBrush}"/>
-                                                    <Button Content="Configure Alerts" Command="{Binding CreateAlertCommand}" Width="160"/>
-                                                </StackPanel>
+                                                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                                                    <StackPanel>
+                                                        <!-- Header -->
+                                                        <Grid Margin="0,0,0,24">
+                                                            <Grid.ColumnDefinitions>
+                                                                <ColumnDefinition Width="*"/>
+                                                                <ColumnDefinition Width="Auto"/>
+                                                            </Grid.ColumnDefinitions>
+                                                            <StackPanel Grid.Column="0">
+                                                                <TextBlock Text="Smart Alert Center" FontSize="24" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}"/>
+                                                                <TextBlock Text="Automated alerts for error patterns and anomalies" Margin="0,4,0,0" Foreground="{DynamicResource ThemeTextSecondary}"/>
+                                                            </StackPanel>
+                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                <Button Content="Create Alert" Command="{Binding CreateAlertCommand}" Width="140" Margin="0,0,12,0"/>
+                                                                <Button Content="Clear All" Command="{Binding ClearAlertsCommand}" Width="120" Style="{StaticResource GhostButtonStyle}"/>
+                                                            </StackPanel>
+                                                        </Grid>
+
+                                                        <!-- Triggered Alerts -->
+                                                        <TextBlock Text="Triggered Alerts" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+                                                        <ItemsControl ItemsSource="{Binding TriggeredAlerts}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="20" Margin="0,0,0,16"
+                                                                           BorderBrush="{DynamicResource ThemeError}" BorderThickness="2" Effect="{DynamicResource ThemeShadow.Card}">
+                                                                        <Grid>
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                            </Grid.ColumnDefinitions>
+
+                                                                            <!-- Alert Icon -->
+                                                                            <Border Grid.Column="0" Background="{DynamicResource ThemeError}" CornerRadius="12" Width="48" Height="48"
+                                                                                   VerticalAlignment="Top" Margin="0,0,16,0">
+                                                                                <TextBlock Text="⚠" FontSize="24" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                                                            </Border>
+
+                                                                            <!-- Alert Content -->
+                                                                            <StackPanel Grid.Column="1">
+                                                                                <TextBlock Text="{Binding AlertName, FallbackValue='Alert Triggered'}" FontSize="16" FontWeight="SemiBold"
+                                                                                          Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,8"/>
+                                                                                <TextBlock Text="{Binding Pattern, FallbackValue='Pattern match detected'}" TextWrapping="Wrap"
+                                                                                          Foreground="{DynamicResource ThemeTextSecondary}" Margin="0,0,0,8"/>
+                                                                                <TextBlock Foreground="{DynamicResource ThemeTextHint}" FontSize="12">
+                                                                                    <Run Text="Triggered at:"/>
+                                                                                    <Run Text="{Binding TriggeredAt, StringFormat='{}{0:yyyy-MM-dd HH:mm:ss}', FallbackValue='—'}"/>
+                                                                                </TextBlock>
+                                                                                <TextBlock Foreground="{DynamicResource ThemeTextHint}" FontSize="12">
+                                                                                    <Run Text="Match count:"/>
+                                                                                    <Run Text="{Binding MatchCount, FallbackValue='0'}" FontWeight="SemiBold"/>
+                                                                                </TextBlock>
+                                                                            </StackPanel>
+
+                                                                            <!-- Actions -->
+                                                                            <Button Grid.Column="2" Content="Acknowledge" Command="{Binding DataContext.AcknowledgeAlertCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                                   CommandParameter="{Binding}" Width="120" VerticalAlignment="Center"/>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+
+                                                        <!-- Empty State for Triggered Alerts -->
+                                                        <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="32" Margin="0,0,0,32"
+                                                               Visibility="{Binding TriggeredAlerts.Count, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                                            <StackPanel HorizontalAlignment="Center">
+                                                                <TextBlock Text="✓" FontSize="48" Foreground="{DynamicResource ThemeSuccess}" HorizontalAlignment="Center" Margin="0,0,0,12"/>
+                                                                <TextBlock Text="No active alerts" FontSize="16" Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                        </Border>
+
+                                                        <!-- Configured Alerts -->
+                                                        <TextBlock Text="Configured Alert Rules" FontSize="18" FontWeight="SemiBold" Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,16"/>
+                                                        <ItemsControl ItemsSource="{Binding SmartAlerts}">
+                                                            <ItemsControl.ItemTemplate>
+                                                                <DataTemplate>
+                                                                    <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="20" Margin="0,0,0,12" Effect="{DynamicResource ThemeShadow.Card}">
+                                                                        <Grid>
+                                                                            <Grid.ColumnDefinitions>
+                                                                                <ColumnDefinition Width="*"/>
+                                                                                <ColumnDefinition Width="Auto"/>
+                                                                            </Grid.ColumnDefinitions>
+
+                                                                            <StackPanel Grid.Column="0">
+                                                                                <TextBlock Text="{Binding Name, FallbackValue='Unnamed Alert'}" FontSize="15" FontWeight="SemiBold"
+                                                                                          Foreground="{DynamicResource ThemeTextPrimary}" Margin="0,0,0,6"/>
+                                                                                <TextBlock Text="{Binding Pattern, FallbackValue='No pattern'}"
+                                                                                          Foreground="{DynamicResource ThemeTextSecondary}" FontFamily="{DynamicResource ThemeFontFamilyMonospace}" FontSize="12"/>
+                                                                                <TextBlock Margin="0,6,0,0" Foreground="{DynamicResource ThemeTextHint}" FontSize="11">
+                                                                                    <Run Text="Status:"/>
+                                                                                    <Run Text="{Binding IsEnabled, Converter={StaticResource BooleanToStringConverter}, ConverterParameter='Enabled|Disabled', FallbackValue='Unknown'}" FontWeight="SemiBold"/>
+                                                                                </TextBlock>
+                                                                            </StackPanel>
+
+                                                                            <StackPanel Grid.Column="1" Orientation="Horizontal">
+                                                                                <Button Content="{Binding IsEnabled, Converter={StaticResource BooleanToStringConverter}, ConverterParameter='Disable|Enable', FallbackValue='Toggle'}"
+                                                                                       Command="{Binding DataContext.EnableAlertCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                                       CommandParameter="{Binding}" Width="80" Margin="0,0,8,0" Style="{StaticResource GhostButtonStyle}"/>
+                                                                                <Button Content="Delete" Command="{Binding DataContext.DisableAlertCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                                                                       CommandParameter="{Binding}" Width="80" Style="{StaticResource GhostButtonStyle}"/>
+                                                                            </StackPanel>
+                                                                        </Grid>
+                                                                    </Border>
+                                                                </DataTemplate>
+                                                            </ItemsControl.ItemTemplate>
+                                                        </ItemsControl>
+
+                                                        <!-- Empty State for Configured Alerts -->
+                                                        <Border Background="{DynamicResource ThemeSurface}" CornerRadius="16" Padding="48"
+                                                               Visibility="{Binding SmartAlerts.Count, Converter={StaticResource BooleanToVisibilityConverter}, ConverterParameter=Inverse}">
+                                                            <StackPanel HorizontalAlignment="Center">
+                                                                <TextBlock Text="🔔" FontSize="48" HorizontalAlignment="Center" Margin="0,0,0,16"/>
+                                                                <TextBlock Text="No alert rules configured" FontSize="18" FontWeight="SemiBold"
+                                                                          Foreground="{DynamicResource ThemeTextPrimary}" HorizontalAlignment="Center" Margin="0,0,0,8"/>
+                                                                <TextBlock Text="Click 'Create Alert' to set up automated monitoring"
+                                                                          Foreground="{DynamicResource ThemeTextSecondary}" HorizontalAlignment="Center"/>
+                                                            </StackPanel>
+                                                        </Border>
+                                                    </StackPanel>
+                                                </ScrollViewer>
                                             </DataTemplate>
                                         </Setter.Value>
                                     </Setter>
@@ -696,13 +817,13 @@
             </Border>
         </Grid>
         <!-- Status bar placeholder -->
-        <Border Grid.Row="3" Background="{StaticResource SurfaceAltBrush}" Margin="24,0,24,24" Padding="18" CornerRadius="14" BorderBrush="{StaticResource StrokeBrush}" BorderThickness="1">
+        <Border Grid.Row="3" Background="{DynamicResource ThemeSurfaceHover}" Margin="24,0,24,24" Padding="18" CornerRadius="14" BorderBrush="{DynamicResource ThemeBorder}" BorderThickness="1">
             <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="Auto"/>
                 </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding StatusMessage}" Foreground="{StaticResource TextSecondaryBrush}"/>
+                <TextBlock Text="{Binding StatusMessage}" Foreground="{DynamicResource ThemeTextSecondary}"/>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" HorizontalAlignment="Right">
                     <TextBlock Margin="0,0,16,0">
                         <Run Text="Logs:"/>
@@ -710,12 +831,14 @@
                         <Run Text="/"/>
                         <Run Text="{Binding TotalLogCount}" FontWeight="SemiBold"/>
                     </TextBlock>
-                    <TextBlock Text="{Binding ThemeService.CurrentTheme}" Foreground="{StaticResource TextMutedBrush}"/>
+                    <TextBlock Text="{Binding ThemeService.CurrentTheme}" Foreground="{DynamicResource ThemeTextHint}"/>
                 </StackPanel>
             </Grid>
         </Border>
     </Grid>
 </Window>
+
+
 
 
 

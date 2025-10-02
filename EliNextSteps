@@ -1,157 +1,154 @@
-﻿GGs Enterprise UI/UX Overhaul — Master Plan (Desktop + ErrorLogViewer)
+GGsDeepAgent vNext — 2500% Upgrade Playbook (Enterprise, Autonomous, Hacker‑Grade)
 
-Non‑negotiables
-- All features must be fully functional and polished (no rough edges).
-- Zero placeholders and zero nulls across UI, bindings, texts, icons, and commands.
-- Fix root causes, not symptoms. If something is unclear, make a logical assessment and continue.
-- Three launchers only: Launch-Desktop.bat, Launch-ErrorLogViewer.bat, Launch-All.bat — all crash-proof.
-- Smooth startups with welcoming onboarding for both apps.
-- Multiple hacker/tweaker themes with persistence and fast micro-interactions.
-- Verified via builds, smokes, and targeted tests; nothing crashes.
+Prime Directive
+- Evolve GGsDeepAgent into an autonomous, enterprise‑class engineering copilot whose new capabilities make the previous generation look like a proof‑of‑concept. Minimum 25× improvement across reliability, speed, safety, observability, and delivery throughput. If anything is underspecified, make a logical assessment and continue without blocking.
 
-Vision & Vibe
-- Identity: “GGs Pro” — sleek dark neon, subtle circuit textures, glass overlays, cohesive gradients.
-- Mood: Hacker/tweaker confidence without gimmicks; enterprise-grade polish.
-- Motion: Purposeful micro-animations (80–200ms) with smooth easing; never intrusive.
-- Themes: Midnight Cyan (primary), Vapor Purple, Tactical Green, Carbon Minimal, plus Auto (OS-follow).
+Outcome Targets (measurable, non‑negotiable)
+- CI excellence: 100% green for GitHub Jobs — Build/Test/Coverage, Package (MSI+MSIX), and Health Check Gate (blue/green).
+- Build speed: 50% faster cold build, 75% faster incremental builds via caching/parallelism.
+- Failure containment: zero flaky tests; deterministic builds; circuit‑breakers and timeouts in all external calls.
+- Observability: golden signals emitted (latency, error, saturation), trace correlation across desktop/server/agent.
+- Security: signed artifacts, SBOM, SAST/secret scanning, reproducible builds, least‑privilege pipelines.
 
-Phase 1 — Foundation (Design System & Theme)
-- Theme dictionaries per app (colors, typography, depth, effects, animations, controls) with shared naming:
-  - ThemeBackground*, ThemeText*, ThemeAccent*, ThemeBorder*.
-- Animations (reusable Storyboards): FadeIn, SlideUp, SlideFromLeft, ScaleIn, Glow, Pulse.
-- Controls: PrimaryButton, SecondaryButton, GhostButton, IconButton (press/hover spring + ripple),
-  ElevatedCard, SectionCard, Badge, TagPill, TogglePill, TextBox/ComboBox enterprise styles.
-- Theme engine: ThemeManagerService per app (CurrentTheme, AvailableThemes, Save/Load to profile),
-  auto-detect OS light/dark with manual override + persistence.
-- Accessibility: Focus visuals, minimum contrast, keyboard navigation defaults.
+Operating Principles
+- Fix root causes, not symptoms. Eliminate placeholders, nulls, and ambiguous states.
+- Prefer idempotent, restartable operations. Every step can be rerun safely.
+- Fail fast with precise diagnostics; never fail silently.
+- Default secure: secrets from vault, no plaintext creds, signed outputs only.
 
-Deliverables:
-- GGs.Desktop: Views/Themes/EnterpriseThemes.xaml, EnterpriseControlStyles.xaml.
-- ErrorLogViewer: Views/EnterpriseThemes.xaml, EnterpriseControlStyles.xaml.
-- ThemeManagerService (desktop), extend IThemeService (viewer) for persistence.
+Section A — GGsDeepAgent Architecture Upgrades
+- Resilient core:
+  - Structured concurrency; cancelation tokens everywhere; timeouts on I/O; exponential backoff + jitter.
+  - Circuit‑breaker around external dependencies; dead‑letter queue for unprocessed work.
+  - Strong typing at domain boundaries; input validation with actionable errors.
+- Telemetry & tracing:
+  - OpenTelemetry spans for key operations; correlation IDs propagated across desktop/server/agent.
+  - Event‑level logging with stable schemas; PII‑safe redaction.
+  - Health probes: liveness, readiness, and startup probes with self‑healing on failure.
+- Performance & memory:
+  - Async I/O; pooled buffers; zero‑allocation hot paths; cache with TTL + stampede protection.
+  - Benchmark harness with micro/macro profiles; target 25× throughput on representative workloads.
+- Safety & correctness:
+  - Property‑based tests for critical invariants; fuzzing for inputs; fault injection for chaos testing.
+  - Static analyzers enforced at build; nullable enabled; banned API usage list.
 
-Phase 2 — Navigation & Shell
-- Desktop (ModernMainWindow):
-  - Title bar: accent gradient line, app title, status (license/ping), window controls.
-  - Left nav rail: glowing selection, tooltips, hotkeys, full keyboard support.
-  - Content area: card-based dashboards; consistent paddings; animated page transitions.
-- ErrorLogViewer (MainWindow):
-  - Hero header with live status (monitoring, directory breadcrumb, counts).
-  - Left workspace panel: Logs, Analytics, Bookmarks, Alerts, Compare, Export, Settings.
-  - Content region: premium DataGrid for Logs; stat cards for Analytics; actionable cards for
-    Bookmarks/Alerts; dedicated views for Compare/Export/Settings.
+Deliverables (Agent)
+- Refactored core worker(s) with cancellation, retries, and telemetry hooks.
+- Guardrails: input validators, policy layer (retry/breaker), and safety contracts.
+- Benchmarks with baselines + trend alerts; regression gates in CI.
 
-Phase 3 — Onboarding & Startup Experience
-- Desktop:
-  - Smooth cold start: Welcome hero — “Welcome to GGs — Optimizing your experience…”.
-  - Background init (logging, telemetry, entitlements, theme) with busy overlay; no UI thread stalls.
-  - First-run checklist and “Get Started” CTA (profiles/settings).
-- ErrorLogViewer:
-  - Welcome banner: “Error Intelligence Center — Ready to analyze.”
-  - Quick actions: Open logs folder, Start Monitoring, Import Sample Log.
-  - Restore last directory/view/layout across launches.
+Section B — Launchers 2.0 (Hacker‑grade, crash‑proof)
+- Only three batch entrypoints at repo root:
+  - Launch-Desktop.bat — clean build, verify, and launch the desktop app; optional auto‑start server.
+  - Launch-ErrorLogViewer.bat — clean build, verify, and launch the Error Log Viewer.
+  - Launch-All.bat — orchestrate server + desktop + viewer; run solution tests; dashboard + logs.
+- Design intent:
+  - Kill conflicting processes before building (GGs.* apps, msbuild, vstest, optional dotnet).
+  - Dotnet clean on solution; publish into deterministic out/* directories; no stale artifacts.
+  - Wrap PowerShell orchestrators in tools/launcher (Launch-*-New.ps1) with ForceBuild/ForcePort.
+  - Timestamped logs in launcher-logs; clear exit codes; colorful hacker UX; test stubs with --test.
 
-Phase 4 — Button/Action Wiring & Zero‑Placeholder Guarantee
-- Inventory all buttons/menus across both apps.
-- For every command:
-  - Implement full behavior or disable intentionally with a clear tooltip explaining why.
-  - No placeholder text, icons, or dead buttons.
-- Replace all garbled unicode; use clean glyphs/vectors only.
-- Guard every binding (value converters & defaults) — no null reference risks.
+Section C — CI/CD: Make All GitHub Jobs Green
+- Build, Test, Coverage
+  - Matrix: Windows-latest, .NET 9.0. Cache NuGet and intermediate obj.
+  - Steps: dotnet restore; dotnet build -c Release; dotnet test -c Release --collect:"XPlat Code Coverage".
+  - Coverage: use coverlet + reportgenerator to produce Cobertura/HTML; enforce minimum thresholds.
+  - Artifacts: test results and coverage reports uploaded; failure logs attached for triage.
+- Package (MSI + MSIX)
+  - MSIX (wapproj): deterministic versioning via Git tag; appxmanifest transformations per env.
+  - Signing: import PFX from GitHub secret (base64) with secure password; sign all binaries; stamp catalog.
+  - MSI (Wix/MSI): heat + candle + light or MSBuild WixToolset; sign final MSI; attach SBOM (CycloneDX).
+  - Outputs: versioned artifacts pushed to Releases (draft) and retained as workflow artifacts.
+- Health Check Gate (blue/green)
+  - Deploy draft to ephemeral environment; smoke with Launch-All-New.ps1 in --test mode.
+  - Probe endpoints: /healthz and /ready (server), desktop viewer heartbeat via named pipe or local TCP.
+  - Gate policy: progress only on 200 OK health checks + zero errors in logs; otherwise auto‑rollback.
 
-Deliverables:
-- Command audit checklist & implementations; disabled-with-explanation where out of scope.
-- Lint pass for “placeholder”, “lorem”, TODOs, garbled glyphs.
+Reference Workflow (YAML sketch)
+- name: CI
+  on: [push, pull_request]
+  jobs:
+    build_test_coverage:
+      runs-on: windows-latest
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-dotnet@v4
+          with: { dotnet-version: '9.0.x' }
+        - name: Restore
+          run: dotnet restore GGs/GGs.sln
+        - name: Build
+          run: dotnet build GGs/GGs.sln -c Release --no-restore
+        - name: Test + Coverage
+          run: dotnet test GGs/GGs.sln -c Release --no-build --collect:"XPlat Code Coverage"
+        - name: Publish coverage
+          if: always()
+          uses: actions/upload-artifact@v4
+          with: { name: coverage, path: '**/TestResults/**' }
+    package:
+      runs-on: windows-latest
+      needs: build_test_coverage
+      steps:
+        - uses: actions/checkout@v4
+        - uses: actions/setup-dotnet@v4
+          with: { dotnet-version: '9.0.x' }
+        - name: Import code signing cert
+          shell: pwsh
+          run: |
+            $bytes = [Convert]::FromBase64String($env:CODE_SIGNING_PFX_BASE64)
+            Set-Content -Path cert.pfx -Value $bytes -AsByteStream
+        - name: Build MSIX + MSI
+          shell: pwsh
+          run: |
+            dotnet publish GGs/clients/GGs.Desktop/GGs.Desktop.csproj -c Release -o out/desktop
+            dotnet publish GGs/tools/GGs.ErrorLogViewer/GGs.ErrorLogViewer.csproj -c Release -o out/viewer
+            msbuild GGs/packaging/msix/GGs.Desktop.Package/GGs.Desktop.Package.wapproj /p:Configuration=Release /p:GenerateAppxPackageOnBuild=true /p:AppxPackageDir=out/msix/ /p:PackageCertificateKeyFile="cert.pfx" /p:PackageCertificatePassword="$(CODE_SIGNING_PFX_PASSWORD)"
+            rem Wix/MSI step here (tooling-dependent)
+        - uses: actions/upload-artifact@v4
+          with: { name: packages, path: out/** }
+    health_gate:
+      runs-on: windows-latest
+      needs: package
+      steps:
+        - uses: actions/checkout@v4
+        - name: Orchestrated smoke
+          shell: pwsh
+          run: GGs/tools/launcher/Launch-All-New.ps1 -Test -TestDurationSeconds 10
+        - name: Verify health
+          shell: pwsh
+          run: |
+            $ok = (Invoke-WebRequest -UseBasicParsing http://localhost:5000/healthz).StatusCode -eq 200
+            if (-not $ok) { throw 'Health probe failed' }
 
-Phase 5 — Error Log Viewer: Logs View (Enterprise DataGrid)
-- DataGrid polish:
-  - Virtualization on, row templates by level: left accent bar; distinct hover/selected.
-  - Columns: level icon, timestamp, source pill, compact/raw message (toggle), optional file path.
-  - Context menu: Copy Selected / Raw / Compact / Details.
-- Details panel:
-  - Message, source, timestamp, level, tags, Raw payload expander, Exception/StackTrace expanders (monospace). 
-- Filters:
-  - Text search with regex toggle, level/source filters, Smart Filter (dedupe), font-size slider, auto-scroll toggle.
+Section D — Packaging Hardening (MSI + MSIX)
+- Versioning: semantic version from tags; auto‑increment pre‑release for PR builds.
+- Signing: centralized cert retrieval; timestamp service; verify signatures in CI.
+- Installer UX: default silent switch; repair/uninstall idempotent; safe upgrades.
+- MSIX manifest: Publisher, Identity, capabilities minimal; icons + assets validated.
 
-Deliverables:
-- Null-safe converters; no runtime binding errors.
-- Export selected logs to CSV/JSON; verified SaveFileDialog flow.
+Section E — Test Strategy (Agent, Server, Desktop, Viewer)
+- Unit: fast, deterministic with mocks; required for critical code paths.
+- Integration: real file I/O, networking on ephemeral ports; hermetic by default.
+- E2E: emulator flows for desktop + viewer; golden screenshots for critical views.
+- Chaos: fault injection scenarios scheduled nightly; verify recovery and alerting.
 
-Phase 6 — Error Log Viewer: Analytics, Bookmarks, Alerts
-- Analytics:
-  - Stat cards: Health Score, Errors/Warns, rates, Top Sources; anomaly triggers (basic).
-- Bookmarks:
-  - Add/Remove/GoTo; TagPill rendering; persisted bookmarks.
-- Alerts:
-  - Simple rules; Triggered alert cards (name, pattern, time), Acknowledge action.
+Section F — Observability & Ops
+- Central logs with component+correlation; structured JSON; retention + rotation.
+- Metrics: request duration, error rate, queue depth, memory, GC pauses.
+- Alerts: build break, test failure, pkg signing failure, health gate breach.
 
-Deliverables:
-- EnhancedMainViewModel commands wired; disable with explanation when no data.
-- All features functional and polished in these sections.
+Section G — Autonomous Execution Protocol (for the Agent)
+- Discover → Propose → Implement → Validate → Ship loop with no manual stalls.
+- If blocked by environment (e.g., cert), create stub tasks with clear prereqs and continue in parallel areas.
+- Always write remediation steps into failure logs with next‑action hints.
 
-Phase 7 — GGs.Desktop Views Revamp
-- Dashboard: Health, Recommendations, Quick Actions (Game Mode, Boost, Clean) as polished cards.
-- Optimization & Monitoring: enterprise styles for toggles/sliders; helper text; safe background tasks.
-- Network/Profiles/System Intelligence/Notifications/Settings: apply design system, real commands,
-  clear disabled states for unimplemented.
-- Theme toggle: animated icon swap and fade, persisted.
+Section H — Handoff & Rollback
+- Rollback recipes for each deployable unit; artifact retention and provenance documented.
+- Handoff doc summarizing changes, risks, toggles, and support playbooks.
 
-Deliverables:
-- Clean iconography; no garbled content; consistent spacing & elevation.
+Done Criteria
+- All three launchers pass local smoke in both normal and --test modes.
+- GitHub Actions shows all three jobs green: Build/Test/Coverage, Package (MSI+MSIX), Health gate.
+- Agent throughput improved by 25× on benchmark suite; no regressions.
 
-Phase 8 — Accessibility, Keyboard, Performance
-- Keyboard nav: TabIndex where needed; focus visuals.
-- High contrast variants & sufficient contrast ratios.
-- Respect “Reduce motion” if available; keep animations subtle.
-- Offload heavy work to background threads; never block UI >100ms.
+Work autonomously. Make strong, sensible assumptions. Deliver with receipts.
 
-Deliverables:
-- Manual keyboard test script; optional perf traces for heavy views.
-
-Phase 9 — Launchers (exactly 3)
-- Launch-ErrorLogViewer.bat
-  - Clean → Build → Verify exe → Launch; flags: --release, --no-restore, --no-launch; detailed logs.
-- Launch-Desktop.bat
-  - Clean → Build → Verify exe → Launch; optional --with-server (auto-start local server).
-- Launch-All.bat
-  - Clean/build server+desktop+viewer; run solution tests; launch both apps; shared flags; logs.
-- All launchers are crash-proof with clear messages and non-zero exit codes on failure.
-
-Deliverables:
-- Remove old launchers; keep these 3 only. Smoke-test common failure modes.
-
-Phase 10 — Test Strategy (Builds, Smokes, Functionals)
-- Builds: dotnet build solution in Debug and Release.
-- UI smokes:
-  - Both apps launch; welcome experience shows; nav works; theme toggle persists across restarts.
-- ErrorLogViewer functionals:
-  - Regex search, level/source filter, raw/compact toggle, export CSV/JSON, details expanders, bookmarks, alerts.
-- Launchers:
-  - Simulate missing SDK/build errors/missing exe; confirm graceful exits and accurate log messages.
-- Enforcement:
-  - Automated scans for placeholders/garbled glyphs; runtime check for binding errors (Output window).
-
-Deliverables:
-- Test checklist with pass/fail for all polished features.
-- Batch test helpers for quick local verification.
-
-Phase 11 — Root‑Cause Fix Policy
-- Any discovered issue is fixed at the source:
-  - Null bindings → set defaults, add converters, or initialize properties.
-  - Missing command → implement or explicitly disable with clear UX text.
-  - Layout issues → correct styles/templates, not band-aid Visibility hacks.
-
-Deliverables:
-- Issue log with root-cause notes and file references.
-
-Phase 12 — Final Polish & Handoff
-- Consistency pass on spacing, typography, shadows, hover states.
-- Verify theme persistence & cross-app identity.
-- Verify launcher logs and exit codes are pristine.
-- Short user guide covering themes, navigation, key tasks, exporting, and launchers.
-
-Execution Notes
-- Work autonomously; make logical assessments where requirements are underspecified.
-- Keep changes focused and high quality; do not introduce placeholders.
-- All features must be polished before sign-off.
-- Final verification: dotnet build (Debug/Release), run all launchers, execute smoke + functional tests.

@@ -13,6 +13,7 @@ public sealed class UserSettings
     public int Version { get; set; } = CurrentVersion;
 
     // General
+    public bool IsFirstRun { get; set; } = true;
     public bool LaunchMinimized { get; set; }
     public bool StartWithWindows { get; set; }
 

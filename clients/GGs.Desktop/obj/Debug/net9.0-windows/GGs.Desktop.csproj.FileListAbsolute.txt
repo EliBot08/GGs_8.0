@@ -428,3 +428,5 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Deskt
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Midnight.baml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Tactical.baml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Themes\Palettes\Vapor.baml
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Views\WelcomeOverlay.baml
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Debug\net9.0-windows\Views\WelcomeOverlay.g.cs

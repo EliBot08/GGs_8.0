@@ -102,6 +102,8 @@ namespace GGs.ErrorLogViewer.ViewModels
         public ICommand SwitchToCompareViewCommand { get; }
         public ICommand SwitchToExportViewCommand { get; }
         public ICommand SwitchToSettingsViewCommand { get; }
+        public ICommand OpenLogsFolderCommand { get; }
+        public ICommand ImportSampleLogCommand { get; }
 
         public EnhancedMainViewModel(
             ILogMonitoringService logMonitoringService,
@@ -166,6 +168,8 @@ namespace GGs.ErrorLogViewer.ViewModels
             SwitchToCompareViewCommand = new RelayCommand(() => ActiveView = "Compare");
             SwitchToExportViewCommand = new RelayCommand(() => ActiveView = "Export");
             SwitchToSettingsViewCommand = new RelayCommand(() => ActiveView = "Settings");
+            OpenLogsFolderCommand = new RelayCommand(OpenLogsFolder);
+            ImportSampleLogCommand = new AsyncRelayCommand(ImportSampleLogAsync);
 
             PropertyChanged += OnEnhancedPropertyChanged;
             LogEntries.CollectionChanged += OnLogEntriesCollectionChanged;
@@ -699,6 +703,100 @@ namespace GGs.ErrorLogViewer.ViewModels
 
             // Call base disposal
             base.Dispose(disposing);
+        }
+
+        // Quick Actions Methods
+        private void OpenLogsFolder()
+        {
+            try
+            {
+                var logDirectory = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData), "GGs", "Logs");
+
+                if (!Directory.Exists(logDirectory))
+                {
+                    Directory.CreateDirectory(logDirectory);
+                }
+
+                System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                {
+                    FileName = logDirectory,
+                    UseShellExecute = true
+                });
+
+                StatusMessage = "Opened logs folder";
+                _logger.LogInformation("Opened logs folder: {Directory}", logDirectory);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Failed to open logs folder: {ex.Message}";
+                _logger.LogError(ex, "Failed to open logs folder");
+            }
+        }
+
+        private async Task ImportSampleLogAsync()
+        {
+            try
+            {
+                StatusMessage = "Importing sample log...";
+
+                // Create sample log entries
+                var sampleEntries = new[]
+                {
+                    new LogEntry
+                    {
+                        Id = Random.Shared.NextInt64(),
+                        Timestamp = DateTime.Now.AddMinutes(-10),
+                        Level = Models.LogLevel.Information,
+                        Source = "Sample",
+                        Message = "Application started successfully",
+                        RawLine = "[INFO] Application started successfully"
+                    },
+                    new LogEntry
+                    {
+                        Id = Random.Shared.NextInt64(),
+                        Timestamp = DateTime.Now.AddMinutes(-8),
+                        Level = Models.LogLevel.Warning,
+                        Source = "Sample",
+                        Message = "Configuration file not found, using defaults",
+                        RawLine = "[WARN] Configuration file not found, using defaults"
+                    },
+                    new LogEntry
+                    {
+                        Id = Random.Shared.NextInt64(),
+                        Timestamp = DateTime.Now.AddMinutes(-5),
+                        Level = Models.LogLevel.Error,
+                        Source = "Sample",
+                        Message = "Failed to connect to database: Connection timeout",
+                        RawLine = "[ERROR] Failed to connect to database: Connection timeout"
+                    },
+                    new LogEntry
+                    {
+                        Id = Random.Shared.NextInt64(),
+                        Timestamp = DateTime.Now.AddMinutes(-2),
+                        Level = Models.LogLevel.Success,
+                        Source = "Sample",
+                        Message = "Database connection restored",
+                        RawLine = "[SUCCESS] Database connection restored"
+                    }
+                };
+
+                await Task.Run(() =>
+                {
+                    foreach (var entry in sampleEntries)
+                    {
+                        LogEntries.Add(entry);
+                    }
+                });
+
+                StatusMessage = $"Imported {sampleEntries.Length} sample log entries";
+                NotifyAnalyticsCommandStates();
+                _logger.LogInformation("Imported {Count} sample log entries", sampleEntries.Length);
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"Failed to import sample log: {ex.Message}";
+                _logger.LogError(ex, "Failed to import sample log");
+            }
         }
     }
 }

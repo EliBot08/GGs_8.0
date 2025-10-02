@@ -1,0 +1,30 @@
+============================================================================ 
+GGs Quick Test Suite 
+Started: Fri 10/03/2025  0:11:09.57 
+============================================================================ 
+ 
+[PASS] Desktop executable found: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\bin\Debug\net9.0-windows\GGs.Desktop.exe 
+[TEST 5/8] Verifying ErrorLogViewer executable... 
+[PASS] ErrorLogViewer executable found: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\bin\Debug\net9.0-windows\GGs.ErrorLogViewer.exe 
+[TEST 6/8] Running unit tests... 
+Test run for C:\Users\307824\OneDrive - VÃ¤sterÃ¥s Stad\Skrivbordet\GGs\GGs\tests\GGs.ErrorLogViewer.Tests\bin\Debug\net9.0-windows\GGs.ErrorLogViewer.Tests.dll (.NETCoreApp,Version=v9.0)
+VSTest version 17.14.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+
+Passed!  - Failed:     0, Passed:    23, Skipped:     0, Total:    23, Duration: 376 ms - GGs.ErrorLogViewer.Tests.dll (net9.0)
+[PASS] Unit tests passed 
+[TEST 7/8] Scanning for placeholders... 
+[WARN] Found 11 placeholders 
+[PASS] No placeholders found 
+[TEST 8/8] Checking theme files... 
+[FAIL] Missing theme files (found 5/5) 
+[PASS] All 5 theme files found 
+============================================================================ 
+Test Summary 
+Total Tests: 5 
+Passed: 6 
+Failed: 1 
+============================================================================ 
+Completed: Fri 10/03/2025  0:11:20.04 

@@ -80,6 +80,9 @@ namespace GGs.ErrorLogViewer.ViewModels
         [ObservableProperty]
         private bool _isDetailsPaneVisible = true;
 
+        [ObservableProperty]
+        private bool _showFilePathColumn = false;
+
         public ObservableCollection<LogEntry> LogEntries { get; }
         public ICollectionView LogEntriesView { get; }
         public ObservableCollection<string> AvailableSources { get; }
@@ -97,6 +100,8 @@ namespace GGs.ErrorLogViewer.ViewModels
         public ICommand RefreshCommand { get; protected set; }
         public ICommand ClearLogsCommand { get; protected set; }
         public ICommand ExportLogsCommand { get; protected set; }
+        public ICommand ExportToCsvCommand { get; protected set; }
+        public ICommand ExportToJsonCommand { get; protected set; }
         public ICommand CopySelectedCommand { get; protected set; }
         public ICommand OpenLogDirectoryCommand { get; protected set; }
         public ICommand ClearOldLogsCommand { get; protected set; }
@@ -105,6 +110,7 @@ namespace GGs.ErrorLogViewer.ViewModels
         public ICommand CopyCompactCommand { get; protected set; }
         public ICommand CopyDetailsCommand { get; protected set; }
         public ICommand ToggleDetailsPaneCommand { get; protected set; }
+        public ICommand ToggleFilePathColumnCommand { get; protected set; }
         
         // Navigation commands (placeholders - implemented in enhanced VM)
         public ICommand SwitchToLogsViewCommand { get; protected set; }
@@ -143,6 +149,8 @@ namespace GGs.ErrorLogViewer.ViewModels
             RefreshCommand = new AsyncRelayCommand(RefreshLogsAsync);
             ClearLogsCommand = new RelayCommand(ClearLogsInternal);
             ExportLogsCommand = new AsyncRelayCommand(ExportLogsAsync);
+            ExportToCsvCommand = new AsyncRelayCommand(ExportToCsvAsync);
+            ExportToJsonCommand = new AsyncRelayCommand(ExportToJsonAsync);
             CopySelectedCommand = new RelayCommand(CopySelected, () => SelectedLogEntry != null);
             OpenLogDirectoryCommand = new RelayCommand(OpenLogDirectory);
             ClearOldLogsCommand = new RelayCommand(ClearOldLogs);
@@ -150,6 +158,7 @@ namespace GGs.ErrorLogViewer.ViewModels
             CopyCompactCommand = new RelayCommand(CopyCompact, () => SelectedLogEntry != null);
             CopyDetailsCommand = new RelayCommand(CopyDetails, () => SelectedLogEntry != null);
             ToggleDetailsPaneCommand = new RelayCommand(() => IsDetailsPaneVisible = !IsDetailsPaneVisible);
+            ToggleFilePathColumnCommand = new RelayCommand(() => ShowFilePathColumn = !ShowFilePathColumn);
 
             SwitchToLogsViewCommand = new RelayCommand(() => { /* Placeholder - Enhanced VM handles actual navigation */ });
             SwitchToAnalyticsViewCommand = new RelayCommand(() => { /* Placeholder */ });
@@ -398,6 +407,92 @@ namespace GGs.ErrorLogViewer.ViewModels
                 _earlyLoggingService.LogApplicationEvent("Export", "Export failed with exception", new { Exception = ex.ToString() });
                 
                 System.Windows.MessageBox.Show($"Export failed: {ex.Message}", 
+                    "Export Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+        }
+
+        private async Task ExportToCsvAsync()
+        {
+            try
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "CSV Files (*.csv)|*.csv|All Files (*.*)|*.*",
+                    DefaultExt = "csv",
+                    FileName = $"logs_export_{DateTime.Now:yyyyMMdd_HHmmss}.csv"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var filteredEntries = LogEntriesView.Cast<LogEntry>();
+                    var success = await _exportService.ExportToCsvAsync(filteredEntries, saveFileDialog.FileName, includeDetails: true);
+
+                    if (success)
+                    {
+                        StatusMessage = $"Exported {filteredEntries.Count()} logs to CSV";
+                        _logger.LogInformation("Successfully exported {Count} log entries to CSV: {FileName}",
+                            filteredEntries.Count(), saveFileDialog.FileName);
+
+                        System.Windows.MessageBox.Show($"Successfully exported {filteredEntries.Count()} log entries to:\n{saveFileDialog.FileName}",
+                            "Export Complete", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        StatusMessage = "CSV export failed";
+                        _logger.LogError("Failed to export logs to CSV: {FileName}", saveFileDialog.FileName);
+                        System.Windows.MessageBox.Show("Failed to export logs to CSV. Please check the log file for details.",
+                            "Export Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"CSV export failed: {ex.Message}";
+                _logger.LogError(ex, "Failed to export logs to CSV");
+                System.Windows.MessageBox.Show($"CSV export failed: {ex.Message}",
+                    "Export Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+            }
+        }
+
+        private async Task ExportToJsonAsync()
+        {
+            try
+            {
+                var saveFileDialog = new Microsoft.Win32.SaveFileDialog
+                {
+                    Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                    DefaultExt = "json",
+                    FileName = $"logs_export_{DateTime.Now:yyyyMMdd_HHmmss}.json"
+                };
+
+                if (saveFileDialog.ShowDialog() == true)
+                {
+                    var filteredEntries = LogEntriesView.Cast<LogEntry>();
+                    var success = await _exportService.ExportToJsonAsync(filteredEntries, saveFileDialog.FileName, true);
+
+                    if (success)
+                    {
+                        StatusMessage = $"Exported {filteredEntries.Count()} logs to JSON";
+                        _logger.LogInformation("Successfully exported {Count} log entries to JSON: {FileName}",
+                            filteredEntries.Count(), saveFileDialog.FileName);
+
+                        System.Windows.MessageBox.Show($"Successfully exported {filteredEntries.Count()} log entries to:\n{saveFileDialog.FileName}",
+                            "Export Complete", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Information);
+                    }
+                    else
+                    {
+                        StatusMessage = "JSON export failed";
+                        _logger.LogError("Failed to export logs to JSON: {FileName}", saveFileDialog.FileName);
+                        System.Windows.MessageBox.Show("Failed to export logs to JSON. Please check the log file for details.",
+                            "Export Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                StatusMessage = $"JSON export failed: {ex.Message}";
+                _logger.LogError(ex, "Failed to export logs to JSON");
+                System.Windows.MessageBox.Show($"JSON export failed: {ex.Message}",
                     "Export Error", System.Windows.MessageBoxButton.OK, System.Windows.MessageBoxImage.Error);
             }
         }

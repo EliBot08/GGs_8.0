@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET9_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\App.xaml
-12847338427
+131459452511
 
 4565903934
 239122854865
-Views\CompareView.xaml;Views\ExportFormatDialog.xaml;Views\ExportView.xaml;Views\MainWindow.xaml;Views\SettingsView.xaml;Views\Themes\EnterpriseAnimations.xaml;Views\Themes\EnterpriseThemes.xaml;Views\Themes\Palettes\Carbon.xaml;Views\Themes\Palettes\Light.xaml;Views\Themes\Palettes\Midnight.xaml;Views\Themes\Palettes\Tactical.xaml;Views\Themes\Palettes\Vapor.xaml;
+Views\CompareView.xaml;Views\ExportFormatDialog.xaml;Views\ExportView.xaml;Views\MainWindow.xaml;Views\SettingsView.xaml;Views\Themes\EnterpriseAnimations.xaml;Views\Themes\EnterpriseControlStyles.xaml;Views\Themes\EnterpriseThemes.xaml;Views\Themes\Palettes\Carbon.xaml;Views\Themes\Palettes\Light.xaml;Views\Themes\Palettes\Midnight.xaml;Views\Themes\Palettes\Tactical.xaml;Views\Themes\Palettes\Vapor.xaml;
 
 False
 

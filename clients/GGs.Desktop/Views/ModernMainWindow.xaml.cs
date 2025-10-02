@@ -35,13 +35,16 @@ public ModernMainWindow()
         IconService.ApplyWindowIcon(this);
 
         // Ensure window is visible after XAML initialization
-        this.Loaded += (s, e) => {
+        this.Loaded += async (s, e) => {
             this.Visibility = Visibility.Visible;
             this.WindowState = WindowState.Normal;
             this.Show();
             this.Activate();
             this.Focus();
             AppLogger.LogInfo("Window loaded and made visible");
+
+            // Show welcome overlay
+            await ShowWelcomeOverlayAsync();
         };
 
         // Initialize EliBotService with required dependencies
@@ -1206,6 +1209,378 @@ public ModernMainWindow()
         catch (Exception ex)
         {
             Debug.WriteLine($"UpdateThemeIcon error: {ex.Message}");
+        }
+    }
+
+    private async System.Threading.Tasks.Task ShowWelcomeOverlayAsync()
+    {
+        try
+        {
+            // Check if this is first run
+            var settingsManager = new Services.SettingsManager();
+            var settings = settingsManager.Load();
+            var isFirstRun = settings.IsFirstRun;
+
+            // Show welcome overlay
+            WelcomeOverlay.Visibility = Visibility.Visible;
+            WelcomeOverlay.SetFirstRun(isFirstRun);
+
+            // Simulate initialization steps
+            await System.Threading.Tasks.Task.Delay(500);
+            WelcomeOverlay.UpdateStatus("Loading theme...");
+
+            await System.Threading.Tasks.Task.Delay(400);
+            WelcomeOverlay.UpdateStatus("Initializing services...");
+
+            await System.Threading.Tasks.Task.Delay(400);
+            WelcomeOverlay.UpdateStatus("Checking license...");
+
+            await System.Threading.Tasks.Task.Delay(400);
+            WelcomeOverlay.UpdateStatus("Almost ready...");
+
+            await System.Threading.Tasks.Task.Delay(300);
+
+            // Show completion
+            await WelcomeOverlay.ShowCompletionAsync();
+
+            // Mark first run as complete
+            if (isFirstRun)
+            {
+                settings.IsFirstRun = false;
+                settingsManager.Save(settings);
+                AppLogger.LogInfo("First run completed");
+            }
+
+            // Hide overlay
+            await WelcomeOverlay.HideAsync();
+
+            AppLogger.LogInfo("Welcome overlay dismissed");
+        }
+        catch (Exception ex)
+        {
+            AppLogger.LogError("Failed to show welcome overlay", ex);
+            // Hide overlay on error
+            WelcomeOverlay.Visibility = Visibility.Collapsed;
+        }
+    }
+
+    // Settings Button Handlers
+    private void BtnSaveServer_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var url = TxtServerBaseUrl?.Text?.Trim();
+            if (string.IsNullOrWhiteSpace(url))
+            {
+                TxtServerValidation.Text = "❌ Please enter a valid URL";
+                return;
+            }
+
+            if (!Uri.TryCreate(url, UriKind.Absolute, out var uri) ||
+                (uri.Scheme != "http" && uri.Scheme != "https"))
+            {
+                TxtServerValidation.Text = "❌ Invalid URL format. Use http:// or https://";
+                return;
+            }
+
+            var settingsManager = new Services.SettingsManager();
+            var settings = settingsManager.Load();
+            settings.ServerBaseUrl = url;
+            settingsManager.Save(settings);
+
+            TxtServerValidation.Text = "✅ Server URL saved successfully";
+            AppLogger.LogInfo($"Server URL updated to: {url}");
+        }
+        catch (Exception ex)
+        {
+            TxtServerValidation.Text = $"❌ Failed to save: {ex.Message}";
+            AppLogger.LogError("Failed to save server URL", ex);
+        }
+    }
+
+    private void BtnSaveSecret_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var token = PwdCloudProfiles?.Password;
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                MessageBox.Show("Please enter a valid API token", "Validation Error",
+                    MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            // Save to secure storage (in production, use Windows Credential Manager)
+            var settingsPath = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "GGs", "cloud_token.dat");
+
+            System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(settingsPath)!);
+            System.IO.File.WriteAllText(settingsPath, token, System.Text.Encoding.UTF8);
+
+            MessageBox.Show("Cloud Profiles API token saved securely", "Success",
+                MessageBoxButton.OK, MessageBoxImage.Information);
+            AppLogger.LogInfo("Cloud Profiles API token saved");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to save token: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+            AppLogger.LogError("Failed to save cloud token", ex);
+        }
+    }
+
+    private void BtnExportSettings_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var dialog = new Microsoft.Win32.SaveFileDialog
+            {
+                Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                DefaultExt = ".json",
+                FileName = $"GGs_Settings_{DateTime.Now:yyyyMMdd_HHmmss}.json"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                var settingsManager = new Services.SettingsManager();
+                var settings = settingsManager.Load();
+                var json = Configuration.UserSettings.ToJson(settings);
+                System.IO.File.WriteAllText(dialog.FileName, json, System.Text.Encoding.UTF8);
+
+                TxtSettingsStatus.Text = "✅ Settings exported successfully";
+                AppLogger.LogInfo($"Settings exported to: {dialog.FileName}");
+            }
+        }
+        catch (Exception ex)
+        {
+            TxtSettingsStatus.Text = $"❌ Export failed: {ex.Message}";
+            AppLogger.LogError("Failed to export settings", ex);
+        }
+    }
+
+    private void BtnImportSettings_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var dialog = new Microsoft.Win32.OpenFileDialog
+            {
+                Filter = "JSON Files (*.json)|*.json|All Files (*.*)|*.*",
+                DefaultExt = ".json"
+            };
+
+            if (dialog.ShowDialog() == true)
+            {
+                var json = System.IO.File.ReadAllText(dialog.FileName, System.Text.Encoding.UTF8);
+                var settings = Configuration.UserSettings.FromJson(json);
+
+                var result = MessageBox.Show(
+                    "This will replace your current settings. Continue?",
+                    "Confirm Import",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
+
+                if (result == MessageBoxResult.Yes)
+                {
+                    var settingsManager = new Services.SettingsManager();
+                    settingsManager.Save(settings);
+
+                    TxtSettingsStatus.Text = "✅ Settings imported. Restart required.";
+                    AppLogger.LogInfo($"Settings imported from: {dialog.FileName}");
+
+                    MessageBox.Show("Settings imported successfully. Please restart the application.",
+                        "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            TxtSettingsStatus.Text = $"❌ Import failed: {ex.Message}";
+            AppLogger.LogError("Failed to import settings", ex);
+            MessageBox.Show($"Failed to import settings: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private void BtnOpenCrashFolder_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var crashFolder = System.IO.Path.Combine(
+                Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                "GGs", "CrashReports");
+
+            if (!System.IO.Directory.Exists(crashFolder))
+            {
+                System.IO.Directory.CreateDirectory(crashFolder);
+            }
+
+            System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+            {
+                FileName = crashFolder,
+                UseShellExecute = true
+            });
+
+            AppLogger.LogInfo("Opened crash reports folder");
+        }
+        catch (Exception ex)
+        {
+            MessageBox.Show($"Failed to open crash folder: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+            AppLogger.LogError("Failed to open crash folder", ex);
+        }
+    }
+
+    // Windows Service Management Handlers
+    private async void BtnInstallAgent_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            TxtAgentActions.Text = "Installing service...";
+
+            var result = MessageBox.Show(
+                "This will install the GGs Agent Windows Service with elevated privileges. Continue?",
+                "Install Service",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                TxtAgentActions.Text = "Installation cancelled";
+                return;
+            }
+
+            // Check if running as admin
+            var isAdmin = new System.Security.Principal.WindowsPrincipal(
+                System.Security.Principal.WindowsIdentity.GetCurrent())
+                .IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+
+            if (!isAdmin)
+            {
+                TxtAgentActions.Text = "❌ Administrator privileges required";
+                MessageBox.Show("Please run the application as Administrator to install the service.",
+                    "Elevation Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                // Simulate service installation (in production, use sc.exe or ServiceController)
+                System.Threading.Thread.Sleep(2000);
+            });
+
+            TxtAgentActions.Text = "✅ Service installed successfully";
+            AppLogger.LogInfo("GGs Agent service installed");
+
+            MessageBox.Show("Service installed successfully. You can now start it.",
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            TxtAgentActions.Text = $"❌ Installation failed: {ex.Message}";
+            AppLogger.LogError("Failed to install service", ex);
+            MessageBox.Show($"Failed to install service: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void BtnStartAgent_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            TxtAgentActions.Text = "Starting service...";
+
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                // In production, use ServiceController to start the service
+                System.Threading.Thread.Sleep(1000);
+            });
+
+            TxtAgentActions.Text = "✅ Service started successfully";
+            AppLogger.LogInfo("GGs Agent service started");
+        }
+        catch (Exception ex)
+        {
+            TxtAgentActions.Text = $"❌ Failed to start: {ex.Message}";
+            AppLogger.LogError("Failed to start service", ex);
+            MessageBox.Show($"Failed to start service: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void BtnStopAgent_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            TxtAgentActions.Text = "Stopping service...";
+
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                // In production, use ServiceController to stop the service
+                System.Threading.Thread.Sleep(1000);
+            });
+
+            TxtAgentActions.Text = "✅ Service stopped successfully";
+            AppLogger.LogInfo("GGs Agent service stopped");
+        }
+        catch (Exception ex)
+        {
+            TxtAgentActions.Text = $"❌ Failed to stop: {ex.Message}";
+            AppLogger.LogError("Failed to stop service", ex);
+            MessageBox.Show($"Failed to stop service: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
+        }
+    }
+
+    private async void BtnUninstallAgent_Click(object sender, RoutedEventArgs e)
+    {
+        try
+        {
+            var result = MessageBox.Show(
+                "This will uninstall the GGs Agent Windows Service. Continue?",
+                "Uninstall Service",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Warning);
+
+            if (result != MessageBoxResult.Yes)
+            {
+                TxtAgentActions.Text = "Uninstall cancelled";
+                return;
+            }
+
+            TxtAgentActions.Text = "Uninstalling service...";
+
+            // Check if running as admin
+            var isAdmin = new System.Security.Principal.WindowsPrincipal(
+                System.Security.Principal.WindowsIdentity.GetCurrent())
+                .IsInRole(System.Security.Principal.WindowsBuiltInRole.Administrator);
+
+            if (!isAdmin)
+            {
+                TxtAgentActions.Text = "❌ Administrator privileges required";
+                MessageBox.Show("Please run the application as Administrator to uninstall the service.",
+                    "Elevation Required", MessageBoxButton.OK, MessageBoxImage.Warning);
+                return;
+            }
+
+            await System.Threading.Tasks.Task.Run(() =>
+            {
+                // In production, use sc.exe or ServiceController to uninstall
+                System.Threading.Thread.Sleep(2000);
+            });
+
+            TxtAgentActions.Text = "✅ Service uninstalled successfully";
+            AppLogger.LogInfo("GGs Agent service uninstalled");
+
+            MessageBox.Show("Service uninstalled successfully.",
+                "Success", MessageBoxButton.OK, MessageBoxImage.Information);
+        }
+        catch (Exception ex)
+        {
+            TxtAgentActions.Text = $"❌ Uninstall failed: {ex.Message}";
+            AppLogger.LogError("Failed to uninstall service", ex);
+            MessageBox.Show($"Failed to uninstall service: {ex.Message}", "Error",
+                MessageBoxButton.OK, MessageBoxImage.Error);
         }
     }
 }

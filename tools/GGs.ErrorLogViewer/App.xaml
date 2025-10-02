@@ -25,6 +25,7 @@
             <converters:BooleanToMessageConverter x:Key="BooleanToMessageConverter"/>
             <converters:RawOrCompactMessageConverter x:Key="RawOrCompactMessageConverter"/>
             <converters:StringEqualsToVisibilityConverter x:Key="StringEqualsToVisibilityConverter"/>
+            <converters:StringEqualsConverter x:Key="StringEqualsConverter"/>
 
         </ResourceDictionary>
     </Application.Resources>

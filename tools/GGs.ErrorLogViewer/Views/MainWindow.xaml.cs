@@ -33,7 +33,10 @@ namespace GGs.ErrorLogViewer.Views
             try
             {
                 _logger.LogInformation("MainWindow loaded successfully");
-                
+
+                // Check if this is first run and show quick actions
+                CheckAndShowQuickActions();
+
                 // Set focus to search box for better UX
                 if (FindName("SearchBox") is FrameworkElement searchBox)
                 {
@@ -43,6 +46,45 @@ namespace GGs.ErrorLogViewer.Views
             catch (Exception ex)
             {
                 _logger.LogError(ex, "Error during MainWindow load");
+            }
+        }
+
+        private void CheckAndShowQuickActions()
+        {
+            try
+            {
+                var settingsPath = System.IO.Path.Combine(
+                    Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+                    "GGs", "ErrorLogViewer", "first_run.flag");
+
+                if (!System.IO.File.Exists(settingsPath))
+                {
+                    // First run - show quick actions
+                    QuickActionsBar.Visibility = Visibility.Visible;
+
+                    // Create flag file
+                    System.IO.Directory.CreateDirectory(System.IO.Path.GetDirectoryName(settingsPath)!);
+                    System.IO.File.WriteAllText(settingsPath, DateTime.UtcNow.ToString("o"));
+
+                    _logger.LogInformation("First run detected - showing quick actions");
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to check first run status");
+            }
+        }
+
+        private void DismissQuickActions_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                QuickActionsBar.Visibility = Visibility.Collapsed;
+                _logger.LogInformation("Quick actions dismissed by user");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogWarning(ex, "Failed to dismiss quick actions");
             }
         }
 

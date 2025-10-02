@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GGs.Agent")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f50cfc369ab77cda351114afed0f93e45cd01ffa")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12333c61d903cc981cf15c024a558a45ee41a549")]
 [assembly: System.Reflection.AssemblyProductAttribute("GGs.Agent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.Agent")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

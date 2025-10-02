@@ -409,3 +409,4 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLo
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\obj\Debug\net9.0-windows\GGs.ErrorLogViewer.pdb
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\obj\Debug\net9.0-windows\GGs.ErrorLogViewer.genruntimeconfig.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\obj\Debug\net9.0-windows\ref\GGs.ErrorLogViewer.dll
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\obj\Debug\net9.0-windows\Views\Themes\EnterpriseControlStyles.baml

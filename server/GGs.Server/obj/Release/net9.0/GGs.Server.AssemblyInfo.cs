@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GGs.Server")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f7575dfd44c4960cb1543dc6dfdfa9fb28352e59")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12333c61d903cc981cf15c024a558a45ee41a549")]
 [assembly: System.Reflection.AssemblyProductAttribute("GGs.Server")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.Server")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

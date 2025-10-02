@@ -1,79 +1,75 @@
 @echo off
-setlocal EnableDelayedExpansion
+setlocal EnableExtensions EnableDelayedExpansion
+
+:: =============================================================
+::  GGs // Desktop Launcher — stealth build + launch
+:: =============================================================
+title GGs :: Launch-Desktop (DeepOps)
+color 0A
 
 set "SCRIPT_DIR=%~dp0"
 set "REPO_ROOT=%SCRIPT_DIR%"
 if exist "%SCRIPT_DIR%..\" set "REPO_ROOT=%SCRIPT_DIR%..\"
+set "LOG_DIR=%REPO_ROOT%launcher-logs"
+if not exist "%LOG_DIR%" mkdir "%LOG_DIR%" >nul 2>&1
+set "LOG_FILE=%LOG_DIR%\desktop-launcher.log"
 
-set "CONFIG=Debug"
-set "RESTORE=--restore"
-set "LAUNCH=true"
-set "WITH_SERVER=false"
+set "WITH_SERVER=0"
+set "TEST_MODE=0"
+set "TEST_SECONDS=8"
+set "SKIP_DOTNET_KILL=0"
 
+:: args: [--with-server] [--test] [--duration N] [--skip-dotnet-kill]
 :parse
 if "%~1"=="" goto parsed
-if "%~1"=="--release" (
-    set "CONFIG=Release"
-) else if "%~1"=="--no-restore" (
-    set "RESTORE="
-) else if "%~1"=="--no-launch" (
-    set "LAUNCH=false"
-) else if "%~1"=="--with-server" (
-    set "WITH_SERVER=true"
-) else (
-    echo [WARN] Unknown option %~1
-)
+if /I "%~1"=="--with-server"     set "WITH_SERVER=1"
+if /I "%~1"=="--test"            set "TEST_MODE=1"
+if /I "%~1"=="--duration"        (set "TEST_SECONDS=%~2" & shift)
+if /I "%~1"=="--skip-dotnet-kill" set "SKIP_DOTNET_KILL=1"
 shift
 goto parse
 
 :parsed
-set "LOG_DIR=%REPO_ROOT%launcher-logs"
-if not exist "%LOG_DIR%" mkdir "%LOG_DIR%" >nul 2>&1
-set "LOG_FILE=%LOG_DIR%\launch-desktop.log"
-call :log "=== Launch Desktop (%CONFIG%) ==="
+echo ==============================================================================>>"%LOG_FILE%"
+echo [DESKTOP] Starting at %DATE% %TIME%>>"%LOG_FILE%"
 
-where dotnet >nul 2>&1
-if errorlevel 1 (
-    echo [ERROR] dotnet CLI not found
-    exit /b 1
+where dotnet >nul 2>&1 || (echo [ERROR] dotnet CLI not found & exit /b 1)
+
+call :kill_conflicts
+call :clean_target "clients\GGs.Desktop\GGs.Desktop.csproj" "out\desktop"
+
+set "PS_ARGS=-File \"%REPO_ROOT%tools\launcher\Launch-Desktop-New.ps1\" -ForceBuild"
+if %TEST_MODE%==1 set "PS_ARGS=%PS_ARGS% -Test -TestDurationSeconds %TEST_SECONDS%"
+
+if %WITH_SERVER%==1 (
+  echo [*] Spawning server in background ...>>"%LOG_FILE%"
+  start "GGs Server" powershell -NoLogo -NoProfile -ExecutionPolicy Bypass -File "%REPO_ROOT%tools\launcher\Launch-Server-New.ps1" -ForceBuild -ForcePort
 )
 
-set "DESKTOP_PROJ=%REPO_ROOT%clients\GGs.Desktop\GGs.Desktop.csproj"
-call :run "dotnet clean \"%DESKTOP_PROJ%\" --configuration %CONFIG%" "Cleaning desktop"
-call :run "dotnet build \"%DESKTOP_PROJ%\" --configuration %CONFIG% %RESTORE%" "Building desktop"
-
-if /I "%WITH_SERVER%"=="true" (
-    set "SERVER_PROJ=%REPO_ROOT%server\GGs.Server\GGs.Server.csproj"
-    call :log "Auto-starting local server"
-    start "GGs Server" cmd /c "dotnet run --project \"%SERVER_PROJ%\" --configuration %CONFIG% --no-build --urls http://localhost:5000"
+powershell -NoLogo -NoProfile -ExecutionPolicy Bypass %PS_ARGS%
+set "EXIT_CODE=%ERRORLEVEL%"
+if not "%EXIT_CODE%"=="0" (
+  echo [FAIL] Desktop launcher failed with exit code %EXIT_CODE%>>"%LOG_FILE%"
+  exit /b %EXIT_CODE%
 )
 
-if /I "%LAUNCH%"=="false" goto done
-set "DESKTOP_EXE=%REPO_ROOT%clients\GGs.Desktop\bin\%CONFIG%\net9.0-windows\GGs.Desktop.exe"
-if exist "%DESKTOP_EXE%" (
-    start "GGs Desktop" "%DESKTOP_EXE%"
-    call :log "Desktop launched from %DESKTOP_EXE%"
-) else (
-    echo [ERROR] Desktop executable not found at %DESKTOP_EXE%
-    call :log "Desktop executable missing"
-    exit /b 1
-)
-
-:done
-echo [SUCCESS] Desktop ready. Log: %LOG_FILE%
+echo [OK] Desktop ready.>>"%LOG_FILE%"
 exit /b 0
 
-:run
-set "CMD=%~1"
-set "STEP=%~2"
-call :log "[RUN] %STEP%"
-call %CMD% >>"%LOG_FILE%" 2>&1
-if errorlevel 1 (
-    echo [ERROR] %STEP% failed. See %LOG_FILE%.
-    exit /b 1
+:kill_conflicts
+echo [*] Neutralizing conflicting processes...>>"%LOG_FILE%"
+for %%P in (GGs.Desktop.exe msbuild.exe vstest.console.exe) do (
+  taskkill /F /IM %%P /T >nul 2>&1 && echo   - killed %%P>>"%LOG_FILE%"
+)
+if %SKIP_DOTNET_KILL%==0 (
+  taskkill /F /IM dotnet.exe /T >nul 2>&1 && echo   - killed dotnet.exe>>"%LOG_FILE%"
 )
 exit /b 0
 
-:log
-echo %~1>>"%LOG_FILE%"
+:clean_target
+set "PROJ=%~1"
+set "OUTDIR=%~2"
+echo [*] Cleaning %PROJ% and %OUTDIR% ...>>"%LOG_FILE%"
+if exist "%REPO_ROOT%%OUTDIR%" rmdir /s /q "%REPO_ROOT%%OUTDIR%" >nul 2>&1
+dotnet clean "%REPO_ROOT%%PROJ%" -c Release --nologo >>"%LOG_FILE%" 2>&1
 exit /b 0
