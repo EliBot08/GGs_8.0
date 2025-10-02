@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj": {}
+    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj": {}
   },
   "projects": {
-    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj": {
+    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj",
+        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj",
         "projectName": "GGs.Agent",
-        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj",
+        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj",
         "packagesPath": "C:\\Users\\307824\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\agent\\GGs.Agent\\obj\\",
+        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\agent\\GGs.Agent\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\307824\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -26,8 +26,8 @@
           "net9.0-windows7.0": {
             "targetAlias": "net9.0-windows",
             "projectReferences": {
-              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
-                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
+              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
+                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
               }
             }
           }
@@ -68,6 +68,17 @@
               "target": "Package",
               "version": "[8.0.1, )"
             },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "MinVer": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "System.Diagnostics.PerformanceCounter": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -92,6 +103,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
+              "version": "[9.0.9, 9.0.9]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -101,14 +118,14 @@
         }
       }
     },
-    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\GGs.Server.csproj": {
+    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\GGs.Server.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\GGs.Server.csproj",
+        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\GGs.Server.csproj",
         "projectName": "GGs.Server",
-        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\GGs.Server.csproj",
+        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\GGs.Server.csproj",
         "packagesPath": "C:\\Users\\307824\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\obj\\",
+        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\307824\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -123,8 +140,8 @@
           "net9.0": {
             "targetAlias": "net9.0",
             "projectReferences": {
-              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
-                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
+              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
+                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
               }
             }
           }
@@ -203,6 +220,17 @@
               "target": "Package",
               "version": "[8.0.8, )"
             },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "MinVer": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "OpenTelemetry.Exporter.OpenTelemetryProtocol": {
               "target": "Package",
               "version": "[1.9.0, )"
@@ -251,6 +279,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
+              "version": "[9.0.9, 9.0.9]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.AspNetCore.App": {
               "privateAssets": "none"
@@ -263,14 +297,14 @@
         }
       }
     },
-    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
+    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj",
+        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj",
         "projectName": "GGs.Shared",
-        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj",
+        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj",
         "packagesPath": "C:\\Users\\307824\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\obj\\",
+        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\307824\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -307,6 +341,17 @@
               "target": "Package",
               "version": "[8.0.0, )"
             },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "MinVer": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "System.Management": {
               "target": "Package",
               "version": "[8.0.0, )"
@@ -327,6 +372,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
+              "version": "[9.0.9, 9.0.9]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"
@@ -336,14 +387,14 @@
         }
       }
     },
-    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj": {
+    "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj",
+        "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj",
         "projectName": "GGs.Enterprise.Tests",
-        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj",
+        "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.Enterprise.Tests\\GGs.Enterprise.Tests.csproj",
         "packagesPath": "C:\\Users\\307824\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.Enterprise.Tests\\obj\\",
+        "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.Enterprise.Tests\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "C:\\Users\\307824\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -358,14 +409,14 @@
           "net9.0-windows7.0": {
             "targetAlias": "net9.0-windows",
             "projectReferences": {
-              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj": {
-                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj"
+              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj": {
+                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj"
               },
-              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\GGs.Server.csproj": {
-                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\GGs.Server.csproj"
+              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\GGs.Server.csproj": {
+                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\GGs.Server.csproj"
               },
-              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
-                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
+              "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
+                "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
               }
             }
           }
@@ -418,6 +469,17 @@
               "target": "Package",
               "version": "[17.8.0, )"
             },
+            "Microsoft.SourceLink.GitHub": {
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[8.0.0, )"
+            },
+            "MinVer": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[6.0.0, )"
+            },
             "Moq": {
               "target": "Package",
               "version": "[4.20.69, )"
@@ -454,6 +516,12 @@
           ],
           "assetTargetFallback": true,
           "warn": true,
+          "downloadDependencies": [
+            {
+              "name": "Microsoft.NETCore.App.Crossgen2.win-x64",
+              "version": "[9.0.9, 9.0.9]"
+            }
+          ],
           "frameworkReferences": {
             "Microsoft.NETCore.App": {
               "privateAssets": "all"

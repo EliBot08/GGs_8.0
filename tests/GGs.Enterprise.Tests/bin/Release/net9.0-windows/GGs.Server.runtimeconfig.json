@@ -15,7 +15,9 @@
       "System.GC.Server": true,
       "System.Reflection.Metadata.MetadataUpdater.IsSupported": false,
       "System.Reflection.NullabilityInfoContext.IsSupported": true,
-      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false
+      "System.Runtime.Serialization.EnableUnsafeBinaryFormatterSerialization": false,
+      "System.Runtime.TieredCompilation": true,
+      "System.Runtime.TieredCompilation.QuickJit": true
     }
   }
 }

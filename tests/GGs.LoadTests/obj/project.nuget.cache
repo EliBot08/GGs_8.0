@@ -1,8 +1,8 @@
 {
   "version": 2,
-  "dgSpecHash": "NCoD15OQ8Jo=",
+  "dgSpecHash": "Ajv/vB1hzpM=",
   "success": true,
-  "projectFilePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
+  "projectFilePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
   "expectedPackageFiles": [
     "C:\\Users\\307824\\.nuget\\packages\\azure.core\\1.42.0\\azure.core.1.42.0.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\azure.extensions.aspnetcore.configuration.secrets\\1.3.2\\azure.extensions.aspnetcore.configuration.secrets.1.3.2.nupkg.sha512",
@@ -253,9 +253,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "GGs.LoadTests depends on NBomber (>= 5.8.3) but NBomber 5.8.3 was not found. NBomber 6.0.0 was resolved instead.",
-      "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
+      "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
+      "filePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
       "libraryId": "NBomber",
       "targetGraphs": [
         "net9.0"
@@ -265,9 +265,9 @@
       "code": "NU1603",
       "level": "Warning",
       "message": "GGs.LoadTests depends on NBomber.Http (>= 5.8.3) but NBomber.Http 5.8.3 was not found. NBomber.Http 6.0.0 was resolved instead.",
-      "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
+      "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
       "warningLevel": 1,
-      "filePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
+      "filePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.LoadTests\\GGs.LoadTests.csproj",
       "libraryId": "NBomber.Http",
       "targetGraphs": [
         "net9.0"

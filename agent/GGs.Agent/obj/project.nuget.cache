@@ -1,6 +1,6 @@
 {
   "version": 2,
-  "dgSpecHash": "IWkc4eC4yGs=",
+  "dgSpecHash": "/16wGHFg+9w=",
   "success": true,
   "projectFilePath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\agent\\GGs.Agent\\GGs.Agent.csproj",
   "expectedPackageFiles": [
@@ -11,6 +11,7 @@
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.aspnetcore.signalr.client.core\\8.0.8\\microsoft.aspnetcore.signalr.client.core.8.0.8.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.aspnetcore.signalr.common\\8.0.8\\microsoft.aspnetcore.signalr.common.8.0.8.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.aspnetcore.signalr.protocols.json\\8.0.8\\microsoft.aspnetcore.signalr.protocols.json.8.0.8.nupkg.sha512",
+    "C:\\Users\\307824\\.nuget\\packages\\microsoft.build.tasks.git\\8.0.0\\microsoft.build.tasks.git.8.0.0.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.data.sqlite\\8.0.8\\microsoft.data.sqlite.8.0.8.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.data.sqlite.core\\8.0.8\\microsoft.data.sqlite.core.8.0.8.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.extensions.configuration\\8.0.0\\microsoft.extensions.configuration.8.0.0.nupkg.sha512",
@@ -42,6 +43,9 @@
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.extensions.options\\8.0.2\\microsoft.extensions.options.8.0.2.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.extensions.options.configurationextensions\\8.0.0\\microsoft.extensions.options.configurationextensions.8.0.0.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\microsoft.extensions.primitives\\8.0.0\\microsoft.extensions.primitives.8.0.0.nupkg.sha512",
+    "C:\\Users\\307824\\.nuget\\packages\\microsoft.sourcelink.common\\8.0.0\\microsoft.sourcelink.common.8.0.0.nupkg.sha512",
+    "C:\\Users\\307824\\.nuget\\packages\\microsoft.sourcelink.github\\8.0.0\\microsoft.sourcelink.github.8.0.0.nupkg.sha512",
+    "C:\\Users\\307824\\.nuget\\packages\\minver\\6.0.0\\minver.6.0.0.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\sqlitepclraw.bundle_e_sqlite3\\2.1.6\\sqlitepclraw.bundle_e_sqlite3.2.1.6.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\sqlitepclraw.core\\2.1.6\\sqlitepclraw.core.2.1.6.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\sqlitepclraw.lib.e_sqlite3\\2.1.6\\sqlitepclraw.lib.e_sqlite3.2.1.6.nupkg.sha512",
@@ -55,7 +59,8 @@
     "C:\\Users\\307824\\.nuget\\packages\\system.memory\\4.5.3\\system.memory.4.5.3.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\system.security.cryptography.protecteddata\\8.0.0\\system.security.cryptography.protecteddata.8.0.0.nupkg.sha512",
     "C:\\Users\\307824\\.nuget\\packages\\system.serviceprocess.servicecontroller\\8.0.1\\system.serviceprocess.servicecontroller.8.0.1.nupkg.sha512",
-    "C:\\Users\\307824\\.nuget\\packages\\system.threading.channels\\8.0.0\\system.threading.channels.8.0.0.nupkg.sha512"
+    "C:\\Users\\307824\\.nuget\\packages\\system.threading.channels\\8.0.0\\system.threading.channels.8.0.0.nupkg.sha512",
+    "C:\\Users\\307824\\.nuget\\packages\\microsoft.netcore.app.crossgen2.win-x64\\9.0.9\\microsoft.netcore.app.crossgen2.win-x64.9.0.9.nupkg.sha512"
   ],
   "logs": []
 }

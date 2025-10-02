@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("GGs.E2ETests")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+f689b6a7253c4ad115db9dadd713710ccee16bbd")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+96bc82cdd9721b72ea8d4ec820aa842e365156a3")]
 [assembly: System.Reflection.AssemblyProductAttribute("GGs.E2ETests")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.E2ETests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

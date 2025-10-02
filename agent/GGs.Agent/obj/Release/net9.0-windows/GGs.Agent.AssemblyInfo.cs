@@ -11,13 +11,16 @@ using System;
 using System.Reflection;
 
 [assembly: Microsoft.Extensions.Configuration.UserSecrets.UserSecretsIdAttribute("dotnet-GGs.Agent-4a73d5fc-5e50-4a1e-a6a2-894e94afeb8a")]
-[assembly: System.Reflection.AssemblyCompanyAttribute("GGs.Agent")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Västerås Stad")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © Västerås Stad 2025")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+12333c61d903cc981cf15c024a558a45ee41a549")]
-[assembly: System.Reflection.AssemblyProductAttribute("GGs.Agent")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0-dev.74+96bc82cdd9721b72ea8d4ec820aa842e365156a3")]
+[assembly: System.Reflection.AssemblyProductAttribute("GGsDeepAgent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.Agent")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/vasteras-stad/ggsdeepagent")]
+[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
 

@@ -230,7 +230,7 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Server.deps.json
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Server.runtimeconfig.json
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Server.dll
-C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Server.pdb
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Server.xml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\Azure.Core.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\Azure.Extensions.AspNetCore.Configuration.Secrets.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\Azure.Identity.dll
@@ -422,7 +422,7 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\runtimes\win\lib\net8.0\System.ServiceProcess.ServiceController.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\runtimes\win\lib\net6.0\System.Windows.Extensions.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Shared.dll
-C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Shared.pdb
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Shared.xml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\GGs.Server.csproj.AssemblyReference.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\rpswa.dswa.cache.json
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\GGs.Server.GeneratedMSBuildEditorConfig.editorconfig
@@ -443,6 +443,6 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\GGs.Server.csproj.Up2Date
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\GGs.Server.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\refint\GGs.Server.dll
-C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\GGs.Server.pdb
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\GGs.Server.xml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\GGs.Server.genruntimeconfig.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\obj\Release\net9.0\ref\GGs.Server.dll

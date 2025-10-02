@@ -1,0 +1,153 @@
+<Project>
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       GGsDeepAgent - Enterprise Build Configuration
+       
+       This file defines common build properties for all projects in the solution.
+       It enforces enterprise-grade quality standards, security, and observability.
+       ═══════════════════════════════════════════════════════════════════════════ -->
+
+  <PropertyGroup Label="Framework and Language">
+    <TargetFramework Condition="'$(TargetFramework)' == ''">net9.0</TargetFramework>
+    <LangVersion>latest</LangVersion>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Nullable Reference Types">
+    <!-- Enable nullable reference types for better null safety -->
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Code Quality and Analysis">
+    <!-- Warnings as errors disabled - will enable after fixing root causes -->
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningLevel>4</WarningLevel>
+    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <EnableNETAnalyzers>true</EnableNETAnalyzers>
+    <AnalysisLevel>latest</AnalysisLevel>
+    <AnalysisMode>Default</AnalysisMode>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Deterministic Builds">
+    <!-- Enable deterministic builds for reproducibility -->
+    <Deterministic>true</Deterministic>
+    <ContinuousIntegrationBuild Condition="'$(CI)' == 'true'">true</ContinuousIntegrationBuild>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Assembly Information">
+    <Company>Västerås Stad</Company>
+    <Product>GGsDeepAgent</Product>
+    <Copyright>Copyright © Västerås Stad $([System.DateTime]::Now.Year)</Copyright>
+    <Authors>Västerås Stad</Authors>
+    <NeutralLanguage>en-US</NeutralLanguage>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Versioning">
+    <!-- Semantic versioning with Git integration using MinVer -->
+    <MinVerTagPrefix>v</MinVerTagPrefix>
+    <MinVerMinimumMajorMinor>1.0</MinVerMinimumMajorMinor>
+    <MinVerDefaultPreReleaseIdentifiers>dev</MinVerDefaultPreReleaseIdentifiers>
+    <MinVerVerbosity>normal</MinVerVerbosity>
+  </PropertyGroup>
+
+  <!-- MinVer package reference for all projects -->
+  <ItemGroup>
+    <PackageReference Include="MinVer" Version="6.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <!-- Build output paths are managed by individual projects to avoid conflicts with WPF -->
+
+  <PropertyGroup Label="Performance Optimizations">
+    <!-- Enable ReadyToRun for faster startup in Release builds -->
+    <PublishReadyToRun Condition="'$(Configuration)' == 'Release'">true</PublishReadyToRun>
+    <PublishReadyToRunShowWarnings>true</PublishReadyToRunShowWarnings>
+    
+    <!-- Enable tiered compilation -->
+    <TieredCompilation>true</TieredCompilation>
+    <TieredCompilationQuickJit>true</TieredCompilationQuickJit>
+    
+    <!-- Optimize for size in Release builds -->
+    <DebugType Condition="'$(Configuration)' == 'Release'">embedded</DebugType>
+    <DebugSymbols Condition="'$(Configuration)' == 'Release'">true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Security">
+    <!-- Enable security features -->
+    <EnableDefaultSecurityPolicy>true</EnableDefaultSecurityPolicy>
+  </PropertyGroup>
+
+  <PropertyGroup Label="Documentation">
+    <!-- Generate XML documentation for public APIs -->
+    <GenerateDocumentationFile Condition="'$(IsTestProject)' != 'true'">true</GenerateDocumentationFile>
+    <NoWarn>$(NoWarn);1591</NoWarn> <!-- Suppress missing XML comment warnings for now -->
+  </PropertyGroup>
+
+  <PropertyGroup Label="Package Settings">
+    <PackageProjectUrl>https://github.com/vasteras-stad/ggsdeepagent</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/vasteras-stad/ggsdeepagent</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       Test Project Detection
+       ═══════════════════════════════════════════════════════════════════════════ -->
+  <PropertyGroup>
+    <IsTestProject Condition="$(MSBuildProjectName.Contains('Test'))">true</IsTestProject>
+  </PropertyGroup>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       Package Version Management
+
+       Note: Individual projects manage their own package references.
+       This section can be used to centralize version management in the future.
+       ═══════════════════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       Code Analysis Rules
+       ═══════════════════════════════════════════════════════════════════════════ -->
+  <PropertyGroup Label="Code Analysis Rules">
+    <!-- Only suppress rules that are not applicable to this project -->
+    <NoWarn>$(NoWarn);CA1014</NoWarn> <!-- Mark assemblies with CLSCompliant - not needed -->
+    <NoWarn>$(NoWarn);CA1062</NoWarn> <!-- Validate arguments of public methods - handled by nullable -->
+    <NoWarn>$(NoWarn);CA2007</NoWarn> <!-- Do not directly await a Task - not needed for desktop apps -->
+  </PropertyGroup>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       Source Link for Debugging
+       ═══════════════════════════════════════════════════════════════════════════ -->
+  <PropertyGroup Label="Source Link">
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
+  <ItemGroup Label="Source Link">
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="8.0.0" PrivateAssets="All" />
+  </ItemGroup>
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       Telemetry and Observability
+
+       Note: Telemetry packages are managed by individual projects to avoid conflicts.
+       ═══════════════════════════════════════════════════════════════════════════ -->
+
+  <!-- ═══════════════════════════════════════════════════════════════════════════
+       Build Events
+       ═══════════════════════════════════════════════════════════════════════════ -->
+  <Target Name="DisplayBuildInfo" BeforeTargets="Build">
+    <Message Text="═══════════════════════════════════════════════════════════════" Importance="high" />
+    <Message Text="Building: $(MSBuildProjectName)" Importance="high" />
+    <Message Text="Configuration: $(Configuration)" Importance="high" />
+    <Message Text="Framework: $(TargetFramework)" Importance="high" />
+    <Message Text="Nullable: $(Nullable)" Importance="high" />
+    <Message Text="TreatWarningsAsErrors: $(TreatWarningsAsErrors)" Importance="high" />
+    <Message Text="═══════════════════════════════════════════════════════════════" Importance="high" />
+  </Target>
+
+</Project>
+

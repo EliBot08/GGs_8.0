@@ -95,7 +95,7 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\b
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Agent.deps.json
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Agent.runtimeconfig.json
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Agent.dll
-C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Agent.pdb
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Agent.xml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\Microsoft.AspNetCore.Connections.Abstractions.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\Microsoft.AspNetCore.Http.Connections.Client.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\Microsoft.AspNetCore.Http.Connections.Common.dll
@@ -169,7 +169,7 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\b
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\runtimes\win\lib\net8.0\System.Management.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\runtimes\win\lib\net8.0\System.ServiceProcess.ServiceController.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Shared.dll
-C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Shared.pdb
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Shared.xml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.csproj.AssemblyReference.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.GeneratedMSBuildEditorConfig.editorconfig
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.AssemblyInfoInputs.cache
@@ -179,6 +179,6 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\o
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.csproj.Up2Date
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.dll
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\refint\GGs.Agent.dll
-C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.pdb
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.xml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\GGs.Agent.genruntimeconfig.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\obj\Release\net9.0-windows\ref\GGs.Agent.dll

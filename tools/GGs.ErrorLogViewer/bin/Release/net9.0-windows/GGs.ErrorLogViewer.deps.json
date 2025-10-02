@@ -6,7 +6,7 @@
   "compilationOptions": {},
   "targets": {
     ".NETCoreApp,Version=v9.0": {
-      "GGs.ErrorLogViewer/1.0.0": {
+      "GGs.ErrorLogViewer/1.0.0-dev.74": {
         "dependencies": {
           "CommunityToolkit.Mvvm": "8.2.2",
           "Microsoft.Extensions.Configuration": "9.0.0",
@@ -15,6 +15,8 @@
           "Microsoft.Extensions.Hosting": "9.0.0",
           "Microsoft.Extensions.Logging": "9.0.0",
           "Microsoft.Extensions.Options.ConfigurationExtensions": "9.0.0",
+          "Microsoft.SourceLink.GitHub": "8.0.0",
+          "MinVer": "6.0.0",
           "ModernWpfUI": "0.9.6",
           "Newtonsoft.Json": "13.0.3",
           "Serilog": "3.1.1",
@@ -41,6 +43,7 @@
           }
         }
       },
+      "Microsoft.Build.Tasks.Git/8.0.0": {},
       "Microsoft.Extensions.Configuration/9.0.0": {
         "dependencies": {
           "Microsoft.Extensions.Configuration.Abstractions": "9.0.0",
@@ -400,6 +403,14 @@
           }
         }
       },
+      "Microsoft.SourceLink.Common/8.0.0": {},
+      "Microsoft.SourceLink.GitHub/8.0.0": {
+        "dependencies": {
+          "Microsoft.Build.Tasks.Git": "8.0.0",
+          "Microsoft.SourceLink.Common": "8.0.0"
+        }
+      },
+      "MinVer/6.0.0": {},
       "ModernWpfUI/0.9.6": {
         "runtime": {
           "lib/net5.0-windows7.0/ModernWpf.Controls.dll": {
@@ -923,7 +934,7 @@
     }
   },
   "libraries": {
-    "GGs.ErrorLogViewer/1.0.0": {
+    "GGs.ErrorLogViewer/1.0.0-dev.74": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
@@ -934,6 +945,13 @@
       "sha512": "sha512-r0g0k9tGYdrnz8R7T3x5UiokDffeevzK/2P/9SBL6fqLgN8B157MIi/bVUWI1KAz6ZorZrK9AdABCWUeXZZsvA==",
       "path": "communitytoolkit.mvvm/8.2.2",
       "hashPath": "communitytoolkit.mvvm.8.2.2.nupkg.sha512"
+    },
+    "Microsoft.Build.Tasks.Git/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bZKfSIKJRXLTuSzLudMFte/8CempWjVamNUR5eHJizsy+iuOuO/k2gnh7W0dHJmYY0tBf+gUErfluCv5mySAOQ==",
+      "path": "microsoft.build.tasks.git/8.0.0",
+      "hashPath": "microsoft.build.tasks.git.8.0.0.nupkg.sha512"
     },
     "Microsoft.Extensions.Configuration/9.0.0": {
       "type": "package",
@@ -1123,6 +1141,27 @@
       "sha512": "sha512-N3qEBzmLMYiASUlKxxFIISP4AiwuPTHF5uCh+2CWSwwzAJiIYx0kBJsS30cp1nvhSySFAVi30jecD307jV+8Kg==",
       "path": "microsoft.extensions.primitives/9.0.0",
       "hashPath": "microsoft.extensions.primitives.9.0.0.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.Common/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-dk9JPxTCIevS75HyEQ0E4OVAFhB2N+V9ShCXf8Q6FkUQZDkgLI12y679Nym1YqsiSysuQskT7Z+6nUf3yab6Vw==",
+      "path": "microsoft.sourcelink.common/8.0.0",
+      "hashPath": "microsoft.sourcelink.common.8.0.0.nupkg.sha512"
+    },
+    "Microsoft.SourceLink.GitHub/8.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-G5q7OqtwIyGTkeIOAc3u2ZuV/kicQaec5EaRnc0pIeSnh9LUjj+PYQrJYBURvDt7twGl2PKA7nSN0kz1Zw5bnQ==",
+      "path": "microsoft.sourcelink.github/8.0.0",
+      "hashPath": "microsoft.sourcelink.github.8.0.0.nupkg.sha512"
+    },
+    "MinVer/6.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-+/SsmiySsXJlvQLCGBqaZKNVt3s/Y/HbAdwtop7Km2CnuZbaScoqkWJEBQ5Cy9ebkn6kCYKrHsXgwrFdTgcb3g==",
+      "path": "minver/6.0.0",
+      "hashPath": "minver.6.0.0.nupkg.sha512"
     },
     "ModernWpfUI/0.9.6": {
       "type": "package",

@@ -10,13 +10,16 @@
 using System;
 using System.Reflection;
 
-[assembly: System.Reflection.AssemblyCompanyAttribute("GGs.Enterprise.Tests")]
+[assembly: System.Reflection.AssemblyCompanyAttribute("Västerås Stad")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
+[assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © Västerås Stad 2025")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+d285377f756c6058e94ff87053e74d389d229a34")]
-[assembly: System.Reflection.AssemblyProductAttribute("GGs.Enterprise.Tests")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0-dev.74+96bc82cdd9721b72ea8d4ec820aa842e365156a3")]
+[assembly: System.Reflection.AssemblyProductAttribute("GGsDeepAgent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.Enterprise.Tests")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
+[assembly: System.Reflection.AssemblyMetadataAttribute("RepositoryUrl", "https://github.com/vasteras-stad/ggsdeepagent")]
+[assembly: System.Resources.NeutralResourcesLanguageAttribute("en-US")]
 [assembly: System.Runtime.Versioning.TargetPlatformAttribute("Windows7.0")]
 [assembly: System.Runtime.Versioning.SupportedOSPlatformAttribute("Windows7.0")]
 

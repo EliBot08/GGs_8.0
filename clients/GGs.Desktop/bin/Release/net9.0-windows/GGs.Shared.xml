@@ -1,0 +1,204 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.Shared</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.Shared.Api.ApiClient">
+            <summary>
+            API client for communicating with the GGs server
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Api.AuthService">
+            <summary>
+            Authentication service for user login and token management
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Http.SecureHttpClientFactory">
+            <summary>
+            Factory for creating secure HTTP clients
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Models.SystemInformation">
+            <summary>
+            Comprehensive system information model for enterprise-grade hardware detection
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Models.UltraDeepDiagnosticsReport">
+            <summary>
+            Ultra-deep diagnostics report containing expert-level Windows internals analysis
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.LicenseValidator">
+            <summary>
+            Validates license requirements for system intelligence operations
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.LicenseValidator.ValidateLicenseAsync(System.String,GGs.Shared.SystemIntelligence.LicenseTier)">
+            <summary>
+            Validates if user has required license tier
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.LicenseValidator.GetUserLicenseTierAsync(System.String)">
+            <summary>
+            Gets the user's current license tier
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.LicenseValidator.ValidateCloudSavePermissionsAsync(GGs.Shared.SystemIntelligence.LicenseTier)">
+            <summary>
+            Validates cloud save permissions
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.LicenseValidator.ValidateScanAreasAsync(GGs.Shared.SystemIntelligence.LicenseTier,GGs.Shared.SystemIntelligence.ScanArea)">
+            <summary>
+            Validates scan areas based on license tier
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.LicenseException">
+            <summary>
+            License exception
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.ProgressTracker">
+            <summary>
+            Tracks progress of system intelligence operations
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.ProgressTracker.StartScanSessionAsync(System.Guid,System.Int32)">
+            <summary>
+            Starts a new scan session
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.ProgressTracker.StartApplicationSessionAsync(System.Guid,System.Int32)">
+            <summary>
+            Starts a new application session
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.ProgressTracker.UpdateScanProgressAsync(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Updates scan progress
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.ProgressTracker.UpdateApplicationProgressAsync(System.Guid,System.Int32,System.Int32)">
+            <summary>
+            Updates application progress
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.ProgressTracker.CompleteSessionAsync(System.Guid)">
+            <summary>
+            Completes a session
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.ProgressTracker.CompleteApplicationSessionAsync(System.Guid)">
+            <summary>
+            Completes an application session
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemIntelligence.ProgressTracker.EndSessionAsync(System.Guid)">
+            <summary>
+            Ends a session
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.ProgressSession">
+            <summary>
+            Progress session information
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.TweakSource">
+            <summary>
+            Source of detected tweaks
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.TweakCategory">
+            <summary>
+            Category of performance tweaks
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.ScanStatus">
+            <summary>
+            Status of system scanning operation
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.PerformanceImpact">
+            <summary>
+            Estimated performance impact of tweaks
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.TweakType">
+            <summary>
+            The type of a tweak, indicating the system area it affects.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.KnownOptimizer">
+            <summary>
+            Third-party optimizer applications that can be detected
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.ScanDepth">
+            <summary>
+            Scan depth levels for different scanning operations
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.DetectionConfidence">
+            <summary>
+            Detection confidence levels
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.ScanArea">
+            <summary>
+            System areas that can be scanned
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.SharingPermission">
+            <summary>
+            Profile sharing permissions
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.CloudProfileStatus">
+            <summary>
+            Cloud profile status
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.SecuritySeverity">
+            <summary>
+            Security severity levels
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.ServiceAction">
+            <summary>
+            Service actions that can be performed
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.RiskLevel">
+            <summary>
+            Risk levels for security assessment
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.SafetyLevel">
+            <summary>
+            Safety levels for tweak assessment
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.CommandType">
+            <summary>
+            Command types for tweak execution
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.LicenseTier">
+            <summary>
+            License tiers for feature access
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.SystemIntelligenceService">
+            <summary>
+            Main orchestration service for the System Intelligence Harvester feature
+            Coordinates deep system scanning, tweak detection, and profile management
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemIntelligence.UacPrivilegeManager">
+            <summary>
+            Manages UAC privileges and elevation requirements
+            </summary>
+        </member>
+    </members>
+</doc>

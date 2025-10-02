@@ -1,154 +1,278 @@
 GGsDeepAgent vNext — 2500% Upgrade Playbook (Enterprise, Autonomous, Hacker‑Grade)
 
-Prime Directive
-- Evolve GGsDeepAgent into an autonomous, enterprise‑class engineering copilot whose new capabilities make the previous generation look like a proof‑of‑concept. Minimum 25× improvement across reliability, speed, safety, observability, and delivery throughput. If anything is underspecified, make a logical assessment and continue without blocking.
+═══════════════════════════════════════════════════════════════════════════════
+PRIME DIRECTIVE
+═══════════════════════════════════════════════════════════════════════════════
+Evolve GGsDeepAgent into an autonomous, enterprise‑class engineering copilot whose
+new capabilities make the previous generation look like a proof‑of‑concept.
+Minimum 25× improvement across reliability, speed, safety, observability, and
+delivery throughput. If anything is underspecified, make a logical assessment
+and continue without blocking.
 
-Outcome Targets (measurable, non‑negotiable)
-- CI excellence: 100% green for GitHub Jobs — Build/Test/Coverage, Package (MSI+MSIX), and Health Check Gate (blue/green).
-- Build speed: 50% faster cold build, 75% faster incremental builds via caching/parallelism.
-- Failure containment: zero flaky tests; deterministic builds; circuit‑breakers and timeouts in all external calls.
-- Observability: golden signals emitted (latency, error, saturation), trace correlation across desktop/server/agent.
-- Security: signed artifacts, SBOM, SAST/secret scanning, reproducible builds, least‑privilege pipelines.
+═══════════════════════════════════════════════════════════════════════════════
+OUTCOME TARGETS (Measurable, Non‑Negotiable)
+═══════════════════════════════════════════════════════════════════════════════
+✓ CI Excellence: 100% green for GitHub Jobs — Build/Test/Coverage, Package (MSI+MSIX), Health Check Gate
+✓ Build Speed: 50% faster cold build, 75% faster incremental builds via caching/parallelism
+✓ Failure Containment: Zero flaky tests; deterministic builds; circuit‑breakers and timeouts in all external calls
+✓ Observability: Golden signals emitted (latency, error, saturation), trace correlation across desktop/server/agent
+✓ Security: Signed artifacts, SBOM, SAST/secret scanning, reproducible builds, least‑privilege pipelines
+✓ Zero Warnings: All compiler warnings treated as errors; static analysis enforced; nullable reference types enabled
+✓ Zero Technical Debt: No TODOs, FIXMEs, or placeholders in production code
 
-Operating Principles
-- Fix root causes, not symptoms. Eliminate placeholders, nulls, and ambiguous states.
-- Prefer idempotent, restartable operations. Every step can be rerun safely.
-- Fail fast with precise diagnostics; never fail silently.
-- Default secure: secrets from vault, no plaintext creds, signed outputs only.
+═══════════════════════════════════════════════════════════════════════════════
+OPERATING PRINCIPLES (10X Enhanced)
+═══════════════════════════════════════════════════════════════════════════════
 
-Section A — GGsDeepAgent Architecture Upgrades
-- Resilient core:
-  - Structured concurrency; cancelation tokens everywhere; timeouts on I/O; exponential backoff + jitter.
-  - Circuit‑breaker around external dependencies; dead‑letter queue for unprocessed work.
-  - Strong typing at domain boundaries; input validation with actionable errors.
-- Telemetry & tracing:
-  - OpenTelemetry spans for key operations; correlation IDs propagated across desktop/server/agent.
-  - Event‑level logging with stable schemas; PII‑safe redaction.
-  - Health probes: liveness, readiness, and startup probes with self‑healing on failure.
-- Performance & memory:
-  - Async I/O; pooled buffers; zero‑allocation hot paths; cache with TTL + stampede protection.
-  - Benchmark harness with micro/macro profiles; target 25× throughput on representative workloads.
-- Safety & correctness:
-  - Property‑based tests for critical invariants; fuzzing for inputs; fault injection for chaos testing.
-  - Static analyzers enforced at build; nullable enabled; banned API usage list.
+🎯 PRINCIPLE 1: ROOT CAUSE ELIMINATION
+   - Fix root causes, not symptoms. Eliminate placeholders, nulls, and ambiguous states
+   - Every fix must include: root cause analysis, prevention strategy, and regression test
+   - Document WHY decisions were made, not just WHAT was changed
+   - Use static analysis and compiler features to prevent entire classes of bugs
 
-Deliverables (Agent)
-- Refactored core worker(s) with cancellation, retries, and telemetry hooks.
-- Guardrails: input validators, policy layer (retry/breaker), and safety contracts.
-- Benchmarks with baselines + trend alerts; regression gates in CI.
+🔄 PRINCIPLE 2: IDEMPOTENCY & RESTARTABILITY
+   - Prefer idempotent, restartable operations. Every step can be rerun safely
+   - All operations must be atomic or compensatable with clear rollback paths
+   - State transitions must be explicit, logged, and recoverable
+   - Use transactional boundaries and saga patterns for distributed operations
 
-Section B — Launchers 2.0 (Hacker‑grade, crash‑proof)
-- Only three batch entrypoints at repo root:
-  - Launch-Desktop.bat — clean build, verify, and launch the desktop app; optional auto‑start server.
-  - Launch-ErrorLogViewer.bat — clean build, verify, and launch the Error Log Viewer.
-  - Launch-All.bat — orchestrate server + desktop + viewer; run solution tests; dashboard + logs.
-- Design intent:
-  - Kill conflicting processes before building (GGs.* apps, msbuild, vstest, optional dotnet).
-  - Dotnet clean on solution; publish into deterministic out/* directories; no stale artifacts.
-  - Wrap PowerShell orchestrators in tools/launcher (Launch-*-New.ps1) with ForceBuild/ForcePort.
-  - Timestamped logs in launcher-logs; clear exit codes; colorful hacker UX; test stubs with --test.
+⚡ PRINCIPLE 3: FAIL FAST WITH PRECISION
+   - Fail fast with precise diagnostics; never fail silently
+   - Every error must include: context, correlation ID, remediation steps, and next actions
+   - Structured logging with stable schemas; PII-safe redaction by default
+   - Error budgets and SLOs tracked; alerts with actionable runbooks
 
-Section C — CI/CD: Make All GitHub Jobs Green
-- Build, Test, Coverage
-  - Matrix: Windows-latest, .NET 9.0. Cache NuGet and intermediate obj.
-  - Steps: dotnet restore; dotnet build -c Release; dotnet test -c Release --collect:"XPlat Code Coverage".
-  - Coverage: use coverlet + reportgenerator to produce Cobertura/HTML; enforce minimum thresholds.
-  - Artifacts: test results and coverage reports uploaded; failure logs attached for triage.
-- Package (MSI + MSIX)
-  - MSIX (wapproj): deterministic versioning via Git tag; appxmanifest transformations per env.
-  - Signing: import PFX from GitHub secret (base64) with secure password; sign all binaries; stamp catalog.
-  - MSI (Wix/MSI): heat + candle + light or MSBuild WixToolset; sign final MSI; attach SBOM (CycloneDX).
-  - Outputs: versioned artifacts pushed to Releases (draft) and retained as workflow artifacts.
-- Health Check Gate (blue/green)
-  - Deploy draft to ephemeral environment; smoke with Launch-All-New.ps1 in --test mode.
-  - Probe endpoints: /healthz and /ready (server), desktop viewer heartbeat via named pipe or local TCP.
-  - Gate policy: progress only on 200 OK health checks + zero errors in logs; otherwise auto‑rollback.
+🔒 PRINCIPLE 4: SECURITY BY DEFAULT
+   - Default secure: secrets from vault, no plaintext creds, signed outputs only
+   - Least privilege everywhere; defense in depth; assume breach mentality
+   - Input validation at all boundaries; output encoding; CSRF/XSS protection
+   - Regular security audits; dependency scanning; SBOM generation
 
-Reference Workflow (YAML sketch)
-- name: CI
-  on: [push, pull_request]
-  jobs:
-    build_test_coverage:
-      runs-on: windows-latest
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-dotnet@v4
-          with: { dotnet-version: '9.0.x' }
-        - name: Restore
-          run: dotnet restore GGs/GGs.sln
-        - name: Build
-          run: dotnet build GGs/GGs.sln -c Release --no-restore
-        - name: Test + Coverage
-          run: dotnet test GGs/GGs.sln -c Release --no-build --collect:"XPlat Code Coverage"
-        - name: Publish coverage
-          if: always()
-          uses: actions/upload-artifact@v4
-          with: { name: coverage, path: '**/TestResults/**' }
-    package:
-      runs-on: windows-latest
-      needs: build_test_coverage
-      steps:
-        - uses: actions/checkout@v4
-        - uses: actions/setup-dotnet@v4
-          with: { dotnet-version: '9.0.x' }
-        - name: Import code signing cert
-          shell: pwsh
-          run: |
-            $bytes = [Convert]::FromBase64String($env:CODE_SIGNING_PFX_BASE64)
-            Set-Content -Path cert.pfx -Value $bytes -AsByteStream
-        - name: Build MSIX + MSI
-          shell: pwsh
-          run: |
-            dotnet publish GGs/clients/GGs.Desktop/GGs.Desktop.csproj -c Release -o out/desktop
-            dotnet publish GGs/tools/GGs.ErrorLogViewer/GGs.ErrorLogViewer.csproj -c Release -o out/viewer
-            msbuild GGs/packaging/msix/GGs.Desktop.Package/GGs.Desktop.Package.wapproj /p:Configuration=Release /p:GenerateAppxPackageOnBuild=true /p:AppxPackageDir=out/msix/ /p:PackageCertificateKeyFile="cert.pfx" /p:PackageCertificatePassword="$(CODE_SIGNING_PFX_PASSWORD)"
-            rem Wix/MSI step here (tooling-dependent)
-        - uses: actions/upload-artifact@v4
-          with: { name: packages, path: out/** }
-    health_gate:
-      runs-on: windows-latest
-      needs: package
-      steps:
-        - uses: actions/checkout@v4
-        - name: Orchestrated smoke
-          shell: pwsh
-          run: GGs/tools/launcher/Launch-All-New.ps1 -Test -TestDurationSeconds 10
-        - name: Verify health
-          shell: pwsh
-          run: |
-            $ok = (Invoke-WebRequest -UseBasicParsing http://localhost:5000/healthz).StatusCode -eq 200
-            if (-not $ok) { throw 'Health probe failed' }
+🏗️ PRINCIPLE 5: STRONG CONTRACTS & TYPES
+   - Strong typing at domain boundaries; nullable reference types enabled
+   - API contracts versioned and backward compatible; breaking changes gated
+   - Schema validation for all external data; fail on unknown properties
+   - Use discriminated unions and result types instead of exceptions for expected failures
 
-Section D — Packaging Hardening (MSI + MSIX)
-- Versioning: semantic version from tags; auto‑increment pre‑release for PR builds.
-- Signing: centralized cert retrieval; timestamp service; verify signatures in CI.
-- Installer UX: default silent switch; repair/uninstall idempotent; safe upgrades.
-- MSIX manifest: Publisher, Identity, capabilities minimal; icons + assets validated.
+📊 PRINCIPLE 6: OBSERVABILITY FIRST
+   - Instrument before implementing; telemetry is not optional
+   - Distributed tracing with correlation IDs propagated across all boundaries
+   - Metrics with dimensions; logs with structure; traces with context
+   - Health probes (liveness, readiness, startup) with self-healing capabilities
 
-Section E — Test Strategy (Agent, Server, Desktop, Viewer)
-- Unit: fast, deterministic with mocks; required for critical code paths.
-- Integration: real file I/O, networking on ephemeral ports; hermetic by default.
-- E2E: emulator flows for desktop + viewer; golden screenshots for critical views.
-- Chaos: fault injection scenarios scheduled nightly; verify recovery and alerting.
+⚙️ PRINCIPLE 7: PERFORMANCE & EFFICIENCY
+   - Async I/O everywhere; pooled buffers; zero-allocation hot paths
+   - Cache with TTL + stampede protection; lazy initialization with thread safety
+   - Benchmark-driven optimization; profile before optimizing
+   - Resource limits and backpressure; graceful degradation under load
 
-Section F — Observability & Ops
-- Central logs with component+correlation; structured JSON; retention + rotation.
-- Metrics: request duration, error rate, queue depth, memory, GC pauses.
-- Alerts: build break, test failure, pkg signing failure, health gate breach.
+🧪 PRINCIPLE 8: TEST PYRAMID EXCELLENCE
+   - Unit tests: fast, deterministic, isolated with mocks
+   - Integration tests: real I/O on ephemeral resources; hermetic by default
+   - E2E tests: critical user journeys; golden screenshots for UI
+   - Chaos tests: fault injection; verify recovery and alerting
 
-Section G — Autonomous Execution Protocol (for the Agent)
-- Discover → Propose → Implement → Validate → Ship loop with no manual stalls.
-- If blocked by environment (e.g., cert), create stub tasks with clear prereqs and continue in parallel areas.
-- Always write remediation steps into failure logs with next‑action hints.
+🚀 PRINCIPLE 9: CONTINUOUS DELIVERY
+   - Every commit is potentially shippable; trunk-based development
+   - Feature flags for gradual rollout; kill switches for instant rollback
+   - Blue-green deployments; canary releases; automated rollback on failure
+   - Deployment metrics tracked; DORA metrics measured and improved
 
-Section H — Handoff & Rollback
-- Rollback recipes for each deployable unit; artifact retention and provenance documented.
-- Handoff doc summarizing changes, risks, toggles, and support playbooks.
+🤖 PRINCIPLE 10: AUTONOMOUS EXECUTION
+   - Discover → Propose → Implement → Validate → Ship loop with no manual stalls
+   - If blocked by environment, create stub tasks with clear prereqs and continue in parallel
+   - Always write remediation steps into failure logs with next‑action hints
+   - Self-healing where possible; escalate with full context when human intervention needed
 
-Done Criteria
-- All three launchers pass local smoke in both normal and --test modes.
-- GitHub Actions shows all three jobs green: Build/Test/Coverage, Package (MSI+MSIX), Health gate.
-- Agent throughput improved by 25× on benchmark suite; no regressions.
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 1 — GGsDeepAgent Architecture Upgrades
+═══════════════════════════════════════════════════════════════════════════════
+
+🏗️ RESILIENT CORE
+   ✓ Structured concurrency; cancellation tokens everywhere; timeouts on I/O
+   ✓ Exponential backoff + jitter for retries; circuit‑breaker around external dependencies
+   ✓ Dead‑letter queue for unprocessed work; poison message handling
+   ✓ Strong typing at domain boundaries; input validation with actionable errors
+   ✓ Result types instead of exceptions for expected failures
+
+📊 TELEMETRY & TRACING
+   ✓ OpenTelemetry spans for key operations; correlation IDs propagated across desktop/server/agent
+   ✓ Event‑level logging with stable schemas; PII‑safe redaction
+   ✓ Health probes: liveness, readiness, and startup probes with self‑healing on failure
+   ✓ Metrics: request duration, error rate, queue depth, memory, GC pauses
+   ✓ Distributed tracing with W3C Trace Context propagation
+
+⚡ PERFORMANCE & MEMORY
+   ✓ Async I/O everywhere; pooled buffers; zero‑allocation hot paths
+   ✓ Cache with TTL + stampede protection; lazy initialization with thread safety
+   ✓ Benchmark harness with micro/macro profiles; target 25× throughput on representative workloads
+   ✓ Memory pressure monitoring; GC tuning; object pooling for hot paths
+
+🧪 SAFETY & CORRECTNESS
+   ✓ Property‑based tests for critical invariants; fuzzing for inputs
+   ✓ Fault injection for chaos testing; verify recovery and alerting
+   ✓ Static analyzers enforced at build; nullable enabled; banned API usage list
+   ✓ Code coverage minimum 80%; mutation testing for critical paths
+
+📦 DELIVERABLES (Phase 1)
+   ✓ Refactored core worker(s) with cancellation, retries, and telemetry hooks
+   ✓ Guardrails: input validators, policy layer (retry/breaker), and safety contracts
+   ✓ Benchmarks with baselines + trend alerts; regression gates in CI
+   ✓ Health check endpoints with detailed diagnostics
+   ✓ Comprehensive unit and integration test suite
+
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 2 — Launchers 2.0 (Hacker‑Grade, Crash‑Proof)
+═══════════════════════════════════════════════════════════════════════════════
+
+🚀 THREE BATCH ENTRYPOINTS AT REPO ROOT
+   ✓ Launch-Desktop.bat — clean build, verify, and launch the desktop app; optional auto‑start server
+   ✓ Launch-ErrorLogViewer.bat — clean build, verify, and launch the Error Log Viewer
+   ✓ Launch-All.bat — orchestrate server + desktop + viewer; run solution tests; dashboard + logs
+
+🎯 DESIGN INTENT
+   ✓ Kill conflicting processes before building (GGs.* apps, msbuild, vstest, optional dotnet)
+   ✓ Dotnet clean on solution; publish into deterministic out/* directories; no stale artifacts
+   ✓ Wrap PowerShell orchestrators in tools/launcher (Launch-*-New.ps1) with ForceBuild/ForcePort
+   ✓ Timestamped logs in launcher-logs; clear exit codes; colorful hacker UX
+   ✓ Test stubs with --test flag for CI/CD integration
+   ✓ Health checks after launch; retry logic with exponential backoff
+   ✓ Graceful shutdown handlers; cleanup on exit
+
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 3 — CI/CD: Make All GitHub Jobs Green
+═══════════════════════════════════════════════════════════════════════════════
+
+🏗️ BUILD, TEST, COVERAGE
+   ✓ Matrix: Windows-latest, .NET 9.0. Cache NuGet and intermediate obj
+   ✓ Steps: dotnet restore; dotnet build -c Release; dotnet test -c Release --collect:"XPlat Code Coverage"
+   ✓ Coverage: use coverlet + reportgenerator to produce Cobertura/HTML; enforce minimum thresholds (80%)
+   ✓ Artifacts: test results and coverage reports uploaded; failure logs attached for triage
+   ✓ Warnings as errors; nullable reference types enabled; static analysis enforced
+   ✓ Parallel test execution; test result caching; flaky test detection
+
+📦 PACKAGE (MSI + MSIX)
+   ✓ MSIX (wapproj): deterministic versioning via Git tag; appxmanifest transformations per env
+   ✓ Signing: import PFX from GitHub secret (base64) with secure password; sign all binaries; stamp catalog
+   ✓ MSI (Wix/MSI): heat + candle + light or MSBuild WixToolset; sign final MSI; attach SBOM (CycloneDX)
+   ✓ Outputs: versioned artifacts pushed to Releases (draft) and retained as workflow artifacts
+   ✓ Artifact attestation; provenance tracking; supply chain security
+
+🏥 HEALTH CHECK GATE (Blue/Green)
+   ✓ Deploy draft to ephemeral environment; smoke with Launch-All-New.ps1 in --test mode
+   ✓ Probe endpoints: /healthz and /ready (server), desktop viewer heartbeat via named pipe or local TCP
+   ✓ Gate policy: progress only on 200 OK health checks + zero errors in logs; otherwise auto‑rollback
+   ✓ Performance regression detection; load testing; chaos engineering
+   ✓ Automated rollback on failure; incident creation with full context
+
+📋 REFERENCE WORKFLOW (YAML Sketch)
+   See .github/workflows/ci.yml for full implementation
+
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 4 — Packaging Hardening (MSI + MSIX)
+═══════════════════════════════════════════════════════════════════════════════
+
+📦 VERSIONING & SIGNING
+   ✓ Semantic version from tags; auto‑increment pre‑release for PR builds
+   ✓ Centralized cert retrieval; timestamp service; verify signatures in CI
+   ✓ Artifact attestation; provenance tracking; supply chain security
+
+🎨 INSTALLER UX
+   ✓ Default silent switch; repair/uninstall idempotent; safe upgrades
+   ✓ MSIX manifest: Publisher, Identity, capabilities minimal; icons + assets validated
+   ✓ Custom actions for service installation; registry cleanup; file associations
+
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 5 — Test Strategy (Agent, Server, Desktop, Viewer)
+═══════════════════════════════════════════════════════════════════════════════
+
+🧪 UNIT TESTS
+   ✓ Fast, deterministic with mocks; required for critical code paths
+   ✓ Code coverage minimum 80%; mutation testing for critical paths
+   ✓ Property-based tests for invariants; parameterized tests for edge cases
+
+🔗 INTEGRATION TESTS
+   ✓ Real file I/O, networking on ephemeral ports; hermetic by default
+   ✓ Database tests with test containers; message queue tests with in-memory brokers
+   ✓ API contract tests; schema validation tests
+
+🎭 E2E TESTS
+   ✓ Emulator flows for desktop + viewer; golden screenshots for critical views
+   ✓ User journey tests; accessibility tests; performance tests
+   ✓ Cross-browser/platform tests; localization tests
+
+💥 CHAOS TESTS
+   ✓ Fault injection scenarios scheduled nightly; verify recovery and alerting
+   ✓ Network partitions; process crashes; resource exhaustion
+   ✓ Time travel tests; clock skew; timezone edge cases
+
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 6 — Observability & Ops
+═══════════════════════════════════════════════════════════════════════════════
+
+📊 LOGGING & METRICS
+   ✓ Central logs with component+correlation; structured JSON; retention + rotation
+   ✓ Metrics: request duration, error rate, queue depth, memory, GC pauses
+   ✓ Distributed tracing with W3C Trace Context; span attributes and events
+
+🚨 ALERTING & MONITORING
+   ✓ Alerts: build break, test failure, pkg signing failure, health gate breach
+   ✓ SLO-based alerting; error budgets; incident management
+   ✓ Runbooks for common issues; automated remediation where possible
+
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 7 — Autonomous Execution Protocol
+═══════════════════════════════════════════════════════════════════════════════
+
+🤖 EXECUTION LOOP
+   ✓ Discover → Propose → Implement → Validate → Ship loop with no manual stalls
+   ✓ If blocked by environment (e.g., cert), create stub tasks with clear prereqs and continue in parallel
+   ✓ Always write remediation steps into failure logs with next‑action hints
+   ✓ Self-healing where possible; escalate with full context when human intervention needed
+
+═══════════════════════════════════════════════════════════════════════════════
+PHASE 8 — Handoff & Rollback
+═══════════════════════════════════════════════════════════════════════════════
+
+📚 DOCUMENTATION & ROLLBACK
+   ✓ Rollback recipes for each deployable unit; artifact retention and provenance documented
+   ✓ Handoff doc summarizing changes, risks, toggles, and support playbooks
+   ✓ Architecture decision records (ADRs); runbooks; troubleshooting guides
+
+═══════════════════════════════════════════════════════════════════════════════
+DONE CRITERIA (Definition of Done)
+═══════════════════════════════════════════════════════════════════════════════
+
+✅ LAUNCHERS
+   ✓ All three launchers pass local smoke in both normal and --test modes
+   ✓ Zero errors, zero warnings in launcher logs
+   ✓ Health checks pass after launch; graceful shutdown on exit
+
+✅ CI/CD
+   ✓ GitHub Actions shows all three jobs green: Build/Test/Coverage, Package (MSI+MSIX), Health gate
+   ✓ Code coverage ≥ 80%; mutation score ≥ 70%
+   ✓ Zero compiler warnings; zero static analysis issues
+
+✅ PERFORMANCE
+   ✓ Agent throughput improved by 25× on benchmark suite; no regressions
+   ✓ Build time reduced by 50% (cold) and 75% (incremental)
+   ✓ Memory usage optimized; zero memory leaks
+
+✅ QUALITY
+   ✓ Zero flaky tests; deterministic builds
+   ✓ All tests pass; no skipped or ignored tests
+   ✓ Security scan clean; dependency vulnerabilities resolved
+
+✅ DOCUMENTATION
+   ✓ README updated; architecture diagrams current
+   ✓ API documentation complete; runbooks for operations
+   ✓ Handoff document with rollback procedures
+
+═══════════════════════════════════════════════════════════════════════════════
+EXECUTION MANDATE
+═══════════════════════════════════════════════════════════════════════════════
 
 Work autonomously. Make strong, sensible assumptions. Deliver with receipts.
+Fix root causes. Never leave TODOs. Always add tests. Document decisions.
+If blocked, create parallel work streams. Always provide next actions.
 

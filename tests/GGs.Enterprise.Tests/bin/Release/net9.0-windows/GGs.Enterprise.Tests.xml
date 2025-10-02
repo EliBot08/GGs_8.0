@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.Enterprise.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.Enterprise.Tests.EnterpriseIntegrationTests">
+            <summary>
+            Enterprise-level integration tests for GGs application
+            Validates end-to-end functionality, performance, and reliability
+            </summary>
+        </member>
+    </members>
+</doc>

@@ -12449,11 +12449,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.NewE2ETests\\GGs.NewE2ETests.csproj",
+      "projectUniqueName": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.NewE2ETests\\GGs.NewE2ETests.csproj",
       "projectName": "GGs.NewE2ETests",
-      "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.NewE2ETests\\GGs.NewE2ETests.csproj",
+      "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.NewE2ETests\\GGs.NewE2ETests.csproj",
       "packagesPath": "C:\\Users\\307824\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\tests\\GGs.NewE2ETests\\obj\\",
+      "outputPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\tests\\GGs.NewE2ETests\\obj\\",
       "projectStyle": "PackageReference",
       "configFilePaths": [
         "C:\\Users\\307824\\AppData\\Roaming\\NuGet\\NuGet.Config"
@@ -12468,14 +12468,14 @@
         "net9.0-windows7.0": {
           "targetAlias": "net9.0-windows",
           "projectReferences": {
-            "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\clients\\GGs.Desktop\\GGs.Desktop.csproj": {
-              "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\clients\\GGs.Desktop\\GGs.Desktop.csproj"
+            "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\clients\\GGs.Desktop\\GGs.Desktop.csproj": {
+              "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\clients\\GGs.Desktop\\GGs.Desktop.csproj"
             },
-            "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\GGs.Server.csproj": {
-              "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server\\GGs.Server.csproj"
+            "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\GGs.Server.csproj": {
+              "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\server\\GGs.Server\\GGs.Server.csproj"
             },
-            "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
-              "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
+            "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj": {
+              "projectPath": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\GGs\\shared\\GGs.Shared\\GGs.Shared.csproj"
             }
           }
         }

@@ -1,0 +1,261 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.Agent</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.Agent.Services.EnhancedSystemInformationService">
+            <summary>
+            ENHANCED System Information Service - 1000%+ Improved
+            Real implementations instead of placeholders
+            Comprehensive hardware detection and system analysis
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.EnhancedSystemInformationService.CollectRealMemoryInformationAsync(System.Threading.CancellationToken)">
+            <summary>
+            Real Memory Information Collection - Not a placeholder!
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.EnhancedSystemInformationService.CollectRealStorageInformationAsync(System.Threading.CancellationToken)">
+            <summary>
+            Real Storage Information Collection with SMART data
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.EnhancedSystemInformationService.CollectRealNetworkInformationAsync(System.Threading.CancellationToken)">
+            <summary>
+            Real Network Information Collection with topology
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.EnhancedSystemInformationService.CollectRealPowerInformationAsync(System.Threading.CancellationToken)">
+            <summary>
+            Real Power Information Collection
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.EnhancedSystemInformationService.CollectRealPerformanceMetricsAsync(System.Threading.CancellationToken)">
+            <summary>
+            Real Performance Metrics Collection
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.EnhancedTweakCollectionService">
+            <summary>
+            Enhanced system tweaks collection service with deep analysis and progress reporting
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.EnhancedTweakCollectionService.CollectSystemTweaksAsync(System.IProgress{GGs.Agent.Services.TweakCollectionProgress},System.Threading.CancellationToken)">
+            <summary>
+            Collects comprehensive system tweaks with animated progress reporting
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.EnhancedTweakCollectionService.UploadSystemTweaksAsync(GGs.Agent.Services.SystemTweaksCollection,System.IProgress{GGs.Agent.Services.TweakUploadProgress},System.Threading.CancellationToken)">
+            <summary>
+            Uploads system tweaks with progress reporting
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.HardwareDetectionService">
+            <summary>
+            Comprehensive hardware detection service supporting all GPU vendors and legacy hardware
+            Provides deep system access for enterprise-grade hardware analysis
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.HardwareDetectionService.DetectAllGpuHardwareAsync(System.Threading.CancellationToken)">
+            <summary>
+            Detects all GPU hardware including legacy and modern cards from all vendors
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.HardwareDetectionService.DetectAllCpuHardwareAsync(System.Threading.CancellationToken)">
+            <summary>
+            Detects all CPU hardware including legacy processors and architectures
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.EnhancedGpuInfo">
+            <summary>
+            Enhanced GPU information with comprehensive vendor support
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.EnhancedCpuInfo">
+            <summary>
+            Enhanced CPU information with comprehensive architecture support
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.RealCpuDetectionService">
+            <summary>
+            Real CPU Detection Service - 1000%+ Enhanced
+            Uses CPUID, WMI, Registry, and Performance Counters
+            Supports Intel, AMD, and ARM processors
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealCpuDetectionService.CollectUltraDeepCpuInformationAsync(System.Threading.CancellationToken)">
+            <summary>
+            Collects ultra-deep CPU information using multiple detection methods
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.RealTimeMonitoringService">
+            <summary>
+            Real-time system monitoring service for enterprise-grade continuous data collection
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeMonitoringService.StartMonitoringAsync(System.TimeSpan,System.Threading.CancellationToken)">
+            <summary>
+            Starts real-time monitoring with specified interval
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeMonitoringService.StopMonitoringAsync">
+            <summary>
+            Stops real-time monitoring
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeMonitoringService.CollectRealTimeData(System.Object)">
+            <summary>
+            Collects comprehensive real-time system data
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.RealTimeSystemMonitorService">
+            <summary>
+            Real-Time System Monitoring Service - Enterprise Grade
+            Provides continuous, high-frequency monitoring of system resources
+            Features:
+            - CPU monitoring (per-core and aggregate)
+            - Memory monitoring (physical, virtual, paging)
+            - Disk I/O monitoring (read/write rates)
+            - Network monitoring (bandwidth, packets, errors)
+            - Process monitoring (top consumers)
+            - GPU monitoring (if available)
+            - Temperature monitoring (if available)
+            - Power monitoring (battery, consumption)
+            - Configurable sampling intervals
+            - Historical data retention
+            - Alert threshold detection
+            - Performance counter integration
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.InitializeAsync">
+            <summary>
+            Initializes performance counters
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.StartMonitoringAsync(System.Threading.CancellationToken)">
+            <summary>
+            Starts continuous monitoring
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.StopMonitoringAsync">
+            <summary>
+            Stops monitoring
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.MonitoringLoopAsync(System.Threading.CancellationToken)">
+            <summary>
+            Main monitoring loop
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.TakeSnapshotAsync(System.Threading.CancellationToken)">
+            <summary>
+            Takes a snapshot of current system metrics
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetPerCoreCpuUsage">
+            <summary>
+            Gets CPU usage per core
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetTopProcessesByCpu(System.Int32)">
+            <summary>
+            Gets top processes by CPU usage
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetTopProcessesByMemory(System.Int32)">
+            <summary>
+            Gets top processes by memory usage
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetTotalThreadCount">
+            <summary>
+            Gets total thread count across all processes
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetTotalHandleCount">
+            <summary>
+            Gets total handle count across all processes
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetNetworkInterfaceInstance">
+            <summary>
+            Gets the primary network interface instance name
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.CheckThresholds(GGs.Agent.Services.MonitoringSnapshot)">
+            <summary>
+            Checks if any thresholds are exceeded
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetHistory(System.Int32)">
+            <summary>
+            Gets monitoring history
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetHistoricalAverage(System.Func{GGs.Agent.Services.MonitoringSnapshot,System.Double},System.Int32)">
+            <summary>
+            Gets historical average for a metric
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.GetHistoricalPeak(System.Func{GGs.Agent.Services.MonitoringSnapshot,System.Double},System.Int32)">
+            <summary>
+            Gets historical peak for a metric
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.RealTimeSystemMonitorService.ClearHistory">
+            <summary>
+            Clears monitoring history
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.SystemInformationService">
+            <summary>
+            Enterprise-grade system information collection service with deep hardware detection
+            Supports all GPU vendors (NVIDIA, AMD, Intel) and legacy hardware
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Services.SystemInformationService.CollectSystemInformationAsync(System.IProgress{GGs.Agent.Services.SystemCollectionProgress},System.Threading.CancellationToken)">
+            <summary>
+            Collects comprehensive system information with progress reporting
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.Services.SystemCollectionProgress">
+            <summary>
+            Progress reporting for system information collection
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Worker.ExecuteTweakWithEnhancedLogging(GGs.Shared.Tweaks.TweakDefinition,System.String)">
+            <summary>
+            Enterprise-grade tweak execution with comprehensive logging and error handling
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Worker.SendAuditLogWithFallback(GGs.Shared.Tweaks.TweakApplicationLog,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Enterprise audit logging with comprehensive fallback strategy
+            Implements secure /api/audit/log endpoint with legacy fallback
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Worker.TrySendAuditLog(System.String,GGs.Shared.Tweaks.TweakApplicationLog,System.String,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Attempts to send audit log to specified endpoint with proper enterprise security headers
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Worker.SendEnterpriseHeartbeat(Microsoft.AspNetCore.SignalR.Client.HubConnection,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Enterprise heartbeat with comprehensive system health monitoring
+            Sends enhanced telemetry data for enterprise monitoring and compliance
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Worker.SendHubExecutionResult(Microsoft.AspNetCore.SignalR.Client.HubConnection,GGs.Shared.Tweaks.TweakApplicationLog,System.String,System.Threading.CancellationToken)">
+            <summary>
+            Sends real-time execution result via SignalR hub for immediate admin feedback
+            Critical for enterprise real-time monitoring and compliance
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.Worker.StoreFailedAuditLogAsync(GGs.Shared.Tweaks.TweakApplicationLog,System.String)">
+            <summary>
+            Stores failed audit logs to local disk for offline retry
+            </summary>
+        </member>
+    </members>
+</doc>
