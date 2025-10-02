@@ -1,0 +1,14 @@
+[Thu 10/02/2025  5:28:06.48] [INFO] Launching Launch-Viewer
+[Thu 10/02/2025  5:28:06.75] [INFO] dotnet SDK 9.0.305 detected
+[Thu 10/02/2025  5:28:06.76] [INFO] Building ErrorLogViewer project...
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  GGs.ErrorLogViewer -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\tools\GGs.ErrorLogViewer\bin\Debug\net9.0-windows\GGs.ErrorLogViewer.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.16
+[Thu 10/02/2025  5:28:09.47] [SUCCESS] Build succeeded.
+[Thu 10/02/2025  5:28:09.50] [INFO] Starting Error Log Viewer...

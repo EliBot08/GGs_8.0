@@ -1,0 +1,7 @@
+[Thu 10/02/2025 15:40:38.28] [INFO] Starting Launch-Server
+[Thu 10/02/2025 15:40:38.52] [INFO] dotnet SDK 9.0.305 detected
+[Thu 10/02/2025 15:40:38.53] [INFO] Building server project...
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  GGs.Shared -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\shared\GGs.Shared\bin\Debug\net9.0\GGs.Shared.dll
+^C

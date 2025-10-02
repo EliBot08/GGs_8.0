@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "GGs.LicenseTool/1.0.0": {
+        "dependencies": {
+          "GGs.Shared": "1.0.0"
+        },
+        "runtime": {
+          "GGs.LicenseTool.dll": {}
+        }
+      },
+      "GGs.Shared/1.0.0": {
+        "runtime": {
+          "GGs.Shared.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "GGs.LicenseTool/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "GGs.Shared/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

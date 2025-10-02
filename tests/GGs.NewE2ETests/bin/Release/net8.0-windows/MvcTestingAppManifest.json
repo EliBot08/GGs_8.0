@@ -1,0 +1,6 @@
+{
+  "GGs.Agent, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\Downloads\\GGs3.0\\GGs2.0\\GGs\\agent\\GGs.Agent",
+  "GGs.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\Downloads\\GGs3.0\\GGs2.0\\GGs\\clients\\GGs.Desktop",
+  "GGs.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\Downloads\\GGs3.0\\GGs2.0\\GGs\\server\\GGs.Server",
+  "GGs.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\Downloads\\GGs3.0\\GGs2.0\\GGs\\shared\\GGs.Shared"
+}

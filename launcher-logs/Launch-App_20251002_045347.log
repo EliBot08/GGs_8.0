@@ -1,0 +1,6 @@
+[Thu 10/02/2025  4:53:47.82] [INFO] Starting Launch-App launcher
+[Thu 10/02/2025  4:53:48.24] [INFO] dotnet SDK 9.0.305 detected
+[Thu 10/02/2025  4:53:48.25] [INFO] Building GGs.Desktop...
+The filename, directory name, or volume label syntax is incorrect.
+[Thu 10/02/2025  4:53:48.30] [ERROR] Desktop build failed. See C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\launcher-logs\Launch-App_20251002_045347.log
+[Thu 10/02/2025  4:53:48.30] [ERROR] Launch-App failed

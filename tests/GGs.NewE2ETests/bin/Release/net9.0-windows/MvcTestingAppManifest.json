@@ -1,0 +1,6 @@
+{
+  "GGs.Agent, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\agent\\GGs.Agent",
+  "GGs.Desktop, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\clients\\GGs.Desktop",
+  "GGs.Server, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\server\\GGs.Server",
+  "GGs.Shared, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null": "C:\\Users\\307824\\OneDrive - Västerås Stad\\Skrivbordet\\GGs\\shared\\GGs.Shared"
+}

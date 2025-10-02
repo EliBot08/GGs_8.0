@@ -1,0 +1,20 @@
+﻿GGs.Desktop
+
+
+winexe
+C#
+.cs
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\clients\GGs.Desktop\obj\Release\net9.0-windows\
+GGs.Desktop
+none
+false
+TRACE;RELEASE;NET;NET9_0;NETCOREAPP;WINDOWS;WINDOWS7_0;NET5_0_OR_GREATER;NET6_0_OR_GREATER;NET7_0_OR_GREATER;NET8_0_OR_GREATER;NET9_0_OR_GREATER;NETCOREAPP3_0_OR_GREATER;NETCOREAPP3_1_OR_GREATER;WINDOWS7_0_OR_GREATER
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\clients\GGs.Desktop\App.xaml
+36-1187774978
+
+115-190852623
+286258706202
+MainWindow.xaml;Themes\EnterpriseControlStyles.xaml;Themes\EnterpriseThemes.xaml;Views\ActivationWindow.xaml;Views\Admin\CloudProfilesView.xaml;Views\Admin\DeviceManagementView.xaml;Views\Admin\LicenseManagementView.xaml;Views\Admin\RemoteManagementView.xaml;Views\Admin\TrustedPublishersWindow.xaml;Views\Admin\TweakManagementView.xaml;Views\Admin\UserManagementView.xaml;Views\AnalyticsView.xaml;Views\Analytics\AuditSearchView.xaml;Views\CommunityHubView.xaml;Views\Controls\AnimatedProgressBar.xaml;Views\Controls\FeatureHighlight.xaml;Views\Controls\ProgressDot.xaml;Views\Controls\StatCard.xaml;Views\Controls\SystemTweaksPanel.xaml;Views\Controls\TierCard.xaml;Views\DashboardView.xaml;Views\ErrorLogViewer.xaml;Views\LicenseDiagnosticsWindow.xaml;Views\LicenseWindow.xaml;Views\LoginWindow.xaml;Views\ModernActivationWindow.xaml;Views\ModernMainWindow.xaml;Views\NetworkView.xaml;Views\NotificationsView.xaml;Views\OnboardingChecklist.xaml;Views\OptimizationView.xaml;Views\OwnerDashboard.xaml;Views\ProfileArchitectView.xaml;Views\RecoveryWindow.xaml;Views\SystemIntelligenceView.xaml;Views\UpdateWindow.xaml;
+
+False
+

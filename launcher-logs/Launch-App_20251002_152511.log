@@ -1,0 +1,19 @@
+[Thu 10/02/2025 15:25:11.35] [INFO] Starting Launch-App launcher
+[Thu 10/02/2025 15:25:11.58] [INFO] dotnet SDK 9.0.305 detected
+[Thu 10/02/2025 15:25:11.59] [INFO] Building GGs.Desktop...
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  GGs.Shared -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\shared\GGs.Shared\bin\Debug\net9.0\GGs.Shared.dll
+  GGs.Agent -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\agent\GGs.Agent\bin\Debug\net9.0-windows\GGs.Agent.dll
+  GGs.Desktop -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\clients\GGs.Desktop\bin\Debug\net9.0-windows\GGs.Desktop.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:02.67
+[Thu 10/02/2025 15:25:14.84] [SUCCESS] Desktop build succeeded
+[Thu 10/02/2025 15:25:14.86] [INFO] Waiting 2 seconds before launch
+[Thu 10/02/2025 15:25:16.16] [INFO] Launching desktop client...
+[Thu 10/02/2025 15:25:20.47] [ERROR] Failed to start desktop executable
+[Thu 10/02/2025 15:25:20.48] [ERROR] Launch-App failed

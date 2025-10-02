@@ -1,0 +1,19 @@
+[Thu 10/02/2025 15:32:45.44] [INFO] Detected dotnet SDK version 9.0.305
+[Thu 10/02/2025 15:32:45.46] [INFO] Building solution...
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  GGs.Shared -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\shared\GGs.Shared\bin\Debug\net9.0\GGs.Shared.dll
+  GGs.Agent -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\agent\GGs.Agent\bin\Debug\net9.0-windows\GGs.Agent.dll
+  GGs.ErrorLogViewer -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\tools\GGs.ErrorLogViewer\bin\Debug\net9.0-windows\GGs.ErrorLogViewer.dll
+  GGs.ErrorLogViewer.Tests -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\tests\GGs.ErrorLogViewer.Tests\bin\Debug\net9.0-windows\GGs.ErrorLogViewer.Tests.dll
+  GGs.Server -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\server\GGs.Server\bin\Debug\net9.0\GGs.Server.dll
+  GGs.Desktop -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\clients\GGs.Desktop\bin\Debug\net9.0-windows\GGs.Desktop.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.00
+[Thu 10/02/2025 15:32:49.12] [SUCCESS] Build succeeded.
+[Thu 10/02/2025 15:32:49.13] [SUCCESS] Verification run complete.
+[Thu 10/02/2025 15:32:49.14] [INFO] Launch-All completed.

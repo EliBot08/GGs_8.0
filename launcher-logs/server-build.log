@@ -1,0 +1,10 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+  GGs.Shared -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\shared\GGs.Shared\bin\Debug\net9.0\GGs.Shared.dll
+  GGs.Server -> C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Debug\net9.0\GGs.Server.dll
+
+Build succeeded.
+    0 Warning(s)
+    0 Error(s)
+
+Time Elapsed 00:00:03.82

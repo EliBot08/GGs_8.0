@@ -1,0 +1,15 @@
+[Thu-10-02 07:47] ============================================================================ 
+[Thu-10-02 07:47] GGs Web Server Launcher - Enterprise Edition Started 
+[Thu-10-02 07:47] ============================================================================ 
+[Thu-10-02 07:47] Building project: server\GGs.Server\GGs.Server.csproj 
+[Thu-10-02 07:47] Cleaning previous build... 
+[Thu-10-02 07:47] Running dotnet build... 
+[Thu-10-02 07:47] Build completed successfully. 
+[Thu-10-02 07:47] Executable found after build. 
+[Thu-10-02 07:47] Build time: Thu 10/02/2025 19:47:09.23 
+[Thu-10-02 07:47] Launching application... 
+[Thu-10-02 07:47] Launch command executed. 
+[Thu-10-02 07:47] Server launcher finished. 
+[Thu-10-02 07:57] ============================================================================ 
+[Thu-10-02 07:57] Launching application... 
+[Thu-10-02 07:57] ERROR: Failed to launch application. 

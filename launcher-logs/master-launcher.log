@@ -1,0 +1,66 @@
+[Thu-10-02 05:56] ============================================================================ 
+[Thu-10-02 05:56] GGs Launcher Suite - Master Orchestrator Started 
+[Thu-10-02 05:56] ============================================================================ 
+[Thu-10-02 05:56] ============================================================================ 
+[Thu-10-02 05:56] Phase 1: Dependency Validation 
+[Thu-10-02 05:56] Checking .NET SDK... 
+[Thu-10-02 05:56] User initiated shutdown of all components 
+[Thu-10-02 05:56] All components terminated successfully 
+[Thu-10-02 05:56] Launcher suite shutdown complete 
+[Thu-10-02 05:56] ============================================================================ 
+[Thu-10-02 05:56] Launching error log viewer... 
+[Thu-10-02 05:56] Viewer launched 
+[Thu-10-02 05:56] Viewer verified running 
+[Thu-10-02 05:56] Phase 4 completed 
+[Thu-10-02 05:56] Phase 5: Entering monitoring mode 
+[Thu-10-02 05:56] User initiated shutdown of all components 
+[Thu-10-02 05:56] All components terminated successfully 
+[Thu-10-02 05:56] Launcher suite shutdown complete 
+[Thu-10-02 05:56] ============================================================================ 
+[Thu-10-02 05:56] Project structure validated successfully 
+[Thu-10-02 05:56] Checking port availability... 
+[Thu-10-02 05:56] Port 5000 is available 
+[Thu-10-02 05:56] Viewer stopped unexpectedly 
+[Thu-10-02 05:56] Launching web server... 
+[Thu-10-02 06:26] ============================================================================ 
+[Thu-10-02 06:26] GGs Launcher Suite - Master Orchestrator Started 
+[Thu-10-02 06:26] ============================================================================ 
+[Thu-10-02 06:26] ============================================================================ 
+[Thu-10-02 06:26] Phase 1: Dependency Validation 
+[Thu-10-02 06:26] Checking .NET SDK... 
+[Thu-10-02 07:04] Viewer stopped unexpectedly 
+[Thu-10-02 07:05] Viewer stopped unexpectedly 
+[Thu-10-02 07:11] Viewer stopped unexpectedly 
+[Thu-10-02 07:15] Viewer stopped unexpectedly 
+[Thu-10-02 07:15] ============================================================================ 
+[Thu-10-02 07:15] GGs Launcher Suite - Master Orchestrator Started 
+[Thu-10-02 07:15] ============================================================================ 
+[Thu-10-02 07:15] ============================================================================ 
+[Thu-10-02 07:15] Phase 1: Dependency Validation 
+[Thu-10-02 07:15] Checking .NET SDK... 
+[Thu-10-02 07:47] ============================================================================ 
+[Thu-10-02 07:47] GGs Launcher Suite - Master Orchestrator (Enterprise Edition) Started 
+[Thu-10-02 07:47] ============================================================================ 
+[Thu-10-02 07:47] Building all components... 
+[Thu-10-02 07:47] Cleaning and building server... 
+[Thu-10-02 07:47] Cleaning and building desktop... 
+[Thu-10-02 07:47] Cleaning and building viewer... 
+[Thu-10-02 07:47] All components built successfully. 
+[Thu-10-02 07:47] All executables found after build. 
+[Thu-10-02 07:47] Build time: Thu 10/02/2025 19:47:52.23 
+[Thu-10-02 07:47] Launching all components... 
+[Thu-10-02 07:47] All launch commands executed. 
+[Thu-10-02 07:51] ============================================================================ 
+[Thu-10-02 07:51] GGs Launcher Suite - Master Orchestrator (Enterprise Edition) Started 
+[Thu-10-02 07:51] ============================================================================ 
+[Thu-10-02 07:51] Building all components... 
+[Thu-10-02 07:51] Cleaning and building server... 
+[Thu-10-02 07:51] ERROR: Server build failed. Aborting launch. 
+[Thu-10-02 07:57] ============================================================================ 
+[Thu-10-02 07:57] GGs Launcher Suite - Master Orchestrator (Enterprise Edition) Started 
+[Thu-10-02 07:57] ============================================================================ 
+[Thu-10-02 07:57] Building all components... 
+[Thu-10-02 07:57] Cleaning and building server... 
+[Thu-10-02 07:57] Cleaning and building desktop... 
+[Thu-10-02 07:57] Cleaning and building viewer... 
+[Thu-10-02 07:57] ERROR: Viewer build failed. Aborting launch. 

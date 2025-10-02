@@ -1,0 +1,5 @@
+[Thu 10/02/2025  4:56:00.05] [INFO] Starting Launch-Server
+[Thu 10/02/2025  4:56:00.37] [INFO] dotnet SDK 9.0.305 detected
+The filename, directory name, or volume label syntax is incorrect.
+[Thu 10/02/2025  4:56:00.44] [ERROR] Server build failed. See log.
+[Thu 10/02/2025  4:56:00.45] [ERROR] Launch-Server failed

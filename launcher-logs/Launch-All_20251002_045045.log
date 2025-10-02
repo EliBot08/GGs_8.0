@@ -1,0 +1,6 @@
+[Thu 10/02/2025  4:50:45.31] [INFO] Starting Launch-All launcher
+[Thu 10/02/2025  4:50:45.75] [INFO] Detected dotnet SDK version 9.0.305
+[Thu 10/02/2025  4:50:45.75] [INFO] Building solution...
+The filename, directory name, or volume label syntax is incorrect.
+[Thu 10/02/2025  4:50:45.80] [ERROR] dotnet build failed. See C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\launcher-logs\Launch-All_20251002_045045.log for details.
+[Thu 10/02/2025  4:50:45.81] [ERROR] Launch-All encountered a fatal error.

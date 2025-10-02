@@ -1,0 +1,6 @@
+[Thu 10/02/2025  4:55:23.22] [INFO] Launching Launch-Viewer
+[Thu 10/02/2025  4:55:23.55] [INFO] dotnet SDK 9.0.305 detected
+[Thu 10/02/2025  4:55:23.56] [INFO] Building ErrorLogViewer project...
+The filename, directory name, or volume label syntax is incorrect.
+[Thu 10/02/2025  4:55:23.61] [ERROR] ErrorLogViewer build failed. Check C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\launcher-logs\Launch-Viewer_20251002_045523.log
+[Thu 10/02/2025  4:55:23.62] [ERROR] Launch-Viewer failed

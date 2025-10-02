@@ -1,0 +1,11 @@
+  Determining projects to restore...
+  All projects are up-to-date for restore.
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\Views\MainWindow.xaml(262,36): error MC3000: 'Name cannot begin with the '<' character, hexadecimal value 0x3C. Line 262, position 36.' XML is not valid. [C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\GGs.ErrorLogViewer.csproj]
+
+Build FAILED.
+
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\Views\MainWindow.xaml(262,36): error MC3000: 'Name cannot begin with the '<' character, hexadecimal value 0x3C. Line 262, position 36.' XML is not valid. [C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.ErrorLogViewer\GGs.ErrorLogViewer.csproj]
+    0 Warning(s)
+    1 Error(s)
+
+Time Elapsed 00:00:01.97
