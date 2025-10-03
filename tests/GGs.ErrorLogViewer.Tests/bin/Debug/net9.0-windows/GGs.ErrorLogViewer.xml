@@ -1,0 +1,432 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.ErrorLogViewer</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.ErrorLogViewer.App">
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.AppTheme">
+            <summary>
+            Enhanced theme configuration for professional log viewer
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.LogBookmark">
+            <summary>
+            Bookmark for quick navigation to important log entries
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.LogTag">
+            <summary>
+            Tag for categorizing log entries
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.LogEntryTag">
+            <summary>
+            Association between log entries and tags
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.SmartAlert">
+            <summary>
+            Smart alert configuration for pattern detection
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.LogComparisonResult">
+            <summary>
+            Log comparison result for side-by-side view
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.LogDataPoint">
+            <summary>
+            Analytics data point for charting
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.ErrorCluster">
+            <summary>
+            Error clustering result for pattern analysis
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.SessionState">
+            <summary>
+            Session state for crash recovery
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.RetentionPolicy">
+            <summary>
+            Log retention policy configuration
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.LogSourceConfig">
+            <summary>
+            Log source configuration for external imports
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Models.PanelConfiguration">
+            <summary>
+            UI panel configuration for customizable layout
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Services.LogRotationService">
+            <summary>
+            Enterprise-grade log rotation and management service
+            Prevents log bloat and ensures only relevant logs are displayed
+            </summary>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.Services.LogRotationService.CurrentSessionId">
+            <summary>
+            Gets the current session ID for this run
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.RotateLogsOnStartupAsync(System.String)">
+            <summary>
+            Rotates logs on startup - archives old logs and cleans up
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.CreateSessionMarker">
+            <summary>
+            Adds a session marker to identify the current run
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.DeduplicateLogs(System.Collections.ObjectModel.ObservableCollection{GGs.ErrorLogViewer.Models.LogEntry})">
+            <summary>
+            Deduplicates log entries based on timestamp and message
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.FilterCurrentSession(System.Collections.ObjectModel.ObservableCollection{GGs.ErrorLogViewer.Models.LogEntry})">
+            <summary>
+            Filters logs to show only the current session
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.ArchiveOldLogsAsync(System.String)">
+            <summary>
+            Archives logs older than MAX_LOG_AGE_DAYS
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.CompressArchivedLogsAsync(System.String)">
+            <summary>
+            Compresses archived log files
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.DeleteOldArchivesAsync(System.String,System.Int32)">
+            <summary>
+            Deletes compressed archives older than specified days
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.EnforceLogSizeLimitsAsync(System.String)">
+            <summary>
+            Enforces maximum log size limits
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.GenerateSessionId">
+            <summary>
+            Generates a unique session ID
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.GetDirectoryStats(System.String)">
+            <summary>
+            Gets statistics about the log directory
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Services.LogRotationService.ClearAllLogsAsync(System.String,System.Boolean)">
+            <summary>
+            Clears all logs (with confirmation)
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Services.LogDirectoryStats">
+            <summary>
+            Statistics about the log directory
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel">
+            <summary>
+            Enhanced view model extending MainViewModel with analytics, bookmarks, alerts, and advanced exports.
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel.CurrentStatistics">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel._currentStatistics"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel.ErrorClusters">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel._errorClusters"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel.TimeSeriesData">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel._timeSeriesData"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel.ActiveView">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel._activeView"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel.ShowAnalyticsDashboard">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel._showAnalyticsDashboard"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel.ShowBookmarksPanel">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel._showBookmarksPanel"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel.ShowAlertsPanel">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.EnhancedMainViewModel._showAlertsPanel"/>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.ViewModels.MainViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.IsMonitoring">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._isMonitoring"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.IsRawMode">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._isRawMode"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.SearchText">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._searchText"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.UseRegex">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._useRegex"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.SmartFilter">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._smartFilter"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.LogFontSize">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._logFontSize"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.SelectedLogLevel">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._selectedLogLevel"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.SelectedSource">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._selectedSource"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.TotalLogCount">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._totalLogCount"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.FilteredLogCount">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._filteredLogCount"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.StatusMessage">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._statusMessage"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.AutoScroll">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._autoScroll"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.SelectedLogEntry">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._selectedLogEntry"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.IsDetailsPaneVisible">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._isDetailsPaneVisible"/>
+        </member>
+        <member name="P:GGs.ErrorLogViewer.ViewModels.MainViewModel.ShowFilePathColumn">
+            <inheritdoc cref="F:GGs.ErrorLogViewer.ViewModels.MainViewModel._showFilePathColumn"/>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Views.Converters.StringEqualsConverter">
+            <summary>
+            Compares two string inputs and returns true when they match, ignoring case.
+            Supports usage as both an <see cref="T:System.Windows.Data.IValueConverter"/> and <see cref="T:System.Windows.Data.IMultiValueConverter"/>.
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Views.CompareView">
+            <summary>
+            CompareView
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Views.CompareView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Views.ExportFormatDialog">
+            <summary>
+            ExportFormatDialog
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Views.ExportFormatDialog.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Views.ExportView">
+            <summary>
+            ExportView
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Views.ExportView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Views.MainWindow">
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Views.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.ErrorLogViewer.Views.SettingsView">
+            <summary>
+            SettingsView
+            </summary>
+        </member>
+        <member name="M:GGs.ErrorLogViewer.Views.SettingsView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.CurrentStatistics">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "CurrentStatistics" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ErrorClusters">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ErrorClusters" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TimeSeriesData">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TimeSeriesData" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ActiveView">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ActiveView" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ShowAnalyticsDashboard">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ShowAnalyticsDashboard" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ShowBookmarksPanel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ShowBookmarksPanel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ShowAlertsPanel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ShowAlertsPanel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsMonitoring">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsMonitoring" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsRawMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsRawMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SearchText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SearchText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.UseRegex">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "UseRegex" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SmartFilter">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SmartFilter" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LogFontSize">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LogFontSize" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedLogLevel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedLogLevel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedSource">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedSource" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TotalLogCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TotalLogCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FilteredLogCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FilteredLogCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AutoScroll">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AutoScroll" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedLogEntry">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedLogEntry" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsDetailsPaneVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsDetailsPaneVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ShowFilePathColumn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ShowFilePathColumn" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.CurrentStatistics">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "CurrentStatistics" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ErrorClusters">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ErrorClusters" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TimeSeriesData">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TimeSeriesData" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ActiveView">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ActiveView" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ShowAnalyticsDashboard">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ShowAnalyticsDashboard" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ShowBookmarksPanel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ShowBookmarksPanel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ShowAlertsPanel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ShowAlertsPanel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsMonitoring">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsMonitoring" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsRawMode">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsRawMode" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SearchText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SearchText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.UseRegex">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "UseRegex" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SmartFilter">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SmartFilter" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LogFontSize">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LogFontSize" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedLogLevel">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedLogLevel" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedSource">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedSource" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TotalLogCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TotalLogCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FilteredLogCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FilteredLogCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StatusMessage">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StatusMessage" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AutoScroll">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AutoScroll" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedLogEntry">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedLogEntry" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HasSelectedLogEntry">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HasSelectedLogEntry" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsDetailsPaneVisible">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsDetailsPaneVisible" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ShowFilePathColumn">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ShowFilePathColumn" generated properties.</summary>
+        </member>
+    </members>
+</doc>

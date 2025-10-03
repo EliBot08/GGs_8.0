@@ -25,5 +25,11 @@
         <member name="M:GGs.Server.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
             <inheritdoc />
         </member>
+        <member name="T:GGs.Server.Migrations.AddTelemetryFieldsToTweakLog">
+            <summary>
+            Migration to add enhanced telemetry fields to TweakApplicationLog.
+            Implements Prompt 4: OperationId, CorrelationId, synchronized timestamps, reason codes, and policy decisions.
+            </summary>
+        </member>
     </members>
 </doc>

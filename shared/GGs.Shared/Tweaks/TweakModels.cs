@@ -50,6 +50,44 @@ public sealed class TweakApplicationLog
     public string? AfterState { get; set; }
     public int ExecutionTimeMs { get; set; }
 
+    // Prompt 4: Enhanced Telemetry, Correlation, and Trace Depth
+    /// <summary>
+    /// Unique operation identifier for this specific execution.
+    /// Used for distributed tracing and correlation across systems.
+    /// </summary>
+    public string OperationId { get; set; } = Guid.NewGuid().ToString("N");
+
+    /// <summary>
+    /// Correlation identifier linking related operations together.
+    /// Passed from the initiating request through all downstream operations.
+    /// </summary>
+    public string? CorrelationId { get; set; }
+
+    /// <summary>
+    /// Synchronized timestamp when the operation was initiated (UTC).
+    /// Used for accurate time-series analysis and event ordering.
+    /// </summary>
+    public DateTime InitiatedUtc { get; set; } = DateTime.UtcNow;
+
+    /// <summary>
+    /// Synchronized timestamp when the operation completed (UTC).
+    /// Used for duration calculation and performance analysis.
+    /// </summary>
+    public DateTime? CompletedUtc { get; set; }
+
+    /// <summary>
+    /// Standardized reason code for policy decisions and errors.
+    /// Format: CATEGORY.ACTION.Context.Detail
+    /// Examples: POLICY.DENY.ServiceStop.WinDefend, VALIDATION.FAILED.RegistryPath.Blocked
+    /// </summary>
+    public string? ReasonCode { get; set; }
+
+    /// <summary>
+    /// Policy decision context for audit trail.
+    /// Captures why an operation was allowed, denied, or modified.
+    /// </summary>
+    public string? PolicyDecision { get; set; }
+
     // Enriched audit fields (explicit for ops and compliance)
     // Registry
     public string? RegistryPath { get; set; }

@@ -1,0 +1,29 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.Server</name>
+    </assembly>
+    <members>
+        <member name="M:GGs.Server.Controllers.AuditController.Log(GGs.Shared.Tweaks.TweakApplicationLog)">
+            <summary>
+            Ingest a tweak execution audit log.
+            Provide X-Machine-Token header if unauthenticated and no client certificate.
+            </summary>
+            <remarks>
+            Security: Allowed if request is authenticated OR mTLS client certificate is present OR header X-Machine-Token matches configured Audit:MachineToken.
+            </remarks>
+        </member>
+        <member name="T:GGs.Server.Migrations.InitialCreate">
+            <inheritdoc />
+        </member>
+        <member name="M:GGs.Server.Migrations.InitialCreate.Up(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:GGs.Server.Migrations.InitialCreate.Down(Microsoft.EntityFrameworkCore.Migrations.MigrationBuilder)">
+            <inheritdoc />
+        </member>
+        <member name="M:GGs.Server.Migrations.InitialCreate.BuildTargetModel(Microsoft.EntityFrameworkCore.ModelBuilder)">
+            <inheritdoc />
+        </member>
+    </members>
+</doc>

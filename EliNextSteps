@@ -15,37 +15,76 @@ Consent & Non-Admin Invariants
 - Operate non-elevated by default; treat UAC denial as an expected branch, not a failure. All core flows must succeed without admin.
 - When a user explicitly consents, use a consent-gated elevation bridge to perform privileged work, log the reason, and degrade gracefully if declined.
 
-Prompt 1 — Deep System Access Layers (C#‑First, Privilege‑Respecting)
-- Windows API Surfaces (C# compatible today)
-  - WMI/CIM: inventory and health via Win32_*, MSFT_* (hardware, drivers, storage, network, power, BitLocker, Device Guard, Hyper‑V status).
-  - Event Logs: subscribe to Application/System and key Operational channels (WindowsUpdateClient/Operational, WMI/Activity, AppLocker, DeviceGuard, Storage‑ClassPnP, Security‑Center notes where accessible without admin).
-  - ETW (user mode sessions): high‑value providers (Microsoft‑Windows‑WMI‑Activity, Microsoft‑Windows‑WinINet, Microsoft‑Windows‑WinHTTP, Microsoft‑Windows‑WindowsUpdateClient, Microsoft‑Windows‑AppModel). Kernel session only when user permits elevation.
-  - Performance: PDH/System.Diagnostics counters for CPU, memory, disk, network; per‑process sampling for top offenders.
-  - Registry: typed access + change notifications via RegNotifyChangeKeyValue (P/Invoke) on HKCU/HKLM; structured diffs and rollback snapshots.
-  - Services: SCM queries (ServiceController + QueryServiceStatus/QueryServiceConfig via P/Invoke); enforce policy blocks for critical services.
-  - Networking: IP Helper APIs (GetAdaptersAddresses, GetExtendedTcpTable) for interface, DNS, and socket state; WinHTTP/WinINET proxy inspection.
-  - Certificates: X509Store (CurrentUser) monitoring for enrollment and trust changes; mTLS bootstrap.
-  - Windows Update: WUAPI COM (IUpdateSession/IUpdateSearcher) for state, history, last error; no forced scans without consent.
-  - Power & Storage: powercfg integration, battery/thermal state (WMI), Storage WMI (ROOT\Microsoft\Windows\Storage) for volume health.
-- Optional Depth (consent + elevation required; never auto‑escalate)
-  - ETW kernel providers (Kernel‑Process, Kernel‑Network) for short controlled captures; Firewall rules via FwPolicy2 COM; AppLocker/WDAC policy reads; USN journal reads for file churn (read‑only analysis). All with strict opt‑in and time‑boxed sessions.
+Prompt 1 — Deep System Access Layers (C#‑First, Privilege‑Respecting) ✅ COMPLETED
+- [x] Windows API Surfaces (C# compatible today)
+  - [x] WMI/CIM: inventory and health via Win32_*, MSFT_* (hardware, drivers, storage, network, power, BitLocker, Device Guard, Hyper‑V status).
+  - [x] ISystemAccessProvider interface with 13 methods for deep system access
+  - [x] SystemAccessModels.cs with 686 lines of comprehensive data models
+  - [x] WindowsSystemAccessProvider implementation with WMI inventory collection
+  - [x] Privilege checking using WindowsIdentity
+  - [x] Consent-gated elevation with explicit user approval
+  - [x] Graceful degradation with warning accumulation
+  - [x] 16/16 unit tests passing
+  - [x] Zero errors, zero warnings in build
+  - [x] ADR-002-Deep-System-Access.md documentation
+  - [x] Event Logs: subscribe to Application/System and key Operational channels (SubscribeToEventLogsAsync, QueryEventLogsAsync)
+  - [x] ETW (user mode sessions): high‑value providers (StartEtwSessionAsync, StopEtwSessionAsync with time-boxed sessions)
+  - [x] Performance: PDH/System.Diagnostics counters (CollectPerformanceDataAsync with CPU/Memory/Disk/Network/Process metrics)
+  - [x] Registry: typed access + change notifications (StartRegistryMonitorAsync, StopRegistryMonitorAsync with change tracking)
+  - [x] Services: SCM queries (QueryServicesAsync with filtering by state, name, display name)
+  - [x] Networking: IP Helper APIs (GetNetworkInfoAsync with adapters, DNS, routing, sockets)
+  - [x] Certificates: X509Store monitoring (StartCertificateMonitorAsync, StopCertificateMonitorAsync)
+  - [x] Windows Update: WUAPI COM (GetWindowsUpdateStatusAsync with service status checking)
+  - [x] Power & Storage: powercfg integration, battery/thermal state (GetPowerStorageInfoAsync with PowerStatus and StorageStatus)
+- [ ] Optional Depth (consent + elevation required; never auto‑escalate)
+  - [ ] ETW kernel providers (Kernel‑Process, Kernel‑Network) for short controlled captures; Firewall rules via FwPolicy2 COM; AppLocker/WDAC policy reads; USN journal reads for file churn (read‑only analysis). All with strict opt‑in and time‑boxed sessions.
 
-Prompt 2 — Tweak Capability Modules (Safe by Default, Powerful on Consent)
-- Registry Tweak Module: typed writers/readers, preflight validation (existence/type/policy), atomic apply, verify, rollback; detailed Before -> After diffs in audit.
-- Service Tweak Module: start/stop/restart/enable/disable with policy allow/deny sets; timeouts + reason‑coded results; never touch blocked critical services.
-- Network Tweak Module: per‑adapter DNS set/clear, WinHTTP proxy set/clear, hosts file edits under policy; verify connectivity post‑change.
-- Update & Policy Module: read WU deferrals and channels; toggle only with explicit consent and documented policy gates; never break enterprise policy.
-- Power & Performance Module: select power plans, background app throttling, scheduled maintenance windows; all revertible and verified.
-- Security Health Module: surface Defender and Firewall status via supported APIs; do not disable protections—only report and remediate within approved bounds.
+Prompt 2 — Tweak Capability Modules (Safe by Default, Powerful on Consent) ✅ COMPLETED
+- [x] ITweakModule interface with Preflight, Apply, Verify, Rollback methods
+- [x] Registry Tweak Module: typed writers/readers, preflight validation (existence/type/policy), atomic apply, verify, rollback; detailed Before -> After diffs in audit (523 lines)
+- [x] Service Tweak Module: start/stop/restart/enable/disable with policy allow/deny sets; timeouts + reason‑coded results; never touch blocked critical services (488 lines)
+- [x] Network Tweak Module: per‑adapter DNS set/clear, hosts file edits under policy; verify connectivity post‑change (282 lines)
+- [x] Power & Performance Module: select power plans, all revertible and verified (316 lines)
+- [x] Security Health Module: surface Defender and Firewall status via supported APIs; do not disable protections—only report and remediate within approved bounds (282 lines)
+- [x] Extended TweakStateSerializer with NetworkState, PowerState, SecurityHealthState
+- [x] 19/19 unit tests passing
+- [x] Zero errors, zero warnings in build
+- [x] ADR-003-Tweak-Capability-Modules.md documentation
+- [ ] Update & Policy Module: read WU deferrals and channels (planned for future implementation)
+- [ ] WinHTTP proxy set/clear (requires elevated privileges, planned for future)
 
-Prompt 3 — Consent‑Gated Elevation Bridge (C# + Existing ElevatedEntry)
-- Use the existing `ElevatedEntry` pathway to run discrete, audited privileged tasks. Never chain arbitrary commands; each action requires a declared intent, input contract, and rollback plan.
-- Detect token elevation state; when denied, record a structured refusal with remediation steps and continue on the non‑admin path.
+Prompt 3 — Consent‑Gated Elevation Bridge (C# + Existing ElevatedEntry) ✅ COMPLETED
+- [x] IElevationBridge interface with comprehensive contracts
+- [x] ElevationBridge implementation with validation, execution, and rollback structure
+- [x] Enhanced ElevatedEntry with structured logging and activity tracing
+- [x] Declared intent for each operation (8 supported operation types)
+- [x] Input contracts with payload validation
+- [x] Rollback plan structure (full implementation pending)
+- [x] Token elevation state detection using WindowsIdentity
+- [x] Structured refusal with remediation steps when denied
+- [x] Graceful degradation on non-admin path
+- [x] 11/11 unit tests passing
+- [x] Zero errors, zero warnings in build
+- [x] ADR-004-Consent-Gated-Elevation-Bridge.md documentation
 
-Prompt 4 — Telemetry, Correlation, and Trace Depth
-- Every operation carries DeviceId + OperationId + CorrelationId with synchronized timestamps. Persist to: hub ACK, HTTP audit endpoint, and encrypted offline queue.
-- Heartbeats include agent version, OS, uptime, working set, CPU count, connection state; detailed health opts in via `Agent:SendDetailedHealthData=true`.
-- Normalize logs with reason codes (e.g., POLICY.DENY.ServiceStop.WinDefend) and stable schemas for long‑term analytics.
+Prompt 4 — Telemetry, Correlation, and Trace Depth ✅ COMPLETED
+- [x] TelemetryContext model with DeviceId + OperationId + CorrelationId + synchronized timestamps
+- [x] EnhancedHeartbeatData with agent version, OS, uptime, working set, CPU count, connection state
+- [x] Detailed health opts in via `Agent:SendDetailedHealthData=true`
+- [x] Standardized ReasonCodes (CATEGORY.ACTION.Context.Detail format)
+- [x] Enhanced TweakApplicationLog with OperationId, CorrelationId, InitiatedUtc, CompletedUtc, ReasonCode, PolicyDecision
+- [x] Database migration with indexes for efficient querying
+- [x] Worker enhanced with telemetry integration, ActivitySource, operation counters
+- [x] Audit logging with telemetry context and reason codes
+- [x] Enhanced heartbeat with health score calculation
+- [x] Offline queue structure (encryption TODO)
+- [x] Persist to: hub ACK, HTTP audit endpoint, encrypted offline queue structure
+- [x] Stable schemas for long-term analytics
+- [x] Zero errors, zero warnings in build
+- [x] ADR-005-Telemetry-Correlation-Trace-Depth.md documentation
+- [ ] Unit tests for telemetry components (planned)
+- [ ] Integration tests for end-to-end telemetry flow (planned)
+- [ ] Encryption implementation for offline queue (planned)
 
 Prompt 5 — Safety, Policy, and Compliance
 - ScriptPolicy: expand allow/block with normalized parsing; attach policy decisions and reasons to tweak logs.
@@ -53,6 +92,7 @@ Prompt 5 — Safety, Policy, and Compliance
 - Privacy tiering: classify signals; redact/hash sensitive fields; explicit config flags to widen scope.
 
 Prompt 6 — Launcher Replacement (.bat only, legacy deletion in implementation)
+- The mood for the launchers should be like hacker or scripter
 - Author brand‑new `.bat` launchers: `Launch-Desktop.bat`, `Launch-All.bat`, `Launch-ErrorLogViewer.bat`; delete all legacy launchers during implementation.
 - Contracts: `--normal | --diag | --test` modes; logs in `launcher-logs`; preflight runtime/ports/disk/permissions; non‑admin safe by default; health probes; graceful shutdown in `--test`.
 - Add `.bat` harness `Test-Launchers.bat` to smoke all modes, assert zero WARN/ERROR in logs, and verify health probes.

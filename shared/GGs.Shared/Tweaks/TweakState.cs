@@ -30,6 +30,9 @@ public static class TweakStateSerializer
                 "registry" => JsonSerializer.Deserialize<RegistryState>(json, _opts),
                 "service" => JsonSerializer.Deserialize<ServiceState>(json, _opts),
                 "script" => JsonSerializer.Deserialize<ScriptState>(json, _opts),
+                "network" => JsonSerializer.Deserialize<NetworkState>(json, _opts),
+                "power" => JsonSerializer.Deserialize<PowerState>(json, _opts),
+                "security" => JsonSerializer.Deserialize<SecurityHealthState>(json, _opts),
                 _ => null
             };
             return state != null;
@@ -66,3 +69,27 @@ public sealed class ScriptState : ITweakState
     public string? UndoScript { get; set; }
 }
 
+public sealed class NetworkState : ITweakState
+{
+    public string Type => "network";
+    public int AdapterCount { get; set; }
+    public string? AdapterInfo { get; set; }
+    public DateTime Timestamp { get; set; }
+}
+
+public sealed class PowerState : ITweakState
+{
+    public string Type => "power";
+    public string? ActivePlanGuid { get; set; }
+    public string? ActivePlanName { get; set; }
+    public DateTime Timestamp { get; set; }
+}
+
+public sealed class SecurityHealthState : ITweakState
+{
+    public string Type => "security";
+    public string? DefenderServiceStatus { get; set; }
+    public bool FirewallEnabled { get; set; }
+    public bool RealTimeProtectionEnabled { get; set; }
+    public DateTime Timestamp { get; set; }
+}

@@ -14,6 +14,294 @@
             Authentication service for user login and token management
             </summary>
         </member>
+        <member name="T:GGs.Shared.Elevation.IElevationBridge">
+            <summary>
+            Contract for consent-gated elevation bridge.
+            Provides discrete, audited privileged operations with declared intent, input contracts, and rollback plans.
+            Never chains arbitrary commands; each action requires explicit declaration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Elevation.IElevationBridge.ExecuteElevatedAsync(GGs.Shared.Elevation.ElevationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Executes an elevated operation with full audit trail and rollback support.
+            </summary>
+            <param name="request">The elevation request with operation details</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Result of the elevated operation</returns>
+        </member>
+        <member name="M:GGs.Shared.Elevation.IElevationBridge.IsElevatedAsync(System.Threading.CancellationToken)">
+            <summary>
+            Checks if the current process is running with elevated privileges.
+            </summary>
+            <returns>True if elevated, false otherwise</returns>
+        </member>
+        <member name="M:GGs.Shared.Elevation.IElevationBridge.ValidateRequestAsync(GGs.Shared.Elevation.ElevationRequest,System.Threading.CancellationToken)">
+            <summary>
+            Validates an elevation request without executing it.
+            Checks permissions, policy compliance, and input validation.
+            </summary>
+            <param name="request">The elevation request to validate</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Validation result with any issues found</returns>
+        </member>
+        <member name="M:GGs.Shared.Elevation.IElevationBridge.RollbackAsync(GGs.Shared.Elevation.ElevationExecutionLog,System.Threading.CancellationToken)">
+            <summary>
+            Rolls back a previously executed elevated operation.
+            </summary>
+            <param name="executionLog">The execution log from the original operation</param>
+            <param name="cancellationToken">Cancellation token</param>
+            <returns>Result of the rollback operation</returns>
+        </member>
+        <member name="T:GGs.Shared.Elevation.ElevationRequest">
+            <summary>
+            Request for an elevated operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.RequestId">
+            <summary>
+            Unique identifier for this request.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.CorrelationId">
+            <summary>
+            Correlation ID for tracing across systems.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.OperationType">
+            <summary>
+            Type of elevated operation (e.g., "RegistrySet", "ServiceAction", "FlushDns").
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.OperationName">
+            <summary>
+            Human-readable operation name for logging and consent UI.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.Reason">
+            <summary>
+            Detailed reason for requiring elevation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.RiskLevel">
+            <summary>
+            Risk level of this operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.RequiresRestart">
+            <summary>
+            Whether this operation requires a system restart.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.EstimatedDuration">
+            <summary>
+            Estimated duration of the operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.Payload">
+            <summary>
+            Structured payload for the operation (JSON-serializable).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.SupportsRollback">
+            <summary>
+            Whether this operation supports rollback.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.RequestedAtUtc">
+            <summary>
+            Timestamp when the request was created.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRequest.RequestedBy">
+            <summary>
+            User who requested the operation (for audit trail).
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Elevation.ElevationRiskLevel">
+            <summary>
+            Risk level for elevation requests.
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Elevation.ElevationRiskLevel.Low">
+            <summary>
+            Low risk - read-only or easily reversible operations.
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Elevation.ElevationRiskLevel.Medium">
+            <summary>
+            Medium risk - configuration changes that can be rolled back.
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Elevation.ElevationRiskLevel.High">
+            <summary>
+            High risk - system-level changes that may require restart.
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Elevation.ElevationRiskLevel.Critical">
+            <summary>
+            Critical risk - operations that could affect system stability.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Elevation.ElevationExecutionResult">
+            <summary>
+            Result of an elevated operation execution.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.Success">
+            <summary>
+            Whether the operation succeeded.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.RequestId">
+            <summary>
+            The original request ID.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.CorrelationId">
+            <summary>
+            Correlation ID for tracing.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.ExitCode">
+            <summary>
+            Exit code from the elevated process (0 = success).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.Message">
+            <summary>
+            Output message from the operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.ErrorMessage">
+            <summary>
+            Error message if the operation failed.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.ExecutedAtUtc">
+            <summary>
+            Timestamp when execution started.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.CompletedAtUtc">
+            <summary>
+            Timestamp when execution completed.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.Duration">
+            <summary>
+            Actual duration of the operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionResult.ExecutionLog">
+            <summary>
+            Execution log for audit trail and rollback.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Elevation.ElevationExecutionLog">
+            <summary>
+            Execution log for audit trail and rollback support.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.Request">
+            <summary>
+            The original request.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.BeforeState">
+            <summary>
+            State before the operation (for rollback).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.AfterState">
+            <summary>
+            State after the operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.ChangeDetails">
+            <summary>
+            Detailed changes made by the operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.WasElevated">
+            <summary>
+            Whether the operation was actually elevated.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.ExecutedBy">
+            <summary>
+            User who executed the operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.MachineName">
+            <summary>
+            Machine where the operation was executed.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationExecutionLog.ExecutedAtUtc">
+            <summary>
+            Timestamp of execution.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Elevation.ElevationValidationResult">
+            <summary>
+            Result of elevation request validation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationValidationResult.IsValid">
+            <summary>
+            Whether the request is valid.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationValidationResult.ValidationErrors">
+            <summary>
+            Validation errors if any.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationValidationResult.PolicyViolations">
+            <summary>
+            Policy violations if any.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationValidationResult.RequiresElevation">
+            <summary>
+            Whether elevation is required for this operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationValidationResult.ReasonCode">
+            <summary>
+            Reason code for validation result (e.g., "POLICY.DENY.ServiceStop.WinDefend").
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Elevation.ElevationRollbackResult">
+            <summary>
+            Result of a rollback operation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRollbackResult.Success">
+            <summary>
+            Whether the rollback succeeded.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRollbackResult.OriginalRequestId">
+            <summary>
+            The original request ID that was rolled back.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRollbackResult.RestoredState">
+            <summary>
+            Restored state after rollback.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRollbackResult.ErrorMessage">
+            <summary>
+            Error message if rollback failed.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Elevation.ElevationRollbackResult.RolledBackAtUtc">
+            <summary>
+            Timestamp when rollback was performed.
+            </summary>
+        </member>
         <member name="T:GGs.Shared.Http.SecureHttpClientFactory">
             <summary>
             Factory for creating secure HTTP clients
@@ -27,6 +315,226 @@
         <member name="T:GGs.Shared.Models.UltraDeepDiagnosticsReport">
             <summary>
             Ultra-deep diagnostics report containing expert-level Windows internals analysis
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.ISystemAccessProvider">
+            <summary>
+            Defines the contract for deep system access capabilities.
+            All operations respect privilege boundaries and consent requirements.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.GetWmiInventoryAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets WMI/CIM inventory and health data.
+            Non-admin safe. Returns comprehensive hardware, driver, storage, network, power, and security status.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.SubscribeToEventLogsAsync(GGs.Shared.SystemAccess.EventLogSubscriptionRequest,System.Threading.CancellationToken)">
+            <summary>
+            Subscribes to Windows Event Log channels.
+            Non-admin safe for Application/System and most Operational channels.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.QueryEventLogsAsync(GGs.Shared.SystemAccess.EventLogQueryRequest,System.Threading.CancellationToken)">
+            <summary>
+            Queries Event Log entries with filtering.
+            Non-admin safe for accessible channels.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.StartEtwSessionAsync(GGs.Shared.SystemAccess.EtwSessionRequest,System.Threading.CancellationToken)">
+            <summary>
+            Starts ETW (Event Tracing for Windows) session for user-mode providers.
+            Kernel providers require elevation and explicit consent.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.StopEtwSessionAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Stops an active ETW session.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.CollectPerformanceDataAsync(GGs.Shared.SystemAccess.PerformanceDataRequest,System.Threading.CancellationToken)">
+            <summary>
+            Collects performance counter data (CPU, memory, disk, network, per-process).
+            Non-admin safe.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.StartRegistryMonitorAsync(GGs.Shared.SystemAccess.RegistryMonitorRequest,System.Threading.CancellationToken)">
+            <summary>
+            Monitors registry key for changes using RegNotifyChangeKeyValue.
+            Non-admin safe for HKCU; HKLM requires appropriate permissions.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.StopRegistryMonitorAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Stops an active registry monitor.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.QueryServicesAsync(GGs.Shared.SystemAccess.ServiceQueryRequest,System.Threading.CancellationToken)">
+            <summary>
+            Queries Windows services with detailed status and configuration.
+            Non-admin safe for queries; modifications require elevation.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.GetNetworkInfoAsync(GGs.Shared.SystemAccess.NetworkInfoRequest,System.Threading.CancellationToken)">
+            <summary>
+            Gets network adapter information, DNS configuration, and socket state.
+            Uses IP Helper APIs (GetAdaptersAddresses, GetExtendedTcpTable).
+            Non-admin safe.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.StartCertificateMonitorAsync(GGs.Shared.SystemAccess.CertificateMonitorRequest,System.Threading.CancellationToken)">
+            <summary>
+            Monitors X509 certificate stores (CurrentUser) for enrollment and trust changes.
+            Non-admin safe for CurrentUser store.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.StopCertificateMonitorAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Stops an active certificate monitor.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.GetWindowsUpdateStatusAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets Windows Update status, history, and last error using WUAPI COM.
+            Non-admin safe for queries; no forced scans without consent.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.GetPowerStorageInfoAsync(System.Threading.CancellationToken)">
+            <summary>
+            Gets power and storage information (battery, thermal, volume health).
+            Uses powercfg integration and Storage WMI.
+            Non-admin safe.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.RequestElevationConsentAsync(GGs.Shared.SystemAccess.ElevationConsentRequest,System.Threading.CancellationToken)">
+            <summary>
+            Requests consent-gated elevation for privileged operations.
+            Returns elevation result with user decision and reason logging.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.SystemAccess.ISystemAccessProvider.CheckPrivilegesAsync(System.Threading.CancellationToken)">
+            <summary>
+            Checks current privilege level and capabilities.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.PrivilegeCheckResult">
+            <summary>
+            Result of privilege check operation.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.ElevationConsentRequest">
+            <summary>
+            Request for elevation consent.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.ElevationConsentResult">
+            <summary>
+            Result of elevation consent request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.ElevationRiskLevel">
+            <summary>
+            Risk level for elevation requests.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.WmiInventoryRequest">
+            <summary>
+            WMI/CIM inventory request parameters.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.WmiInventoryResult">
+            <summary>
+            Result of WMI/CIM inventory collection.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.EventLogSubscriptionRequest">
+            <summary>
+            Event log subscription request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.EventLogSubscriptionResult">
+            <summary>
+            Result of event log subscription.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.EventLogQueryRequest">
+            <summary>
+            Event log query request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.EventLogQueryResult">
+            <summary>
+            Result of event log query.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.EtwSessionRequest">
+            <summary>
+            ETW session request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.EtwSessionResult">
+            <summary>
+            Result of ETW session operation.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.PerformanceDataRequest">
+            <summary>
+            Performance data collection request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.PerformanceDataResult">
+            <summary>
+            Result of performance data collection.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.RegistryMonitorRequest">
+            <summary>
+            Registry monitoring request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.RegistryMonitorResult">
+            <summary>
+            Result of registry monitoring operation.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.ServiceQueryRequest">
+            <summary>
+            Service query request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.ServiceQueryResult">
+            <summary>
+            Result of service query.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.NetworkInfoRequest">
+            <summary>
+            Network information request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.NetworkInfoResult">
+            <summary>
+            Result of network information query.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.CertificateMonitorRequest">
+            <summary>
+            Certificate monitoring request.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.CertificateMonitorResult">
+            <summary>
+            Result of certificate monitoring operation.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.WindowsUpdateResult">
+            <summary>
+            Result of Windows Update status query.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.SystemAccess.PowerStorageResult">
+            <summary>
+            Result of power and storage information query.
             </summary>
         </member>
         <member name="T:GGs.Shared.SystemIntelligence.LicenseValidator">
@@ -198,6 +706,438 @@
         <member name="T:GGs.Shared.SystemIntelligence.UacPrivilegeManager">
             <summary>
             Manages UAC privileges and elevation requirements
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.ITweakModule">
+            <summary>
+            Base interface for all tweak capability modules.
+            Each module implements safe-by-default, powerful-on-consent operations
+            with preflight validation, atomic apply, verify, and rollback capabilities.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.ITweakModule.ModuleName">
+            <summary>
+            Module name for logging and telemetry.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ITweakModule.PreflightAsync(GGs.Shared.Tweaks.TweakDefinition,System.Threading.CancellationToken)">
+            <summary>
+            Validates whether the tweak can be applied without actually applying it.
+            Checks existence, type, policy constraints, and permissions.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ITweakModule.ApplyAsync(GGs.Shared.Tweaks.TweakDefinition,System.Threading.CancellationToken)">
+            <summary>
+            Applies the tweak atomically. Should be idempotent.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ITweakModule.VerifyAsync(GGs.Shared.Tweaks.TweakDefinition,System.Threading.CancellationToken)">
+            <summary>
+            Verifies that the tweak was applied successfully.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ITweakModule.RollbackAsync(GGs.Shared.Tweaks.TweakApplicationLog,System.Threading.CancellationToken)">
+            <summary>
+            Rolls back the tweak to its previous state.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.TweakPreflightResult">
+            <summary>
+            Result of preflight validation.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.TweakApplicationResult">
+            <summary>
+            Result of tweak application.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.TweakVerificationResult">
+            <summary>
+            Result of tweak verification.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.TweakRollbackResult">
+            <summary>
+            Result of tweak rollback.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.ReasonCodes">
+            <summary>
+            Standardized reason codes for telemetry, audit logging, and policy decisions.
+            Format: CATEGORY.ACTION.Context.Detail
+            
+            This provides stable, machine-readable codes for long-term analytics and compliance.
+            All codes follow a hierarchical structure for easy filtering and aggregation.
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.POLICY_DENY">
+            <summary>Policy denied the operation</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.POLICY_ALLOW">
+            <summary>Policy allowed the operation</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.POLICY_WARN">
+            <summary>Policy warning issued but operation proceeded</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.VALIDATION_FAILED">
+            <summary>Validation failed</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.EXECUTION_SUCCESS">
+            <summary>Execution succeeded</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.EXECUTION_FAILED">
+            <summary>Execution failed</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.EXECUTION_TIMEOUT">
+            <summary>Execution timed out</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.EXECUTION_CANCELLED">
+            <summary>Execution was cancelled</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.ELEVATION_GRANTED">
+            <summary>Elevation was granted</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.ELEVATION_DENIED_USER">
+            <summary>Elevation was denied by user</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.ELEVATION_DENIED_POLICY">
+            <summary>Elevation was denied by policy</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.ELEVATION_NOT_REQUIRED">
+            <summary>Elevation was not required</summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ReasonCodes.ElevationFailed(System.String)">
+            <summary>Elevation failed due to error</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.CONSENT_GRANTED">
+            <summary>User granted consent</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.CONSENT_DENIED">
+            <summary>User denied consent</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.CONSENT_TIMEOUT">
+            <summary>Consent timed out</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.CONSENT_NOT_REQUIRED">
+            <summary>Consent not required</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.PREFLIGHT_PASSED">
+            <summary>Preflight checks passed</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.PREFLIGHT_FAILED">
+            <summary>Preflight checks failed</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.ROLLBACK_SUCCESS">
+            <summary>Rollback succeeded</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.ROLLBACK_FAILED">
+            <summary>Rollback failed</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.ROLLBACK_NOT_AVAILABLE">
+            <summary>Rollback not available</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.AUDIT_SUCCESS">
+            <summary>Audit log sent successfully</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.AUDIT_FAILED">
+            <summary>Audit log failed to send</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.AUDIT_QUEUED">
+            <summary>Audit log queued for offline retry</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.NETWORK_SUCCESS">
+            <summary>Network operation succeeded</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.NETWORK_FAILED">
+            <summary>Network operation failed</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.NETWORK_TIMEOUT">
+            <summary>Network timeout</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.NETWORK_UNAVAILABLE">
+            <summary>Network unavailable</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.QUEUE_ENQUEUED">
+            <summary>Item enqueued successfully</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.QUEUE_DISPATCHED">
+            <summary>Item dispatched successfully</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.QUEUE_DISPATCH_FAILED">
+            <summary>Item dispatch failed</summary>
+        </member>
+        <member name="F:GGs.Shared.Tweaks.ReasonCodes.QUEUE_DROPPED">
+            <summary>Item dropped due to policy</summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ReasonCodes.SanitizeForCode(System.String)">
+            <summary>
+            Sanitizes a string for use in a reason code by removing invalid characters.
+            Keeps only alphanumeric characters, underscores, and hyphens.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ReasonCodes.Parse(System.String)">
+            <summary>
+            Parses a reason code into its components.
+            Returns (Category, Action, Context, Detail) or nulls if parsing fails.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ReasonCodes.IsSuccess(System.String)">
+            <summary>
+            Checks if a reason code indicates success.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ReasonCodes.IsPolicyDenial(System.String)">
+            <summary>
+            Checks if a reason code indicates a policy denial.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.ReasonCodes.IsValidationFailure(System.String)">
+            <summary>
+            Checks if a reason code indicates a validation failure.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.TelemetryContext">
+            <summary>
+            Telemetry context that flows through all operations for distributed tracing and correlation.
+            Implements Prompt 4 requirements: DeviceId + OperationId + CorrelationId with synchronized timestamps.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TelemetryContext.DeviceId">
+            <summary>
+            Unique identifier for the device executing the operation.
+            Stable across reboots and reinstalls.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TelemetryContext.OperationId">
+            <summary>
+            Unique identifier for this specific operation instance.
+            Generated once per operation and flows through all related activities.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TelemetryContext.CorrelationId">
+            <summary>
+            Correlation identifier linking related operations together.
+            Passed from the initiating request through all downstream operations.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TelemetryContext.InitiatedUtc">
+            <summary>
+            Synchronized timestamp when the operation was initiated (UTC).
+            Used for accurate time-series analysis and event ordering.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TelemetryContext.UserId">
+            <summary>
+            User identifier if available (for audit trail).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TelemetryContext.SessionId">
+            <summary>
+            Session identifier if available (for grouping related operations).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TelemetryContext.ParentOperationId">
+            <summary>
+            Parent operation ID if this is a child operation.
+            Used for building operation hierarchies.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.TelemetryContext.Create(System.String,System.String,System.String)">
+            <summary>
+            Creates a new telemetry context with a new operation ID.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.TelemetryContext.CreateChild">
+            <summary>
+            Creates a child telemetry context that inherits correlation but has a new operation ID.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.TelemetryContext.ToDictionary">
+            <summary>
+            Converts the telemetry context to a dictionary for logging and tracing.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Tweaks.TelemetryContext.ToString">
+            <summary>
+            Returns a formatted string for logging.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Tweaks.EnhancedHeartbeatData">
+            <summary>
+            Enhanced heartbeat data with comprehensive system health monitoring.
+            Implements Prompt 4 requirements for detailed health telemetry.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.Context">
+            <summary>
+            Telemetry context for correlation.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.Timestamp">
+            <summary>
+            Timestamp of the heartbeat (UTC).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.AgentVersion">
+            <summary>
+            Agent version string.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.OSVersion">
+            <summary>
+            Operating system version.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.MachineName">
+            <summary>
+            Machine name.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.ProcessorCount">
+            <summary>
+            Number of processor cores.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.SystemUptime">
+            <summary>
+            System uptime duration.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.ProcessUptime">
+            <summary>
+            Agent process uptime duration.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.ConnectionState">
+            <summary>
+            Connection state (Connected, Disconnected, Reconnecting, etc.).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.WorkingSetBytes">
+            <summary>
+            Working set size in bytes (memory used by the agent process).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.PrivateMemoryBytes">
+            <summary>
+            Private memory size in bytes.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.VirtualMemoryBytes">
+            <summary>
+            Virtual memory size in bytes.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.CpuUsagePercent">
+            <summary>
+            CPU usage percentage (0-100).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.TotalPhysicalMemoryBytes">
+            <summary>
+            Total physical memory in bytes.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.AvailablePhysicalMemoryBytes">
+            <summary>
+            Available physical memory in bytes.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.ThreadCount">
+            <summary>
+            Number of threads in the agent process.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.HandleCount">
+            <summary>
+            Number of handles in the agent process.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.GCTotalMemoryBytes">
+            <summary>
+            .NET GC total memory in bytes.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.GCGen0Collections">
+            <summary>
+            .NET GC generation 0 collection count.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.GCGen1Collections">
+            <summary>
+            .NET GC generation 1 collection count.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.GCGen2Collections">
+            <summary>
+            .NET GC generation 2 collection count.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.OperationsExecuted">
+            <summary>
+            Number of operations executed since last heartbeat.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.OperationsSucceeded">
+            <summary>
+            Number of operations succeeded since last heartbeat.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.OperationsFailed">
+            <summary>
+            Number of operations failed since last heartbeat.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.OfflineQueueDepth">
+            <summary>
+            Number of items in the offline queue.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.HealthScore">
+            <summary>
+            Health score (0-100, where 100 is perfect health).
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.CustomMetrics">
+            <summary>
+            Additional custom metrics as key-value pairs.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TweakApplicationLog.OperationId">
+            <summary>
+            Unique operation identifier for this specific execution.
+            Used for distributed tracing and correlation across systems.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TweakApplicationLog.CorrelationId">
+            <summary>
+            Correlation identifier linking related operations together.
+            Passed from the initiating request through all downstream operations.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TweakApplicationLog.InitiatedUtc">
+            <summary>
+            Synchronized timestamp when the operation was initiated (UTC).
+            Used for accurate time-series analysis and event ordering.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TweakApplicationLog.CompletedUtc">
+            <summary>
+            Synchronized timestamp when the operation completed (UTC).
+            Used for duration calculation and performance analysis.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TweakApplicationLog.ReasonCode">
+            <summary>
+            Standardized reason code for policy decisions and errors.
+            Format: CATEGORY.ACTION.Context.Detail
+            Examples: POLICY.DENY.ServiceStop.WinDefend, VALIDATION.FAILED.RegistryPath.Blocked
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Tweaks.TweakApplicationLog.PolicyDecision">
+            <summary>
+            Policy decision context for audit trail.
+            Captures why an operation was allowed, denied, or modified.
             </summary>
         </member>
     </members>

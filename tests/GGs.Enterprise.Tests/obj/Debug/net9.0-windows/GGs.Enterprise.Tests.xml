@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.Enterprise.Tests</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.Enterprise.Tests.Elevation.ElevationBridgeTests">
+            <summary>
+            Comprehensive tests for ElevationBridge.
+            Tests privilege checking, request validation, consent gating, and graceful degradation.
+            </summary>
+        </member>
+        <member name="T:GGs.Enterprise.Tests.EnterpriseIntegrationTests">
+            <summary>
+            Enterprise-level integration tests for GGs application
+            Validates end-to-end functionality, performance, and reliability
+            </summary>
+        </member>
+        <member name="T:GGs.Enterprise.Tests.SystemAccess.WindowsSystemAccessProviderTests">
+            <summary>
+            Comprehensive tests for WindowsSystemAccessProvider.
+            Tests privilege checking, consent gating, WMI inventory, and graceful degradation.
+            </summary>
+        </member>
+    </members>
+</doc>

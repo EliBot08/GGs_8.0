@@ -1,0 +1,932 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.Desktop</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.Desktop.App">
+            <summary>
+            App
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.App.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.App.Main">
+            <summary>
+            Application Entry Point.
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.MainWindow">
+            <summary>
+            MainWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.MainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Services.SafeFileManager">
+            <summary>
+            Safe file operations used by installers/updaters. Each method is defensive and avoids partial writes.
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Services.SafeFileManager.WriteFileSafely(System.String,System.Byte[],System.Boolean,System.String@,System.String@)">
+            <summary>
+            Writes the content to destination atomically. If destination exists, it is optionally backed up.
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Services.SafeFileManager.ReplaceFile(System.String,System.String,System.Boolean,System.String@,System.String@)">
+            <summary>
+            Replace destination with source atomically when possible.
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Services.SafeFileManager.DeleteFileSafe(System.String,System.String@)">
+            <summary>
+            Deletes a file if it exists, removing read-only attribute and swallowing non-critical errors.
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Services.SafeFileManager.CleanObsoleteFiles(System.Collections.Generic.IEnumerable{System.String},System.Collections.Generic.List{System.ValueTuple{System.String,System.String}}@)">
+            <summary>
+            Deletes a set of files; returns count deleted.
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Services.SignatureValidationService">
+            <summary>
+            Handles digital signature verification and trust settings for cloud profiles.
+            Minimal implementation to satisfy current usage; can be expanded to perform real PKI/metadata checks.
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Services.SignatureValidationService.GetTrustedPublishersAsync">
+            <summary>
+            Returns trusted publishers list from a local file if present; otherwise returns an empty list.
+            File format (JSON): [{ "name": "Org", "fingerprints": ["abc", "def"] }]
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Services.SignatureValidationService.VerifyProfileSignatureAsync(GGs.Desktop.ViewModels.Admin.CloudProfile)">
+            <summary>
+            Naive signature verification: considers a profile verified if the publisher or fingerprint matches a trusted entry.
+            This can be extended to pull publisher certificates or verify signed manifests.
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.ViewModels.Admin.CloudProfilesViewModel">
+            <summary>
+            Enterprise Cloud Profiles ViewModel with signature trust and security validation
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.ViewModels.Analytics.AuditSearchViewModel">
+            <summary>
+            Enterprise Audit Search ViewModel with advanced filtering and real-time capabilities
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.LogDirectory">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.logDirectory"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.FilterText">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.filterText"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeInfo">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.includeInfo"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeWarning">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.includeWarning"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeError">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.includeError"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeDebug">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.includeDebug"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.AutoScrollToBottom">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.autoScrollToBottom"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IsPaused">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.isPaused"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IsBusy">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.isBusy"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.TotalCount">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.totalCount"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.StatusText">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.statusText"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.PauseButtonText">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.pauseButtonText"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.SelectedLog">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.selectedLog"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.LastRefreshedDisplay">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.lastRefreshedDisplay"/>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnFilterTextChanged(System.String)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.FilterText"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.FilterText"/> is changed.</remarks>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnIncludeInfoChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeInfo"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeInfo"/> is changed.</remarks>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnIncludeWarningChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeWarning"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeWarning"/> is changed.</remarks>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnIncludeErrorChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeError"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeError"/> is changed.</remarks>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnIncludeDebugChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeDebug"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IncludeDebug"/> is changed.</remarks>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnIsPausedChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IsPaused"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IsPaused"/> is changed.</remarks>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnIsBusyChanged(System.Boolean)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IsBusy"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.IsBusy"/> is changed.</remarks>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.OnTotalCountChanged(System.Int32)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.TotalCount"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.ErrorLogViewerViewModel.TotalCount"/> is changed.</remarks>
+        </member>
+        <member name="T:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel">
+            <inheritdoc/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Id">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.id"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Timestamp">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.timestamp"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Level">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.level"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Emoji">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.emoji"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Source">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.source"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Message">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.message"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Raw">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.raw"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.FilePath">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.filePath"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.LineNumber">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.lineNumber"/>
+        </member>
+        <member name="M:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.OnTimestampChanged(System.DateTime)">
+            <summary>Executes the logic for when <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Timestamp"/> just changed.</summary>
+            <param name="value">The new property value that was set.</param>
+            <remarks>This method is invoked right after the value of <see cref="P:GGs.Desktop.ViewModels.ErrorLogViewer.LogEntryViewModel.Timestamp"/> is changed.</remarks>
+        </member>
+        <member name="T:GGs.Desktop.ViewModels.OwnerDashboardViewModel">
+            <summary>
+            Ultra-enhanced Owner Dashboard ViewModel
+            Provides comprehensive system management, analytics, and control
+            Features:
+            - Real-time device monitoring
+            - Advanced analytics and insights
+            - License management
+            - User administration
+            - Performance tracking
+            - Predictive maintenance alerts
+            - Custom report generation
+            - Multi-tenant management
+            </summary>
+            <inheritdoc/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.OwnerName">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._ownerName"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.TotalDevices">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._totalDevices"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.ActiveDevices">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._activeDevices"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.InactiveDevices">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._inactiveDevices"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.AlertCount">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._alertCount"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.TotalUsers">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._totalUsers"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.ActiveUsers">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._activeUsers"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.TotalRevenue">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._totalRevenue"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.MonthlyRecurringRevenue">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._monthlyRecurringRevenue"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.SystemHealthScore">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._systemHealthScore"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.HealthStatus">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._healthStatus"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.IsLoading">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._isLoading"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.SelectedTimeRange">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._selectedTimeRange"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.DeviceStats">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._deviceStats"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.LicenseStats">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._licenseStats"/>
+        </member>
+        <member name="P:GGs.Desktop.ViewModels.OwnerDashboardViewModel.PerformanceStats">
+            <inheritdoc cref="F:GGs.Desktop.ViewModels.OwnerDashboardViewModel._performanceStats"/>
+        </member>
+        <member name="T:GGs.Desktop.Views.ActivationWindow">
+            <summary>
+            ActivationWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.ActivationWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Admin.CloudProfilesView">
+            <summary>
+            Enterprise Cloud Profiles Marketplace with digital signature trust and verification
+            </summary>
+            <summary>
+            CloudProfilesView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Admin.CloudProfilesView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Admin.DeviceManagementView">
+            <summary>
+            DeviceManagementView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Admin.DeviceManagementView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Admin.TrustedPublishersWindow">
+            <summary>
+            Window for managing trusted publishers
+            </summary>
+            <summary>
+            TrustedPublishersWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Admin.TrustedPublishersWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Admin.UserManagementView">
+            <summary>
+            UserManagementView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Admin.UserManagementView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Admin.LicenseManagementView">
+            <summary>
+            LicenseManagementView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Admin.LicenseManagementView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Admin.RemoteManagementView">
+            <summary>
+            RemoteManagementView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Admin.RemoteManagementView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Admin.TweakManagementView">
+            <summary>
+            TweakManagementView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Admin.TweakManagementView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Analytics.AuditSearchView">
+            <summary>
+            Enterprise Advanced Audit Search with comprehensive filtering and compliance reporting
+            </summary>
+            <summary>
+            AuditSearchView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Analytics.AuditSearchView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.CommunityHubView">
+            <summary>
+            Community Hub for browsing, sharing, and managing system intelligence profiles
+            </summary>
+            <summary>
+            CommunityHubView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.CommunityHubView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.CommunityShareProfileDialog">
+            <summary>
+            Dialog for sharing a profile to the community
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.MyProfilesDialog">
+            <summary>
+            Dialog for managing user's shared profiles
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.ProfileDetailsDialog">
+            <summary>
+            Dialog for viewing detailed profile information
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Controls.AnimatedProgressBar">
+            <summary>
+            Professional animated progress bar with smooth transitions and visual effects
+            </summary>
+            <summary>
+            AnimatedProgressBar
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Controls.AnimatedProgressBar.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Controls.ProgressAnimationType">
+            <summary>
+            Animation types for different progress operations
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Controls.FeatureHighlight">
+            <summary>
+            FeatureHighlight
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Controls.FeatureHighlight.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Controls.ProgressDot">
+            <summary>
+            ProgressDot
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Controls.ProgressDot.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Controls.StatCard">
+            <summary>
+            StatCard
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Controls.StatCard.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Controls.SystemTweaksPanel">
+            <summary>
+            Professional system tweaks panel with real-time monitoring and animated progress
+            </summary>
+            <summary>
+            SystemTweaksPanel
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Controls.SystemTweaksPanel.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.Controls.TierCard">
+            <summary>
+            TierCard
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.Controls.TierCard.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.DashboardView">
+            <summary>
+            DashboardView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.DashboardView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.ErrorLogViewer">
+            <summary>
+            ErrorLogViewer
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.ErrorLogViewer.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.LicenseDiagnosticsWindow">
+            <summary>
+            LicenseDiagnosticsWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.LicenseDiagnosticsWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.LicenseWindow">
+            <summary>
+            LicenseWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.LicenseWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.LoginWindow">
+            <summary>
+            LoginWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.LoginWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.ModernActivationWindow">
+            <summary>
+            ModernActivationWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.ModernActivationWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.ModernMainWindow">
+            <summary>
+            ModernMainWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.ModernMainWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.NetworkView">
+            <summary>
+            NetworkView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.NetworkView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.OnboardingChecklist">
+            <summary>
+            OnboardingChecklist
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.OnboardingChecklist.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.OptimizationView">
+            <summary>
+            OptimizationView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.OptimizationView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.ProfileArchitectView">
+            <summary>
+            Profile Architect - Enterprise-grade profile management system
+            Provides comprehensive tools for organizing, sharing, and managing System Intelligence profiles
+            </summary>
+            <summary>
+            ProfileArchitectView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.ProfileArchitectView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.RecoveryWindow">
+            <summary>
+            RecoveryWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.RecoveryWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.SystemIntelligenceView">
+            <summary>
+            Premium System Intelligence Harvester UI with enterprise-grade functionality
+            Provides real-time progress tracking and comprehensive system analysis
+            </summary>
+            <summary>
+            SystemIntelligenceView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.SystemIntelligenceView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.UpdateWindow">
+            <summary>
+            UpdateWindow
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.UpdateWindow.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.WelcomeOverlay">
+            <summary>
+            WelcomeOverlay
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.WelcomeOverlay.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.AnalyticsView">
+            <summary>
+            AnalyticsView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.AnalyticsView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.NotificationsView">
+            <summary>
+            NotificationsView
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.NotificationsView.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:GGs.Desktop.Views.OwnerDashboard">
+            <summary>
+            OwnerDashboard
+            </summary>
+        </member>
+        <member name="M:GGs.Desktop.Views.OwnerDashboard.InitializeComponent">
+            <summary>
+            InitializeComponent
+            </summary>
+        </member>
+        <member name="T:XamlGeneratedNamespace.GeneratedInternalTypeHelper">
+            <summary>
+            GeneratedInternalTypeHelper
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateInstance(System.Type,System.Globalization.CultureInfo)">
+            <summary>
+            CreateInstance
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.GetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            GetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.SetPropertyValue(System.Reflection.PropertyInfo,System.Object,System.Object,System.Globalization.CultureInfo)">
+            <summary>
+            SetPropertyValue
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.CreateDelegate(System.Type,System.Object,System.String)">
+            <summary>
+            CreateDelegate
+            </summary>
+        </member>
+        <member name="M:XamlGeneratedNamespace.GeneratedInternalTypeHelper.AddEventHandler(System.Reflection.EventInfo,System.Object,System.Delegate)">
+            <summary>
+            AddEventHandler
+            </summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LogDirectory">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LogDirectory" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FilterText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FilterText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IncludeInfo">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IncludeInfo" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IncludeWarning">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IncludeWarning" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IncludeError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IncludeError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IncludeDebug">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IncludeDebug" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AutoScrollToBottom">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AutoScrollToBottom" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsPaused">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsPaused" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TotalCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TotalCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.StatusText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "StatusText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PauseButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PauseButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedLog">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedLog" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LastRefreshedDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LastRefreshedDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Id">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Id" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Timestamp">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Timestamp" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Level">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Level" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Emoji">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Emoji" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Source">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Source" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Message">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Message" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.Raw">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "Raw" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.FilePath">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "FilePath" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LineNumber">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LineNumber" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.OwnerName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "OwnerName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TotalDevices">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TotalDevices" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ActiveDevices">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ActiveDevices" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.InactiveDevices">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "InactiveDevices" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.AlertCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "AlertCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TotalUsers">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TotalUsers" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.ActiveUsers">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "ActiveUsers" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.TotalRevenue">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "TotalRevenue" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.MonthlyRecurringRevenue">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "MonthlyRecurringRevenue" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SystemHealthScore">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SystemHealthScore" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.HealthStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "HealthStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.SelectedTimeRange">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "SelectedTimeRange" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.DeviceStats">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "DeviceStats" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.LicenseStats">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "LicenseStats" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangingArgs.PerformanceStats">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangingEventArgs"/> instance for all "PerformanceStats" generated properties.</summary>
+        </member>
+        <member name="T:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs">
+            <summary>
+            A helper type providing cached, reusable <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instances
+            for all properties generated with <see cref="T:CommunityToolkit.Mvvm.ComponentModel.ObservablePropertyAttribute"/>.
+            </summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LogDirectory">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LogDirectory" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FilterText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FilterText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IncludeInfo">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IncludeInfo" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IncludeWarning">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IncludeWarning" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IncludeError">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IncludeError" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IncludeDebug">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IncludeDebug" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AutoScrollToBottom">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AutoScrollToBottom" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsPaused">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsPaused" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsBusy">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsBusy" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TotalCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TotalCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.StatusText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "StatusText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PauseButtonText">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PauseButtonText" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedLog">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedLog" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LastRefreshedDisplay">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LastRefreshedDisplay" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Id">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Id" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Timestamp">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Timestamp" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Level">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Level" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Emoji">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Emoji" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Source">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Source" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Message">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Message" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.Raw">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "Raw" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.FilePath">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "FilePath" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LineNumber">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LineNumber" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.OwnerName">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "OwnerName" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TotalDevices">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TotalDevices" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ActiveDevices">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ActiveDevices" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.InactiveDevices">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "InactiveDevices" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.AlertCount">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "AlertCount" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TotalUsers">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TotalUsers" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.ActiveUsers">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "ActiveUsers" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.TotalRevenue">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "TotalRevenue" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.MonthlyRecurringRevenue">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "MonthlyRecurringRevenue" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SystemHealthScore">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SystemHealthScore" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.HealthStatus">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "HealthStatus" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.IsLoading">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "IsLoading" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.SelectedTimeRange">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "SelectedTimeRange" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.DeviceStats">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "DeviceStats" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.LicenseStats">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "LicenseStats" generated properties.</summary>
+        </member>
+        <member name="F:CommunityToolkit.Mvvm.ComponentModel.__Internals.__KnownINotifyPropertyChangedArgs.PerformanceStats">
+            <summary>The cached <see cref="T:System.ComponentModel.PropertyChangedEventArgs"/> instance for all "PerformanceStats" generated properties.</summary>
+        </member>
+    </members>
+</doc>
