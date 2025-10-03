@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Release")]
 [assembly: System.Reflection.AssemblyCopyrightAttribute("Copyright © Västerås Stad 2025")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0-dev.74+96bc82cdd9721b72ea8d4ec820aa842e365156a3")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0-dev.75+f9711e816a3d0b500542e586a01d435cb59bc0b8")]
 [assembly: System.Reflection.AssemblyProductAttribute("GGsDeepAgent")]
 [assembly: System.Reflection.AssemblyTitleAttribute("GGs.Desktop")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
