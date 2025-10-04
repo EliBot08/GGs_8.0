@@ -37,12 +37,7 @@
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Padding" Value="24"/>
             <Setter Property="Margin" Value="8"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect Color="Black" Opacity="0.1" ShadowDepth="4" BlurRadius="12"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
+            </Style>
 
         <!-- Premium Button Style -->
         <Style x:Key="PremiumButton" TargetType="Button">

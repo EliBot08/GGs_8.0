@@ -1,0 +1,8 @@
+=== GGs LaunchControl v1.0.0 ===
+Profile: errorlogviewer
+Mode: test
+Started: 2025-10-04 04:06:47
+========================================
+
+[2025-10-04 04:06:47.205] Elevation Status: IsElevated=False, Requested=False
+[2025-10-04 04:06:47.272] Loaded profile 'errorlogviewer' from C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\bin\Release\net9.0-windows\win-x64\publish\profiles\errorlogviewer.json

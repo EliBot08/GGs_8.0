@@ -1,0 +1,45 @@
+{
+  "name": "desktop",
+  "description": "Launch GGs Desktop application with full UI",
+  "applications": [
+    {
+      "name": "GGs Desktop",
+      "executablePath": "clients/GGs.Desktop/bin/Release/net9.0-windows/GGs.Desktop.exe",
+      "arguments": "",
+      "requiresElevation": false,
+      "waitForExit": false,
+      "optional": false
+    }
+  ],
+  "healthChecks": [
+    {
+      "type": "DotNetRuntime",
+      "target": ".NET 9.0",
+      "description": ".NET 9.0 Runtime",
+      "required": true
+    },
+    {
+      "type": "DirectoryExists",
+      "target": "clients/GGs.Desktop/bin/Release/net9.0-windows",
+      "description": "Desktop binaries directory",
+      "required": true,
+      "autoFix": "CreateDirectory"
+    },
+    {
+      "type": "FileExists",
+      "target": "clients/GGs.Desktop/bin/Release/net9.0-windows/GGs.Desktop.exe",
+      "description": "Desktop executable",
+      "required": true
+    },
+    {
+      "type": "DiskSpace",
+      "target": "C:1",
+      "description": "Minimum disk space (1 GB)",
+      "required": true
+    }
+  ],
+  "exitPolicy": "FireAndForget",
+  "requiresElevation": false,
+  "startupDelayMs": 1000
+}
+

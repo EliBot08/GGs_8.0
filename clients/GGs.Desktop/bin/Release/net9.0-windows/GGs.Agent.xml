@@ -26,6 +26,64 @@
             Response from elevated process (matches ElevatedEntry format).
             </summary>
         </member>
+        <member name="T:GGs.Agent.ScriptPolicy">
+            <summary>
+            Enterprise-grade script policy engine with normalized parsing and detailed policy decisions.
+            Provides three-tier security model: Strict (allowlist), Moderate (denylist), Permissive (audit-only).
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.ScriptPolicy.Mode">
+            <summary>
+            Policy modes: Strict (allowlist), Moderate (denylist), Permissive (allow all)
+            </summary>
+        </member>
+        <member name="F:GGs.Agent.ScriptPolicy.BlockList">
+            <summary>
+            Comprehensive denylist to prevent high-risk PowerShell operations.
+            Expanded with additional dangerous commands and patterns.
+            </summary>
+        </member>
+        <member name="F:GGs.Agent.ScriptPolicy.AllowListPrefixes">
+            <summary>
+            Conservative allowlist for Strict mode.
+            Only safe, read-only, and informational commands are permitted.
+            </summary>
+        </member>
+        <member name="T:GGs.Agent.ScriptPolicy.PolicyDecision">
+            <summary>
+            Policy decision result with detailed reasoning.
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.ScriptPolicy.Evaluate(System.String)">
+            <summary>
+            Evaluate script against policy with detailed decision tracking.
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.ScriptPolicy.IsAllowed(System.String)">
+            <summary>
+            Legacy compatibility method - returns only boolean result.
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.ScriptPolicy.NormalizeScript(System.String)">
+            <summary>
+            Normalize script for consistent policy evaluation.
+            - Convert to lowercase
+            - Remove extra whitespace
+            - Normalize line endings
+            - Remove PowerShell comments
+            - Expand common aliases
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.ScriptPolicy.ExpandAliases(System.String)">
+            <summary>
+            Expand common PowerShell aliases to their full cmdlet names for better pattern matching.
+            </summary>
+        </member>
+        <member name="M:GGs.Agent.ScriptPolicy.TruncateForLog(System.String,System.Int32)">
+            <summary>
+            Truncate string for logging to prevent log injection and excessive log size.
+            </summary>
+        </member>
         <member name="T:GGs.Agent.Services.EnhancedSystemInformationService">
             <summary>
             ENHANCED System Information Service - 1000%+ Improved

@@ -1,4 +1,5 @@
 using Xunit;
+using GGs.Shared.Privacy;
 using GGs.Shared.Tweaks;
 using System;
 using System.Linq;
@@ -242,14 +243,15 @@ public class Prompt4TelemetryTests
         // Arrange
         var context = TelemetryContext.Create("device-1", "correlation-1");
 
-        // Act
+        // Act - with privacy sanitization
+        var machineNameHash = PrivacySanitizer.SanitizeMachineName("TEST-MACHINE");
         var heartbeat = new EnhancedHeartbeatData
         {
             Context = context,
             Timestamp = DateTime.UtcNow,
             AgentVersion = "1.0.0",
             OSVersion = "Windows 11",
-            MachineName = "TEST-MACHINE",
+            MachineNameHash = machineNameHash,
             ProcessorCount = 8,
             SystemUptime = TimeSpan.FromHours(24),
             ProcessUptime = TimeSpan.FromMinutes(30),
@@ -265,7 +267,7 @@ public class Prompt4TelemetryTests
         Assert.Equal(context, heartbeat.Context);
         Assert.Equal("1.0.0", heartbeat.AgentVersion);
         Assert.Equal("Windows 11", heartbeat.OSVersion);
-        Assert.Equal("TEST-MACHINE", heartbeat.MachineName);
+        Assert.Equal(machineNameHash, heartbeat.MachineNameHash);
         Assert.Equal(8, heartbeat.ProcessorCount);
         Assert.Equal(TimeSpan.FromHours(24), heartbeat.SystemUptime);
         Assert.Equal(TimeSpan.FromMinutes(30), heartbeat.ProcessUptime);

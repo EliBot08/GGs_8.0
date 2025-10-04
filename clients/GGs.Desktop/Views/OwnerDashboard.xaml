@@ -25,12 +25,7 @@
             <Setter Property="CornerRadius" Value="12"/>
             <Setter Property="Padding" Value="20"/>
             <Setter Property="Margin" Value="10"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="20" ShadowDepth="0" Opacity="0.3" Color="#000000"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
+            </Style>
 
         <!-- Stat Card Style -->
         <Style x:Key="StatCard" TargetType="Border" BasedOn="{StaticResource ModernCard}">
@@ -530,3 +525,4 @@
         </Grid>
     </Border>
 </Window>
+

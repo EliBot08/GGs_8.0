@@ -20,12 +20,7 @@
             <Setter Property="BorderThickness" Value="1"/>
             <Setter Property="Padding" Value="14"/>
             <Setter Property="SnapsToDevicePixels" Value="True"/>
-            <Setter Property="Effect">
-                <Setter.Value>
-                    <DropShadowEffect BlurRadius="14" Opacity="0.35" ShadowDepth="0" Color="#000000"/>
-                </Setter.Value>
-            </Setter>
-        </Style>
+            </Style>
     </UserControl.Resources>
 
     <Border x:Name="Root" Style="{StaticResource HoverableBorder}" Cursor="Hand" MouseLeftButtonUp="Root_MouseLeftButtonUp">
@@ -69,3 +64,4 @@
         </Border.Triggers>
     </Border>
 </UserControl>
+

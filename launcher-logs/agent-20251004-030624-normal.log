@@ -1,0 +1,13 @@
+[Sat 10/04/2025  3:06:24.22] [INFO] Agent Launcher started in normal mode 
+[Sat 10/04/2025  3:06:24.23] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\agent-20251004-030624-normal.log 
+[Sat 10/04/2025  3:06:24.32] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  3:06:24.32] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  3:06:24.32] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  3:06:24.34] [INFO] Starting preflight checks 
+[Sat 10/04/2025  3:06:24.68] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  3:06:24.68] [INFO] Disk space check skipped 
+[Sat 10/04/2025  3:06:24.69] [SUCCESS] Write permissions verified 
+[Sat 10/04/2025  3:06:24.70] [INFO] Launching Agent from: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\agent\GGs.Agent\bin\Release\net9.0-windows\GGs.Agent.exe 
+[Sat 10/04/2025  3:06:25.85] [INFO] Starting health probe 
+[Sat 10/04/2025  3:06:27.36] [SUCCESS] Health probe: process running 
+[Sat 10/04/2025  3:06:27.37] [SUCCESS] Agent launcher completed successfully 

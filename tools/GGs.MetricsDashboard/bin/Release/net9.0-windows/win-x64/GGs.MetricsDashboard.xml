@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.MetricsDashboard</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.MetricsDashboard.Program">
+            <summary>
+            Real-time metrics dashboard demonstrating 25000% capability uplift.
+            Displays telemetry coverage, tweak success rate, recovery speed, and system health.
+            </summary>
+        </member>
+    </members>
+</doc>

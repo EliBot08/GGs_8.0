@@ -317,6 +317,160 @@
             Ultra-deep diagnostics report containing expert-level Windows internals analysis
             </summary>
         </member>
+        <member name="T:GGs.Shared.Privacy.PrivacyTier">
+            <summary>
+            Privacy tier classification for telemetry and system data.
+            Implements Prompt 5: Privacy tiering with signal classification, redaction, and hashing.
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Privacy.PrivacyTier.Public">
+            <summary>
+            Public data - No privacy concerns (e.g., OS version, processor count)
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Privacy.PrivacyTier.Internal">
+            <summary>
+            Internal data - Low privacy risk (e.g., performance metrics, health scores)
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Privacy.PrivacyTier.Confidential">
+            <summary>
+            Confidential data - Medium privacy risk (e.g., machine name, IP addresses)
+            Requires hashing or redaction in logs
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Privacy.PrivacyTier.Restricted">
+            <summary>
+            Restricted data - High privacy risk (e.g., user names, file paths, registry values)
+            Must be hashed or fully redacted
+            </summary>
+        </member>
+        <member name="F:GGs.Shared.Privacy.PrivacyTier.Secret">
+            <summary>
+            Secret data - Critical privacy risk (e.g., credentials, tokens, keys)
+            Must never be logged or transmitted
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Privacy.PrivacyConfiguration">
+            <summary>
+            Privacy configuration flags to control data collection scope.
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.CollectMachineNames">
+            <summary>
+            Enable collection of machine names (hashed by default)
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.CollectUserNames">
+            <summary>
+            Enable collection of user names (hashed by default)
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.CollectIpAddresses">
+            <summary>
+            Enable collection of IP addresses (hashed by default)
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.CollectFilePaths">
+            <summary>
+            Enable collection of file paths (redacted by default)
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.CollectRegistryValues">
+            <summary>
+            Enable collection of registry values (redacted by default)
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.CollectProcessNames">
+            <summary>
+            Enable collection of process names
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.CollectNetworkDetails">
+            <summary>
+            Enable collection of network adapter details
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.EnableDetailedHealthTelemetry">
+            <summary>
+            Enable detailed health telemetry
+            </summary>
+        </member>
+        <member name="P:GGs.Shared.Privacy.PrivacyConfiguration.HashSensitiveFields">
+            <summary>
+            Hash sensitive fields instead of redacting them (allows correlation while preserving privacy)
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacyConfiguration.LoadFromEnvironment">
+            <summary>
+            Load configuration from environment variables or config file
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Privacy.PrivacySanitizer">
+            <summary>
+            Privacy-aware data sanitizer with classification, redaction, and hashing.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.Sanitize(System.String,GGs.Shared.Privacy.PrivacyTier)">
+            <summary>
+            Sanitize a value based on its privacy tier and configuration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.SanitizeMachineName(System.String)">
+            <summary>
+            Sanitize machine name based on configuration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.SanitizeUserName(System.String)">
+            <summary>
+            Sanitize user name based on configuration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.SanitizeIpAddress(System.String)">
+            <summary>
+            Sanitize IP address based on configuration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.SanitizeFilePath(System.String)">
+            <summary>
+            Sanitize file path based on configuration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.SanitizeRegistryValue(System.String)">
+            <summary>
+            Sanitize registry value based on configuration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.SanitizeProcessName(System.String)">
+            <summary>
+            Sanitize process name based on configuration.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.Hash(System.String)">
+            <summary>
+            Hash a value using SHA256 for privacy-preserving correlation.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.Redact(System.String)">
+            <summary>
+            Redact a value by showing only first and last characters.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.SanitizeObject``1(``0,System.Collections.Generic.Dictionary{System.String,GGs.Shared.Privacy.PrivacyTier})">
+            <summary>
+            Sanitize an object by applying privacy rules to all string properties.
+            </summary>
+        </member>
+        <member name="M:GGs.Shared.Privacy.PrivacySanitizer.GetConfiguration">
+            <summary>
+            Get current privacy configuration.
+            </summary>
+        </member>
+        <member name="T:GGs.Shared.Privacy.PrivacyAwareTelemetry">
+            <summary>
+            Privacy-aware telemetry data model.
+            </summary>
+        </member>
         <member name="T:GGs.Shared.SystemAccess.ISystemAccessProvider">
             <summary>
             Defines the contract for deep system access capabilities.
@@ -988,9 +1142,10 @@
             Operating system version.
             </summary>
         </member>
-        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.MachineName">
+        <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.MachineNameHash">
             <summary>
-            Machine name.
+            Machine name hash (privacy-sanitized).
+            Implements Prompt 5: Privacy tiering with hashing for confidential data.
             </summary>
         </member>
         <member name="P:GGs.Shared.Tweaks.EnhancedHeartbeatData.ProcessorCount">

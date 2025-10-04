@@ -1,0 +1,12 @@
+[Sat 10/04/2025  2:50:50.52] [INFO] ErrorLogViewer Launcher started in test mode 
+[Sat 10/04/2025  2:50:50.53] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\ErrorLogViewer-20251004-025050-test.log 
+[Sat 10/04/2025  2:50:51.18] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  2:50:51.18] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  2:50:51.18] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  2:50:51.18] [INFO] Starting preflight checks 
+[Sat 10/04/2025  2:50:51.50] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  2:50:51.50] [INFO] Disk space check skipped 
+[Sat 10/04/2025  2:50:51.51] [SUCCESS] Write permissions verified 
+[Sat 10/04/2025  2:50:51.52] [ERROR] ErrorLogViewer executable not found 
+[Sat 10/04/2025  2:50:51.53] [ERROR] Searched: Release and Debug configurations 
+[Sat 10/04/2025  2:50:51.53] [INFO] Please build the solution first: dotnet build GGs.sln 

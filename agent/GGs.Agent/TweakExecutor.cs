@@ -81,7 +81,7 @@ public static class TweakExecutor
                 }
                 case GGs.Shared.Enums.CommandType.Script:
                 {
-                    var (ok, output) = RunPowerShell(tweak.ScriptContent ?? string.Empty);
+                    var (ok, output, policyDecision) = RunPowerShell(tweak.ScriptContent ?? string.Empty);
                     log.BeforeState = null;
                     var s = new ScriptState
                     {
@@ -96,6 +96,20 @@ public static class TweakExecutor
                     log.Success = ok;
                     if (!ok) log.Error = output;
                     if (!ok) activity?.SetTag("tweak.error", Trim(output));
+
+                    // Attach policy decision to log
+                    if (policyDecision != null)
+                    {
+                        log.ReasonCode = policyDecision.ReasonCode;
+                        log.PolicyDecision = policyDecision.Decision;
+                        activity?.SetTag("policy.mode", policyDecision.PolicyMode.ToString());
+                        activity?.SetTag("policy.allowed", policyDecision.Allowed);
+                        if (!string.IsNullOrEmpty(policyDecision.BlockedPattern))
+                        {
+                            activity?.SetTag("policy.blocked_pattern", policyDecision.BlockedPattern);
+                        }
+                    }
+
                     return log;
                 }
                 default:
@@ -203,14 +217,19 @@ public static class TweakExecutor
         catch { return false; }
     }
 
-    private static (bool ok, string output) RunPowerShell(string script)
+    private static (bool ok, string output, ScriptPolicy.PolicyDecision? policyDecision) RunPowerShell(string script)
     {
         try
         {
-            if (!ScriptPolicy.IsAllowed(script))
+            // Evaluate script against policy with detailed decision tracking
+            var policyDecision = ScriptPolicy.Evaluate(script);
+
+            if (!policyDecision.Allowed)
             {
-                return (false, "Script blocked by policy: contains disallowed commands.");
+                var errorMessage = $"Script blocked by policy: {policyDecision.Decision}";
+                return (false, errorMessage, policyDecision);
             }
+
             string encoded = Convert.ToBase64String(System.Text.Encoding.Unicode.GetBytes(script));
             var psi = new ProcessStartInfo
             {
@@ -225,12 +244,12 @@ public static class TweakExecutor
             var stdOut = p.StandardOutput.ReadToEnd();
             var stdErr = p.StandardError.ReadToEnd();
             p.WaitForExit();
-            if (p.ExitCode == 0) return (true, stdOut);
-            return (false, string.IsNullOrWhiteSpace(stdErr) ? stdOut : stdErr);
+            if (p.ExitCode == 0) return (true, stdOut, policyDecision);
+            return (false, string.IsNullOrWhiteSpace(stdErr) ? stdOut : stdErr, policyDecision);
         }
         catch (Exception ex)
         {
-            return (false, ex.ToString());
+            return (false, ex.ToString(), null);
         }
     }
 

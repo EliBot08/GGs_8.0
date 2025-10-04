@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net9.0-windows</TargetFramework>
@@ -35,6 +35,7 @@
     <ProjectReference Include="..\..\shared\GGs.Shared\GGs.Shared.csproj" />
     <ProjectReference Include="..\..\agent\GGs.Agent\GGs.Agent.csproj" />
     <ProjectReference Include="..\..\server\GGs.Server\GGs.Server.csproj" />
+    <ProjectReference Include="..\..\clients\GGs.Desktop\GGs.Desktop.csproj" />
   </ItemGroup>
 
   <ItemGroup>

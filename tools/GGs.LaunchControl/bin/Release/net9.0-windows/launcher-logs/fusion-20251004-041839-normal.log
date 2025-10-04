@@ -1,0 +1,9 @@
+=== GGs LaunchControl v1.0.0 ===
+Profile: fusion
+Mode: normal
+Started: 2025-10-04 04:18:39
+========================================
+
+[2025-10-04 04:18:39.536] Elevation Status: IsElevated=False, Requested=False
+[2025-10-04 04:18:39.573] Loaded profile 'fusion' from C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\bin\Release\net9.0-windows\win-x64\publish\profiles\fusion.json
+[2025-10-04 04:18:43.916] Launch sequence completed successfully for profile 'fusion'

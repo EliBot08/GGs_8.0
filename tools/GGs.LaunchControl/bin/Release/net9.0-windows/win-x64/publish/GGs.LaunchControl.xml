@@ -1,0 +1,227 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>GGs.LaunchControl</name>
+    </assembly>
+    <members>
+        <member name="T:GGs.LaunchControl.Models.LaunchProfile">
+            <summary>
+            Defines a launch profile for orchestrating application startup.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfile.Name">
+            <summary>
+            Profile name (e.g., "desktop", "errorlogviewer", "fusion").
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfile.Description">
+            <summary>
+            Human-readable description.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfile.Applications">
+            <summary>
+            Applications to launch in this profile.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfile.HealthChecks">
+            <summary>
+            Health checks to perform before launching.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfile.ExitPolicy">
+            <summary>
+            Exit policy (e.g., "WaitForAll", "WaitForAny", "FireAndForget").
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfile.RequiresElevation">
+            <summary>
+            Whether this profile requires elevation.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfile.StartupDelayMs">
+            <summary>
+            Startup delay in milliseconds between launching applications.
+            </summary>
+        </member>
+        <member name="T:GGs.LaunchControl.Models.ApplicationDefinition">
+            <summary>
+            Defines an application to launch.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.Name">
+            <summary>
+            Application name for display.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.ExecutablePath">
+            <summary>
+            Relative path to executable from LaunchControl directory.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.Arguments">
+            <summary>
+            Command-line arguments.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.WorkingDirectory">
+            <summary>
+            Working directory (defaults to executable directory).
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.RequiresElevation">
+            <summary>
+            Whether this application requires elevation.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.WaitForExit">
+            <summary>
+            Whether to wait for this application to exit before continuing.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.TimeoutSeconds">
+            <summary>
+            Timeout in seconds for waiting (0 = infinite).
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.ApplicationDefinition.Optional">
+            <summary>
+            Whether this application is optional (failure doesn't stop profile).
+            </summary>
+        </member>
+        <member name="T:GGs.LaunchControl.Models.HealthCheck">
+            <summary>
+            Defines a health check to perform before launching.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.HealthCheck.Type">
+            <summary>
+            Check type (e.g., "FileExists", "DirectoryExists", "PortAvailable", "DotNetRuntime").
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.HealthCheck.Target">
+            <summary>
+            Check target (e.g., file path, port number).
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.HealthCheck.Description">
+            <summary>
+            Human-readable description of what this check validates.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.HealthCheck.Required">
+            <summary>
+            Whether this check is required (failure stops launch).
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.HealthCheck.AutoFix">
+            <summary>
+            Auto-fix action if check fails (e.g., "CreateDirectory", "DownloadFile").
+            </summary>
+        </member>
+        <member name="T:GGs.LaunchControl.Models.HealthCheckResult">
+            <summary>
+            Result of a health check.
+            </summary>
+        </member>
+        <member name="T:GGs.LaunchControl.Models.LaunchResult">
+            <summary>
+            Result of launching an application.
+            </summary>
+        </member>
+        <member name="T:GGs.LaunchControl.Models.LaunchProfileJsonContext">
+            <summary>
+            JSON serialization context for LaunchProfile to support trimming and AOT.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.Boolean">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.ApplicationDefinition">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.HealthCheck">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.LaunchProfile">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.ListApplicationDefinition">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.ListHealthCheck">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.Int32">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.String">
+            <summary>
+            Defines the source generated JSON serialization contract metadata for a given type.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.Default">
+            <summary>
+            The default <see cref="T:System.Text.Json.Serialization.JsonSerializerContext"/> associated with a default <see cref="T:System.Text.Json.JsonSerializerOptions"/> instance.
+            </summary>
+        </member>
+        <member name="P:GGs.LaunchControl.Models.LaunchProfileJsonContext.GeneratedSerializerOptions">
+            <summary>
+            The source-generated options associated with this context.
+            </summary>
+        </member>
+        <member name="M:GGs.LaunchControl.Models.LaunchProfileJsonContext.#ctor">
+            <inheritdoc/>
+        </member>
+        <member name="M:GGs.LaunchControl.Models.LaunchProfileJsonContext.#ctor(System.Text.Json.JsonSerializerOptions)">
+            <inheritdoc/>
+        </member>
+        <member name="M:GGs.LaunchControl.Models.LaunchProfileJsonContext.GetTypeInfo(System.Type)">
+            <inheritdoc/>
+        </member>
+        <member name="T:GGs.LaunchControl.Services.ApplicationLauncher">
+            <summary>
+            Launches applications with proper error handling and elevation support.
+            </summary>
+        </member>
+        <member name="T:GGs.LaunchControl.Services.HealthChecker">
+            <summary>
+            Performs health checks before launching applications.
+            </summary>
+        </member>
+        <member name="T:GGs.LaunchControl.Services.PrivilegeChecker">
+            <summary>
+            Checks current privilege level and elevation status.
+            </summary>
+        </member>
+        <member name="M:GGs.LaunchControl.Services.PrivilegeChecker.IsElevated">
+            <summary>
+            Checks if the current process is running with administrator privileges.
+            </summary>
+        </member>
+        <member name="M:GGs.LaunchControl.Services.PrivilegeChecker.GetCurrentUser">
+            <summary>
+            Gets the current user name.
+            </summary>
+        </member>
+        <member name="M:GGs.LaunchControl.Services.PrivilegeChecker.GetIntegrityLevel">
+            <summary>
+            Gets the integrity level of the current process.
+            </summary>
+        </member>
+    </members>
+</doc>

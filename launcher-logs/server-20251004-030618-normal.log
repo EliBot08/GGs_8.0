@@ -1,0 +1,13 @@
+[Sat 10/04/2025  3:06:18.16] [INFO] Server Launcher started in normal mode 
+[Sat 10/04/2025  3:06:18.16] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\server-20251004-030618-normal.log 
+[Sat 10/04/2025  3:06:18.21] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  3:06:18.21] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  3:06:18.21] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  3:06:18.22] [INFO] Starting preflight checks 
+[Sat 10/04/2025  3:06:18.53] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  3:06:18.54] [INFO] Disk space check skipped 
+[Sat 10/04/2025  3:06:18.54] [SUCCESS] Write permissions verified 
+[Sat 10/04/2025  3:06:18.56] [INFO] Launching Server from: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\server\GGs.Server\bin\Release\net9.0\GGs.Server.exe 
+[Sat 10/04/2025  3:06:19.07] [INFO] Starting health probe 
+[Sat 10/04/2025  3:06:21.32] [SUCCESS] Health probe: process running 
+[Sat 10/04/2025  3:06:21.33] [SUCCESS] Server launcher completed successfully 

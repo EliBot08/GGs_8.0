@@ -1,0 +1,7 @@
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\obj\Release\net9.0\win-x64\GGs.LaunchControl.csproj.AssemblyReference.cache
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\obj\Release\net9.0\win-x64\GGs.LaunchControl.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\obj\Release\net9.0\win-x64\GGs.LaunchControl.AssemblyInfoInputs.cache
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\obj\Release\net9.0\win-x64\GGs.LaunchControl.AssemblyInfo.cs
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\obj\Release\net9.0\win-x64\GGs.LaunchControl.csproj.CoreCompileInputs.cache
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\obj\Release\net9.0\win-x64\GGs.LaunchControl.sourcelink.json
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\obj\Release\net9.0\win-x64\GGs.LaunchControl.xml

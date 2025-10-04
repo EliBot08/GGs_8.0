@@ -4,8 +4,8 @@
   <trustInfo xmlns="urn:schemas-microsoft-com:asm.v2">
     <security>
       <requestedPrivileges xmlns="urn:schemas-microsoft-com:asm.v3">
-        <!-- Request elevation so the user explicitly approves via UAC when launching. -->
-        <requestedExecutionLevel level="requireAdministrator" uiAccess="false" />
+        <!-- Run as invoker - do not require admin, gracefully degrade if needed -->
+        <requestedExecutionLevel level="asInvoker" uiAccess="false" />
       </requestedPrivileges>
     </security>
   </trustInfo>

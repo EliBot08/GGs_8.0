@@ -1,0 +1,10 @@
+[Sat 10/04/2025  2:12:31.77] [INFO] Desktop Launcher started in test mode 
+[Sat 10/04/2025  2:12:31.78] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\desktop-20251004-021231-test.log 
+[Sat 10/04/2025  2:12:34.39] [INFO] Running without administrator privileges 
+[Sat 10/04/2025  2:12:34.40] [INFO] Starting preflight checks 
+[Sat 10/04/2025  2:12:34.71] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  2:12:34.78] [ERROR] Insufficient disk space:  MB free (need 100 MB
+[Sat 10/04/2025  2:12:34.78] [ERROR] Insufficient disk space:  MB free (need 100 MB) 
+[Sat 10/04/2025  2:12:34.78] [ERROR] Insufficient disk space:  MB free (need 100 MB) 
+[Sat 10/04/2025  2:12:34.78] [ERROR] Insufficient disk space:  MB free (need 100 MB) 
+[Sat 10/04/2025  2:12:34.79] [ERROR] Preflight checks failed 

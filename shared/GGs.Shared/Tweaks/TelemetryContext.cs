@@ -152,9 +152,10 @@ public sealed class EnhancedHeartbeatData
     public required string OSVersion { get; init; }
 
     /// <summary>
-    /// Machine name.
+    /// Machine name hash (privacy-sanitized).
+    /// Implements Prompt 5: Privacy tiering with hashing for confidential data.
     /// </summary>
-    public required string MachineName { get; init; }
+    public required string MachineNameHash { get; init; }
 
     /// <summary>
     /// Number of processor cores.

@@ -218,3 +218,4 @@ C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Deskt
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Release\net9.0-windows\GGs.Desktop.xml
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Release\net9.0-windows\GGs.Desktop.genruntimeconfig.cache
 C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Release\net9.0-windows\ref\GGs.Desktop.dll
+C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\obj\Release\net9.0-windows\Themes\SafeStyles.baml

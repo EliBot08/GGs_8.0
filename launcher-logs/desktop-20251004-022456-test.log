@@ -1,0 +1,9 @@
+[Sat 10/04/2025  2:24:56.07] [INFO] Desktop Launcher started in test mode 
+[Sat 10/04/2025  2:24:56.07] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\desktop-20251004-022456-test.log 
+[Sat 10/04/2025  2:24:56.73] [INFO] Running without administrator privileges 
+[Sat 10/04/2025  2:24:56.74] [INFO] Starting preflight checks 
+[Sat 10/04/2025  2:24:57.04] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  2:24:57.05] [INFO] Disk space check skipped 
+[Sat 10/04/2025  2:24:57.05] [SUCCESS] Write permissions verified 
+[Sat 10/04/2025  2:24:57.06] [INFO] Launching Desktop from: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\bin\Release\net9.0-windows\GGs.Desktop.exe 
+[Sat 10/04/2025  2:25:00.03] [ERROR] Failed to launch Desktop application 

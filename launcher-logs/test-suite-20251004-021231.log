@@ -1,0 +1,22 @@
+[Sat 10/04/2025  2:12:31.68] [INFO] ========================================== 
+[Sat 10/04/2025  2:12:31.68] [INFO] GGs Launcher Test Suite v2.0 
+[Sat 10/04/2025  2:12:31.69] [INFO] ========================================== 
+[Sat 10/04/2025  2:12:31.69] [INFO] Total tests: 0 
+[Sat 10/04/2025  2:12:31.70] [SUCCESS] Passed: 0 
+[Sat 10/04/2025  2:12:31.70] [INFO] Failed: 0 
+[Sat 10/04/2025  2:12:31.71] [INFO] ========================================== 
+[Sat 10/04/2025  2:12:31.71] [SUCCESS] TEST SUITE PASSED 
+[Sat 10/04/2025  2:12:31.72] [SUCCESS] Passed: 0 
+[Sat 10/04/2025  2:12:31.72] [INFO] Failed: 0 
+[Sat 10/04/2025  2:12:31.73] [INFO] ========================================== 
+[Sat 10/04/2025  2:12:31.73] [SUCCESS] TEST SUITE PASSED 
+[Sat 10/04/2025  2:12:31.74] [INFO]  
+[Sat 10/04/2025  2:12:31.74] [INFO]  
+[Sat 10/04/2025  2:12:31.75] [INFO] Test 1: Launcher files exist 
+[Sat 10/04/2025  2:12:31.75] [SUCCESS] PASSED 
+[Sat 10/04/2025  2:12:34.80] [ERROR] Desktop launcher failed in test mode 
+[Sat 10/04/2025  2:12:34.80] [ERROR] FAILED 
+[Sat 10/04/2025  2:12:34.81] [INFO]  
+[Sat 10/04/2025  2:12:34.82] [INFO] Test 2: Launch ErrorLogViewer (test mode) 
+[Sat 10/04/2025  2:12:34.82] [INFO] Test 2: Launch ErrorLogViewer (test mode) 
+[Sat 10/04/2025  2:12:34.82] [INFO] Test 2: Launch ErrorLogViewer (test mode) 

@@ -16,7 +16,6 @@
             <GradientStop Color="#3D1E6E" Offset="1"/>
         </LinearGradientBrush>
 
-        <DropShadowEffect x:Key="CardShadow" BlurRadius="20" ShadowDepth="0" Color="#80000000"/>
         <CornerRadius x:Key="CardRadius">14</CornerRadius>
 
         <Style x:Key="CardBorder" TargetType="Border">
@@ -151,3 +150,4 @@
         <Grid Grid.Row="2" Height="20"/>
     </Grid>
 </Window>
+

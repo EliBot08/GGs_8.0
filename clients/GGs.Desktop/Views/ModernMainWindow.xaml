@@ -14,8 +14,8 @@
     <Window.Resources>
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
-                <ResourceDictionary Source="../Themes/EnterpriseControlStyles.xaml"/>
                 <ResourceDictionary Source="../Themes/EnterpriseThemes.xaml"/>
+                <ResourceDictionary Source="../Themes/SafeStyles.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Window.Resources>
@@ -540,6 +540,8 @@
         </Grid>
     </Border>
 </Window>
+
+
 
 
 

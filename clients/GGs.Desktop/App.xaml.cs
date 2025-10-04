@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -464,6 +465,15 @@ public partial class App : Application
             AppLogger.LogCritical($"Unhandled exception in {safeContext}: {safeMessage}", new Exception(safeMessage));
         }
 
+        if (exception is System.Windows.Markup.XamlParseException xamlEx)
+        {
+            AppLogger.LogCritical($"XAML parse failure details -> Line: {xamlEx.LineNumber}, Position: {xamlEx.LinePosition}, Uri: {xamlEx.BaseUri}", xamlEx);
+            foreach (DictionaryEntry entry in xamlEx.Data)
+            {
+                AppLogger.LogCritical($"XAML data[{entry.Key}] = {entry.Value}", xamlEx.InnerException ?? xamlEx);
+            }
+        }
+
         try
         {
             CrashReportingService.Instance.AddBreadcrumb(safeContext, "exception");
@@ -538,3 +548,4 @@ public partial class App : Application
         AppLogger.LogInfo($"Power mode changed: {e.Mode}");
     }
 }
+

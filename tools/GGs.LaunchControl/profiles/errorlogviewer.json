@@ -1,0 +1,39 @@
+{
+  "name": "errorlogviewer",
+  "description": "Launch GGs ErrorLogViewer for diagnostics",
+  "applications": [
+    {
+      "name": "GGs ErrorLogViewer",
+      "executablePath": "tools/GGs.ErrorLogViewer/bin/Release/net9.0-windows/GGs.ErrorLogViewer.exe",
+      "arguments": "",
+      "requiresElevation": false,
+      "waitForExit": false,
+      "optional": false
+    }
+  ],
+  "healthChecks": [
+    {
+      "type": "DotNetRuntime",
+      "target": ".NET 9.0",
+      "description": ".NET 9.0 Runtime",
+      "required": true
+    },
+    {
+      "type": "DirectoryExists",
+      "target": "tools/GGs.ErrorLogViewer/bin/Release/net9.0-windows",
+      "description": "ErrorLogViewer binaries directory",
+      "required": true,
+      "autoFix": "CreateDirectory"
+    },
+    {
+      "type": "FileExists",
+      "target": "tools/GGs.ErrorLogViewer/bin/Release/net9.0-windows/GGs.ErrorLogViewer.exe",
+      "description": "ErrorLogViewer executable",
+      "required": true
+    }
+  ],
+  "exitPolicy": "FireAndForget",
+  "requiresElevation": false,
+  "startupDelayMs": 500
+}
+

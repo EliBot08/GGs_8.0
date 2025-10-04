@@ -1,4 +1,5 @@
 using System.Net.Http.Json;
+using GGs.Shared.Privacy;
 using GGs.Shared.Tweaks;
 using Microsoft.AspNetCore.SignalR.Client;
 using Microsoft.Extensions.Configuration;
@@ -415,7 +416,7 @@ public class Worker : BackgroundService
             var telemetryContext = TelemetryContext.Create(deviceId);
             var currentProcess = Process.GetCurrentProcess();
 
-            // Collect basic system health metrics (always sent)
+            // Collect basic system health metrics (always sent) with privacy sanitization
             var basicHealthData = new
             {
                 DeviceId = deviceId,
@@ -423,7 +424,7 @@ public class Worker : BackgroundService
                 Timestamp = DateTime.UtcNow,
                 AgentVersion = System.Reflection.Assembly.GetExecutingAssembly().GetName().Version?.ToString() ?? "Unknown",
                 OSVersion = Environment.OSVersion.ToString(),
-                MachineName = Environment.MachineName,
+                MachineNameHash = PrivacySanitizer.SanitizeMachineName(Environment.MachineName), // Privacy: Hashed or redacted
                 ProcessorCount = Environment.ProcessorCount,
                 SystemUptime = TimeSpan.FromMilliseconds(Environment.TickCount64),
                 ProcessUptime = DateTime.UtcNow - currentProcess.StartTime.ToUniversalTime(),
@@ -437,14 +438,14 @@ public class Worker : BackgroundService
             var sendDetailedHealth = _config.GetValue<bool>("Agent:SendDetailedHealthData", false);
             if (sendDetailedHealth)
             {
-                // Collect detailed health metrics (opt-in)
+                // Collect detailed health metrics (opt-in) with privacy sanitization
                 var enhancedHealthData = new EnhancedHeartbeatData
                 {
                     Context = telemetryContext,
                     Timestamp = DateTime.UtcNow,
                     AgentVersion = basicHealthData.AgentVersion,
                     OSVersion = basicHealthData.OSVersion,
-                    MachineName = basicHealthData.MachineName,
+                    MachineNameHash = basicHealthData.MachineNameHash, // Privacy: Already sanitized
                     ProcessorCount = basicHealthData.ProcessorCount,
                     SystemUptime = basicHealthData.SystemUptime,
                     ProcessUptime = basicHealthData.ProcessUptime,

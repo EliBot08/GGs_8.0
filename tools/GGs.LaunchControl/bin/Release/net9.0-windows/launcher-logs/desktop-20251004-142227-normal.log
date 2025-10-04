@@ -1,0 +1,14 @@
+=== GGs LaunchControl v1.0.0 ===
+Profile: desktop
+Mode: normal
+Started: 2025-10-04 14:22:27
+========================================
+
+[2025-10-04 14:22:28.095] FATAL ERROR: The handle is invalid.
+   at System.ConsolePal.GetBufferInfo(Boolean throwOnNoConsole, Boolean& succeeded)
+   at System.ConsolePal.GetCursorPosition()
+   at System.Console.get_CursorLeft()
+   at Spectre.Console.LegacyConsoleBackend.Clear(Boolean home) in /_/src/Spectre.Console/Internal/Backends/Legacy/LegacyConsoleBackend.cs:line 20
+   at Spectre.Console.AnsiConsoleFacade.Clear(Boolean home) in /_/src/Spectre.Console/Internal/Backends/AnsiConsoleFacade.cs:line 32
+   at GGs.LaunchControl.Program.DisplayIntro(LaunchOptions options) in C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\Program.cs:line 136
+   at GGs.LaunchControl.Program.Main(String[] args) in C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\Program.cs:line 29

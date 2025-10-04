@@ -1,0 +1,13 @@
+[Sat 10/04/2025  2:49:34.07] [INFO] Desktop Launcher started in test mode 
+[Sat 10/04/2025  2:49:34.07] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\desktop-20251004-024934-test.log 
+[Sat 10/04/2025  2:49:34.85] [INFO] Starting preflight checks 
+[Sat 10/04/2025  2:49:35.39] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  2:49:35.39] [INFO] Disk space check skipped 
+[Sat 10/04/2025  2:49:35.40] [SUCCESS] Write permissions verified 
+[Sat 10/04/2025  2:49:35.41] [INFO] Launching Desktop from: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\bin\Release\net9.0-windows\GGs.Desktop.exe 
+[Sat 10/04/2025  2:49:36.11] [INFO] Starting health probe 
+[Sat 10/04/2025  2:49:39.04] [SUCCESS] Health probe: process running 
+[Sat 10/04/2025  2:49:39.05] [SUCCESS] Desktop launcher completed successfully 
+[Sat 10/04/2025  2:49:39.07] [INFO] Test mode: waiting 5 seconds before shutdown 
+[Sat 10/04/2025  2:49:44.14] [INFO] Attempting graceful shutdown of GGs.Desktop 
+[Sat 10/04/2025  2:49:47.30] [WARN] Graceful shutdown timeout, forcing termination 

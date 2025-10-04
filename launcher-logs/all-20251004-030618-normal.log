@@ -1,0 +1,22 @@
+[Sat 10/04/2025  3:06:18.04] [INFO] All-in-One Launcher started in normal mode 
+[Sat 10/04/2025  3:06:18.05] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\all-20251004-030618-normal.log 
+[Sat 10/04/2025  3:06:18.05] [INFO] Launch sequence: Server - - -
+[Sat 10/04/2025  3:06:18.12] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:18.12] [INFO] Step 1/4: Launching Server 
+[Sat 10/04/2025  3:06:18.14] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:21.34] [SUCCESS] Server launched successfully 
+[Sat 10/04/2025  3:06:24.18] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:24.19] [INFO] Step 2/4: Launching Agent 
+[Sat 10/04/2025  3:06:24.20] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:27.38] [SUCCESS] Agent launched successfully 
+[Sat 10/04/2025  3:06:29.14] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:29.15] [INFO] Step 3/4: Launching Desktop 
+[Sat 10/04/2025  3:06:29.15] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:36.38] [SUCCESS] Desktop launched successfully 
+[Sat 10/04/2025  3:06:38.13] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:38.14] [INFO] Step 4/4: Launching ErrorLogViewer 
+[Sat 10/04/2025  3:06:38.15] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:41.42] [SUCCESS] ErrorLogViewer launched successfully 
+[Sat 10/04/2025  3:06:41.43] [INFO] ========================================== 
+[Sat 10/04/2025  3:06:41.44] [SUCCESS] All components launched successfully 
+[Sat 10/04/2025  3:06:41.44] [INFO] ========================================== 

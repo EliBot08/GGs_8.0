@@ -1,0 +1,8 @@
+=== GGs LaunchControl v1.0.0 ===
+Profile: desktop
+Mode: test
+Started: 2025-10-04 03:49:16
+========================================
+
+[2025-10-04 03:49:16.866] Elevation Status: IsElevated=False, Requested=False
+[2025-10-04 03:49:17.064] Loaded profile 'desktop' from C:\Users\307824\OneDrive - Västerås Stad\Skrivbordet\GGs\GGs\tools\GGs.LaunchControl\bin\Release\net9.0-windows\win-x64\publish\profiles\desktop.json

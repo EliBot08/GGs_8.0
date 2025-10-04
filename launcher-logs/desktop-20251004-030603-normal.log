@@ -1,0 +1,10 @@
+[Sat 10/04/2025  3:06:03.35] [INFO] Desktop Launcher started in normal mode 
+[Sat 10/04/2025  3:06:03.36] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\desktop-20251004-030603-normal.log 
+[Sat 10/04/2025  3:06:06.36] [INFO] Starting preflight checks 
+[Sat 10/04/2025  3:06:06.69] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  3:06:06.70] [INFO] Disk space check skipped 
+[Sat 10/04/2025  3:06:06.71] [SUCCESS] Write permissions verified 
+[Sat 10/04/2025  3:06:06.72] [INFO] Launching Desktop from: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\clients\GGs.Desktop\bin\Release\net9.0-windows\GGs.Desktop.exe 
+[Sat 10/04/2025  3:06:07.34] [INFO] Starting health probe 
+[Sat 10/04/2025  3:06:09.36] [SUCCESS] Health probe: process running 
+[Sat 10/04/2025  3:06:09.37] [SUCCESS] Desktop launcher completed successfully 

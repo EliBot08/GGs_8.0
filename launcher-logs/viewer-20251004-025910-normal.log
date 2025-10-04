@@ -1,0 +1,13 @@
+[Sat 10/04/2025  2:59:10.75] [INFO] Error Log Viewer Launcher started in normal mode 
+[Sat 10/04/2025  2:59:10.76] [INFO] Log file: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\launcher-logs\\viewer-20251004-025910-normal.log 
+[Sat 10/04/2025  2:59:10.86] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  2:59:10.86] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  2:59:10.86] [INFO] Running without administrator privileges (this is normal) 
+[Sat 10/04/2025  2:59:10.87] [INFO] Starting preflight checks 
+[Sat 10/04/2025  2:59:11.20] [SUCCESS] .NET 9.0.305 detected 
+[Sat 10/04/2025  2:59:11.20] [INFO] Disk space check skipped 
+[Sat 10/04/2025  2:59:11.21] [SUCCESS] Write permissions verified 
+[Sat 10/04/2025  2:59:11.21] [INFO] Launching ErrorLogViewer from: C:\Users\307824\OneDrive - V„ster†s Stad\Skrivbordet\GGs\GGs\tools\\GGs.ErrorLogViewer\bin\Release\net9.0-windows\GGs.ErrorLogViewer.exe 
+[Sat 10/04/2025  2:59:11.67] [INFO] Starting health probe 
+[Sat 10/04/2025  2:59:13.33] [SUCCESS] Health probe: process running 
+[Sat 10/04/2025  2:59:13.34] [SUCCESS] ErrorLogViewer launcher completed successfully 

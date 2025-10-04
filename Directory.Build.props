@@ -18,10 +18,10 @@
   </PropertyGroup>
 
   <PropertyGroup Label="Code Quality and Analysis">
-    <!-- Warnings as errors disabled - will enable after fixing root causes -->
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <!-- Warnings as errors enabled for enterprise-grade quality -->
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
     <WarningLevel>4</WarningLevel>
-    <EnforceCodeStyleInBuild>false</EnforceCodeStyleInBuild>
+    <EnforceCodeStyleInBuild>true</EnforceCodeStyleInBuild>
     <EnableNETAnalyzers>true</EnableNETAnalyzers>
     <AnalysisLevel>latest</AnalysisLevel>
     <AnalysisMode>Default</AnalysisMode>
